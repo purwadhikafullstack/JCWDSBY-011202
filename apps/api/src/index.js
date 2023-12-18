@@ -64,7 +64,7 @@ const main = () => {
     if (err) {
       console.log(`ERROR: ${err}`);
     } else {
-      console.log(`  ➜  [API] Local:   http://localhost:${PORT}/`);
+      console.log(`  ➜  [API] Local:   http://localhost:${PORT}/api`);
     }
   });
 };

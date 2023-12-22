@@ -10,6 +10,8 @@ router.get('/', (req, res) => {
 });
 
 router.use('/sample', sampleRouter);
+// router.use('/register', sampleRouter);
+// router.use('/login', sampleRouter);
 
 // Gibran
 router.use('/categories', categoriesRouter);

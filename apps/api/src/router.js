@@ -8,6 +8,8 @@ router.get('/', (req, res) => {
 });
 
 router.use('/sample', sampleRouter);
+// router.use('/register', sampleRouter);
+// router.use('/login', sampleRouter);
 
 // add another router here ...
 

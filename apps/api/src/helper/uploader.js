@@ -1,21 +1,29 @@
 const multer = require('multer');
 const fs = require('fs');
+const path = require('path');
 
 module.exports = {
   uploader: (directory) => {
-    const defaultDir = './public';
+    const defaultDir = './src/public'; // Adjust the default public directory path
+
     const storageUploader = multer.diskStorage({
       destination: (req, file, cb) => {
-        const pathDir = directory ? defaultDir + directory : defaultDir;
+        const pathDir = directory
+          ? path.join(defaultDir, directory)
+          : defaultDir;
+
         if (fs.existsSync(pathDir)) {
           console.log(`Directory ${pathDir} already exists`);
           cb(null, pathDir);
         } else {
-          fs.mkdir(pathDir, (err) => {
+          fs.mkdir(pathDir, { recursive: true }, (err) => {
             if (err) {
-              console.log('ERROR CREATE DIRECTORY', err);
+              console.error('Error creating directory:', err);
+              cb(err, pathDir);
+            } else {
+              console.log(`Directory ${pathDir} created`);
+              cb(null, pathDir);
             }
-            return cb(err, pathDir);
           });
         }
       },
@@ -23,24 +31,26 @@ module.exports = {
         cb(null, `${Date.now()}-${file.originalname}`);
       },
     });
+
     const fileFilter = (req, file, cb) => {
       console.log('CHECK FILE FROM REQUEST CLIENT', file);
-      if (
-        file.originalname.toLowerCase().includes('png') ||
-        file.originalname.toLowerCase().includes('jpg') ||
-        file.originalname.toLowerCase().includes('jpeg') ||
-        file.originalname.toLowerCase().includes('gif')
-      ) {
+      const allowedExtensions = ['png', 'jpg', 'jpeg', 'gif'];
+      const isAllowed = allowedExtensions.some((ext) =>
+        file.originalname.toLowerCase().includes(ext),
+      );
+
+      if (isAllowed) {
         cb(null, true);
       } else {
         cb(
           new Error(
-            'Your file extension are denied, ONLY JPG or PNG files are allowed',
+            'Your file extension is denied. Only JPG, PNG, JPEG, or GIF files are allowed.',
             false,
           ),
         );
       }
     };
+
     return multer({ storage: storageUploader, fileFilter: fileFilter });
   },
 };

@@ -36,6 +36,7 @@
 .sofa{
   background-blend-mode: darken;
   background: url(sofa.jpg);
+
 }
 
 .article{
@@ -77,3 +78,4 @@
 .productsList td:hover{
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); 
 }
+

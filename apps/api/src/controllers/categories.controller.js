@@ -29,6 +29,7 @@ export const getData = async (req, res, next) => {
           attributes: [],
           as: 'products',
           where: { is_deleted: false },
+          required: false,
         },
       ],
       group: ['categories.id'],
@@ -42,6 +43,7 @@ export const getData = async (req, res, next) => {
       .send({ success: false, message: 'ERROR GETTING DATA' });
   }
 };
+
 export const createData = async (req, res, next) => {
   try {
     const existingCategory = await categories.findOne({

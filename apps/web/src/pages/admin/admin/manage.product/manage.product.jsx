@@ -1,16 +1,16 @@
 import AdminLayout from '../../../../components/AdminLayout';
-import FormProductAdd from '../../../../components/FormProductAdd';
 import ProductTable from '../../../../components/ProductTable';
-
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
 
 const ManageProduct = () => {
   const [isModalOpen, setModalOpen] = useState(false);
   const [products, setProducts] = useState([]);
+  const navigate = useNavigate();
 
   const handleAddButtonClick = () => {
-    setModalOpen(true);
+    navigate('add-product');
   };
 
   const closeModal = () => {
@@ -24,12 +24,13 @@ const ManageProduct = () => {
   };
 
   const handleAddProduct = async (newProduct) => {
+    console.log(newProduct[0]);
     try {
-      const response = await axios.post(
-        'http://localhost:8000/api/products',
-        newProduct,
+      const response = await axios.get(
+        `http://localhost:8000/api/products?id=${newProduct[0].id}`,
       );
-      setProducts((prevProducts) => [...prevProducts, response.data]);
+      console.log(response);
+      setProducts((prevProducts) => [...prevProducts, response.data[0]]);
     } catch (error) {
       console.error('Error adding product:', error);
     }
@@ -53,9 +54,9 @@ const ManageProduct = () => {
   return (
     <div>
       <AdminLayout>
-        <div className="sm:p-1 p-4 ">
-          <div className="sm:p-1 p-4 flex justify-between items-center">
-            <div className="font-bold text-xl">Product List</div>
+        <div>
+          <div className="p-4 flex justify-between items-center bg-white">
+            <div className="font-bold text-xl ">Product List</div>
             <button
               onClick={handleAddButtonClick}
               style={{ cursor: 'pointer' }}
@@ -65,15 +66,10 @@ const ManageProduct = () => {
             </button>
           </div>
         </div>
-        <div className="w-full mt-4 ">
+        <div className="w-full mt-4 p-4">
           <ProductTable products={products} onDelete={handleDelete} />
         </div>
       </AdminLayout>
-      {isModalOpen && (
-        <div>
-          <FormProductAdd closeModal={closeModal} onAdd={handleAddProduct} />
-        </div>
-      )}
     </div>
   );
 };

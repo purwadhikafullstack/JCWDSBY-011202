@@ -25,7 +25,7 @@ const ProductTable = ({ products, onDelete }) => {
   return (
     <div className="overflow-x-auto mx-auto">
       <div className="flex flex-col">
-        <div className="hidden lg:table w-full max-w-full overflow-hidden border divide-y divide-gray-200 content-center text-center rounded-md">
+        <div className="hidden lg:table w-full max-w-full overflow-hidden border divide-y divide-gray-200 rounded-md">
           <thead className="bg-orange-50">
             <tr>
               <th className="lg:px-6 lg:py-3 px-3 py-2 text-xs font-medium tracking-wider text-gray-500 uppercase">

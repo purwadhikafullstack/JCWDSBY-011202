@@ -1,10 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { CiShoppingCart } from 'react-icons/ci';
+import { VscAccount } from 'react-icons/vsc';
 import { Link } from 'react-router-dom';
+import SearchBar from './Searchbar';
 
 const linksData = [
-  { to: '/products', label: 'Products' },
   { to: '/', label: 'Home' },
+  { to: '/product-search', label: 'Products' },
 ];
 
 const TemporaryNavbar = () => {
@@ -13,7 +15,6 @@ const TemporaryNavbar = () => {
   useEffect(() => {
     const handleScroll = () => {
       const scrollPosition = window.scrollY;
-      // console.log('Scroll Position:', scrollPosition);
       setIsScrolled(scrollPosition > 100);
     };
 
@@ -30,8 +31,8 @@ const TemporaryNavbar = () => {
         isScrolled ? 'bg-transparent' : 'bg-white'
       } transition-all duration-300 opacity-95 z-10`}
     >
-      <div className="flex justify-between">
-        <div className="flex ml-36 items-center">
+      <div className="flex justify-between w-10/12 mx-auto">
+        <div className="flex  items-center">
           <h1 className="font-bold text-xl text-orange-500">Ace</h1>
           <h1 className="font-bold text-xl">Warehouse</h1>
           {linksData.map((link, index) => (
@@ -44,9 +45,16 @@ const TemporaryNavbar = () => {
             </Link>
           ))}
         </div>
-        <div className="flex flex-row-reverse items-center">
+        <div className="flex  items-center">
+          <SearchBar />
           <Link to="/cart" className="mx-2">
             <CiShoppingCart
+              size={24}
+              className="hover:text-orange-400 transition-all duration-300"
+            />
+          </Link>
+          <Link to="/cart" className="mx-2">
+            <VscAccount
               size={24}
               className="hover:text-orange-400 transition-all duration-300"
             />

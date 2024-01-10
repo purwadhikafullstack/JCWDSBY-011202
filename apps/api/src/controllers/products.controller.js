@@ -9,7 +9,6 @@ export const getProduct = async (req, res, next) => {
     const filter = {
       is_deleted: false,
     };
-
     if (req.query.id) {
       filter.id = req.query.id;
     }
@@ -46,7 +45,7 @@ export const getProduct = async (req, res, next) => {
         },
         {
           model: products_images,
-          attributes: ['image'],
+          attributes: ['image', 'id'],
         },
       ],
     });
@@ -81,6 +80,7 @@ export const createProduct = async (req, res, next) => {
         return res.status(201).send({
           success: true,
           message: 'Product restored successfully',
+          data: existingProduct,
         });
       } else {
         return res.status(400).send({
@@ -107,6 +107,7 @@ export const createProduct = async (req, res, next) => {
     return res.status(201).send({
       success: true,
       message: 'Product added successfully',
+      data: newProduct,
     });
   } catch (error) {
     console.log(error);

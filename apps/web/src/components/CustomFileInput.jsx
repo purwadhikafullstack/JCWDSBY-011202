@@ -1,11 +1,28 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
+import { IoCloseOutline } from 'react-icons/io5';
 
-const CustomFileInput = ({ onChange }) => {
+const CustomFileInput = ({
+  onChange,
+  onImagePreviewsChange,
+  onCancelPreview,
+}) => {
   const [imagePreviews, setImagePreviews] = useState([]);
+  const [filesArray, setFilesArray] = useState([]);
+  const [isInputDisabled, setIsInputDisabled] = useState(false);
   const fileInputRef = useRef(null);
+
+  useEffect(() => {
+    if (imagePreviews.length > 0) {
+      setIsInputDisabled(true);
+      if (onImagePreviewsChange) {
+        onImagePreviewsChange(filesArray);
+      }
+    }
+  }, [imagePreviews, onImagePreviewsChange, filesArray]);
 
   const handleFileChange = (e) => {
     const files = e.target.files;
+    console.log(files);
 
     if (files) {
       const newPreviews = Array.from(files).map((file) => {
@@ -21,7 +38,12 @@ const CustomFileInput = ({ onChange }) => {
       });
 
       Promise.all(newPreviews).then((results) => {
+        console.log('New Previews:', results);
         setImagePreviews(results);
+        setFilesArray(Array.from(files));
+        if (onImagePreviewsChange) {
+          onImagePreviewsChange(Array.from(files));
+        }
       });
     }
 
@@ -32,31 +54,56 @@ const CustomFileInput = ({ onChange }) => {
 
   const handleCancelPreview = () => {
     setImagePreviews([]);
+    setFilesArray([]);
+    setIsInputDisabled(false);
+
     if (fileInputRef.current) {
       fileInputRef.current.value = '';
+    }
+
+    if (onCancelPreview) {
+      onCancelPreview();
     }
   };
 
   return (
-    <div className="w-full">
-      <label className="flex justify-center w-full h-32 px-4 transition bg-white border-2 border-gray-300 border-dashed rounded-md appearance-none cursor-pointer hover:border-orange-500 focus:outline-none">
-        <span className="flex items-center space-x-2">
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            className="w-6 h-6 text-orange-600"
-            fill="none"
-            viewBox="0 0 24 24"
-            stroke="currentColor"
-            strokeWidth="2"
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"
+    <div className="w-full h-full">
+      <label className="flex justify-center w-[400px] h-[400px]  transition bg-white border-2 border-gray-300 rounded-md appearance-none cursor-pointer hover:border-orange-500 focus:outline-none">
+        {imagePreviews.length > 0 ? (
+          <div className="relative">
+            <img
+              src={imagePreviews[0]}
+              className="w-full h-full rounded-md"
+              alt="Image Preview"
             />
-          </svg>
-          <span className="font-medium text-gray-600">Drop Product Images</span>
-        </span>
+            <button
+              onClick={handleCancelPreview}
+              className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-white p-2 rounded-full border border-gray-300 hover:bg-gray-100"
+            >
+              <IoCloseOutline />
+            </button>
+          </div>
+        ) : (
+          <span className="flex items-center space-x-2">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              className="w-6 h-6 text-orange-600"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+              strokeWidth="2"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"
+              />
+            </svg>
+            <span className="font-medium text-gray-600">
+              Drop Product Images
+            </span>
+          </span>
+        )}
         <input
           type="file"
           name="file_upload"
@@ -64,29 +111,9 @@ const CustomFileInput = ({ onChange }) => {
           onChange={handleFileChange}
           multiple
           ref={fileInputRef}
+          disabled={isInputDisabled}
         />
       </label>
-
-      {imagePreviews.length > 0 && (
-        <div className="mt-4 flex flex-wrap space-x-2 max-h-72 overflow-y-auto">
-          {imagePreviews.map((preview, index) => (
-            <img
-              key={index}
-              src={preview}
-              className="w-24 h-24 object-cover rounded-md mb-2 md:w-32 md:h-32 md:mb-0"
-              alt={`Image Preview ${index + 1}`}
-            />
-          ))}
-          {imagePreviews.length > 0 && (
-            <button
-              className="text-orange-500 hover:text-orange-700 block w-full md:w-auto"
-              onClick={handleCancelPreview}
-            >
-              Cancel
-            </button>
-          )}
-        </div>
-      )}
     </div>
   );
 };

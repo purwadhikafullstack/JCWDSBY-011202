@@ -6,7 +6,14 @@ import ManageCategory from './pages/admin/admin/manage.category/manage.category'
 import ProductDetail from './pages/user/product.detail/Product.detail';
 import NotFoundPage from './components/Temporary/404';
 import EditProduct from './components/EditProduct';
-
+import LandingWarehouse from './pages/admin/admin.warehouse/landing/Landing';
+import ViewProduct from './pages/admin/admin.warehouse/view.product/View.Product';
+import ViewCategory from './pages/admin/admin.warehouse/view.category/View.Category';
+import AddProduct from './components/AddProduct';
+import ProdutSearch from './pages/user/product.search/Product.search';
+import ManageInventory from './pages/admin/admin/manage.inventory/manage.inventory';
+import WarehouseInventory from './components/WarehouseInventory';
+import EditStockProduct from './pages/admin/admin.warehouse/edit.stock/EditStock';
 function App() {
   return (
     <BrowserRouter>
@@ -17,11 +24,38 @@ function App() {
         <Route path="" />
         <Route path="" />
         {/* ROUTES FEATURE : PRODUCT-MANAGEMENT GIBRAN*/}
-        <Route path="/admin-landing" element={<LandingAdmin />} />
-        <Route path="/manage-product" element={<ManageProduct />} />
+        <Route path="/admin" element={<LandingAdmin />} />
+        <Route path="/admin/manage-product" element={<ManageProduct />} />
+        <Route
+          path="/admin/manage-product/add-product"
+          element={<AddProduct />}
+        />
         <Route path="edit-product/:id" element={<EditProduct />} />
-        <Route path="/manage-category" element={<ManageCategory />} />
+        <Route path="/admin/manage-category" element={<ManageCategory />} />
+        <Route path="/admin/manage-inventory" element={<ManageInventory />} />
         <Route path="/product-detail/:id" element={<ProductDetail />} />
+        <Route path="/product-search" element={<ProdutSearch />} />
+        <Route path="/warehouse-admin" element={<LandingWarehouse />} />
+        <Route
+          path="/warehouse-admin/view-products"
+          element={<ViewProduct />}
+        />
+        <Route
+          path="/warehouse-admin/view-categories"
+          element={<ViewCategory />}
+        />
+        <Route
+          path="/warehouse-admin/view-categories"
+          element={<ViewCategory />}
+        />
+        <Route
+          path="/warehouse-admin/manage-inventory"
+          element={<WarehouseInventory />}
+        />
+        <Route
+          path="/warehouse-admin/edit-stock"
+          element={<EditStockProduct />}
+        />
         <Route path="*" element={<NotFoundPage />} />
         {/* ROUTES FEATURE : PRODUCT-MANAGEMENT MAS ADHON*/}
         <Route path="" />

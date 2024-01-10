@@ -2,7 +2,7 @@ import { FaFacebook, FaTwitter, FaLinkedin } from 'react-icons/fa';
 const TemporaryFooter = () => {
   return (
     <div>
-      <div className=" bottom-0 left-0 right-0 bg-[#F06105] p-4 text-white text-center ">
+      <div className=" bottom-0 left-0 right-0 bg-[#F06105] p-4 text-white text-center mt-8">
         <div className="flex justify-center items-center mb-4">
           <a
             href="https://www.facebook.com/"

@@ -18,6 +18,7 @@ import EditStockProduct from './pages/admin/admin.warehouse/edit.stock/EditStock
 import Login from './pages/user/login/login';
 import Register from './pages/user/register/register';
 import TestLoginPage from './pages/user/layout/testLoginPage';
+import CartPage from './pages/user/cart/Cart';
 
 function App() {
   return (
@@ -64,6 +65,7 @@ function App() {
         />
         <Route path="*" element={<NotFoundPage />} />
         {/* ROUTES FEATURE : PRODUCT-MANAGEMENT MAS ADHON*/}
+        <Route path="/user/cart" element={<CartPage />} />
         <Route path="" />
         <Route path="" />
         <Route path="" />

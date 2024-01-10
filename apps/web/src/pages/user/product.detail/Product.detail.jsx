@@ -19,7 +19,9 @@ const ProductDetail = () => {
       setCounter(counter - 1);
     }
   };
-
+  const onHandleCart = () => {
+    
+  }
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -155,10 +157,11 @@ const ProductDetail = () => {
                       +
                     </button>
                   </div>
-
                   <div className="mt-1">
                     <div className="pt-2">
-                      <button className="w-full inline-block px-4 py-1 text-sm font-bold text-white bg-orange-500 rounded-md cursor-pointer transition-all duration-300 hover:bg-orange-600 focus:outline-none">
+                      <button className="w-full inline-block px-4 py-1 text-sm font-bold text-white bg-orange-500 rounded-md cursor-pointer transition-all duration-300 hover:bg-orange-600 focus:outline-none"
+                      onClick={onHandleCart}
+                      >
                         Add to Cart
                       </button>
                       <h1 className="text-orange-500 text-xs">

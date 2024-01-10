@@ -37,5 +37,9 @@
     "sequelize-cli": "^6.6.2",
     "sequelize-mock": "^0.10.2",
     "supertest": "^6.3.3"
-  }
+  },
+  "main": ".eslintrc.js",
+  "author": "",
+  "license": "ISC",
+  "description": ""
 }

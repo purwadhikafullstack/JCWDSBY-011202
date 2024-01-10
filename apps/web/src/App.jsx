@@ -3,6 +3,7 @@ import Home from './pages/user/home/Home';
 import LandingAdmin from './pages/admin/admin/landing/Landing';
 import ManageProduct from './pages/admin/admin/manage.product/manage.product';
 import ManageCategory from './pages/admin/admin/manage.category/manage.category';
+import ManageAccount from './pages/admin/admin/manage.account/manage.account';
 import ProductDetail from './pages/user/product.detail/Product.detail';
 import NotFoundPage from './components/Temporary/404';
 import EditProduct from './components/EditProduct';
@@ -14,15 +15,20 @@ import ProdutSearch from './pages/user/product.search/Product.search';
 import ManageInventory from './pages/admin/admin/manage.inventory/manage.inventory';
 import WarehouseInventory from './components/WarehouseInventory';
 import EditStockProduct from './pages/admin/admin.warehouse/edit.stock/EditStock';
+import Login from './pages/user/login/login';
+import Register from './pages/user/register/register';
+import TestLoginPage from './pages/user/layout/testLoginPage';
+
 function App() {
   return (
     <BrowserRouter>
       <Routes>
         <Route path="/" element={<Home />} />
         {/* ROUTES FEATURE : PRODUCT-MANAGEMENT KAI*/}
-        <Route path="" />
-        <Route path="" />
-        <Route path="" />
+        <Route path="/login" element={<Login />} />
+        <Route path="/test-page" element={<TestLoginPage />} />
+        <Route path="/register" element={<Register />}/>
+        <Route path="/manage-account" element={<ManageAccount />}/>
         {/* ROUTES FEATURE : PRODUCT-MANAGEMENT GIBRAN*/}
         <Route path="/admin" element={<LandingAdmin />} />
         <Route path="/admin/manage-product" element={<ManageProduct />} />

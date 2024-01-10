@@ -17,12 +17,21 @@ export const init = (sequelize) => {
       username: DataTypes.STRING,
       password: DataTypes.STRING,
       email: DataTypes.STRING,
-      role: DataTypes.STRING,
+      role: {
+        type: DataTypes.STRING,
+        defaultValue: "user"
+      },
       profile_picture: DataTypes.STRING,
       address_id: DataTypes.INTEGER,
       warehouse_id: DataTypes.INTEGER,
-      is_verified: DataTypes.BOOLEAN,
-      is_deleted: DataTypes.BOOLEAN,
+      is_verified: {
+        type: DataTypes.BOOLEAN,
+        defaultValue: false, 
+      },
+      is_deleted: {
+        type: DataTypes.BOOLEAN,
+        defaultValue: false,
+      },
     },
     {
       sequelize,

@@ -2,7 +2,7 @@ import React from 'react';
 
 const BasicTable = ({ categories, onEdit = () => {}, onDelete = () => {} }) => {
   return (
-    <div className="overflow-x-auto text">
+    <div className="overflow-x-auto text rounded-lg">
       <table className="min-w-full border divide-y divide-gray-200 ">
         <thead className="bg-orange-50">
           <tr>

@@ -86,7 +86,7 @@ const ManageCategory = () => {
   return (
     <div>
       <AdminLayout>
-        <div className="p-4 flex justify-between items-center">
+        <div className="p-4 flex justify-between items-center bg-white">
           <div className="font-bold text-xl">Category List</div>
           <button
             onClick={handleAddButtonClick}
@@ -96,7 +96,7 @@ const ManageCategory = () => {
             Add Category <span className="font-bold">+</span>
           </button>
         </div>
-        <div>
+        <div className="p-4">
           <BasicTable
             categories={categories}
             onEdit={handleEditClick}

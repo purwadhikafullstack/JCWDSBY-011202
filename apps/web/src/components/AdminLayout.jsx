@@ -3,11 +3,12 @@ import { Link } from 'react-router-dom';
 import React, { useState } from 'react';
 
 const linksData = [
-  { to: '/manage-account', label: 'Account' },
-  { to: '/manage-product', label: 'Products' },
-  { to: '/transaction', label: 'Transaction' },
-  { to: '/warehouses', label: 'Warehouses' },
-  { to: '/manage-category', label: 'Categories' },
+  { to: '/admin/manage-account', label: 'Account' },
+  { to: '/admin/manage-product', label: 'Products' },
+  { to: '/admin/transaction', label: 'Transaction' },
+  { to: '/admin/warehouses', label: 'Warehouses' },
+  { to: '/admin/manage-category', label: 'Categories' },
+  { to: '/admin/manage-inventory', label: 'Inventory' },
 ];
 
 const AdminLayout = (props) => {
@@ -26,7 +27,7 @@ const AdminLayout = (props) => {
         } transition-all duration-300 min-h-screen md:min-h-0`}
       >
         <div className="flex items-center mb-4">
-          <Link to="/admin-landing">
+          <Link to="/admin">
             <img src={icon} className="w-[25px]" alt="" />
           </Link>
           <h1 className="ml-2 font-bold text-lg">Super Admin</h1>
@@ -36,7 +37,7 @@ const AdminLayout = (props) => {
             <Link
               key={index}
               to={link.to}
-              className="block py-2 px-4 transition-all duration-300 hover:bg-slate-200 hover:rounded-md "
+              className="block py-2 px-4 transition-all duration-300 hover:bg-orange-500 hover:rounded-md hover:text-white "
             >
               {link.label}
             </Link>
@@ -55,7 +56,7 @@ const AdminLayout = (props) => {
       </div>
 
       {/* Main Content */}
-      <div className="flex-1 p-4 overflow-hidden overflow-y-auto">
+      <div className="flex-1 overflow-hidden overflow-y-auto">
         {props.children}
       </div>
     </div>

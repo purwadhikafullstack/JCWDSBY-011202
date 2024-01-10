@@ -14,13 +14,9 @@ const ProductDetail = () => {
   const [products, setProducts] = useState([]);
   const { id } = useParams();
 
-  const incrementCounter = () => {
-    setCounter((prevCounter) => prevCounter + 1);
-  };
-
-  const decrementCounter = () => {
+  const handleDecrease = () => {
     if (counter > 1) {
-      setCounter((prevCounter) => prevCounter - 1);
+      setCounter(counter - 1);
     }
   };
 
@@ -30,17 +26,18 @@ const ProductDetail = () => {
         const response = await axios.get(
           `http://localhost:8000/api/products?id=${id}`,
         );
-        if (!response.data.length) {
+        if (response.data.length === 0) {
           navigate('/not-found');
+        } else {
+          setProducts(response.data);
         }
-        setProducts(response.data);
       } catch (error) {
         console.error('Error fetching data:', error);
       }
     };
 
     fetchData();
-  }, []);
+  }, [id, navigate]);
 
   const formattedPrice =
     products.length > 0 ? formatPriceToIDR(products[0].price * counter) : '';
@@ -71,21 +68,32 @@ const ProductDetail = () => {
       </div>
       <div className="mx-32">
         <div className="flex mx-6 my-8">
-          <div>
-            <img src="https://placehold.co/384x384" alt="" />
-            <div className="grid grid-cols-4 gap-4">
-              {[...Array(4)].map((_, index) => (
-                <img
-                  key={index}
-                  className="w-[80px] h-[90px] "
-                  src="https://placehold.co/384x384"
-                  alt=""
-                />
-              ))}
+          <div className="w-[600px]">
+            <img
+              className="w-[400px] h-[400px]  border-2"
+              src={
+                products.length > 0 && products[0].product_images?.length > 0
+                  ? `http://localhost:8000/productimage/${products[0].product_images[0].image}`
+                  : 'https://placehold.co/384x384'
+              }
+              alt="Main Image"
+            />
+            <div className="grid grid-cols-4 gap-4 mt-2">
+              {products.length > 0 &&
+                products[0].product_images
+                  ?.slice(1, products[0].product_images.length)
+                  .filter((image) => image)
+                  .map((image, index) => (
+                    <img
+                      key={index}
+                      className="w-[84px] h-[90px]  border-2"
+                      src={`http://localhost:8000/productimage/${image.image}`}
+                      alt={`Product ${index + 2}`}
+                    />
+                  ))}
             </div>
           </div>
-
-          <div className="mx-8 w-5/12">
+          <div className="mx-8 w-full">
             <div>
               <h1 className="text-2xl font-extrabold">
                 {products.length > 0 && products[0].name}
@@ -95,67 +103,90 @@ const ProductDetail = () => {
               <p className="text-gray-500">
                 {products.length > 0 && products[0].description}
               </p>
-            </div>
-          </div>
+              <div className="mt-8 w-10/12 text-gray-500 text-[14px]">
+                <h1>INFORMASI PENTING, HARAP DIBACA</h1>
+                <ul>
+                  <li>
+                    1. Produk dikirim belum dirakit disertai panduan
+                    pemasangannya (Minor Asssembly required).
+                  </li>
+                  <li>
+                    2. Setelah barang diterima, pastikan pesanan Anda sesuai dan
+                    video
+                  </li>
+                  <li>
+                    3. Jika barang tidak sesuai atau bermasalah segera hubungi
+                    melalui email acewarehose@gmail.com
+                  </li>
+                </ul>
+              </div>
+              <div className="w-full mt-16 border border-gray-300 p-2 rounded-md">
+                <hr className="mt-1" />
+                <div className="w-10/12 mx-auto font-medium flex justify-between">
+                  <div>
+                    <h2 className="text-sm pt-2 font-medium text-gray-500">
+                      Harga
+                    </h2>
+                    <h1 className="text-xl text-orange-500">
+                      {formattedPrice}
+                    </h1>
+                  </div>
+                  <div className="flex justify-center items-center mt-4">
+                    <button
+                      onClick={handleDecrease}
+                      className="px-4 py-1 border border-gray-500  rounded-full"
+                    >
+                      -
+                    </button>
+                    <input
+                      type="text"
+                      inputMode="numeric"
+                      value={counter}
+                      onChange={(e) =>
+                        setCounter(parseInt(e.target.value) || 0)
+                      }
+                      className="px-4 py-1 border-gray-500 text-center w-full focus:outline-none"
+                      style={{ marginLeft: 'auto', marginRight: 'auto' }}
+                    />
+                    <button
+                      onClick={() => setCounter(counter + 1)}
+                      className="px-4 py-1 border border-gray-500 rounded-full"
+                    >
+                      +
+                    </button>
+                  </div>
 
-          <div className="sticky w-[250px]">
-            <div className="w-full border border-gray-300 p-2 rounded-md font-medium">
-              <h1 className="border-b border-grey-800 pb-2 text-center">
-                {products.length > 0 && products[0].name}
-              </h1>
-              <h2 className="text-sm pt-2 font-medium text-gray-500">Harga</h2>
-              <h1 className="text-xl text-orange-500">{formattedPrice}</h1>
-              <h2 className="font-medium text-gray-500 text-sm pt-2">Jumlah</h2>
-              <div className="flex items-center">
-                <div>
-                  <button
-                    onClick={decrementCounter}
-                    className="px-4 py-1 border border-gray-500 rounded-l"
-                  >
-                    -
-                  </button>
-                  <input
-                    type="text"
-                    inputMode="numeric"
-                    value={counter}
-                    onChange={(e) => setCounter(parseInt(e.target.value) || 0)}
-                    className="px-4 py-1 border-t border-b border-gray-500 text-center w-3/12"
-                  />
-                  <button
-                    onClick={incrementCounter}
-                    className="px-4 py-1 border border-gray-500 rounded-r"
-                  >
-                    +
-                  </button>
+                  <div className="mt-1">
+                    <div className="pt-2">
+                      <button className="w-full inline-block px-4 py-1 text-sm font-bold text-white bg-orange-500 rounded-md cursor-pointer transition-all duration-300 hover:bg-orange-600 focus:outline-none">
+                        Add to Cart
+                      </button>
+                      <h1 className="text-orange-500 text-xs">
+                        Tersisa <span>48</span>
+                      </h1>
+                    </div>
+                  </div>
                 </div>
-                <h1 className="text-orange-500 text-xs">
-                  Tersisa <span>48</span>
-                </h1>
-              </div>
-              <div className="pt-2">
-                <button className="w-full inline-block px-4 py-1 text-sm font-bold text-white bg-orange-500 rounded-md cursor-pointer transition-all duration-300 hover:bg-orange-600 focus:outline-none">
-                  Add to Cart
-                </button>
-              </div>
-              <div className="flex justify-around mt-2">
-                <h1 className="text-xs text-slate-500 flex items-center hover:text-orange-400 transition-all duration-300 cursor-pointer">
-                  <span className="mx-1">
-                    <CiHeart />
-                  </span>
-                  Wishlist
-                </h1>
-                <h1 className="text-xs text-slate-500 flex items-center hover:text-orange-400 transition-all duration-300 cursor-pointer">
-                  <span className="mx-1">
-                    <CiShare1 />
-                  </span>
-                  Share
-                </h1>
+                <div className="flex justify-around mt-2">
+                  <h1 className="text-xs text-slate-500 flex items-center hover:text-orange-400 transition-all duration-300 cursor-pointer">
+                    <span className="mx-1">
+                      <CiHeart />
+                    </span>
+                    Wishlist
+                  </h1>
+                  <h1 className="text-xs text-slate-500 flex items-center hover:text-orange-400 transition-all duration-300 cursor-pointer">
+                    <span className="mx-1">
+                      <CiShare1 />
+                    </span>
+                    Share
+                  </h1>
+                </div>
               </div>
             </div>
           </div>
         </div>
       </div>
-      <DiscoverMore />
+      <DiscoverMore products={products} />
       <TemporaryFooter />
     </div>
   );

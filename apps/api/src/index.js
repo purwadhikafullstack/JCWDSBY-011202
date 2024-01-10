@@ -57,6 +57,7 @@ const main = () => {
   app.use(cors());
   app.use(json());
   app.use('/api', router);
+  app.use('/productimage', express.static(__dirname + '/public/productimage'));
 
   globalAPIErrorHandler(app);
   serveWebProjectBuildResult(app);

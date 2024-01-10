@@ -4,7 +4,7 @@ import axios from 'axios';
 import { useEffect } from 'react';
 import ButtonWithLoading from './ButtonWithLoading';
 import { useParams } from 'react-router-dom';
-const EditModal = ({ closeModal, onAdd, initialData }) => {
+const EditModal = ({ closeModal, onEdit, initialData }) => {
   const { id } = useParams();
   const [loading, setLoading] = useState(false);
   const [categories, setCategories] = useState([]);
@@ -48,13 +48,13 @@ const EditModal = ({ closeModal, onAdd, initialData }) => {
       );
 
       const updatedProduct = await axios.get(
-        `http://localhost:8000/api/products/${id}`,
+        `http://localhost:8000/api/products?id=${id}`,
       );
 
-      if (onAdd) {
-        onAdd(updatedProduct.data);
+      if (onEdit) {
+        onEdit(updatedProduct.data);
+        console.log(updatedProduct.data);
       }
-
       setFormData({
         name: '',
         price: 0,

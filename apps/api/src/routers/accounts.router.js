@@ -8,6 +8,8 @@ import {
     CreateAccount,
     DeleteAccount,
     GetAccounts,
+    GetAdmins,
+    GetUsers,
     UpdateAccount
 } from "../controllers/accounts.controller";
 
@@ -15,10 +17,12 @@ const accountsRouter = Router()
 
 accountsRouter.post('/register', Register)
 accountsRouter.post('/login', Login)
-accountsRouter.post('forgot-password', ForgotPassword)
+accountsRouter.post('/forgot-password', ForgotPassword)
 accountsRouter.post('reset-password', ResetPassword)
 accountsRouter.get('/keep-login', KeepLogin)
 accountsRouter.get('/', GetAccounts)
+accountsRouter.get('/admins', GetAdmins)
+accountsRouter.get('/users', GetUsers)
 accountsRouter.post('/create-account', CreateAccount)
 accountsRouter.patch('/delete-account/:id', DeleteAccount)
 accountsRouter.patch('/update-account/:id', UpdateAccount)

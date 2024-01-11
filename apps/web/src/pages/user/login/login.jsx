@@ -1,38 +1,38 @@
-import React from 'react';
-import { useState } from 'react';
-import { useDispatch } from 'react-redux';
-import { useNavigate } from 'react-router-dom';
-import { loginSuccess } from '../../../redux/loginAction';
-import Layout from '../layout/layout';
-import axios from 'axios';
-import './login.css';
+import React from 'react'
+import { useState } from 'react'
+import { useDispatch } from 'react-redux'
+import { useNavigate } from 'react-router-dom'
+import { loginSuccess } from '../../../redux/loginAction'
+import Layout from '../layout/layout'
+import axios from 'axios'
+import './login.css'
 
 function Login() {
-    const [visible, setVisible] = useState(false);
-    const [username, setUsername] = useState('');
-    const [password, setPassword] = useState('');
+    const [visible, setVisible] = useState(false)
+    const [username, setUsername] = useState('')
+    const [password, setPassword] = useState('')
 
-    const dispatch = useDispatch();
-    const navigate = useNavigate();
+    const dispatch = useDispatch()
+    const navigate = useNavigate()
 
     const handleLogin = async () => {
         try {
             const response = await axios.post('http://localhost:8000/api/accounts/login', {
                 username,
                 password,
-            });
+            })
 
-            const { success, findAccount, token } = response.data;
+            const { success, findAccount, token } = response.data
 
             if (success) {
-                dispatch(loginSuccess(token, findAccount.username));
+                dispatch(loginSuccess(token, findAccount.username))
                 if (findAccount.role === 'admin') {
-                    navigate('admin-landing')
+                    navigate('/admin')
                 } else {
                     navigate('/')
                 }
             } else {
-                console.log('LOGIN FAILED:', response.data.message);
+                console.log('test');
             }
         } catch (error) {
             console.log(error);
@@ -73,4 +73,4 @@ function Login() {
     )
 }
 
-export default Login;
+export default Login

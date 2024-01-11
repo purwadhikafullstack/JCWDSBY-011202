@@ -1,4 +1,4 @@
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import Home from './pages/user/home/Home';
 import LandingAdmin from './pages/admin/admin/landing/Landing';
 import ManageProduct from './pages/admin/admin/manage.product/manage.product';
@@ -19,6 +19,16 @@ import Login from './pages/user/login/login';
 import Register from './pages/user/register/register';
 import TestLoginPage from './pages/user/layout/testLoginPage';
 
+const AdminRoute = ({ element }) => {
+  const role = useSelector((state) => state.auth.role);
+
+  if (role === 'admin') {
+    return <Navigate to="/admin" />;
+  }
+
+  return element;
+}
+
 function App() {
   return (
     <BrowserRouter>
@@ -28,14 +38,11 @@ function App() {
         <Route path="/login" element={<Login />} />
         <Route path="/test-page" element={<TestLoginPage />} />
         <Route path="/register" element={<Register />}/>
-        <Route path="/manage-account" element={<ManageAccount />}/>
+        <Route path="/admin/manage-account" element={<ManageAccount />}/>
         {/* ROUTES FEATURE : PRODUCT-MANAGEMENT GIBRAN*/}
         <Route path="/admin" element={<LandingAdmin />} />
         <Route path="/admin/manage-product" element={<ManageProduct />} />
-        <Route
-          path="/admin/manage-product/add-product"
-          element={<AddProduct />}
-        />
+        <Route path="/admin/manage-product/add-product"element={<AddProduct />}/>
         <Route path="edit-product/:id" element={<EditProduct />} />
         <Route path="/admin/manage-category" element={<ManageCategory />} />
         <Route path="/admin/manage-inventory" element={<ManageInventory />} />

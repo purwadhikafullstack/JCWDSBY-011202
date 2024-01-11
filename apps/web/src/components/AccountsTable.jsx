@@ -13,9 +13,6 @@ const AccountsTable = ({ accounts, onEdit = () => { }, onDelete = () => { } }) =
               Email
             </th>
             <th className="px-6 py-3 text-xs font-medium tracking-wider text-left text-gray-500 uppercase">
-              Role
-            </th>
-            <th className="px-6 py-3 text-xs font-medium tracking-wider text-left text-gray-500 uppercase">
               Address ID
             </th>
             <th className="px-6 py-3 text-xs font-medium tracking-wider text-left text-gray-500 uppercase">
@@ -34,9 +31,6 @@ const AccountsTable = ({ accounts, onEdit = () => { }, onDelete = () => { } }) =
               </td>
               <td className="px-6 py-4 text-sm text-gray-500 whitespace-nowrap">
                 {account.email}
-              </td>
-              <td className="px-6 py-4 text-sm text-gray-500 whitespace-nowrap">
-                {account.role}
               </td>
               <td className="px-6 py-4 text-sm text-gray-500 whitespace-nowrap">
                 {account.address_id ? account.address_id : '-'}

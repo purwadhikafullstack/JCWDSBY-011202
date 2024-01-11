@@ -65,7 +65,7 @@ function App() {
         />
         <Route path="*" element={<NotFoundPage />} />
         {/* ROUTES FEATURE : PRODUCT-MANAGEMENT MAS ADHON*/}
-        <Route path="/user/cart" element={<CartPage />} />
+        <Route path="/cart" element={<CartPage />} />
         <Route path="" />
         <Route path="" />
         <Route path="" />

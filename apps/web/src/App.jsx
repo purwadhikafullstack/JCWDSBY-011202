@@ -27,8 +27,8 @@ function App() {
         {/* ROUTES FEATURE : PRODUCT-MANAGEMENT KAI*/}
         <Route path="/login" element={<Login />} />
         <Route path="/test-page" element={<TestLoginPage />} />
-        <Route path="/register" element={<Register />}/>
-        <Route path="/manage-account" element={<ManageAccount />}/>
+        <Route path="/register" element={<Register />} />
+        <Route path="/manage-account" element={<ManageAccount />} />
         {/* ROUTES FEATURE : PRODUCT-MANAGEMENT GIBRAN*/}
         <Route path="/admin" element={<LandingAdmin />} />
         <Route path="/admin/manage-product" element={<ManageProduct />} />
@@ -40,7 +40,7 @@ function App() {
         <Route path="/admin/manage-category" element={<ManageCategory />} />
         <Route path="/admin/manage-inventory" element={<ManageInventory />} />
         <Route path="/product-detail/:id" element={<ProductDetail />} />
-        <Route path="/product-search" element={<ProdutSearch />} />
+        <Route path="/product-search?" element={<ProdutSearch />} />
         <Route path="/warehouse-admin" element={<LandingWarehouse />} />
         <Route
           path="/warehouse-admin/view-products"

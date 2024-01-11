@@ -1,7 +1,25 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { CiSearch } from 'react-icons/ci';
+import axios from 'axios';
 
 function SearchBar() {
+  const [query, setQuery] = useState('');
+  const [products, setProducts] = useState([]);
+  console.log(products);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await axios.get(`http://localhost:8000/api/products`);
+        setProducts(response.data);
+      } catch (error) {
+        console.error('Error fetching data:', error);
+      }
+    };
+
+    fetchData();
+  }, []);
+
   return (
     <div className="flex items-center justify-center ">
       <div className="flex w-full h-8 mx-10 rounded bg-white">

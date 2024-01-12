@@ -3,7 +3,6 @@ import jwt from "jsonwebtoken"
 module.exports = {
   validateToken: (req, res, next) => {
     try {
-        console.log("masuk validate 2", req.headers["authorization"].split(" ")[1]);
         const token = req.headers["authorization"].split(" ")[1]
       if (!token) {
         return res.status(400).send({
@@ -18,7 +17,6 @@ module.exports = {
             message: "Unauthorized Request",
           });
         }
-        console.log(verifyData);
         req.userData = verifyData;
         next();
       }
@@ -91,8 +89,3 @@ module.exports = {
     }
   },
 };
-      return res.status(400).send("Invalid Token");
-    }
-  },
-};
-

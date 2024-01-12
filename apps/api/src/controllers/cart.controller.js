@@ -15,9 +15,8 @@ export const addToCart = async (req, res, next) => {
                     { account_id: req.userData.id },
                     { product_id: req.body.product_id }
                 ]
-
             },
-            raw:true
+            raw: true
         })
         if (!findProduct) {
             const result = await carts.create({
@@ -38,11 +37,11 @@ export const addToCart = async (req, res, next) => {
                 total_price: findProduct.total_price + req.body.total_price,
                 updatedAt: new Date(),
             },
-            {
-                where: {
-                    id: findProduct.id
-                }
-            })
+                {
+                    where: {
+                        id: findProduct.id
+                    }
+                })
             return res.status(200).send({
                 message: "Success add product to cart", result: result
             })
@@ -53,7 +52,7 @@ export const addToCart = async (req, res, next) => {
     }
 
 }
-// untuk API cart Page
+// Untuk API("/cart")
 export const getCart = async (req, res, next) => {
     try {
         const allProduct = await carts.findAndCountAll({
@@ -67,7 +66,7 @@ export const getCart = async (req, res, next) => {
                     attributes: ["name", "price"]
                 }
             ],
-            raw:true
+            raw: true
         })
         return res.status(200).send({
             message: "Berhasil mendapatkan data carts",
@@ -77,9 +76,104 @@ export const getCart = async (req, res, next) => {
         return res.status(500).send(error.message)
     }
 }
+// Untuk API("/cart")
 export const deleteCart = async (req, res, next) => {
-
+    try {
+        console.log("params", req.params.id);
+        console.log("params 2", req.userData.id);
+        const result = await carts.destroy({
+            where: {
+                account_id: req.userData.id,
+                id: req.params.id
+            }
+        })
+        return res.status(200).send({
+            message: "Success delete cart item",
+            result: result
+        })
+    } catch (error) {
+        return res.status(500).send(error)
+    }
 }
-export const updateCart = async (req, res, next) => {
+export const plusQty = async (req, res, next) => {
+    try {
+        console.log("masuk plus");
+        const findProduct=await carts.findOne({
+            where:{[Op.and]:[
+                {account_id: req.userData.id},
+                {id: req.params.id}]
+            },
+            include: [
+                {
+                    model: products,
+                    required: true,
+                    attributes: ["name", "price"]
+                }
+            ],
+            raw:true
+        })
+        const data = await carts.update({
+            quantity:findProduct.quantity+1,
+            total_price:findProduct[`product.price`]*(findProduct.quantity+1)
+        },{
+            where: {
+                id:findProduct.id
+            }
+            
+        })
+        return res.status(200).send({message
+        :"success increase qty",
+    result:data})
+    } catch (error) {
+        return res.status(400).send(error.message)
+    }
+}
+export const minusQty = async (req, res, next) => {
+    try {
+        console.log("masuk minus");
+
+        const findProduct=await carts.findOne({
+            where:{[Op.and]:[
+                {account_id: req.userData.id},
+                {id: req.params.id}]
+            },
+            include: [
+                {
+                    model: products,
+                    required: true,
+                    attributes: ["name", "price"]
+                }
+            ],
+            raw:true
+        })
+        if(findProduct.quantity===1){
+            const data = await carts.destroy({
+                where: {
+                    id:findProduct.id
+                }
+            })
+            return res.status(200).send({
+                message:"success delete product cart",
+                result:data
+            })
+        } else {
+            const data = await carts.update({
+                quantity:findProduct.quantity-1,
+                total_price:findProduct[`product.price`]*(findProduct.quantity-1)
+            },{
+                where: {
+                    id:findProduct.id
+                }
+                
+            })
+            return res.status(200).send({message
+            :"success increase qty",
+        result:data})
+        }
+    } catch (error) {
+        return res.status(500).send(error.message)
+    }
+}
+export const other = async (req, res, next) => {
 
 }

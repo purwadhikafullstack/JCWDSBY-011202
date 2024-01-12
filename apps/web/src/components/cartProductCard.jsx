@@ -5,7 +5,7 @@ import { CiTrash } from 'react-icons/ci';
 import { IoShareSocialOutline } from 'react-icons/io5';
 import { useState } from 'react';
 const CartProductCard = (props) => {
-  const [qty, setqty] = useState(props.qty);
+  // const [qty, setqty] = useState(props.qty);
 
   return (
     <>
@@ -15,35 +15,42 @@ const CartProductCard = (props) => {
           <div className="flex gap-2">
             <input type="checkbox" name="intoOrder" />
             <div className=" bg-slate-400">
-              <img src="" alt="gambar" className="w-[50px]" />
+              <img src={props.productImage} alt="gambar" className="w-[50px]" />
             </div>
             <div className=" w-[100px] md:w-[200px] ">
               <p className=" truncate">
                 {props.productName}
               </p>
+              <p className="text-[14px] text-slate-500">
+              Rp {props.productPrice.toLocaleString("id")}
+            </p>
             </div>
           </div>
           {/* untuk qty produk */}
           <div className="flex gap-1">
           <button className=" border-[1px] h-fit px-2 rounded-sm bg-white font-bold hover:bg-slate-300"
-            onClick={()=>{return setqty(qty-1)}}>
+            onClick={
+              props.onClickMinus
+              // ()=>{return setqty(qty-1)}
+              }>
               -
             </button>
             <div className="border-[1px] h-fit px-2 rounded-sm bg-slate-200 font-bold">
               {props.qty}
             </div>
             <button className="border-[1px] h-fit px-2 rounded-sm bg-white font-bold hover:bg-slate-300"
-            onClick={()=>{return setqty(qty+1)}}>
+            onClick={
+              props.onClickPlus
+              // ()=>{return setqty(qty+1)}
+              }>
               +
             </button>
           </div>
           <div className="">
             <p className="text-[#F06105] font-bold text-[16px] md:text-[17px]">
-              {props.productFinalPrice}
+              Rp {props.productFinalPrice.toLocaleString("id")}
             </p>
-            <p className=" line-through text-right text-[14px] text-slate-500">
-              {props.productPrice}
-            </p>
+            
           </div>
         </div>
         <div className=" flex justify-end gap-2">
@@ -54,7 +61,8 @@ const CartProductCard = (props) => {
           <button className="rounded-full bg-slate-100 p-1 hover:bg-slate-300">
             <IoShareSocialOutline className="" />
           </button>
-          <button className="rounded-full bg-slate-100 p-1 hover:bg-slate-300">
+          <button className="rounded-full bg-slate-100 p-1 hover:bg-slate-300"
+          onClick={props.onHandleDelete}>
             <CiTrash className="" />
           </button>
         </div>

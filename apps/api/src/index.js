@@ -59,7 +59,6 @@ const main = () => {
   app.use(bearer());
   app.use('/api', router);
   app.use('/productimage', express.static(__dirname + '/public/productimage'));
-  app.use(bearerToken())
 
   globalAPIErrorHandler(app);
   serveWebProjectBuildResult(app);

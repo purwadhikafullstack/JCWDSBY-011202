@@ -45,9 +45,8 @@ const onHandleCart =async () => {
   try {
     const token = localStorage.getItem("token")
     const send = await axios.post(
-      "http://localhost:8000/cart/add-to-cart",
+      "http://localhost:8000/api/cart/add-to-cart",
       {
-        // account_id : ,
         product_id : id,
         quantity : counter,
         total_price : products[0].price*counter
@@ -55,6 +54,8 @@ const onHandleCart =async () => {
       { headers: { Authorization: `Bearer ${token}`}})
   } catch (error) {
     console.log(error);
+    console.log("disini bro");
+    
   }
 }
   return (

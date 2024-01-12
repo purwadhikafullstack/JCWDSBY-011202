@@ -1,16 +1,18 @@
-const jwt = require("jsonwebtoken");
+import jwt from "jsonwebtoken"
 
 module.exports = {
   validateToken: (req, res, next) => {
     try {
-        console.log("masuk validate", req.token);
-      if (!req.token) {
+
+        console.log("masuk validate 2", req.headers["authorization"].split(" ")[1]);
+        const token = req.headers["authorization"].split(" ")[1]
+      if (!token) {
         return res.status(400).send({
           success: false,
           message: "You don't have account",
         });
       } else {
-        const verifyData = jwt.verify(req.token, "abcd");
+        const verifyData = jwt.verify(token, "abcd");
         if (!verifyData) {
           return res.status(401).send({
             success: false,

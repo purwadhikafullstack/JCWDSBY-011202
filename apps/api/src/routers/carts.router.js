@@ -5,10 +5,10 @@ import { validateToken } from '../middleware/validation';
 const cartRouter = Router()
 
 // GET
-cartRouter.get("/cart",getCart)
+cartRouter.get("/",validateToken,getCart)
 
 // POST
-cartRouter.post("/add-to-cart/",validateToken,addToCart)
+cartRouter.post("/add-to-cart",validateToken,addToCart)
 
 
 

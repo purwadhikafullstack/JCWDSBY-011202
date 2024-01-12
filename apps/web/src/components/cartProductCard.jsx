@@ -19,7 +19,7 @@ const CartProductCard = (props) => {
             </div>
             <div className=" w-[100px] md:w-[200px] ">
               <p className=" truncate">
-                Sofa 1 set untuk bahan {props.productName}
+                {props.productName}
               </p>
             </div>
           </div>
@@ -39,10 +39,10 @@ const CartProductCard = (props) => {
           </div>
           <div className="">
             <p className="text-[#F06105] font-bold text-[16px] md:text-[17px]">
-              Rp 2.500.000 {props.productFinalPrice}
+              {props.productFinalPrice}
             </p>
             <p className=" line-through text-right text-[14px] text-slate-500">
-              Rp 3.500.000 {props.productPrice}
+              {props.productPrice}
             </p>
           </div>
         </div>

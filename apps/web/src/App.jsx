@@ -66,7 +66,7 @@ function App() {
         <Route path="/admin/manage-category" element={<ManageCategory />} />
         <Route path="/admin/manage-inventory" element={<ManageInventory />} />
         <Route path="/product-detail/:id" element={<ProductDetail />} />
-        <Route path="/product-search" element={<ProdutSearch />} />
+        <Route path="/product-search?" element={<ProdutSearch />} />
         <Route path="/warehouse-admin" element={<LandingWarehouse />} />
         <Route path="/warehouse-admin/view-products" element={<ViewProduct />} />
         <Route path="/warehouse-admin/view-categories" element={<ViewCategory />} />

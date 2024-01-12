@@ -71,41 +71,46 @@ function Login() {
     //         console.log(error);
     //     }
     // }
-
-
-
-    return (
-        <Layout className="login">
-            <div className="loginContainer">
-                <h1>Log In</h1>
-                <ul>
-                    <li>
-                        <label htmlFor="">Username</label> <br />
-                        <input type="text" placeholder="Type in your username" onChange={(e) => setUsername(e.target.value)} /> <br />
-                    </li>
-                    <li>
-                        <label htmlFor="">Password</label> <br />
-                        <div className="passwordWrapper">
-                            <input
-                                type={visible ? 'text' : 'password'}
-                                placeholder="Type in your password"
-                                onChange={(e) => setPassword(e.target.value)}
-                            />
-                            <i className={`fa-solid fa-eye${visible ? '' : '-slash'}`} onClick={() => setVisible(!visible)}></i>
-                        </div>
-                    </li>
-                </ul>
-                <button className="forgotWrapper">
-                    <button className="forgot">Forgot password?</button> <br />
-                </button>
-                <button className="buttonWrapper">
-                    <button className="loginButton" onClick={handleLogin}>
-                        Log In
-                    </button>
-                </button>
+  return (
+    <Layout className="login">
+      <div className="loginContainer">
+        <h1>Log In</h1>
+        <ul>
+          <li>
+            <label htmlFor="">Username</label> <br />
+            <input
+              type="text"
+              placeholder="Type in your username"
+              onChange={(e) => setUsername(e.target.value)}
+            />{' '}
+            <br />
+          </li>
+          <li>
+            <label htmlFor="">Password</label> <br />
+            <div className="passwordWrapper">
+              <input
+                type={visible ? 'text' : 'password'}
+                placeholder="Type in your password"
+                onChange={(e) => setPassword(e.target.value)}
+              />
+              <i
+                className={`fa-solid fa-eye${visible ? '' : '-slash'}`}
+                onClick={() => setVisible(!visible)}
+              ></i>
             </div>
-        </Layout>
-    )
+          </li>
+        </ul>
+        <button className="forgotWrapper">
+          <button className="forgot">Forgot password?</button> <br />
+        </button>
+        <button className="buttonWrapper">
+          <button className="loginButton" onClick={handleLogin}>
+            Log In
+          </button>
+        </button>
+      </div>
+    </Layout>
+  );
 }
 
 export default Login

@@ -1,12 +1,13 @@
-const FilterPrice = () => {
+const FilterPrice = (props) => {
   return (
     <div className="mt-2">
       <div className="flex flex-row-reverse w-full h-8  rounded bg-white">
         <input
-          className="w-full  bg-transparent border p-1  text-gray-400 outline-none focus:outline-none"
+          className="w-full  bg-transparent border p-1  text-black-400 outline-none focus:outline-none"
           type="number"
           name="Min Price"
           placeholder="Min Price"
+          onChange={props.MinPriceChange}
         />
         <button
           type="number"
@@ -17,10 +18,11 @@ const FilterPrice = () => {
       </div>
       <div className="flex flex-row-reverse w-full h-8  rounded bg-white mt-2">
         <input
-          className="w-full  bg-transparent border p-1  text-gray-400 outline-none focus:outline-none"
+          className="w-full  bg-transparent border p-1  text-black-400 outline-none focus:outline-none"
           type="number"
           name="Max Price"
           placeholder="Max Price"
+          onChange={props.MaxPriceChange}
         />
         <button
           type="submit"

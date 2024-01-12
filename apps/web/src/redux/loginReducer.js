@@ -1,7 +1,8 @@
 const initialState = {
     token: null,
     username: null,
-};
+    role: null
+}
 
 const loginReducer = (state = initialState, action) => {
     switch (action.type) {
@@ -10,12 +11,13 @@ const loginReducer = (state = initialState, action) => {
                 ...state,
                 token: action.payload.token,
                 username: action.payload.username,
-            };
+                role: action.payload.role
+            }
         case 'LOGOUT':
-            return initialState;
+            return initialState
         default:
-            return state;
+            return state
     }
-};
+}
 
-export default loginReducer;
+export default loginReducer

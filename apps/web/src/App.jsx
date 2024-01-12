@@ -1,4 +1,4 @@
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import { BrowserRouter, Routes, Route, Navigate, useNavigate } from 'react-router-dom';
 import Home from './pages/user/home/Home';
 import LandingAdmin from './pages/admin/admin/landing/Landing';
 import ManageProduct from './pages/admin/admin/manage.product/manage.product';
@@ -18,8 +18,36 @@ import EditStockProduct from './pages/admin/admin.warehouse/edit.stock/EditStock
 import Login from './pages/user/login/login';
 import Register from './pages/user/register/register';
 import TestLoginPage from './pages/user/layout/testLoginPage';
+import { useDispatch } from 'react-redux';
+
+// const AdminRoute = ({ element }) => {
+//   const role = useSelector((state) => state.auth.role);
+
+//   if (role === 'admin') {
+//     return <Navigate to="/admin" />;
+//   }
+
+//   return element;
+// }
 
 function App() {
+  // const navigate = useNavigate();
+  // const dispatch = useDispatch();
+
+  // useEffect(() => {
+  //   const token = localStorage.getItem("token");
+
+  //   if (token) {
+  //     const username = useSelector(state => state.auth.username)
+  //     const role = useSelector(state => state.auth.role)
+  //     dispatch(loginSuccess(token, username, role))
+
+  //     if (role === 'admin') {
+  //       navigate('/admin');
+  //     }
+  //   }
+  // }, [dispatch, navigate]);
+
   return (
     <BrowserRouter>
       <Routes>
@@ -27,41 +55,23 @@ function App() {
         {/* ROUTES FEATURE : PRODUCT-MANAGEMENT KAI*/}
         <Route path="/login" element={<Login />} />
         <Route path="/test-page" element={<TestLoginPage />} />
-        <Route path="/register" element={<Register />}/>
-        <Route path="/manage-account" element={<ManageAccount />}/>
+        <Route path="/register" element={<Register />} />
+        <Route path="/admin/manage-account" element={<ManageAccount />} />
         {/* ROUTES FEATURE : PRODUCT-MANAGEMENT GIBRAN*/}
         <Route path="/admin" element={<LandingAdmin />} />
         <Route path="/admin/manage-product" element={<ManageProduct />} />
-        <Route
-          path="/admin/manage-product/add-product"
-          element={<AddProduct />}
-        />
+        <Route path="/admin/manage-product/add-product" element={<AddProduct />} />
         <Route path="edit-product/:id" element={<EditProduct />} />
         <Route path="/admin/manage-category" element={<ManageCategory />} />
         <Route path="/admin/manage-inventory" element={<ManageInventory />} />
         <Route path="/product-detail/:id" element={<ProductDetail />} />
         <Route path="/product-search" element={<ProdutSearch />} />
         <Route path="/warehouse-admin" element={<LandingWarehouse />} />
-        <Route
-          path="/warehouse-admin/view-products"
-          element={<ViewProduct />}
-        />
-        <Route
-          path="/warehouse-admin/view-categories"
-          element={<ViewCategory />}
-        />
-        <Route
-          path="/warehouse-admin/view-categories"
-          element={<ViewCategory />}
-        />
-        <Route
-          path="/warehouse-admin/manage-inventory"
-          element={<WarehouseInventory />}
-        />
-        <Route
-          path="/warehouse-admin/edit-stock"
-          element={<EditStockProduct />}
-        />
+        <Route path="/warehouse-admin/view-products" element={<ViewProduct />} />
+        <Route path="/warehouse-admin/view-categories" element={<ViewCategory />} />
+        <Route path="/warehouse-admin/view-categories" element={<ViewCategory />} />
+        <Route path="/warehouse-admin/manage-inventory" element={<WarehouseInventory />} />
+        <Route path="/warehouse-admin/edit-stock" element={<EditStockProduct />} />
         <Route path="*" element={<NotFoundPage />} />
         {/* ROUTES FEATURE : PRODUCT-MANAGEMENT MAS ADHON*/}
         <Route path="" />
@@ -72,4 +82,4 @@ function App() {
   );
 }
 
-export default App;
+export default App 

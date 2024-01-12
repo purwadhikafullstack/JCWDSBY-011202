@@ -78,13 +78,13 @@ const EditModal = ({ closeModal, onEdit, initialData }) => {
       try {
         const response = await axios.get(
           'http://localhost:8000/api/categories',
-        );
+        )
         console.log(response.data);
         setCategories(response.data);
       } catch (error) {
         console.log(error);
       }
-    };
+    }
 
     fetchData();
   }, []);

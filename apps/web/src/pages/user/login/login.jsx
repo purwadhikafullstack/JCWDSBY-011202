@@ -23,9 +23,11 @@ function Login() {
             });
 
             const { success, findAccount, token } = response.data;
-
+            console.log("ini token",response.data.token);
+            console.log("ini find account",response.data.findAccount);
             if (success) {
-                dispatch(loginSuccess(token, findAccount.username));
+                // dispatch(loginSuccess(token, findAccount.username));
+                localStorage.setItem("token",token)
                 if (findAccount.role === 'admin') {
                     navigate('admin-landing')
                 } else {

@@ -10,7 +10,7 @@ export default class carts extends Model {
     // define association here
     carts.belongsTo(models.accounts, { foreignKey: "account_id" })
     carts.belongsTo(models.products, { foreignKey: "product_id" })
-    carts.belongsTo(models.warehouses, { foreignKey: "warehouses_id" })
+    carts.belongsTo(models.warehouses, { foreignKey: "warehouse_id" })
   }
 }
 

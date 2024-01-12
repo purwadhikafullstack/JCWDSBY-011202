@@ -6,8 +6,10 @@ export default class accounts extends Model {
    * This method is not a part of Sequelize lifecycle.
    * The `models/index` file will call this method automatically.
    */
-  static associate(accounts) {
+  static associate(models) {
     // define association here
+    accounts.belongsTo(models.warehouses,{foreignKey:"warehouse_id"})
+    accounts.hasMany(models.addresses,{foreignKey:"account_id"})
   }
 }
 

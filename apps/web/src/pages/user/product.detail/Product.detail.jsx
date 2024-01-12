@@ -19,9 +19,7 @@ const ProductDetail = () => {
       setCounter(counter - 1);
     }
   };
-  const onHandleCart = () => {
-    
-  }
+ 
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -43,7 +41,22 @@ const ProductDetail = () => {
 
   const formattedPrice =
     products.length > 0 ? formatPriceToIDR(products[0].price * counter) : '';
-
+const onHandleCart =async () => {
+  try {
+    const token = localStorage.getItem("token")
+    const send = await axios.post(
+      "http://localhost:8000/cart/add-to-cart",
+      {
+        // account_id : ,
+        product_id : id,
+        quantity : counter,
+        total_price : products[0].price*counter
+      },
+      { headers: { Authorization: `Bearer ${token}`}})
+  } catch (error) {
+    console.log(error);
+  }
+}
   return (
     <div className="flex flex-col min-h-screen">
       <TemporaryNavbar />

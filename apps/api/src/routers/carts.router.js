@@ -1,5 +1,6 @@
 import { Router } from 'express';
 import { addToCart, getCart } from '../controllers/cart.controller';
+import { validateToken } from '../middleware/validation';
 
 const cartRouter = Router()
 
@@ -7,6 +8,8 @@ const cartRouter = Router()
 cartRouter.get("/cart",getCart)
 
 // POST
-cartRouter.post("/add-to-cart",addToCart)
+cartRouter.post("/add-to-cart/",validateToken,addToCart)
+
+
 
 export {cartRouter}

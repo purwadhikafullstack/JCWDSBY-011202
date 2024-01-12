@@ -10,33 +10,35 @@ export const Login = async (req, res, next) => {
             },
             raw: true
         })
+        console.log("api backend", findAccount);
+        if (!findAccount) {
+            return res.status(404).send({
+                success: false,
+                message: 'ACCOUNT NOT FOUND'
+            })
+        }
 
-        // const salt = await bcrypt.genSalt(10)
-        // const hashPassword = await bcrypt.hash(req.body.password, salt)
-        // console.log("SALT : ", salt)
-        // console.log("HASH : ", hashPassword)
-
-        // req.body.password = hashPassword
-
-        // if (hashPassword !== findAccount.password) {
-        //     console.log('INPUTTED PASSWORD', req.body.password);
-        //     console.log('ACCOUNT PASSWORD', findAccount.password);
-        //     return res.status(400).send({
-        //         success: false,
-        //         message: 'INCORRECT PASSWORD'
-        //     })
-        // }
+        const correctPassword = await bcrypt.compare(req.body.password, findAccount.password);
+        console.log("api backend 2", correctPassword);
+        if (!correctPassword) {
+            return res.status(400).send({
+                success: false,
+                message: 'INCORRECT PASSWORD'
+            });
+        }
 
         const token = jwt.sign({
             id: findAccount.id,
-            username: findAccount.username
+            role: findAccount.role
         },
         'abcd',
         { expiresIn: "1h" })
-
+        const tokenReal = jwt.verify(token,"abcd")
+        console.log("api backend 3", token );
+        console.log("api backend 4",tokenReal);
         return res.status(200).send({
             success: true,
-            findAccount,
+            username:findAccount.username,
             token
         })
 
@@ -44,7 +46,7 @@ export const Login = async (req, res, next) => {
         console.log(error);
         return res.status(500).send({
             success: false,
-            message: error
+            message: error.message
         })
     }
 }

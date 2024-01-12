@@ -32,9 +32,7 @@ const CartPayment = (props) => {
       {/* Untuk Button lanjutkan dan batal */}
       <div className="flex flex-col gap-2">
         <button className="w-full bg-[#F06105] text-white rounded-md p-2 font-semibold hover:bg-orange-400"
-        onClick={()=>{
-          navigate("/user-checkout")
-        }}>
+        onClick={props.onHandleCheckOut}>
           Checkout
         </button>
         <button className="w-full bg- rounded-md p-2 bg-slate-300 text-slate-800 font-semibold hover:bg-slate-200">

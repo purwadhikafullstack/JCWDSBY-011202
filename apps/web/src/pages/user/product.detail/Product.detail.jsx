@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, CSSProperties  } from 'react';
 import { MdNavigateNext } from 'react-icons/md';
 import { CiHeart, CiShare1 } from 'react-icons/ci';
 import { Link, useNavigate, useParams } from 'react-router-dom';
@@ -7,8 +7,11 @@ import TemporaryNavbar from '../../../components/Temporary/Navbar';
 import TemporaryFooter from '../../../components/Temporary/Footer';
 import { formatPriceToIDR } from '../../../utils';
 import DiscoverMore from '../../../components/DiscoverMore';
+import ClipLoader from "react-spinners/ClipLoader";
+import ButtonWithLoading from '../../../components/ButtonWithLoading';
 
 const ProductDetail = () => {
+  const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
   const [counter, setCounter] = useState(1);
   const [products, setProducts] = useState([]);
@@ -42,6 +45,7 @@ const ProductDetail = () => {
   const formattedPrice =
     products.length > 0 ? formatPriceToIDR(products[0].price * counter) : '';
 const onHandleCart =async () => {
+  setLoading(true)
   try {
     const token = localStorage.getItem("token")
     const send = await axios.post(
@@ -52,10 +56,11 @@ const onHandleCart =async () => {
         total_price : products[0].price*counter
       },
       { headers: { Authorization: `Bearer ${token}`}})
+      alert("Berhasil menambahkan data")
   } catch (error) {
     console.log(error);
-    console.log("disini bro");
-    
+  } finally{
+    setLoading(false)
   }
 }
   return (
@@ -173,11 +178,14 @@ const onHandleCart =async () => {
                   </div>
                   <div className="mt-1">
                     <div className="pt-2">
-                      <button className="w-full inline-block px-4 py-1 text-sm font-bold text-white bg-orange-500 rounded-md cursor-pointer transition-all duration-300 hover:bg-orange-600 focus:outline-none"
+                      <ButtonWithLoading 
+                      title={"Add to cart"}
+                      isLoading={loading}
+                      // className="w-full inline-block px-4 py-1 text-sm font-bold text-white bg-orange-500 rounded-md cursor-pointer transition-all duration-300 hover:bg-orange-600 focus:outline-none"
                       onClick={onHandleCart}
-                      >
-                        Add to Cart
-                      </button>
+                      />
+                      {/* </button> */}
+                      {/* <ButtonWithLoading/> */}
                       <h1 className="text-orange-500 text-xs">
                         Tersisa <span>48</span>
                       </h1>

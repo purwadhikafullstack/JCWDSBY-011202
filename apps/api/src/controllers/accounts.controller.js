@@ -1,4 +1,5 @@
 import accounts from '../models/accounts'
+const bcrypt = require("bcrypt")
 
 export const GetAccounts = async (req, res, next) => {
     try {
@@ -17,7 +18,72 @@ export const GetAccounts = async (req, res, next) => {
         if (req.query.order) {
             req.query.order.toLowerCase() === 'desc' ? 'DESC' : 'ASC'
         }
+        const result = await accounts.findAll({
+            where: filter
+        })
 
+        return res.status(200).send(result)
+
+    } catch (error) {
+        console.log(error);
+        return res.status(500).send({
+            success: false,
+            message: 'MANAGE ACCOUNT FAILED'
+        })
+    }
+}
+
+export const GetAdmins = async (req, res, next) => {
+    try {
+        const filter = {
+            is_deleted: false,
+            role: 'admin'
+        }
+        if (req.query.id) {
+            filter.id = req.query.id
+        }
+        if (req.query.username) {
+            filter.username = req.query.username
+        }
+        if (req.query.email) {
+            filter.email = req.query.email
+        }
+        if (req.query.order) {
+            req.query.order.toLowerCase() === 'desc' ? 'DESC' : 'ASC'
+        }
+        const result = await accounts.findAll({
+            where: filter
+        })
+
+        return res.status(200).send(result)
+
+    } catch (error) {
+        console.log(error);
+        return res.status(500).send({
+            success: false,
+            message: 'MANAGE ACCOUNT FAILED'
+        })
+    }
+}
+
+export const GetUsers = async (req, res, next) => {
+    try {
+        const filter = {
+            is_deleted: false,
+            role: 'user'
+        }
+        if (req.query.id) {
+            filter.id = req.query.id
+        }
+        if (req.query.username) {
+            filter.username = req.query.username
+        }
+        if (req.query.email) {
+            filter.email = req.query.email
+        }
+        if (req.query.order) {
+            req.query.order.toLowerCase() === 'desc' ? 'DESC' : 'ASC'
+        }
         const result = await accounts.findAll({
             where: filter
         })
@@ -37,7 +103,9 @@ export const CreateAccount = async (req, res, next) => {
     try {
         const exists = await accounts.findOne({
             where: {
-                email: req.body.email
+                username: req.body.email,
+                email: req.body.email,
+                is_deleted: false
             }
         })
 
@@ -48,23 +116,16 @@ export const CreateAccount = async (req, res, next) => {
             })
         }
 
-        // const salt = await bcrypt.genSalt(10)
-        // const hashPassword = await bcrypt.hash(req.body.password, salt)
-        // console.log("SALT : ", salt)
-        // console.log("HASH : ", hashPassword)
+        const salt = await bcrypt.genSalt(10)
+        const hashPassword = await bcrypt.hash(req.body.password, salt)
+        console.log("SALT : ", salt)
+        console.log("HASH : ", hashPassword)
 
-        // req.body.password = hashPassword
+        req.body.password = hashPassword
+        // req.body.role = 'admin'
 
         const newAccount = await accounts.create(req.body)
         console.log('ACCOUNT REGISTERED : \n', newAccount);
-
-        // const token = jwt.sign({
-        //     id: newAccount.id,
-        //     email: newAccount.email
-        // },
-        //     process.env.secretToken,
-        //     { expiresIn: '1h' }
-        // )
 
         return res.status(201).send({
             success: true,
@@ -113,35 +174,26 @@ export const DeleteAccount = async (req, res, next) => {
 
 export const UpdateAccount = async (req, res, next) => {
     try {
-        const { username, email } = req.query;
+        console.log(req.params.id);
 
-        if (!username && !email ) {
-            return res.status(400).send({
-                success: false,
-                message: 'NO DATA PROVIDED'
-            })
-        }
-
-        const [updatedRows] = await accounts.update(
-            { username, email },
+        const result = await accounts.update(
+            {
+                username: req.body.username,
+                email: req.body.email,
+                address_id: req.body.address_id,
+                warehouse_id: req.body.warehouse_id
+            },
             {
                 where: {
-                    id: req.params.id
-                }
-            }
+                    id: req.params.id,
+                },
+            },
         )
-
-        if (updatedRows > 0) {
-            return res.status(200).send({
-                success: true,
-                message: 'ACCOUNT SUCCESSFULLY UPDATED'
-            })
-        } else {
-            return res.status(404).send({
-                success: false,
-                message: 'NO CHANGES MADE'
-            })
-        }
+        console.log(result);
+        return res.status(200).send({
+            success: true,
+            message: result
+        })
     } catch (error) {
         console.log(error);
         return res.status(500).send({
@@ -150,3 +202,43 @@ export const UpdateAccount = async (req, res, next) => {
         })
     }
 }
+
+// export const UpdateAccount = async (req, res, next) => {
+//     try {
+//         const { username, email, address_id, warehouse_id } = req.body
+
+//         if (!username || !email || !address_id || !warehouse_id ) {
+//             return res.status(400).send({
+//                 success: false,
+//                 message: 'NO DATA PROVIDED'
+//             })
+//         }
+
+//         const [updatedRows] = await accounts.update(
+//             { username, email, address_id, warehouse_id },
+//             {
+//                 where: {
+//                     id: req.params.id
+//                 }
+//             }
+//         )
+
+//         if (updatedRows > 0) {
+//             return res.status(200).send({
+//                 success: true,
+//                 message: 'ACCOUNT SUCCESSFULLY UPDATED'
+//             })
+//         } else {
+//             return res.status(404).send({
+//                 success: false,
+//                 message: 'NO CHANGES MADE'
+//             })
+//         }
+//     } catch (error) {
+//         console.log(error);
+//         return res.status(500).send({
+//             success: false,
+//             message: error
+//         })
+//     }
+// }

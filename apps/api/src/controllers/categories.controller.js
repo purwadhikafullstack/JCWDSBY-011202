@@ -145,6 +145,7 @@ export const updateData = async (req, res, next) => {
         },
       },
     );
+    console.log(result);
     return res
       .status(200)
       .send({ success: true, message: 'SUCCES UPDATE DATA' });

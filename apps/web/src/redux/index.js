@@ -1,10 +1,10 @@
-import { configureStore } from '@reduxjs/toolkit';
-import loginReducer from './loginReducer'; // Import your loginReducer
+import { configureStore } from '@reduxjs/toolkit'
+import loginReducer from './loginReducer'
 
 const globalState = configureStore({
   reducer: {
-    auth: loginReducer, 
-  },
-});
+    auth: loginReducer,
+  }
+})
 
-export default globalState;
+export default globalState

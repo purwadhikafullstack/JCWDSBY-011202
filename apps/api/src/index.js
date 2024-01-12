@@ -5,6 +5,7 @@ import { NODE_ENV, PORT } from './config';
 import router from './router';
 import { DB } from './db';
 import bearer from 'express-bearer-token';
+
 /**
  * Serve "web" project build result (for production only)
  * @param {Express} app
@@ -52,13 +53,13 @@ const globalAPIErrorHandler = (app) => {
  */
 const main = () => {
   DB.initialize();
-
   const app = express();
   app.use(cors());
   app.use(json());
   app.use(bearer());
   app.use('/api', router);
   app.use('/productimage', express.static(__dirname + '/public/productimage'));
+  app.use(bearerToken())
 
   globalAPIErrorHandler(app);
   serveWebProjectBuildResult(app);

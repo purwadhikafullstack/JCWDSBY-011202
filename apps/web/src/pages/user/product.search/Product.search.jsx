@@ -17,7 +17,8 @@ const ProdutSearch = () => {
   const location = useLocation();
   const navigate = useNavigate();
   const handleFilter = () => {
-    let filteredProducts = [...currentPage];
+    const emptyFilter = [...currentPage];
+    let filteredProducts = [...products];
     if (minPrice !== '' && maxPrice !== '') {
       filteredProducts = filteredProducts.filter(
         (product) =>
@@ -33,8 +34,11 @@ const ProdutSearch = () => {
         (product) => product.price <= parseInt(maxPrice, 10),
       );
     }
-    setCurrentPage(filteredProducts);
+    setCurrentPage(
+      filteredProducts.length > 0 ? filteredProducts : emptyFilter,
+    );
   };
+
   useEffect(() => {
     const fetchData = async () => {
       try {

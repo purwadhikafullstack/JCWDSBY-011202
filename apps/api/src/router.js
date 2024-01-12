@@ -4,6 +4,8 @@ import { categoriesRouter } from './routers/categories.router';
 import { productsRouter } from './routers/products.router';
 import { accountsRouter } from './routers/accounts.router';
 import { cartRouter } from './routers/carts.router';
+import { warehouse_mutationRouter } from './routers/warehouse_mutation.router';
+import { warehouse_storageRouter } from './routers/warehouse_storage.router';
 
 const router = Router();
 
@@ -18,12 +20,14 @@ router.use('/sample', sampleRouter);
 // Gibran
 router.use('/categories', categoriesRouter);
 router.use('/products', productsRouter);
+router.use('/warehouse/mutation', warehouse_mutationRouter);
+router.use('/warehouse/storage', warehouse_storageRouter);
 
 //KAI
-router.use('/accounts', accountsRouter)
+router.use('/accounts', accountsRouter);
 // add another router here ...
 
 // RAMA
-router.use('/cart', cartRouter)
+router.use('/cart', cartRouter);
 
 export default router;

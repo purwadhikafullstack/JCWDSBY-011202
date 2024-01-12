@@ -61,7 +61,7 @@ function SearchBar() {
             >
               <img
                 src={`http://localhost:8000/productimage/${product?.product_images?.[0]?.image}`}
-                className="w-16 mx-2"
+                className="w-16 mx-2 border-2"
               />
               <h1 className="font-semibold text-sm">{product.name}</h1>
             </div>

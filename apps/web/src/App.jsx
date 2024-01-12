@@ -1,4 +1,10 @@
-import { BrowserRouter, Routes, Route, Navigate, useNavigate } from 'react-router-dom';
+import {
+  BrowserRouter,
+  Routes,
+  Route,
+  Navigate,
+  useNavigate,
+} from 'react-router-dom';
 import Home from './pages/user/home/Home';
 import LandingAdmin from './pages/admin/admin/landing/Landing';
 import ManageProduct from './pages/admin/admin/manage.product/manage.product';
@@ -19,6 +25,7 @@ import Login from './pages/user/login/login';
 import Register from './pages/user/register/register';
 import TestLoginPage from './pages/user/layout/testLoginPage';
 import CartPage from './pages/user/cart/Cart';
+import ManageMutation from './pages/admin/admin.warehouse/manage.mutation/Manage.Mutation';
 import { useDispatch } from 'react-redux';
 
 // const AdminRoute = ({ element }) => {
@@ -61,18 +68,40 @@ function App() {
         {/* ROUTES FEATURE : PRODUCT-MANAGEMENT GIBRAN*/}
         <Route path="/admin" element={<LandingAdmin />} />
         <Route path="/admin/manage-product" element={<ManageProduct />} />
-        <Route path="/admin/manage-product/add-product" element={<AddProduct />} />
+        <Route
+          path="/admin/manage-product/add-product"
+          element={<AddProduct />}
+        />
         <Route path="edit-product/:id" element={<EditProduct />} />
         <Route path="/admin/manage-category" element={<ManageCategory />} />
         <Route path="/admin/manage-inventory" element={<ManageInventory />} />
         <Route path="/product-detail/:id" element={<ProductDetail />} />
         <Route path="/product-search?" element={<ProdutSearch />} />
         <Route path="/warehouse-admin" element={<LandingWarehouse />} />
-        <Route path="/warehouse-admin/view-products" element={<ViewProduct />} />
-        <Route path="/warehouse-admin/view-categories" element={<ViewCategory />} />
-        <Route path="/warehouse-admin/view-categories" element={<ViewCategory />} />
-        <Route path="/warehouse-admin/manage-inventory" element={<WarehouseInventory />} />
-        <Route path="/warehouse-admin/edit-stock" element={<EditStockProduct />} />
+        <Route
+          path="/warehouse-admin/view-products"
+          element={<ViewProduct />}
+        />
+        <Route
+          path="/warehouse-admin/view-categories"
+          element={<ViewCategory />}
+        />
+        <Route
+          path="/warehouse-admin/view-categories"
+          element={<ViewCategory />}
+        />
+        <Route
+          path="/warehouse-admin/manage-inventory"
+          element={<WarehouseInventory />}
+        />
+        <Route
+          path="/warehouse-admin/manage-mutation"
+          element={<ManageMutation />}
+        />
+        <Route
+          path="/warehouse-admin/edit-stock"
+          element={<EditStockProduct />}
+        />
         <Route path="*" element={<NotFoundPage />} />
         {/* ROUTES FEATURE : PRODUCT-MANAGEMENT MAS ADHON*/}
         <Route path="/cart" element={<CartPage />} />
@@ -84,4 +113,4 @@ function App() {
   );
 }
 
-export default App 
+export default App;

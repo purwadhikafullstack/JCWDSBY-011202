@@ -7,7 +7,7 @@ const linksData = [
   { to: '/warehouse-admin/view-categories', label: 'Categories' },
   { to: '/warehouse-admin/transaction', label: 'Transaction' },
   { to: '/warehouse-admin/manage-inventory', label: 'Inventory' },
-  { to: '/warehouse-admin/Mutation', label: 'Mutation' },
+  { to: '/warehouse-admin/manage-mutation', label: 'Mutation' },
 ];
 
 const WareHouseAdminLayout = (props) => {

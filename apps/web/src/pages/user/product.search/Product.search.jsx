@@ -6,17 +6,18 @@ import { formatPriceToIDR } from '../../../utils';
 import axios from 'axios';
 import { useState, useEffect } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
-
+import Pagination from '../../../components/Temporary/Pagination';
 const ProdutSearch = () => {
   const [products, setProducts] = useState([]);
+  const [currentPage, setCurrentPage] = useState([]);
   const [price, setPrice] = useState('');
   const [minPrice, setMinPrice] = useState('');
   const [maxPrice, setMaxPrice] = useState('');
+  const [page, setPage] = useState(1);
   const location = useLocation();
   const navigate = useNavigate();
-
   const handleFilter = () => {
-    let filteredProducts = [...products];
+    let filteredProducts = [...currentPage];
     if (minPrice !== '' && maxPrice !== '') {
       filteredProducts = filteredProducts.filter(
         (product) =>
@@ -32,23 +33,46 @@ const ProdutSearch = () => {
         (product) => product.price <= parseInt(maxPrice, 10),
       );
     }
-    setProducts(filteredProducts);
+    setCurrentPage(filteredProducts);
   };
-
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get(
-          `http://localhost:8000/api/products${location.search}`,
-        );
-        setProducts(response.data);
+        if (location.search.includes('category_id=')) {
+          if (page !== 1) {
+            setPage(1);
+          }
+          const response1 = await axios.get(
+            `http://localhost:8000/api/products${location.search}`,
+          );
+          setProducts(response1.data);
+          const response2 = await axios.get(
+            `http://localhost:8000/api/products${location.search}&page=${page}`,
+          );
+          setCurrentPage(response2.data);
+        } else {
+          const response1 = await axios.get(
+            `http://localhost:8000/api/products${location.search}`,
+          );
+          setProducts(response1.data);
+          if (location.search) {
+            const response2 = await axios.get(
+              `http://localhost:8000/api/products${location.search}&page=${page}`,
+            );
+            setCurrentPage(response2.data);
+          } else {
+            const response2 = await axios.get(
+              `http://localhost:8000/api/products?page=${page}`,
+            );
+            setCurrentPage(response2.data);
+          }
+        }
       } catch (error) {
         console.error('Error fetching data:', error);
       }
     };
-
     fetchData();
-  }, [location]);
+  }, [location.search, page]);
 
   useEffect(() => {
     if (location.search && !location.search.includes('price=')) {
@@ -70,6 +94,9 @@ const ProdutSearch = () => {
     }
   }, [price]);
 
+  const handlePageChange = (newPage) => {
+    setPage(newPage);
+  };
   return (
     <div>
       <TemporaryNavbar />
@@ -121,11 +148,11 @@ const ProdutSearch = () => {
                 </select>
               </div>
               <h1 className="text-[14px] self-end">
-                Showing <span>{products.length}</span> results
+                Showing <span>{currentPage.length}</span> results
               </h1>
             </div>
             <div className="flex flex-wrap -mx-2">
-              {products.map((product, index) => (
+              {currentPage.map((product, index) => (
                 <div key={index} className="w-1/4 p-2">
                   <ProductCatalogCard
                     productName={product?.name || 'N/A'}
@@ -148,7 +175,14 @@ const ProdutSearch = () => {
               ))}
             </div>
             <div className="mx-auto p-6 ">
-              <div className="flex justify-center"></div>
+              <div className="flex justify-center">
+                <Pagination
+                  products={products}
+                  page={page}
+                  onClickPrevious={() => handlePageChange(page - 1)}
+                  onClickNext={() => handlePageChange(page + 1)}
+                />
+              </div>
             </div>
           </div>
         </div>

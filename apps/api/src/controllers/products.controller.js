@@ -1,12 +1,14 @@
 import products from '../models/products';
 import categories from '../models/categories';
 import products_images from '../models/product_images';
-
 export const getProduct = async (req, res, next) => {
   try {
     const filter = {
       is_deleted: false,
     };
+    let limit = 12;
+    let page = 1;
+
     if (req.query.id) {
       filter.id = req.query.id;
     }
@@ -16,7 +18,9 @@ export const getProduct = async (req, res, next) => {
     if (req.query.category_id) {
       filter.category_id = req.query.category_id;
     }
+
     const order = [];
+
     if (req.query.alphabet) {
       order.push([
         'name',
@@ -28,6 +32,10 @@ export const getProduct = async (req, res, next) => {
         'price',
         req.query.price.toLowerCase() === 'desc' ? 'DESC' : 'ASC',
       ]);
+    }
+
+    if (req.query.page) {
+      page = parseInt(req.query.page);
     }
 
     const result = await products.findAll({
@@ -46,6 +54,8 @@ export const getProduct = async (req, res, next) => {
           attributes: ['image', 'id'],
         },
       ],
+      limit: req.query.page ? limit : undefined,
+      offset: req.query.page ? (page - 1) * limit : undefined,
     });
 
     return res.status(200).send(result);
@@ -56,6 +66,7 @@ export const getProduct = async (req, res, next) => {
       .send({ success: false, message: 'ERROR GETTING DATA' });
   }
 };
+
 export const createProduct = async (req, res, next) => {
   try {
     const existingProduct = await products.findOne({

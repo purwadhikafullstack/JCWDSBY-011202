@@ -16,7 +16,7 @@ const ProductCard = (props) => {
         />
       </div>
       <div className="flex flex-col justify-between p-1">
-        <h1 className="text-slate-500 font-medium mt-2 h-12">
+        <h1 className="text-slate-500 text-sm font-medium mt-2 h-12">
           {props.productName}
         </h1>
         <div className="flex justify-between mt-2 mb-2">

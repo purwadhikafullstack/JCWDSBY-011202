@@ -32,13 +32,25 @@ export const Login = async (req, res, next) => {
             username: findAccount.username,
             role: findAccount.role
         },
-        'abcd',
-        { expiresIn: "1h" })
+            'abcd',
+            { expiresIn: "1h" })
 
-        return res.status(200).send({
-            success: true,
-            findAccount,
-            token
+        jwt.verify(token, 'abcd', (error, decoded) => {
+            if (error) {
+                return res.status(500).send({
+                    success: false,
+                    message: error
+                })
+            }
+
+            const { role } = decoded;
+
+            return res.status(200).send({
+                success: true,
+                findAccount,
+                token,
+                role
+            })
         })
 
     } catch (error) {

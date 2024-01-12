@@ -9,7 +9,7 @@ const ProductCard = (props) => {
       <div>
         <img
           src={isHovered ? props.src2 : props.src}
-          className="h-6/12 w-full cursor-pointer h-full"
+          className="h-6/12 w-full cursor-pointer h-full transition-all duration-300"
           onMouseEnter={() => setIsHovered(true)}
           onMouseLeave={() => setIsHovered(false)}
           onClick={props.onClick}

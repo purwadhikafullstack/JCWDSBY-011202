@@ -26,9 +26,9 @@ function Login() {
       );
 
       const { success, findAccount, token } = response.data;
-      console.log(response.data);
       if (success) {
         dispatch(loginSuccess(token, findAccount.username));
+        localStorage.setItem('login', token);
         if (findAccount.role === 'admin') {
           navigate('admin-landing');
         } else {

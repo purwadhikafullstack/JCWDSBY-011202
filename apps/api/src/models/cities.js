@@ -9,7 +9,7 @@ export default class cities extends Model {
   static associate(models) {
     // define association here
     cities.hasMany(models.addresses,{foreignKey:"city_id"})
-    cities.belongsTo(models.provinces,{foreignKey:"province_id"})
+    cities.belongsTo(models.provinces,{foreignKey:"prov_id"})
     cities.hasMany(models.warehouses,{foreignKey:"city_id"})
 
   }
@@ -18,7 +18,7 @@ export default class cities extends Model {
 export const init = (sequelize) => {
   cities.init(
     {
-      province_id: DataTypes.INTEGER,
+      prov_id: DataTypes.INTEGER,
       name: DataTypes.STRING,
     
     },

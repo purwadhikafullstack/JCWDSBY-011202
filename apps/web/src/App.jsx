@@ -19,35 +19,75 @@ import Login from './pages/user/login/login';
 import Register from './pages/user/register/register';
 import TestLoginPage from './pages/user/layout/testLoginPage';
 import { useDispatch } from 'react-redux';
+import { useEffect, useState } from 'react';
 
-// const AdminRoute = ({ element }) => {
-//   const role = useSelector((state) => state.auth.role);
+// const navigate = useNavigate()
 
-//   if (role === 'admin') {
-//     return <Navigate to="/admin" />;
+// useEffect(() => {
+//   const localToken = localStorage.getItem('token');
+
+//   const checkLogin = async () => {
+//     if (localToken) {
+//       try {
+//         const response = await axios.get('http://localhost:8000/api/accounts/keep-login', {
+//           headers: {
+//             Authorization: `Bearer ${localToken}`
+//           }
+//         });
+
+//         const { success, role } = response.data;
+
+//         if (success) {
+//           setRole(role);
+//         } else {
+//           console.log('set role failed');
+//         }
+//       } catch (error) {
+//         console.log(error);
+//       }
+//     } else {
+//       console.log('no token');
+//     }
 //   }
 
-//   return element;
-// }
+//   checkLogin();
+//   if (role === 'admin') {
+//     navigate('/admin');
+//   }
+
+// }, [localToken, navigate, role]);
 
 function App() {
-  // const navigate = useNavigate();
-  // const dispatch = useDispatch();
+  const [role, setRole] = useState(null)
 
-  // useEffect(() => {
-  //   const token = localStorage.getItem("token");
+  const handleLogin = async () => {
+    try {
+      const response = await axios.get('http://localhost:8000/api/accounts/keep-login', {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("token")}`
+        }
+      });
 
-  //   if (token) {
-  //     const username = useSelector(state => state.auth.username)
-  //     const role = useSelector(state => state.auth.role)
-  //     dispatch(loginSuccess(token, username, role))
+      const { success, role } = response.data;
 
-  //     if (role === 'admin') {
-  //       navigate('/admin');
-  //     }
-  //   }
-  // }, [dispatch, navigate]);
+      if (success) {
+        setRole(role);
+        if (role === 'admin') {
+          return <Navigate to="/admin" />;
+        } else {
+          return <Navigate to="/" />;
+        }
+      } else {
+        console.log('set role failed');
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  }
 
+  useEffect(() => {
+    handleLogin()
+  }, [role])
   return (
     <BrowserRouter>
       <Routes>

@@ -40,7 +40,7 @@ export const Login = async (req, res, next) => {
                 return res.status(500).send({
                     success: false,
                     message: error
-                })
+                });
             }
 
             const { role } = decoded;
@@ -50,8 +50,8 @@ export const Login = async (req, res, next) => {
                 findAccount,
                 token,
                 role
-            })
-        })
+            });
+        });
 
     } catch (error) {
         console.log(error);

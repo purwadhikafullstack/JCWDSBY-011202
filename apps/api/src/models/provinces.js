@@ -9,7 +9,7 @@ export default class provinces extends Model {
   static associate(models) {
     // define association here
     provinces.hasMany(models.addresses,{foreignKey:"prov_id"})
-    provinces.hasMany(models.cities,{foreignKey:"province_id"})
+    provinces.hasMany(models.cities,{foreignKey:"prov_id"})
     provinces.hasMany(models.warehouses,{foreignKey:"prov_id"})
 
   }

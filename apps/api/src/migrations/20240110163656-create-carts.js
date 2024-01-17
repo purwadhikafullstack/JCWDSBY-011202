@@ -24,6 +24,9 @@ module.exports = {
       total_price: {
         type: Sequelize.INTEGER
       },
+      total_weight: {
+        type: Sequelize.INTEGER
+      },
       createdAt: {
         allowNull: false,
         type: Sequelize.DATE

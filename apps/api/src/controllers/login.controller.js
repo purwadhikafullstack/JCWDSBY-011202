@@ -46,7 +46,7 @@ export const Login = async (req, res, next) => {
             role: findAccount.role
         },
             'abcd',
-            { expiresIn: "1h" })
+            { expiresIn: "5h" })
 
         jwt.verify(token, 'abcd', (error, decoded) => {
             if (error) {

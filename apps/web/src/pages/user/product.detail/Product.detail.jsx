@@ -53,7 +53,8 @@ const onHandleCart =async () => {
       {
         product_id : id,
         quantity : counter,
-        total_price : products[0].price*counter
+        weight: products[0].weight,
+        price: products[0].price
       },
       { headers: { Authorization: `Bearer ${token}`}})
       alert("Berhasil menambahkan data")

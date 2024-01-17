@@ -8,24 +8,25 @@ const CartPayment = (props) => {
       {/* Untuk Ringkasan Pembayaran */}
       <div className="mb-8">
         <p className="text-lg border-b-[1px] pb-3 font-semibold">Ringkasan Pesanan</p>
-        <div className="flex justify-between pt-3">
+        <div className="text-slate-500 italic flex justify-between pt-3">
+          <p>Total Item</p>
+          <p className="text-slate-500">{props.total_item} item/s</p>
+        </div>
+        {/* <div className="flex justify-between pt-1">
           <p>Pricelist</p>
           <p>Rp 2.500.000{props.price}</p>
+        </div> */}
+        <div className="flex justify-between pt-1 text-slate-500 italic ">
+          <p>Berat Total</p>
+          <p>{props.total_weight} Kg</p>
         </div>
-        <div className="flex justify-between pt-1">
-          <p>Biaya Pengiriman</p>
-          <p>Rp 500.000{props.shippingCost}</p>
-        </div>
-        <div className="flex justify-between pt-1">
-          <p>Diskon</p>
-          <p className="text-[#F06105]">(Rp 500.000{props.dicsount})</p>
-        </div>
-          <div className="mt-3 text-slate-500 cursor-pointer text-right hover:text-slate-600">
+        
+          {/* <div className="mt-3 text-slate-500 cursor-pointer text-right hover:text-slate-600">
             Ubah Alamat
-          </div>
+          </div> */}
         <div className="flex justify-between pt-5 font-bold text-lg">
           <p className="">Total</p>
-          <p className="">Rp 3.000.000{props.totalPrice}</p>
+          <p className="">Rp {props.total_price}</p>
         </div>
       </div>
 

@@ -16,7 +16,7 @@ export const init = (sequelize) => {
     {
       name: DataTypes.STRING,
       price: DataTypes.INTEGER,
-      weight: DataTypes.STRING,
+      weight: DataTypes.INTEGER,
       category_id: DataTypes.INTEGER,
       description: DataTypes.STRING,
       is_deleted: DataTypes.BOOLEAN,

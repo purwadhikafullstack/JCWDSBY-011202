@@ -13,7 +13,7 @@ const CartProductCard = (props) => {
         <div className="flex w-full justify-between">
           {/* untuk gambar dan informasi product */}
           <div className="flex gap-2">
-            <input type="checkbox" name="intoOrder" />
+            <input type="checkbox" name="intoOrder" className={props.cardNames} value={props.checkBoxValue} onChange={props.onChangeChecked}/>
             <div className=" bg-slate-400">
               <img src={props.productImage} alt="gambar" className="w-[50px]" />
             </div>
@@ -21,9 +21,12 @@ const CartProductCard = (props) => {
               <p className=" truncate">
                 {props.productName}
               </p>
-              <p className="text-[14px] text-slate-500">
+              <div className=' '>
+              <p className="text-[14px] text-slate-500 ">
               Rp {props.productPrice.toLocaleString("id")}
             </p>
+              <p className="text-[14px] text-slate-500">{props.productWeightConvert} Kg</p>
+              </div>
             </div>
           </div>
           {/* untuk qty produk */}
@@ -48,9 +51,9 @@ const CartProductCard = (props) => {
           </div>
           <div className="">
             <p className="text-[#F06105] font-bold text-[16px] md:text-[17px]">
-              Rp {props.productFinalPrice.toLocaleString("id")}
+              Rp {props.total_price.toLocaleString("id")}
             </p>
-            
+            <p className='text-right text-[14px] text-slate-500'>{props.total_weightConvert} Kg</p>
           </div>
         </div>
         <div className=" flex justify-end gap-2">

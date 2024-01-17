@@ -1,11 +1,46 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useSelector } from 'react-redux';
+import axios from 'axios';
 import './layout.css'
 import icon from '../../../assets/bussinesman.png'
 
 function HeaderLogin() {
-    const [account, setAccount] = useState()
-    const username = useSelector(state => state.auth.username)
+    const [username, setUsername] = useState(null);
+
+    const handleLogin = async () => {
+        try {
+            const response = await axios.get('http://localhost:8000/api/accounts/keep-login', {
+                headers: {
+                    Authorization: `Bearer ${localStorage.getItem("token")}`
+                }
+            })
+
+            const { success, username } = response.data
+
+            if (success) {
+                setUsername(username)
+            } else {
+                console.log('set username failed');
+            }
+
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
+    useEffect(() => {
+        const localToken = localStorage.getItem('token');
+        if (localToken) {
+            handleLogin()
+        } else {
+            console.log('no token');
+        }
+
+    }, []);
+
+    useEffect(() => {
+        console.log('iki username ', username);
+    }, [username]);
 
     return (
         <div className="header">
@@ -17,7 +52,7 @@ function HeaderLogin() {
                 <li>{username}</li>
             </ul>
         </div>
-    )
+    );
 }
 
-export default HeaderLogin
+export default HeaderLogin;

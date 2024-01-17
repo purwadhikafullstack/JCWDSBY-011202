@@ -1,12 +1,11 @@
-import React from 'react'
-import { useState } from 'react'
-import { useDispatch } from 'react-redux'
-import { useNavigate } from 'react-router-dom'
-import { loginSuccess } from '../../../redux/loginAction'
-import Layout from '../layout/layout'
-// import jwt from 'jsonwebtoken';
-import axios from 'axios'
-import './login.css'
+import React from 'react';
+import { useState, useEffect } from 'react';
+import { useDispatch } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
+import { loginSuccess } from '../../../redux/loginAction';
+import Layout from '../layout/layout';
+import axios from 'axios';
+import './login.css';
 
 function Login() {
     const [visible, setVisible] = useState(false)
@@ -22,12 +21,13 @@ function Login() {
                 username,
                 password,
             })
-    
+
             const { success, findAccount, token, role } = response.data
-    
+
             console.log(response.data);
+            
             if (success) {
-                localStorage.setItem("token", token)
+                localStorage.setItem('token', token)
                 dispatch(loginSuccess(token, findAccount.username, role))
                 if (role === 'admin') {
                     navigate('/admin')

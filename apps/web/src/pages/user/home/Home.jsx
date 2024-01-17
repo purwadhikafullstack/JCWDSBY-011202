@@ -156,7 +156,7 @@ export default Home;
 //   return productRows;
 // }
 
-  // const columnsPerRow = 4;
-  // const productRows = useProductRows(products, columnsPerRow);
+// const columnsPerRow = 4;
+// const productRows = useProductRows(products, columnsPerRow);
 
-  // const loggedIn = useSelector(state => !!state.auth.token)
+// const loggedIn = useSelector(state => !!state.auth.token)

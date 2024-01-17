@@ -21,42 +21,6 @@ import TestLoginPage from './pages/user/layout/testLoginPage';
 import { useDispatch } from 'react-redux';
 import { useEffect, useState } from 'react';
 
-// const navigate = useNavigate()
-
-// useEffect(() => {
-//   const localToken = localStorage.getItem('token');
-
-//   const checkLogin = async () => {
-//     if (localToken) {
-//       try {
-//         const response = await axios.get('http://localhost:8000/api/accounts/keep-login', {
-//           headers: {
-//             Authorization: `Bearer ${localToken}`
-//           }
-//         });
-
-//         const { success, role } = response.data;
-
-//         if (success) {
-//           setRole(role);
-//         } else {
-//           console.log('set role failed');
-//         }
-//       } catch (error) {
-//         console.log(error);
-//       }
-//     } else {
-//       console.log('no token');
-//     }
-//   }
-
-//   checkLogin();
-//   if (role === 'admin') {
-//     navigate('/admin');
-//   }
-
-// }, [localToken, navigate, role]);
-
 function App() {
   const [role, setRole] = useState(null)
 
@@ -68,14 +32,14 @@ function App() {
         }
       });
 
-      const { success, role } = response.data;
+      const { success, role } = response.data
 
       if (success) {
         setRole(role);
         if (role === 'admin') {
-          return <Navigate to="/admin" />;
+          return <Navigate to="/admin" />
         } else {
-          return <Navigate to="/" />;
+          return <Navigate to="/" />
         }
       } else {
         console.log('set role failed');

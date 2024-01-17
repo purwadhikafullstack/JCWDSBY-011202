@@ -51,7 +51,7 @@ const LandingAdmin = () => {
     <div>
       <AdminLayout>Hello {role} {username}</AdminLayout>
     </div>
-  );
-};
+  )
+}
 
 export default LandingAdmin;

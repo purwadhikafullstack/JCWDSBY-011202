@@ -5,23 +5,102 @@ import ProductCatalogCard from '../../../components/ProductCatalogCard';
 import { formatPriceToIDR } from '../../../utils';
 import axios from 'axios';
 import { useState, useEffect } from 'react';
-
+import { useLocation, useNavigate } from 'react-router-dom';
+import Pagination from '../../../components/Temporary/Pagination';
 const ProdutSearch = () => {
   const [products, setProducts] = useState([]);
+  const [currentPage, setCurrentPage] = useState([]);
+  const [price, setPrice] = useState('');
+  const [minPrice, setMinPrice] = useState('');
+  const [maxPrice, setMaxPrice] = useState('');
+  const [page, setPage] = useState(1);
+  const location = useLocation();
+  const navigate = useNavigate();
+  const handleFilter = () => {
+    const emptyFilter = [...currentPage];
+    let filteredProducts = [...products];
+    if (minPrice !== '' && maxPrice !== '') {
+      filteredProducts = filteredProducts.filter(
+        (product) =>
+          product.price >= parseInt(minPrice, 10) &&
+          product.price <= parseInt(maxPrice, 10),
+      );
+    } else if (minPrice !== '') {
+      filteredProducts = filteredProducts.filter(
+        (product) => product.price >= parseInt(minPrice, 10),
+      );
+    } else if (maxPrice !== '') {
+      filteredProducts = filteredProducts.filter(
+        (product) => product.price <= parseInt(maxPrice, 10),
+      );
+    }
+    setCurrentPage(
+      filteredProducts.length > 0 ? filteredProducts : emptyFilter,
+    );
+  };
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get('http://localhost:8000/api/products');
-        setProducts(response.data);
+        if (location.search.includes('category_id=')) {
+          if (page !== 1) {
+            setPage(1);
+          }
+          const response1 = await axios.get(
+            `http://localhost:8000/api/products${location.search}`,
+          );
+          setProducts(response1.data);
+          const response2 = await axios.get(
+            `http://localhost:8000/api/products${location.search}&page=${page}`,
+          );
+          setCurrentPage(response2.data);
+        } else {
+          const response1 = await axios.get(
+            `http://localhost:8000/api/products${location.search}`,
+          );
+          setProducts(response1.data);
+          if (location.search) {
+            const response2 = await axios.get(
+              `http://localhost:8000/api/products${location.search}&page=${page}`,
+            );
+            setCurrentPage(response2.data);
+          } else {
+            const response2 = await axios.get(
+              `http://localhost:8000/api/products?page=${page}`,
+            );
+            setCurrentPage(response2.data);
+          }
+        }
       } catch (error) {
         console.error('Error fetching data:', error);
       }
     };
-
     fetchData();
-  }, []);
+  }, [location.search, page]);
 
+  useEffect(() => {
+    if (location.search && !location.search.includes('price=')) {
+      navigate(`/product-search${location.search}&price=${price}`);
+    } else if (
+      location.search.includes('category_id=') &&
+      location.search.includes('price=')
+    ) {
+      const updatedQuery = location.search.split('&')[0];
+      navigate(`/product-search${updatedQuery}&price=${price}`);
+      if (!price) {
+        navigate(`/product-search${updatedQuery}`);
+      }
+    } else {
+      navigate(`?price=${price}`);
+      if (!price) {
+        navigate(`/product-search`);
+      }
+    }
+  }, [price]);
+
+  const handlePageChange = (newPage) => {
+    setPage(newPage);
+  };
   return (
     <div>
       <TemporaryNavbar />
@@ -40,9 +119,19 @@ const ProdutSearch = () => {
           <div className="w-3/12">
             <ProductCategorySearch />
             <div>
-              <FilterPrice />
+              <FilterPrice
+                MinPriceChange={(e) => {
+                  setMinPrice(e.target.value);
+                }}
+                MaxPriceChange={(e) => {
+                  setMaxPrice(e.target.value);
+                }}
+              />
               <div className="mt-2">
-                <button className='w-full class="font-medium text-sm bg-orange-500 hover:bg-orange-600 text-white py-2 px-4 rounded-md transition-all duration-300 ease-in-out focus:outline-none "'>
+                <button
+                  onClick={() => handleFilter()}
+                  className='w-full class="font-medium text-sm bg-orange-500 hover:bg-orange-600 text-white py-2 px-4 rounded-md transition-all duration-300 ease-in-out focus:outline-none "'
+                >
                   Filter
                 </button>
               </div>
@@ -52,21 +141,22 @@ const ProdutSearch = () => {
             <div className="flex justify-between h-8">
               <div className="w-4/12 mt-1">
                 <select
-                  name=""
-                  id=""
+                  onChange={(e) => {
+                    setPrice(e.target.value);
+                  }}
                   className=' className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-orange-500 focus:border-orange-500 block w-full p-1 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-orange-500 dark:focus:border-orange-500"'
                 >
                   <option value={''}>Default Sorting</option>
-                  <option value="">Price Ascending</option>
-                  <option value="">Price Descending</option>
+                  <option value="asc">Price Ascending</option>
+                  <option value="desc">Price Descending</option>
                 </select>
               </div>
               <h1 className="text-[14px] self-end">
-                Showing <span>{products.length}</span> results
+                Showing <span>{currentPage.length}</span> results
               </h1>
             </div>
             <div className="flex flex-wrap -mx-2">
-              {products.map((product, index) => (
+              {currentPage.map((product, index) => (
                 <div key={index} className="w-1/4 p-2">
                   <ProductCatalogCard
                     productName={product?.name || 'N/A'}
@@ -87,6 +177,16 @@ const ProdutSearch = () => {
                   />
                 </div>
               ))}
+            </div>
+            <div className="mx-auto p-6 ">
+              <div className="flex justify-center">
+                <Pagination
+                  products={products}
+                  page={page}
+                  onClickPrevious={() => handlePageChange(page - 1)}
+                  onClickNext={() => handlePageChange(page + 1)}
+                />
+              </div>
             </div>
           </div>
         </div>

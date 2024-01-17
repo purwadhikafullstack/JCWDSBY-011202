@@ -1,9 +1,10 @@
 import { useEffect, useState } from 'react';
 import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
 
 const ProductCategorySearch = () => {
   const [categories, setCategories] = useState([]);
-
+  const navigate = useNavigate();
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -15,10 +16,10 @@ const ProductCategorySearch = () => {
         console.error('Error fetching categories:', error);
       }
     };
-
     fetchData();
   }, []);
 
+  console.log(categories);
   return (
     <div>
       <h4 className="text-[18px] font-light">PRODUCT CATEGORIES</h4>
@@ -27,6 +28,9 @@ const ProductCategorySearch = () => {
           <li
             key={index}
             className="flex font-light hover:text-orange-400 transition-all duration-300 cursor-pointer"
+            onClick={() => {
+              navigate(`?category_id=${category.id}`);
+            }}
           >
             {category.category} (<span>{category.productCount}</span>)
           </li>

@@ -20,6 +20,11 @@ const WarehouseInventory = () => {
             </div>
             <h1 className="mx-2 font-bold text-xl">Manage Inventory</h1>
           </div>
+          <div>
+            <button class="font-medium text-sm bg-orange-500 hover:bg-orange-600 text-white py-2 px-4 rounded-md transition-all duration-300 ease-in-out focus:outline-none ">
+              Add New Stock
+            </button>
+          </div>
         </div>
         <div className="p-4">
           <InventoryTable />

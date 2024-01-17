@@ -10,7 +10,20 @@ export const Login = async (req, res, next) => {
             },
             raw: true
         })
-
+        console.log("api backend", findAccount);
+        if (!findAccount) {
+            return res.status(404).send({
+                success: false,
+                message: 'ACCOUNT NOT FOUND'
+            })
+        }
+        if (!findAccount) {
+            return res.status(404).send({
+                success: false,
+                message: 'ACCOUNT NOT FOUND'
+            })
+        }
+      
         if (!findAccount) {
             return res.status(404).send({
                 success: false,
@@ -57,7 +70,7 @@ export const Login = async (req, res, next) => {
         console.log(error);
         return res.status(500).send({
             success: false,
-            message: error
+            message: error.message
         })
     }
 }

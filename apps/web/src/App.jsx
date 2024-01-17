@@ -52,6 +52,7 @@ function App() {
   useEffect(() => {
     handleLogin()
   }, [role])
+
   return (
     <BrowserRouter>
       <Routes>
@@ -69,7 +70,7 @@ function App() {
         <Route path="/admin/manage-category" element={<ManageCategory />} />
         <Route path="/admin/manage-inventory" element={<ManageInventory />} />
         <Route path="/product-detail/:id" element={<ProductDetail />} />
-        <Route path="/product-search" element={<ProdutSearch />} />
+        <Route path="/product-search?" element={<ProdutSearch />} />
         <Route path="/warehouse-admin" element={<LandingWarehouse />} />
         <Route path="/warehouse-admin/view-products" element={<ViewProduct />} />
         <Route path="/warehouse-admin/view-categories" element={<ViewCategory />} />
@@ -78,6 +79,7 @@ function App() {
         <Route path="/warehouse-admin/edit-stock" element={<EditStockProduct />} />
         <Route path="*" element={<NotFoundPage />} />
         {/* ROUTES FEATURE : PRODUCT-MANAGEMENT MAS ADHON*/}
+        <Route path="/cart" element={<CartPage />} />
         <Route path="" />
         <Route path="" />
         <Route path="" />

@@ -1,10 +1,9 @@
 import { Router } from 'express';
+import { getProduct, createProduct } from '../controllers/products.controller';
 import {
-  getProduct,
-  createProduct,
   deleteProduct,
   updateProduct,
-} from '../controllers/products.controller';
+} from '../controllers/products.modify.controller';
 import {
   addImageToProduct,
   editImage,

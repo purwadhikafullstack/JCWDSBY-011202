@@ -18,36 +18,40 @@ import EditStockProduct from './pages/admin/admin.warehouse/edit.stock/EditStock
 import Login from './pages/user/login/login';
 import Register from './pages/user/register/register';
 import TestLoginPage from './pages/user/layout/testLoginPage';
-import CartPage from './pages/user/cart/Cart';
 import { useDispatch } from 'react-redux';
-
-// const AdminRoute = ({ element }) => {
-//   const role = useSelector((state) => state.auth.role);
-
-//   if (role === 'admin') {
-//     return <Navigate to="/admin" />;
-//   }
-
-//   return element;
-// }
+import { useEffect, useState } from 'react';
 
 function App() {
-  // const navigate = useNavigate();
-  // const dispatch = useDispatch();
+  const [role, setRole] = useState(null)
 
-  // useEffect(() => {
-  //   const token = localStorage.getItem("token");
+  const handleLogin = async () => {
+    try {
+      const response = await axios.get('http://localhost:8000/api/accounts/keep-login', {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("token")}`
+        }
+      });
 
-  //   if (token) {
-  //     const username = useSelector(state => state.auth.username)
-  //     const role = useSelector(state => state.auth.role)
-  //     dispatch(loginSuccess(token, username, role))
+      const { success, role } = response.data
 
-  //     if (role === 'admin') {
-  //       navigate('/admin');
-  //     }
-  //   }
-  // }, [dispatch, navigate]);
+      if (success) {
+        setRole(role);
+        if (role === 'admin') {
+          return <Navigate to="/admin" />
+        } else {
+          return <Navigate to="/" />
+        }
+      } else {
+        console.log('set role failed');
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+  useEffect(() => {
+    handleLogin()
+  }, [role])
 
   return (
     <BrowserRouter>

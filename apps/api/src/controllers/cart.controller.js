@@ -177,7 +177,6 @@ export const minusQty = async (req, res, next) => {
                 where: {
                     id: findProduct.id
                 }
-
             })
             // data.total_weight_convert = data.total_weight / 1000
             return res.status(200).send({

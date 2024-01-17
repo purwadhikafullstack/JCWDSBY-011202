@@ -20,5 +20,4 @@ cartRouter.delete("/:id",validateToken,ValidateUser,deleteCart)
 // UPDATE QTY
 cartRouter.patch("/plus/:id", validateToken,ValidateUser,plusQty)
 cartRouter.patch("/minus/:id", validateToken,ValidateUser,minusQty)
-
 export {cartRouter}

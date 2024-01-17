@@ -46,8 +46,8 @@ export const KeepLogin = async (req, res, next) => {
             console.log('role: ', verifyAccount.role);
             return res.status(200).send({
                 success: true,
-                message: account,
-                token: newToken
+                username,
+                role
             })
         }
     } catch (error) {

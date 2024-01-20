@@ -24,7 +24,7 @@ export const KeepLogin = async (req, res, next) => {
             })
         } else {
             req.accountData = verifyAccount
-            console.log('Keep Login : ', req.accountData)
+            // console.log('Keep Login : ', req.accountData)
 
             const account = await accounts.findOne({
                 where: {
@@ -33,7 +33,7 @@ export const KeepLogin = async (req, res, next) => {
                 raw: true
             })
 
-            console.log('result : ', account)
+            // console.log('result : ', account)
 
             const { id, username, email, role, is_verified, is_deleted } = account
 
@@ -43,7 +43,7 @@ export const KeepLogin = async (req, res, next) => {
                 { expiresIn: '1h' }
             )
 
-            console.log('role: ', verifyAccount.role);
+            // console.log('role: ', verifyAccount.role);
             return res.status(200).send({
                 success: true,
                 username,

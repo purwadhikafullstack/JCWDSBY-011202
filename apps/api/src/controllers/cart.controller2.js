@@ -39,10 +39,64 @@ export const getSummary = async (req, res, next) => {
    allWeight,
    checkedProduct_id,
    allWeightConvert:allWeight/1000,
-   totalItem:checkedProduct_id.length
+   totalItem:checkedProduct_id.length,
+   data
   })
 } catch (error) {
      return res.status(500).send({success:false,message:error
     .message})
  }   
+}
+
+// PATCH Qty
+export const updateQty =async (req,res,next)=>{
+   try {
+      // console.log("haia",req.params.id);
+      // console.log("haia2",req.body);
+      const findCart = await carts.findOne({
+         where:{
+            id:req.params.id
+         },
+         include: [
+            {
+                model: products,
+                required: true,
+                attributes: ["name", "price", "weight"]
+            }
+        ],
+         raw:true
+      })
+      const data = await carts.update({
+         quantity: req.body.quantity,
+         total_price:findCart[`product.price`]*req.body.quantity,
+         total_weight:findCart[`product.weight`]*req.body.quantity
+     }, {
+         where: {
+             id: req.params.id
+         }
+
+     })
+     return res.status(200).send(data)
+   } catch (error) {
+      return res.status(500).send(error)
+   }
+}
+
+// Untuk API("/navbar")
+export const getCountCart = async (req, res, next) => {
+   try {
+      console.log("masuk navbar");
+       const allProduct = await carts.findAndCountAll({
+           where: {
+               account_id: req.userData.id
+           },
+           raw: true
+       })
+       return res.status(200).send({
+           message: "Berhasil mendapatkan data carts",
+           result: allProduct.count
+       })
+   } catch (error) {
+       return res.status(500).send(error.message)
+   }
 }

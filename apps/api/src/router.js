@@ -4,6 +4,7 @@ import { categoriesRouter } from './routers/categories.router';
 import { productsRouter } from './routers/products.router';
 import { accountsRouter } from './routers/accounts.router';
 import { cartRouter } from './routers/carts.router';
+import { checkoutRouter } from './routers/checkout';
 
 const router = Router();
 
@@ -25,5 +26,6 @@ router.use('/accounts', accountsRouter)
 
 // RAMA
 router.use('/cart', cartRouter)
+router.use('/checkout', checkoutRouter)
 
 export default router;

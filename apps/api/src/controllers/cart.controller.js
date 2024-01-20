@@ -4,6 +4,7 @@ import { Model, Op, Sequelize } from 'sequelize';
 import carts from '../models/carts';
 import products from '../models/products';
 import jwt from "jsonwebtoken"
+import product_images from '../models/product_images';
 // Ini routing backend untuk add to cart, get cart, delete cart, update cart plus dan minus
 // untuk API ("cart/add-to-cart")
 export const addToCart = async (req, res, next) => {
@@ -63,6 +64,7 @@ export const addToCart = async (req, res, next) => {
 // Untuk API("/cart")
 export const getCart = async (req, res, next) => {
     try {
+        const productId=[]
         const allProduct = await carts.findAndCountAll({
             where: {
                 account_id: req.userData.id
@@ -71,18 +73,25 @@ export const getCart = async (req, res, next) => {
                 {
                     model: products,
                     required: true,
-                    attributes: ["name", "price", "weight"]
+                    attributes: ["name", "price", "weight","id"],
+                    include:[{model:product_images,required:true,attributes:["image"]}]
                 }
             ],
             raw: true
         })
-        allProduct.rows = allProduct.rows.map((val, id) => {
-            return { ...allProduct.rows[id], productWeightConvert: val[`product.weight`] / 1000, total_weightConvert: val.total_weight / 1000 }
+        const result =[] 
+        let index=0
+        allProduct.rows.map((val,id)=>{
+            if(allProduct.rows[id].product_id != index){
+                index = allProduct.rows[id].product_id
+                result.push({ ...allProduct.rows[id], productWeightConvert: val[`product.weight`] / 1000, total_weightConvert: val.total_weight / 1000 })
+            }
         })
-        // allProduct.rows.weightConvert=allProduct.weight/1000
+       
         return res.status(200).send({
             message: "Berhasil mendapatkan data carts",
-            result: allProduct
+            result: result,
+            count: result.length
         })
     } catch (error) {
         return res.status(500).send(error.message)

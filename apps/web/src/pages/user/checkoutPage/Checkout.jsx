@@ -18,7 +18,7 @@ const CheckoutPage = () => {
       const result = await axios.get(`http://localhost:8000/api/checkout/get-cart/${cartId}`, {
         headers: { Authorization: `Bearer ${token}` },
       });
-      return setCartData(result.data.result);
+      return setCartData(result.data);
     } catch (error) {
       console.log(error);
     }
@@ -34,12 +34,13 @@ const CheckoutPage = () => {
       console.log(error);
     }
   }
+  const getShippingCost = async()=>{
+    
+  }
   useEffect(()=>{
     getDataCart()
     getUserData()
   },[])
-  console.log("1",cartData);
-  console.log("2",userData);
   return (
     <>
     < TemporaryNavbar/>
@@ -49,7 +50,7 @@ const CheckoutPage = () => {
       </div>
       <div className="flex flex-col gap-y-5 md:flex-row md:justify-center md:gap-3 ">
         <div className="shadow-sm md:border-[1px] h-fit rounded-md">
-          {cartData.map((val,id)=>{
+          {cartData.result.map((val,id)=>{
             return <ProductCheckoutCard
             key={id}
             productName={val["product.name"]}
@@ -70,7 +71,7 @@ const CheckoutPage = () => {
            phone={userData["addresses.phone"]}
            city={userData.city}
            province={userData.province}
-
+           price={cartData.checkoutPrice.toLocaleString("id")}
            />
         </div>
       </div>

@@ -18,13 +18,16 @@ const CartPage = () => {
   const [onChangeCheckedValue, setOnChangeCheckedValue] = useState(false);
   const [changeQty, setChangeQty] = useState('');
   const [openModal, setOpenModal] = useState(false);
+  const [cartCount, setCartCount] = useState(0);
+
   let checkedArray = '';
-  const getDataCart = async () => {
+    const getDataCart = async () => {
     try {
       const token = localStorage.getItem('token');
       const result = await axios.get('http://localhost:8000/api/cart/', {
         headers: { Authorization: `Bearer ${token}` },
       });
+      setCartCount(result.data.count)
       return setCartProduct(result.data.result);
     } catch (error) {
       console.log(error);
@@ -69,6 +72,7 @@ const CartPage = () => {
     getDataCart();
     openLoading(3000);
     getChecked();
+
     if (checkedArray) {
       getSummary();
     }
@@ -169,7 +173,9 @@ const CartPage = () => {
   return (
     <>
       {firstloading ? <Loading /> : ''}
-      <TemporaryNavbar />
+      <TemporaryNavbar 
+      cartCount={cartCount}
+      />
       <div className="text-center mt-4 mb-3 md:mb-8">
         <p className="text-4xl">Cart</p>
         <p>home / cart</p>
@@ -192,6 +198,7 @@ const CartPage = () => {
                   productWeightConvert={val.productWeightConvert}
                   total_weightConvert={val.total_weightConvert}
                   checkBoxValue={val.id}
+                  navigateProduct={()=>navigate(`/product-detail/${val[`product.id`]}`)}
                   onHandleDelete={() => onHandleDelete(val.id)}
                   onClickMinus={() => {
                     onHandlePlusMinus('minus', val.id);

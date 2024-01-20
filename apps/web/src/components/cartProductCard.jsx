@@ -12,7 +12,7 @@ const CartProductCard = (props) => {
       <div className="px-2 py-4 pt-6 border-b-[1px] flex flex-col gap-y-3 md:w-[500px] lg:w-[600px]">
         <div className="flex w-full justify-between">
           {/* untuk gambar dan informasi product */}
-          <div className="flex gap-2">
+          <div className="flex pb-2 gap-2 " >
             <input
               type="checkbox"
               name="intoOrder"
@@ -20,7 +20,10 @@ const CartProductCard = (props) => {
               value={props.checkBoxValue}
               onChange={props.onChangeChecked}
             />
-            <div className="flex justify-center items-center ">
+            <div className='cursor-pointer gap-2 flex'
+            onClick={props.navigateProduct}>
+            <div className="flex justify-center items-center "
+            >
               <img src={`http://localhost:8000/productimage/${props.productImage}`} 
               alt="gambar" className="rounded-sm h-[60px] w-[60px]"/>
             </div>
@@ -34,6 +37,8 @@ const CartProductCard = (props) => {
                   {props.productWeightConvert} Kg
                 </p>
               </div>
+            </div>
+
             </div>
           </div>
           {/* untuk qty produk */}

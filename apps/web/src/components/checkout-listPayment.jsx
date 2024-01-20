@@ -33,19 +33,15 @@ const CheckoutPayment = (props) => {
         <p className="text-lg border-b-[1px] pb-3 font-semibold">Ringkasan Pesanan</p>
         <div className="flex justify-between pt-3">
             <p>Pricelist</p>
-            <p>Rp 2.500.000{props.price}</p>
+            <p>Rp {props.price}</p>
         </div>
         <div className="flex justify-between pt-1">
             <p>Biaya Pengiriman</p>
             <p>Rp 500.000{props.shippingCost}</p>
         </div>
-        {/* <div className="flex justify-between pt-1">
-            <p>Diskon</p>
-            <p className="text-[#F06105]">(Rp 500.000{props.dicsount})</p>
-        </div> */}
         <div className="flex justify-between pt-5 font-bold text-lg">
             <p className="">Total</p>
-            <p className="">Rp 3.000.000{props.totalPrice}</p>
+            <p className="">Rp 0</p>
         </div>
       </div>
 

@@ -28,18 +28,26 @@ export const getCartToCheckout = async(req,res,next)=>{
             ],
             raw:true
         })
-        const result =[] 
+        const result =[]
+        const allPrice = [] 
+        const allWeight = [] 
         let index=0
         data.map((val,id)=>{
             if(data[id].product_id != index){
                 index = data[id].product_id
+                allPrice.push(val.total_price)
+                allWeight.push(val.total_weight)
                 result.push({ ...data[id], productWeightConvert: val[`product.weight`] / 1000, total_weightConvert: val.total_weight / 1000 })
             }
         })
-        console.log("uyu",result);
+
+        let checkoutPrice = allPrice.reduce((a,b)=>{return a+b})
+        let checkoutWeight = allWeight.reduce((a,b)=>{return a+b})
         return res.status(200).send({
             message:"success get cart data",
             result,
+            checkoutPrice,
+            checkoutWeight
         })
     } catch (error) {
         return res.status(500).send(error)
@@ -77,9 +85,7 @@ export const getUserData = async(req,res,next)=>{
             raw:true
         })
         const final = {...result,city:city.name,province:province.name}
-        // console.log(final);
-        // console.log("loh dah masuk 3", province);
-        // console.log(result);
+        
         return res.status(200).send({
             message:"success get user data",
            final

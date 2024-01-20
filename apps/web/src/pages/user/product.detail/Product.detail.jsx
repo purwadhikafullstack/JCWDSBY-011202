@@ -16,13 +16,27 @@ const ProductDetail = () => {
   const [counter, setCounter] = useState(1);
   const [products, setProducts] = useState([]);
   const { id } = useParams();
-
+  const [cartCount, setCartCount] = useState(0);
+  const getCountCart = async () => {
+    try {
+      console.log("jalan");
+      const token = localStorage.getItem('token');
+      const result = await axios.get('http://localhost:8000/api/cart/navbar', {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      return setCartCount(result.data.result);
+    } catch (error) {
+      console.log(error);
+    }
+  };
   const handleDecrease = () => {
     if (counter > 1) {
       setCounter(counter - 1);
     }
   };
- 
+  useEffect(()=>{
+    getCountCart()
+    },[])
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -58,6 +72,7 @@ const onHandleCart =async () => {
       },
       { headers: { Authorization: `Bearer ${token}`}})
       alert("Berhasil menambahkan data")
+      getCountCart()
   } catch (error) {
     console.log(error);
   } finally{
@@ -66,7 +81,7 @@ const onHandleCart =async () => {
 }
   return (
     <div className="flex flex-col min-h-screen">
-      <TemporaryNavbar />
+      <TemporaryNavbar cartCount={cartCount}/>
       <div>
         <div className="bg-gray-300 border-2 border-solid border-slate-300 ">
           <div className="flex items-center font-normal ml-40 text-xs ">

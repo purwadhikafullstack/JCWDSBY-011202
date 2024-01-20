@@ -90,7 +90,8 @@ export const getCart = async (req, res, next) => {
        
         return res.status(200).send({
             message: "Berhasil mendapatkan data carts",
-            result: result
+            result: result,
+            count: result.length
         })
     } catch (error) {
         return res.status(500).send(error.message)

@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { CiShoppingCart } from 'react-icons/ci';
 import { VscAccount } from 'react-icons/vsc';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import SearchBar from './Searchbar';
+import axios from 'axios';
 
 const linksData = [
   { to: '/', label: 'Home' },
@@ -10,9 +11,22 @@ const linksData = [
 ];
 
 const TemporaryNavbar = () => {
+  const [cartCount,setCartCount] = useState(0)
+  const navigate=useNavigate()
   const [isScrolled, setIsScrolled] = useState(false);
-
+  const getCountCart = async () => {
+    try {
+      const token = localStorage.getItem('token');
+      const result = await axios.get('http://localhost:8000/api/cart/navbar', {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      return setCartCount(result.data.result);
+    } catch (error) {
+      console.log(error);
+    }
+  };
   useEffect(() => {
+    getCountCart()
     const handleScroll = () => {
       const scrollPosition = window.scrollY;
       setIsScrolled(scrollPosition > 100);
@@ -24,10 +38,9 @@ const TemporaryNavbar = () => {
       window.removeEventListener('scroll', handleScroll);
     };
   }, []);
-
   return (
     <div
-      className={`bg-white p-4 ${
+      className={`bg-white p-4 shadow ${
         isScrolled ? 'bg-transparent' : 'bg-white'
       } transition-all duration-300 opacity-95 z-10`}
     >
@@ -49,9 +62,13 @@ const TemporaryNavbar = () => {
           <SearchBar />
           <Link to="/cart" className="mx-2">
             <CiShoppingCart
+              onClick={()=>navigate("/cart")}
               size={24}
               className="hover:text-orange-400 transition-all duration-300"
             />
+            <div className={`relative ${cartCount?"block":"hidden"}`}>
+              <div className='absolute text-xs rounded-full bg-[#F06105] px-1 text-white font-semibold -top-7 left-4'>{cartCount}</div>
+            </div>
           </Link>
           <Link to="/cart" className="mx-2">
             <VscAccount

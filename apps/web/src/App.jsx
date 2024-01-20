@@ -20,6 +20,9 @@ import Register from './pages/user/register/register';
 import TestLoginPage from './pages/user/layout/testLoginPage';
 import { useDispatch } from 'react-redux';
 import { useEffect, useState } from 'react';
+import CheckoutPage from './pages/user/checkoutPage/Checkout';
+import CartPage from './pages/user/cart/Cart';
+import axios from 'axios';
 
 function App() {
   const [role, setRole] = useState(null)
@@ -80,7 +83,7 @@ function App() {
         <Route path="*" element={<NotFoundPage />} />
         {/* ROUTES FEATURE : PRODUCT-MANAGEMENT MAS ADHON*/}
         <Route path="/cart" element={<CartPage />} />
-        <Route path="" />
+        <Route path="/checkout" element={<CheckoutPage/>}/>
         <Route path="" />
         <Route path="" />
       </Routes>

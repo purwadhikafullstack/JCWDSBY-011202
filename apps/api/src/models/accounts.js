@@ -18,6 +18,7 @@ export const init = (sequelize) => {
     {
       username: DataTypes.STRING,
       password: DataTypes.STRING,
+      fullname: DataTypes.STRING,
       email: DataTypes.STRING,
       role: {
         type: DataTypes.STRING,

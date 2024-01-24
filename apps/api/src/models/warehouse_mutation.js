@@ -15,8 +15,9 @@ export const init = (sequelize) => {
   warehouse_mutation.init(
     {
       warehouse_id: DataTypes.INTEGER,
-      source_warehouse_storage_id: DataTypes.INTEGER,
-      destination_warehouse_storage_id: DataTypes.INTEGER,
+      product_id: DataTypes.INTEGER,
+      source_warehouse_id: DataTypes.INTEGER,
+      destination_warehouse_id: DataTypes.INTEGER,
       quantity: DataTypes.INTEGER,
       mutation_type: DataTypes.STRING,
       is_confirmed: DataTypes.BOOLEAN,

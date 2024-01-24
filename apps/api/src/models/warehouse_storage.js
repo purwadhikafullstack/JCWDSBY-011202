@@ -7,7 +7,12 @@ export default class warehouse_storage extends Model {
    * The `models/index` file will call this method automatically.
    */
   static associate(models) {
-    // define association here
+    warehouse_storage.belongsTo(models.warehouses, {
+      foreignKey: 'warehouse_id',
+    });
+    warehouse_storage.belongsTo(models.products, {
+      foreignKey: 'product_id',
+    });
   }
 }
 

@@ -14,6 +14,9 @@ export default class warehouses extends Model {
     warehouses.hasMany(models.orders, { foreignKey: 'warehouse_id' });
     warehouses.belongsTo(models.provinces, { foreignKey: 'prov_id' });
     warehouses.belongsTo(models.cities, { foreignKey: 'city_id' });
+    warehouses.hasMany(models.warehouse_storage, {
+      foreignKey: 'warehouse_id',
+    });
   }
 }
 

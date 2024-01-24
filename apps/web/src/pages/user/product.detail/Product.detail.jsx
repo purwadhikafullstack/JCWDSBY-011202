@@ -19,7 +19,7 @@ const ProductDetail = () => {
       setCounter(counter - 1);
     }
   };
- 
+
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -41,23 +41,24 @@ const ProductDetail = () => {
 
   const formattedPrice =
     products.length > 0 ? formatPriceToIDR(products[0].price * counter) : '';
-const onHandleCart =async () => {
-  try {
-    const token = localStorage.getItem("token")
-    const send = await axios.post(
-      "http://localhost:8000/api/cart/add-to-cart",
-      {
-        product_id : id,
-        quantity : counter,
-        total_price : products[0].price*counter
-      },
-      { headers: { Authorization: `Bearer ${token}`}})
-  } catch (error) {
-    console.log(error);
-    console.log("disini bro");
-    
-  }
-}
+  const onHandleCart = async () => {
+    try {
+      const token = localStorage.getItem('token');
+      const send = await axios.post(
+        'http://localhost:8000/api/cart/add-to-cart',
+        {
+          product_id: id,
+          quantity: counter,
+          total_price: products[0].price * counter,
+        },
+        { headers: { Authorization: `Bearer ${token}` } },
+      );
+    } catch (error) {
+      console.log(error);
+      console.log('disini bro');
+    }
+  };
+  console.log(products[0]);
   return (
     <div className="flex flex-col min-h-screen">
       <TemporaryNavbar />
@@ -173,13 +174,21 @@ const onHandleCart =async () => {
                   </div>
                   <div className="mt-1">
                     <div className="pt-2">
-                      <button className="w-full inline-block px-4 py-1 text-sm font-bold text-white bg-orange-500 rounded-md cursor-pointer transition-all duration-300 hover:bg-orange-600 focus:outline-none"
-                      onClick={onHandleCart}
+                      <button
+                        className="w-full inline-block px-4 py-1 text-sm font-bold text-white bg-orange-500 rounded-md cursor-pointer transition-all duration-300 hover:bg-orange-600 focus:outline-none"
+                        onClick={onHandleCart}
                       >
                         Add to Cart
                       </button>
                       <h1 className="text-orange-500 text-xs">
-                        Tersisa <span>48</span>
+                        Tersisa{' '}
+                        <span>
+                          {products.length > 0
+                            ? products[0].total_stock > 0
+                              ? products[0].total_stock
+                              : 0
+                            : 0}
+                        </span>
                       </h1>
                     </div>
                   </div>

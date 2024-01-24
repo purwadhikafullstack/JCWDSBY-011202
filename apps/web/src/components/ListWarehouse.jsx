@@ -1,14 +1,10 @@
 import { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
 
-const WarehouseTable = ({ temporaryWareHouse }) => {
-  const [warehouse, setWarehouse] = useState([]);
-  const navigate = useNavigate();
+const ListWarehouse = ({ warehouses, onClickDelete }) => {
+  const [listWarehouse, setListWarehouse] = useState([]);
   useEffect(() => {
-    if (!warehouse.length) {
-      setWarehouse(temporaryWareHouse);
-    }
-  }, [temporaryWareHouse, warehouse]);
+    setListWarehouse(warehouses);
+  }, [warehouses]);
 
   return (
     <div className="overflow-x-auto mx-auto">
@@ -25,12 +21,15 @@ const WarehouseTable = ({ temporaryWareHouse }) => {
               Kota
             </th>
             <th className="lg:px-6 lg:py-3 px-3 py-2 text-xs font-medium tracking-wider text-gray-500 uppercase">
+              Address
+            </th>
+            <th className="lg:px-6 lg:py-3 px-3 py-2 text-xs font-medium tracking-wider text-gray-500 uppercase">
               Action
             </th>
           </tr>
         </thead>
         <tbody className="bg-white divide-y divide-gray-200">
-          {warehouse.map((val, index) => {
+          {listWarehouse.map((val, index) => {
             return (
               <tr key={index}>
                 <td className="lg:px-6 lg:py-4 px-3 py-2 text-sm lg:text-sm sm:text-xs text-gray-500 whitespace-nowrap">
@@ -42,17 +41,20 @@ const WarehouseTable = ({ temporaryWareHouse }) => {
                 <td className="lg:px-6 lg:py-4 px-3 py-2 text-sm lg:text-sm sm:text-xs text-gray-500 whitespace-nowrap">
                   {val.city_name}
                 </td>
+                <td className="lg:px-6 lg:py-4 px-3 py-2 text-sm lg:text-sm sm:text-xs text-gray-500 whitespace-nowrap text-center">
+                  {val.address}
+                </td>
                 <td className="lg:px-6 lg:py-4 px-3 py-2 text-sm lg:text-sm sm:text-xs text-gray-500 whitespace-nowrap flex items-center justify-center">
+                  <button className="lg:bg-orange-500 lg:hover:bg-orange-700 text-white px-4 py-2 rounded mr-2">
+                    Edit
+                  </button>
                   <button
-                    className="lg:bg-orange-500 lg:hover:bg-orange-700 text-white px-4 py-2 rounded mr-2"
+                    className="lg:bg-slate-400 lg:hover:bg-slate-700 text-white px-4 py-2 rounded"
                     onClick={() => {
-                      navigate(
-                        `/warehouse-admin/manage-inventory?warehouse=${val.id}`,
-                      );
-                      sessionStorage.setItem('warehouse_selected', val.id);
+                      onClickDelete(val.id);
                     }}
                   >
-                    Manage
+                    Delete
                   </button>
                 </td>
               </tr>
@@ -64,4 +66,4 @@ const WarehouseTable = ({ temporaryWareHouse }) => {
   );
 };
 
-export default WarehouseTable;
+export default ListWarehouse;

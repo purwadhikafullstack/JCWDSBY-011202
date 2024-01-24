@@ -26,36 +26,10 @@ import Register from './pages/user/register/register';
 import TestLoginPage from './pages/user/layout/testLoginPage';
 import CartPage from './pages/user/cart/Cart';
 import ManageMutation from './pages/admin/admin.warehouse/manage.mutation/Manage.Mutation';
-import { useDispatch } from 'react-redux';
-
-// const AdminRoute = ({ element }) => {
-//   const role = useSelector((state) => state.auth.role);
-
-//   if (role === 'admin') {
-//     return <Navigate to="/admin" />;
-//   }
-
-//   return element;
-// }
+import AddWarehouse from './components/AddWarehouse';
+import ManageWarehouse from './pages/admin/admin/manage.warehouse/manage.warehouse';
 
 function App() {
-  // const navigate = useNavigate();
-  // const dispatch = useDispatch();
-
-  // useEffect(() => {
-  //   const token = localStorage.getItem("token");
-
-  //   if (token) {
-  //     const username = useSelector(state => state.auth.username)
-  //     const role = useSelector(state => state.auth.role)
-  //     dispatch(loginSuccess(token, username, role))
-
-  //     if (role === 'admin') {
-  //       navigate('/admin');
-  //     }
-  //   }
-  // }, [dispatch, navigate]);
-
   return (
     <BrowserRouter>
       <Routes>
@@ -74,7 +48,12 @@ function App() {
         />
         <Route path="edit-product/:id" element={<EditProduct />} />
         <Route path="/admin/manage-category" element={<ManageCategory />} />
-        <Route path="/admin/manage-inventory" element={<ManageInventory />} />
+        <Route path="/admin/manage-inventory?" element={<ManageInventory />} />
+        <Route path="/admin/manage-warehouse" element={<ManageWarehouse />} />
+        <Route
+          path="/admin/manage-warehouse/add-warehouse"
+          element={<AddWarehouse />}
+        />
         <Route path="/product-detail/:id" element={<ProductDetail />} />
         <Route path="/product-search?" element={<ProdutSearch />} />
         <Route path="/warehouse-admin" element={<LandingWarehouse />} />
@@ -99,7 +78,7 @@ function App() {
           element={<ManageMutation />}
         />
         <Route
-          path="/warehouse-admin/edit-stock"
+          path="/warehouse-admin/edit-stock/:id"
           element={<EditStockProduct />}
         />
         <Route path="*" element={<NotFoundPage />} />

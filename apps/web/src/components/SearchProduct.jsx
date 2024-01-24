@@ -3,11 +3,13 @@ import { CiSearch } from 'react-icons/ci';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 
-function SearchBar() {
+function SearchProduct() {
   const navigate = useNavigate();
   const [query, setQuery] = useState('');
   const [products, setProducts] = useState([]);
   const [searchResult, setSearchResult] = useState([]);
+  const [debouncedQuery, setDebouncedQuery] = useState('');
+  console.log(products);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -22,19 +24,26 @@ function SearchBar() {
     fetchData();
   }, []);
 
-  let debounceTimer;
+  useEffect(() => {
+    const timerId = setTimeout(() => {
+      setDebouncedQuery(query);
+    }, 2000);
+
+    return () => {
+      clearTimeout(timerId);
+    };
+  }, [query]);
+
+  useEffect(() => {
+    setSearchResult(
+      products.filter((product) =>
+        product.name.toLowerCase().includes(debouncedQuery.toLowerCase()),
+      ),
+    );
+  }, [debouncedQuery, products]);
 
   const handleQueryChange = (event) => {
-    const newValue = event.target.value;
-    setQuery(newValue);
-    clearTimeout(debounceTimer);
-    debounceTimer = setTimeout(() => {
-      setSearchResult(
-        products.filter((product) =>
-          product.name.toLowerCase().includes(newValue.toLowerCase()),
-        ),
-      );
-    }, 2000);
+    setQuery(event.target.value);
   };
 
   return (
@@ -62,12 +71,8 @@ function SearchBar() {
             <div
               key={product.id}
               className="p-2 flex w-full cursor-pointer"
-              onClick={() => navigate(`/product-detail/${product.id}`)}
+              onClick={() => navigate(`/edit-product/${product.id}`)}
             >
-              <img
-                src={`http://localhost:8000/productimage/${product?.product_images?.[0]?.image}`}
-                className="w-16 mx-2 border-2"
-              />
               <h1 className="font-semibold text-sm">{product.name}</h1>
             </div>
           ))}
@@ -77,4 +82,4 @@ function SearchBar() {
   );
 }
 
-export default SearchBar;
+export default SearchProduct;

@@ -8,6 +8,9 @@ import { warehouse_mutationRouter } from './routers/warehouse_mutation.router';
 import { warehouse_storageRouter } from './routers/warehouse_storage.router';
 import { warehouseRouter } from './routers/warehouse.router';
 import { provinces_and_cities_Router } from './routers/provinces.and.cities.router';
+import { checkoutRouter } from './routers/checkout';
+
+
 const router = Router();
 
 router.get('/', (req, res) => {
@@ -30,6 +33,9 @@ router.use('/accounts', accountsRouter);
 // add another router here ...
 
 // RAMA
-router.use('/cart', cartRouter);
+
+router.use('/cart', cartRouter)
+router.use('/checkout', checkoutRouter)
+
 
 export default router;

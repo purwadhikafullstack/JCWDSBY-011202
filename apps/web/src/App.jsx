@@ -24,12 +24,53 @@ import EditStockProduct from './pages/admin/admin.warehouse/edit.stock/EditStock
 import Login from './pages/user/login/login';
 import Register from './pages/user/register/register';
 import TestLoginPage from './pages/user/layout/testLoginPage';
+
 import CartPage from './pages/user/cart/Cart';
 import ManageMutation from './pages/admin/admin.warehouse/manage.mutation/Manage.Mutation';
 import AddWarehouse from './components/AddWarehouse';
 import ManageWarehouse from './pages/admin/admin/manage.warehouse/manage.warehouse';
 
 function App() {
+
+import { useDispatch } from 'react-redux';
+import { useEffect, useState } from 'react';
+import CheckoutPage from './pages/user/checkoutPage/Checkout';
+import CartPage from './pages/user/cart/Cart';
+import axios from 'axios';
+
+function App() {
+  const [role, setRole] = useState(null)
+
+  const handleLogin = async () => {
+    try {
+      const response = await axios.get('http://localhost:8000/api/accounts/keep-login', {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("token")}`
+        }
+      });
+
+      const { success, role } = response.data
+
+      if (success) {
+        setRole(role);
+        if (role === 'admin') {
+          return <Navigate to="/admin" />
+        } else {
+          return <Navigate to="/" />
+        }
+      } else {
+        console.log('set role failed');
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+  useEffect(() => {
+    handleLogin()
+  }, [role])
+
+
   return (
     <BrowserRouter>
       <Routes>
@@ -84,7 +125,7 @@ function App() {
         <Route path="*" element={<NotFoundPage />} />
         {/* ROUTES FEATURE : PRODUCT-MANAGEMENT MAS ADHON*/}
         <Route path="/cart" element={<CartPage />} />
-        <Route path="" />
+        <Route path="/checkout" element={<CheckoutPage/>}/>
         <Route path="" />
         <Route path="" />
       </Routes>

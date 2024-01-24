@@ -103,7 +103,9 @@ const ProdutSearch = () => {
   };
   return (
     <div>
-      <TemporaryNavbar />
+      <TemporaryNavbar 
+      // cartCount={cartCount} 
+      />
       <div className="w-9/12 mx-auto">
         <div className="w-auto">
           <h1 className="text-4xl text-center">Products</h1>

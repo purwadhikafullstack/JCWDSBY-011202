@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, CSSProperties  } from 'react';
 import { MdNavigateNext } from 'react-icons/md';
 import { CiHeart, CiShare1 } from 'react-icons/ci';
 import { Link, useNavigate, useParams } from 'react-router-dom';
@@ -7,19 +7,37 @@ import TemporaryNavbar from '../../../components/Temporary/Navbar';
 import TemporaryFooter from '../../../components/Temporary/Footer';
 import { formatPriceToIDR } from '../../../utils';
 import DiscoverMore from '../../../components/DiscoverMore';
+import ClipLoader from "react-spinners/ClipLoader";
+import ButtonWithLoading from '../../../components/ButtonWithLoading';
 
 const ProductDetail = () => {
+  const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
   const [counter, setCounter] = useState(1);
   const [products, setProducts] = useState([]);
   const { id } = useParams();
-
+  const [cartCount, setCartCount] = useState(0);
+  const getCountCart = async () => {
+    try {
+      console.log("jalan");
+      const token = localStorage.getItem('token');
+      const result = await axios.get('http://localhost:8000/api/cart/navbar', {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      return setCartCount(result.data.result);
+    } catch (error) {
+      console.log(error);
+    }
+  };
   const handleDecrease = () => {
     if (counter > 1) {
       setCounter(counter - 1);
     }
   };
 
+  useEffect(()=>{
+    getCountCart()
+    },[])
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -41,27 +59,32 @@ const ProductDetail = () => {
 
   const formattedPrice =
     products.length > 0 ? formatPriceToIDR(products[0].price * counter) : '';
-  const onHandleCart = async () => {
-    try {
-      const token = localStorage.getItem('token');
-      const send = await axios.post(
-        'http://localhost:8000/api/cart/add-to-cart',
-        {
-          product_id: id,
-          quantity: counter,
-          total_price: products[0].price * counter,
-        },
-        { headers: { Authorization: `Bearer ${token}` } },
-      );
-    } catch (error) {
-      console.log(error);
-      console.log('disini bro');
-    }
-  };
-  console.log(products[0]);
+
+const onHandleCart =async () => {
+  setLoading(true)
+  try {
+    const token = localStorage.getItem("token")
+    const send = await axios.post(
+      "http://localhost:8000/api/cart/add-to-cart",
+      {
+        product_id : id,
+        quantity : counter,
+        weight: products[0].weight,
+        price: products[0].price
+      },
+      { headers: { Authorization: `Bearer ${token}`}})
+      alert("Berhasil menambahkan data")
+      getCountCart()
+  } catch (error) {
+    console.log(error);
+  } finally{
+    setLoading(false)
+  }
+}
+
   return (
     <div className="flex flex-col min-h-screen">
-      <TemporaryNavbar />
+      <TemporaryNavbar cartCount={cartCount}/>
       <div>
         <div className="bg-gray-300 border-2 border-solid border-slate-300 ">
           <div className="flex items-center font-normal ml-40 text-xs ">
@@ -174,12 +197,14 @@ const ProductDetail = () => {
                   </div>
                   <div className="mt-1">
                     <div className="pt-2">
-                      <button
-                        className="w-full inline-block px-4 py-1 text-sm font-bold text-white bg-orange-500 rounded-md cursor-pointer transition-all duration-300 hover:bg-orange-600 focus:outline-none"
-                        onClick={onHandleCart}
-                      >
-                        Add to Cart
-                      </button>
+                      <ButtonWithLoading 
+                      title={"Add to cart"}
+                      isLoading={loading}
+                      // className="w-full inline-block px-4 py-1 text-sm font-bold text-white bg-orange-500 rounded-md cursor-pointer transition-all duration-300 hover:bg-orange-600 focus:outline-none"
+                      onClick={onHandleCart}
+                      />
+                      {/* </button> */}
+                      {/* <ButtonWithLoading/> */}
                       <h1 className="text-orange-500 text-xs">
                         Tersisa{' '}
                         <span>

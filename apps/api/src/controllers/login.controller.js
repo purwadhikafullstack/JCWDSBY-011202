@@ -23,8 +23,16 @@ export const Login = async (req, res, next) => {
                 message: 'ACCOUNT NOT FOUND'
             })
         }
+      
+        if (!findAccount) {
+            return res.status(404).send({
+                success: false,
+                message: 'ACCOUNT NOT FOUND'
+            })
+        }
 
         const correctPassword = await bcrypt.compare(req.body.password, findAccount.password);
+
         if (!correctPassword) {
             return res.status(400).send({
                 success: false,
@@ -38,14 +46,14 @@ export const Login = async (req, res, next) => {
             role: findAccount.role
         },
             'abcd',
-            { expiresIn: "1h" })
+            { expiresIn: "5h" })
 
         jwt.verify(token, 'abcd', (error, decoded) => {
             if (error) {
                 return res.status(500).send({
                     success: false,
                     message: error
-                })
+                });
             }
 
             const { role } = decoded;
@@ -55,8 +63,8 @@ export const Login = async (req, res, next) => {
                 findAccount,
                 token,
                 role
-            })
-        })
+            });
+        });
 
     } catch (error) {
         console.log(error);

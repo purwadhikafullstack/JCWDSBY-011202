@@ -2,7 +2,6 @@ import React from 'react';
 import axios from 'axios';
 import { formatPriceToIDR } from '../utils';
 import { useNavigate } from 'react-router-dom';
-
 const ProductTable = ({ products, onDelete }) => {
   const navigate = useNavigate();
   const truncateDescription = (description) => {
@@ -12,7 +11,6 @@ const ProductTable = ({ products, onDelete }) => {
     }
     return description;
   };
-
   const handleDelete = async (product) => {
     try {
       await axios.delete(`http://localhost:8000/api/products/${product.id}`);
@@ -21,7 +19,6 @@ const ProductTable = ({ products, onDelete }) => {
       console.error('Error deleting product:', error);
     }
   };
-
   return (
     <div className="overflow-x-auto mx-auto">
       <div className="flex flex-col">
@@ -41,6 +38,9 @@ const ProductTable = ({ products, onDelete }) => {
                 Category
               </th>
               <th className="lg:px-6 lg:py-3 px-3 py-2 text-xs font-medium tracking-wider text-gray-500 uppercase">
+                Total Stock
+              </th>
+              <th className="lg:px-6 lg:py-3 px-3 py-2 text-xs font-medium tracking-wider text-gray-500 uppercase">
                 Action
               </th>
             </tr>
@@ -58,10 +58,13 @@ const ProductTable = ({ products, onDelete }) => {
                   <td className="lg:px-6 lg:py-4 px-3 py-2 text-sm lg:text-sm sm:text-xs text-gray-500 whitespace-nowrap">
                     {truncateDescription(product.description)}
                   </td>
-                  <td className="lg:px-6 lg:py-4 px-3 py-2 text-sm lg:text-sm sm:text-xs text-gray-500 whitespace-nowrap">
+                  <td className="lg:px-6 lg:py-4 px-3 py-2 text-sm lg:text-sm sm:text-xs text-gray-500 whitespace-nowrap text-center">
                     {product.category
                       ? product.category.category
                       : 'Uncategorized'}
+                  </td>
+                  <td className="lg:px-6 lg:py-4 px-3 py-2 text-sm lg:text-sm sm:text-xs text-gray-500 whitespace-nowrap text-center">
+                    {product.total_stock}
                   </td>
                   <td className="lg:px-6 lg:py-4 px-3 py-2 text-sm lg:text-sm sm:text-xs whitespace-nowrap">
                     <button

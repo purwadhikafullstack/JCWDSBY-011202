@@ -34,6 +34,7 @@ const ProductDetail = () => {
       setCounter(counter - 1);
     }
   };
+
   useEffect(()=>{
     getCountCart()
     },[])
@@ -58,6 +59,7 @@ const ProductDetail = () => {
 
   const formattedPrice =
     products.length > 0 ? formatPriceToIDR(products[0].price * counter) : '';
+
 const onHandleCart =async () => {
   setLoading(true)
   try {
@@ -79,6 +81,7 @@ const onHandleCart =async () => {
     setLoading(false)
   }
 }
+
   return (
     <div className="flex flex-col min-h-screen">
       <TemporaryNavbar cartCount={cartCount}/>
@@ -203,7 +206,14 @@ const onHandleCart =async () => {
                       {/* </button> */}
                       {/* <ButtonWithLoading/> */}
                       <h1 className="text-orange-500 text-xs">
-                        Tersisa <span>48</span>
+                        Tersisa{' '}
+                        <span>
+                          {products.length > 0
+                            ? products[0].total_stock > 0
+                              ? products[0].total_stock
+                              : 0
+                            : 0}
+                        </span>
                       </h1>
                     </div>
                   </div>

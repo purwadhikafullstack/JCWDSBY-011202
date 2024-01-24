@@ -3,18 +3,17 @@ import ProductTable from '../../../../components/ProductTable';
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
-
+import Pagination from '../../../../components/Temporary/Pagination';
+import SearchProduct from '../../../../components/SearchProduct';
+import SearchByCategory from '../../../../components/CategoryProductFilter';
 const ManageProduct = () => {
-  const [isModalOpen, setModalOpen] = useState(false);
+  const [page, setPage] = useState(1);
+  const [currentPage, setCurrentPage] = useState([]);
   const [products, setProducts] = useState([]);
   const navigate = useNavigate();
 
   const handleAddButtonClick = () => {
     navigate('add-product');
-  };
-
-  const closeModal = () => {
-    setModalOpen(false);
   };
 
   const handleDelete = (deletedProductId) => {
@@ -23,20 +22,11 @@ const ManageProduct = () => {
     );
   };
 
-  const handleAddProduct = async (newProduct) => {
-    console.log(newProduct[0]);
-    try {
-      const response = await axios.get(
-        `http://localhost:8000/api/products?id=${newProduct[0].id}`,
-      );
-      console.log(response);
-      setProducts((prevProducts) => [...prevProducts, response.data[0]]);
-    } catch (error) {
-      console.error('Error adding product:', error);
-    }
+  const handlePageChange = (newPage) => {
+    setPage(newPage);
   };
 
-  console.log(products);
+  console.log(page);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -50,6 +40,21 @@ const ManageProduct = () => {
 
     fetchData();
   }, []);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await axios.get(
+          `http://localhost:8000/api/products?page=${page}`,
+        );
+        setCurrentPage(response.data);
+      } catch (error) {
+        console.error('Error fetching data:', error);
+      }
+    };
+
+    fetchData();
+  }, [page]);
 
   return (
     <div>
@@ -66,8 +71,22 @@ const ManageProduct = () => {
             </button>
           </div>
         </div>
-        <div className="w-full mt-4 p-4">
-          <ProductTable products={products} onDelete={handleDelete} />
+        <div className="flex mt-4 mx-2">
+          <SearchByCategory />
+          <div>
+            <SearchProduct />
+          </div>
+        </div>
+        <div className="w-full p-4">
+          <ProductTable products={currentPage} onDelete={handleDelete} />
+        </div>
+        <div className="flex justify-center mb-2">
+          <Pagination
+            products={products}
+            onClickPrevious={() => handlePageChange(page - 1)}
+            onClickNext={() => handlePageChange(page + 1)}
+            page={page}
+          />
         </div>
       </AdminLayout>
     </div>

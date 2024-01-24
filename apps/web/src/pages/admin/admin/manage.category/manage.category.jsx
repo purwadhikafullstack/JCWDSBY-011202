@@ -14,7 +14,6 @@ const ManageCategory = () => {
 
   const handleButtonClick = async () => {
     setLoading(true);
-
     try {
       if (editingCategory) {
         await axios.patch(

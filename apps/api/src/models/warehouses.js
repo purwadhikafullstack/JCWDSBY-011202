@@ -8,12 +8,15 @@ export default class warehouses extends Model {
    */
   static associate(models) {
     // define association here
-    warehouses.hasMany(models.accounts,{foreignKey:"warehouse_id"})
-    warehouses.hasMany(models.carts, { foreignKey: "warehouse_id" })
-    warehouses.hasMany(models.order_details,{foreignKey:"warehouse_id"})
-    warehouses.hasMany(models.orders,{foreignKey:"warehouse_id"})
-    warehouses.belongsTo(models.provinces,{foreignKey:"prov_id"})
-    warehouses.belongsTo(models.cities,{foreignKey:"city_id"})
+    warehouses.hasMany(models.accounts, { foreignKey: 'warehouse_id' });
+    warehouses.hasMany(models.carts, { foreignKey: 'warehouse_id' });
+    warehouses.hasMany(models.order_details, { foreignKey: 'warehouse_id' });
+    warehouses.hasMany(models.orders, { foreignKey: 'warehouse_id' });
+    warehouses.belongsTo(models.provinces, { foreignKey: 'prov_id' });
+    warehouses.belongsTo(models.cities, { foreignKey: 'city_id' });
+    warehouses.hasMany(models.warehouse_storage, {
+      foreignKey: 'warehouse_id',
+    });
   }
 }
 
@@ -24,7 +27,7 @@ export const init = (sequelize) => {
       prov_id: DataTypes.INTEGER,
       city_id: DataTypes.INTEGER,
       address: DataTypes.STRING,
-    
+      is_deleted: DataTypes.BOOLEAN,
     },
     {
       sequelize,

@@ -7,31 +7,36 @@ module.exports = {
         allowNull: false,
         autoIncrement: true,
         primaryKey: true,
-        type: Sequelize.INTEGER
+        type: Sequelize.INTEGER,
       },
       name: {
-        type: Sequelize.STRING
+        type: Sequelize.STRING,
       },
       prov_id: {
-        type: Sequelize.INTEGER
+        type: Sequelize.INTEGER,
       },
-      sity_id: {
-        type: Sequelize.INTEGER
+      city_id: {
+        type: Sequelize.INTEGER,
       },
       address: {
-        type: Sequelize.STRING
+        type: Sequelize.STRING,
+      },
+      is_deleted: {
+        allowNull: false,
+        type: Sequelize.BOOLEAN,
+        defaultValue: false,
       },
       createdAt: {
         allowNull: false,
-        type: Sequelize.DATE
+        type: Sequelize.DATE,
       },
       updatedAt: {
         allowNull: false,
-        type: Sequelize.DATE
-      }
+        type: Sequelize.DATE,
+      },
     });
   },
   async down(queryInterface, Sequelize) {
     await queryInterface.dropTable('warehouses');
-  }
+  },
 };

@@ -3,7 +3,7 @@ const ButtonWithLoading = ({ isLoading, onClick, title }) => {
     <div className="mt-4">
       <button
         type="button"
-        className={`flex items-center rounded-lg px-4 py-2 ${
+        className={`flex w-full items-center rounded-lg px-4 py-2 ${
           isLoading ? 'bg-orange-700' : 'bg-orange-500'
         } text-white`}
         disabled={isLoading}
@@ -31,7 +31,7 @@ const ButtonWithLoading = ({ isLoading, onClick, title }) => {
             ></path>
           </svg>
         )}
-        <span className="font-medium">
+        <span className="font-medium w-full text-center">
           {isLoading ? 'Processing...' : title}
         </span>
       </button>

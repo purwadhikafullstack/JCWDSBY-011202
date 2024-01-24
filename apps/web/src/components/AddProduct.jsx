@@ -16,7 +16,11 @@ const AddProduct = () => {
   const navigate = useNavigate();
 
   const handleImagePreviewsChange = (files) => {
-    setSelectedImagePreviews(files.map((file) => URL.createObjectURL(file)));
+    const previews = [];
+    files.forEach((file) => {
+      previews.push(URL.createObjectURL(file));
+    });
+    setSelectedImagePreviews(previews);
     setImageToUpload(files);
   };
 

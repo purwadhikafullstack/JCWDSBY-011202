@@ -12,43 +12,33 @@ const CustomFileInput = ({
   const fileInputRef = useRef(null);
 
   useEffect(() => {
-    if (imagePreviews.length > 0) {
-      setIsInputDisabled(true);
-      if (onImagePreviewsChange) {
-        onImagePreviewsChange(filesArray);
-      }
+    if (imagePreviews.length > 0 && onImagePreviewsChange) {
+      onImagePreviewsChange(filesArray);
     }
   }, [imagePreviews, onImagePreviewsChange, filesArray]);
 
   const handleFileChange = (e) => {
     const files = e.target.files;
-    console.log(files);
 
     if (files) {
-      const newPreviews = Array.from(files).map((file) => {
+      const newPreviews = [];
+      const newFilesArray = Array.from(files);
+      newFilesArray.forEach((file) => {
         const reader = new FileReader();
+        reader.onloadend = () => {
+          newPreviews.push(reader.result);
+          if (newPreviews.length === newFilesArray.length) {
+            setImagePreviews(newPreviews);
+            setFilesArray(newFilesArray);
+          }
+        };
 
-        return new Promise((resolve) => {
-          reader.onloadend = () => {
-            resolve(reader.result);
-          };
-
-          reader.readAsDataURL(file);
-        });
+        reader.readAsDataURL(file);
       });
 
-      Promise.all(newPreviews).then((results) => {
-        console.log('New Previews:', results);
-        setImagePreviews(results);
-        setFilesArray(Array.from(files));
-        if (onImagePreviewsChange) {
-          onImagePreviewsChange(Array.from(files));
-        }
-      });
-    }
-
-    if (onChange) {
-      onChange(e);
+      if (onChange) {
+        onChange(e);
+      }
     }
   };
 

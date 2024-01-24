@@ -8,6 +8,9 @@ export default class products extends Model {
     products.hasMany(models.product_images, {
       foreignKey: 'product_id',
     });
+    products.hasMany(models.warehouse_storage, {
+      foreignKey: 'product_id',
+    });
   }
 }
 

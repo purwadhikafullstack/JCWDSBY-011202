@@ -6,7 +6,7 @@ const linksData = [
   { to: '/admin/manage-account', label: 'Account' },
   { to: '/admin/manage-product', label: 'Products' },
   { to: '/admin/transaction', label: 'Transaction' },
-  { to: '/admin/warehouses', label: 'Warehouses' },
+  { to: '/admin/manage-warehouse', label: 'Warehouses' },
   { to: '/admin/manage-category', label: 'Categories' },
   { to: '/admin/manage-inventory', label: 'Inventory' },
 ];

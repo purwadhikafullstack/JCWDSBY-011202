@@ -1,40 +1,30 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import AdminLayout from '../../../../components/AdminLayout';
 import WarehouseTable from '../../../../components/WarehouseTable';
+import axios from 'axios';
 const ManageInventory = () => {
-  const [temporaryWareHouse, setTemporaryWareHouse] = useState([
-    {
-      name: 'Gudang 1',
-      prov: 'Jawa Timur',
-      city: 'Surabaya',
-      address: 'Jl SidoKirim no.200',
-    },
-    {
-      name: 'Gudang 2',
-      prov: 'DKI Jakarta',
-      city: 'Jakarta',
-      address: 'Jl SidoSend no.200',
-    },
-    {
-      name: 'Gudang 3',
-      prov: 'Jawa Timur',
-      city: 'Kediri',
-      address: 'Jl SidoDelivery no.200',
-    },
-    {
-      name: 'Gudang 4',
-      prov: 'Jawa Barat',
-      city: 'Bandung',
-      address: 'Jl Palus no.200',
-    },
-    {
-      name: 'Gudang 5',
-      prov: 'Bali',
-      city: 'Denpasar',
-      address: 'Jl Aseli no.200',
-    },
-  ]);
-  console.log(temporaryWareHouse);
+  const [temporaryWareHouse, setTemporaryWareHouse] = useState([]);
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await axios.get(
+          'http://localhost:8000/api/warehouses',
+        );
+        setTemporaryWareHouse(response.data.data);
+      } catch (error) {
+        console.error('Error fetching data:', error);
+      }
+    };
+
+    fetchData();
+  }, []);
+
+  useEffect(() => {
+    if (sessionStorage.getItem('warehouse_selected')) {
+      sessionStorage.removeItem('warehouse_selected');
+    }
+  }, []);
+
   return (
     <div>
       <AdminLayout>

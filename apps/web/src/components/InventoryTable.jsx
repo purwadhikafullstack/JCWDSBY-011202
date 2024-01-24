@@ -1,32 +1,60 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-
-const InventoryTable = () => {
+import axios from 'axios';
+const InventoryTable = ({ warehouseInventory, onDelete }) => {
   const navigate = useNavigate();
-  const [warehouseInventory, setWarehouseInventory] = useState([
-    {
-      product: 'Hikari Dining Chair',
-      stock: 2,
-    },
-    {
-      product: 'Skona Sofa',
-      stock: 4,
-    },
-    {
-      product: 'Living Bed',
-      stock: 2,
-    },
-    {
-      product: 'Ivory Table',
-      stock: 1,
-    },
-  ]);
-  console.log(warehouseInventory);
+  const [Inventory, setInventory] = useState([]);
+  const [Product, setProduct] = useState([]);
+
+  const onHandleDelete = async (id) => {
+    try {
+      await axios.delete(`http://localhost:8000/api/warehouse/storage/${id}`);
+      setInventory((prevInventory) =>
+        prevInventory.filter((item) => item.id !== id),
+      );
+      onDelete();
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  useEffect(() => {
+    setInventory(warehouseInventory);
+  }, [warehouseInventory]);
+
+  useEffect(() => {
+    const fetchProduct = async () => {
+      try {
+        const tempProduct = [];
+        const productIds = warehouseInventory.map((item) => item.product_id);
+        console.log(productIds);
+
+        for (let i = 0; i < productIds.length; i++) {
+          const response = await axios.get(
+            `http://localhost:8000/api/products?id=${productIds[i]}`,
+          );
+          tempProduct.push(response.data[0]);
+        }
+
+        setProduct(tempProduct);
+      } catch (error) {
+        console.error('Error fetching product data:', error);
+      }
+    };
+
+    fetchProduct();
+  }, [warehouseInventory]);
+
+  console.log(Product);
+
   return (
     <div className="overflow-x-auto mx-auto">
       <table className="w-full max-w-full overflow-hidden border divide-y divide-gray-200 rounded-md">
         <thead className="bg-orange-50">
           <tr>
+            <th className="lg:px-6 lg:py-3 px-3 py-2 text-xs font-medium tracking-wider text-gray-500 uppercase">
+              Product Preview
+            </th>
             <th className="lg:px-6 lg:py-3 px-3 py-2 text-xs font-medium tracking-wider text-gray-500 uppercase">
               Product
             </th>
@@ -39,23 +67,42 @@ const InventoryTable = () => {
           </tr>
         </thead>
         <tbody className="bg-white divide-y divide-gray-200">
-          {warehouseInventory.map((val, index) => {
+          {Inventory.map((val, index) => {
+            const productImage = Product[index]?.product_images?.[0]?.image;
             return (
               <tr key={index}>
                 <td className="lg:px-6 lg:py-4 px-3 py-2 text-sm lg:text-sm sm:text-xs text-gray-500 whitespace-nowrap">
-                  {val.product}
+                  {productImage && (
+                    <img
+                      src={`http://localhost:8000/productimage/${productImage}`}
+                      className="w-16 mx-auto"
+                    />
+                  )}
                 </td>
-                <td className="lg:px-6 lg:py-4 px-3 py-2 text-sm lg:text-sm sm:text-xs text-gray-500 whitespace-nowrap">
+                <td className="lg:px-6 lg:py-4 px-3 py-2 text-sm lg:text-sm sm:text-xs text-gray-500 whitespace-nowrap text-center">
+                  {val.product_name}
+                </td>
+                <td className="lg:px-6 lg:py-4 px-3 py-2 text-sm lg:text-sm sm:text-xs text-gray-500 whitespace-nowrap text-center">
                   {val.stock}
                 </td>
                 <td className="lg:px-6 lg:py-4 px-3 py-2 text-sm lg:text-sm sm:text-xs text-gray-500 whitespace-nowrap flex items-center justify-center">
                   <button
                     className="lg:bg-orange-500 lg:hover:bg-orange-700 text-white px-4 py-2 rounded mr-2"
                     onClick={() => {
-                      navigate(`/warehouse-admin/edit-stock`);
+                      navigate(
+                        `/warehouse-admin/edit-stock/storage-000${val.id}`,
+                      );
                     }}
                   >
                     Edit Stock
+                  </button>
+                  <button
+                    className="lg:bg-slate-400 lg:hover:bg-slate-700 text-white px-4 py-2 rounded"
+                    onClick={() => {
+                      onHandleDelete(val.id);
+                    }}
+                  >
+                    Delete
                   </button>
                 </td>
               </tr>

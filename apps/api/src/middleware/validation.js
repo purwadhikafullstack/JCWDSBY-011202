@@ -1,4 +1,4 @@
-import jwt from "jsonwebtoken"
+import jwt from 'jsonwebtoken';
 
 module.exports = {
   validateToken: (req, res, next) => {
@@ -10,11 +10,11 @@ module.exports = {
           message: "You don't have account",
         });
       } else {
-        const verifyData = jwt.verify(token, "abcd");
+        const verifyData = jwt.verify(token, 'abcd');
         if (!verifyData) {
           return res.status(401).send({
             success: false,
-            message: "Unauthorized Request",
+            message: 'Unauthorized Request',
           });
         }
         req.userData = verifyData;

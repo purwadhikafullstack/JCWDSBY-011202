@@ -1,8 +1,27 @@
 import products from '../models/products';
 import categories from '../models/categories';
 import products_images from '../models/product_images';
+import warehouse_storage from '../models/warehouse_storage';
+
 export const getProduct = async (req, res, next) => {
   try {
+    const warehouseStorage = await warehouse_storage.findAll({
+      where: {
+        is_deleted: false,
+      },
+      raw: true,
+    });
+
+    const warehouseStockMap = {};
+    warehouseStorage.forEach((item) => {
+      const { product_id, stock } = item;
+      if (warehouseStockMap[product_id] === undefined) {
+        warehouseStockMap[product_id] = stock;
+      } else {
+        warehouseStockMap[product_id] += stock;
+      }
+    });
+
     const filter = {
       is_deleted: false,
     };
@@ -58,7 +77,16 @@ export const getProduct = async (req, res, next) => {
       offset: req.query.page ? (page - 1) * limit : undefined,
     });
 
-    return res.status(200).send(result);
+    const resultWithStock = result.map((product) => {
+      const product_id = product.id;
+      const total_stock = warehouseStockMap[product_id] || 0;
+      return {
+        ...product.get({ plain: true }),
+        total_stock,
+      };
+    });
+
+    return res.status(200).send(resultWithStock);
   } catch (error) {
     console.error(error);
     return res

@@ -8,6 +8,7 @@ import provinces from "../models/provinces"
 
 export const getCartToCheckout = async(req,res,next)=>{
     try {
+        console.log("asa");
         let cartId = ""
         if(req.params.id.includes(",")){
         cartId = req.params.id.split(",")            
@@ -43,6 +44,9 @@ export const getCartToCheckout = async(req,res,next)=>{
 
         let checkoutPrice = allPrice.reduce((a,b)=>{return a+b})
         let checkoutWeight = allWeight.reduce((a,b)=>{return a+b})
+        console.log("1",result);
+        console.log("2",checkoutPrice);
+        console.log("3",checkoutWeight);
         return res.status(200).send({
             message:"success get cart data",
             result,

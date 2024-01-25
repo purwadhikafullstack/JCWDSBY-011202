@@ -24,18 +24,13 @@ import EditStockProduct from './pages/admin/admin.warehouse/edit.stock/EditStock
 import Login from './pages/user/login/login';
 import Register from './pages/user/register/register';
 import TestLoginPage from './pages/user/layout/testLoginPage';
-
 import CartPage from './pages/user/cart/Cart';
 import ManageMutation from './pages/admin/admin.warehouse/manage.mutation/Manage.Mutation';
 import AddWarehouse from './components/AddWarehouse';
 import ManageWarehouse from './pages/admin/admin/manage.warehouse/manage.warehouse';
-
-function App() {
-
 import { useDispatch } from 'react-redux';
 import { useEffect, useState } from 'react';
 import CheckoutPage from './pages/user/checkoutPage/Checkout';
-import CartPage from './pages/user/cart/Cart';
 import axios from 'axios';
 
 function App() {

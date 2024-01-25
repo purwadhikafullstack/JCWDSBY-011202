@@ -66,17 +66,32 @@ export const updateQty =async (req,res,next)=>{
         ],
          raw:true
       })
-      const data = await carts.update({
-         quantity: req.body.quantity,
-         total_price:findCart[`product.price`]*req.body.quantity,
-         total_weight:findCart[`product.weight`]*req.body.quantity
-     }, {
-         where: {
-             id: req.params.id
-         }
+      if(req.body.quantity>req.body.stock){
+         const data = await carts.update({
+            quantity: req.body.stock,
+            total_price:findCart[`product.price`]*req.body.stock,
+            total_weight:findCart[`product.weight`]*req.body.stock
+        }, {
+            where: {
+                id: req.params.id
+            }
+   
+        })
+        return res.status(200).send(data)
+      } else {
 
-     })
-     return res.status(200).send(data)
+         const data = await carts.update({
+            quantity: req.body.quantity,
+            total_price:findCart[`product.price`]*req.body.quantity,
+            total_weight:findCart[`product.weight`]*req.body.quantity
+        }, {
+            where: {
+                id: req.params.id
+            }
+   
+        })
+        return res.status(200).send(data)
+      }
    } catch (error) {
       return res.status(500).send(error)
    }

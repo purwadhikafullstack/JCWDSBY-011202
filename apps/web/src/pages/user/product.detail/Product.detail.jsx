@@ -182,14 +182,25 @@ const onHandleCart =async () => {
                       type="text"
                       inputMode="numeric"
                       value={counter}
-                      onChange={(e) =>
+                      onChange={(e) =>{
                         setCounter(parseInt(e.target.value) || 0)
+                        if(e.target.value>products[0].total_stock){
+                          setCounter(products[0].total_stock)
+                          alert(`Oops stock yang tersedia hanya ${products[0].total_stock}`)
+                        }
+                      }
                       }
                       className="px-4 py-1 border-gray-500 text-center w-full focus:outline-none"
                       style={{ marginLeft: 'auto', marginRight: 'auto' }}
                     />
                     <button
-                      onClick={() => setCounter(counter + 1)}
+                      onClick={() => {
+                        setCounter(counter + 1)
+                        if(counter>products[0].total_stock-1){
+                          setCounter(products[0].total_stock)
+                          alert(`Oops stock yang tersedia hanya ${products[0].total_stock}`)
+                        }
+                      }}
                       className="px-4 py-1 border border-gray-500 rounded-full"
                     >
                       +

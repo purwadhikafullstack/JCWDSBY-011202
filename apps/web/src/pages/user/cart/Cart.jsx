@@ -70,7 +70,7 @@ const CartPage = () => {
   useEffect(() => {
     // USEEFFECT ketika pertama load
     getDataCart();
-    openLoading(3000);
+    openLoading(1500);
     getChecked();
 
     if (checkedArray) {
@@ -100,7 +100,7 @@ const CartPage = () => {
       console.log(error);
     }
   };
-  const onHandleChangeQty = async (cartId, idx) => {
+  const onHandleChangeQty = async (cartId, idx, stock) => {
     try {
       const token = localStorage.getItem('token');
       let item = document.getElementsByName('inputQty');
@@ -113,12 +113,17 @@ const CartPage = () => {
             headers: { Authorization: `Bearer ${token}` },
           },
         );
+         
         getDataCart();
         setOnChangeCheckedValue(!onChangeCheckedValue);
       } else {
+        if(changeItem>stock){
+          alert(`Oops jumlah maksimal pembelian adalah ${stock}`)
+        }
         const updateQty = await axios.patch(
           `http://localhost:8000/api/cart/qty/${cartId}`,
-          { quantity: parseInt(changeItem) },
+          { quantity: parseInt(changeItem),
+          stock:stock },
           {
             headers: { Authorization: `Bearer ${token}` },
           },
@@ -130,13 +135,17 @@ const CartPage = () => {
       console.log(error);
     }
   };
-  const onHandlePlusMinus = async (operator, id) => {
+  const onHandlePlusMinus = async (operator, id, qty,stock) => {
     try {
       const token = localStorage.getItem('token');
       if (operator === 'plus') {
+        if(qty+1>stock){
+          console.log("masyk");
+          alert(`Oops jumlah maksimal pembelian adalah ${stock}`)
+        }
         const edit = await axios.patch(
           `http://localhost:8000/api/cart/plus/${id}`,
-          {},
+          {stock:stock},
           {
             headers: { Authorization: `Bearer ${token}` },
           },
@@ -194,23 +203,24 @@ const CartPage = () => {
                   productPrice={val[`product.price`]}
                   productWeight={val[`product.weight`]}
                   productImage={val['product.product_images.image']}
-                  total_price={val.total_price}
+                  total_price={val.total_price.toLocaleString('id')}
                   productWeightConvert={val.productWeightConvert}
                   total_weightConvert={val.total_weightConvert}
                   checkBoxValue={val.id}
+                  stock={val.stock}
                   navigateProduct={()=>navigate(`/product-detail/${val[`product.id`]}`)}
                   onHandleDelete={() => onHandleDelete(val.id)}
                   onClickMinus={() => {
                     onHandlePlusMinus('minus', val.id);
                   }}
                   onClickPlus={() => {
-                    onHandlePlusMinus('plus', val.id);
+                    onHandlePlusMinus('plus', val.id,val.quantity,val.stock);
                   }}
                   onChangeChecked={() => {
                     setOnChangeCheckedValue(!onChangeCheckedValue);
                   }}
                   onHandleChangeQty={() => {
-                    onHandleChangeQty(val.id, id);
+                    onHandleChangeQty(val.id, id,val.stock);
                   }}
                 />
               );

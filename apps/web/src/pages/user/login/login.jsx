@@ -1,116 +1,136 @@
-import React from 'react';
-import { useState, useEffect } from 'react';
-import { useDispatch } from 'react-redux';
-import { useNavigate } from 'react-router-dom';
-import { loginSuccess } from '../../../redux/loginAction';
-import Layout from '../layout/layout';
+import React, { useState } from 'react';
+import LoginImage from '../../../assets/login.jpg';
+import { Link, useNavigate } from 'react-router-dom';
+import ButtonWithLoading from '../../../components/ButtonWithLoading';
 import axios from 'axios';
-import './login.css';
 
-function Login() {
-    const [visible, setVisible] = useState(false)
-    const [username, setUsername] = useState('')
-    const [password, setPassword] = useState('')
-
-    const dispatch = useDispatch()
-    const navigate = useNavigate()
-
-    const handleLogin = async () => {
-        try {
-            const response = await axios.post('http://localhost:8000/api/accounts/login', {
-                username,
-                password,
-            })
-
-            const { success, findAccount, token, role } = response.data
-
-            console.log(response.data);
-            
-            if (success) {
-                localStorage.setItem('token', token)
-                dispatch(loginSuccess(token, findAccount.username, role))
-                if (role === 'admin') {
-                    navigate('/admin')
-                } else {
-                    navigate('/')
-                }
-            } else {
-                console.log('test');
-            }
-        } catch (error) {
-            console.log(error);
-        }
-    }    
-
-    // const handleLogin = async () => {
-    //     try {
-    //         const response = await axios.post('http://localhost:8000/api/accounts/login', {
-    //             username,
-    //             password,
-    //         })
-
-    //         const { success, findAccount, token } = response.data
-
-    //         console.log(response.data);
-    //         if (success) {
-    //             const decodedToken = jwt.verify(token, 'abcd')
-    //             const role = decodedToken.role;
-
-    //             localStorage.setItem("token", token)
-    //             dispatch(loginSuccess(token, findAccount.username, role))
-
-    //             if (role === 'admin') {
-    //                 navigate('/admin')
-    //             } else {
-    //                 navigate('/')
-    //             }
-    //         } else {
-    //             console.log('test');
-    //         }
-    //     } catch (error) {
-    //         console.log(error);
-    //     }
-    // }
+const LoginForm = () => {
+  const [loading, setLoading] = useState(false);
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [error, setError] = useState(null);
+  const navigate = useNavigate();
+  const onHandleSignIn = async () => {
+    try {
+      setError(null);
+      setLoading(true);
+      const response = await axios.post(
+        'http://localhost:8000/api/accounts/login',
+        {
+          email,
+          password,
+        },
+      );
+      if (response.data.success) {
+        localStorage.setItem('login', response.data.token);
+        navigate('/');
+      } else {
+        setError(
+          response.data.message ||
+            'Login failed. Please check your credentials.',
+        );
+      }
+    } catch (error) {
+      console.error('Error during login:', error);
+      setError('An unexpected error occurred. Please try again.');
+    } finally {
+      setLoading(false);
+    }
+  };
   return (
-    <Layout className="login">
-      <div className="loginContainer">
-        <h1>Log In</h1>
-        <ul>
-          <li>
-            <label htmlFor="">Username</label> <br />
-            <input
-              type="text"
-              placeholder="Type in your username"
-              onChange={(e) => setUsername(e.target.value)}
-            />{' '}
-            <br />
-          </li>
-          <li>
-            <label htmlFor="">Password</label> <br />
-            <div className="passwordWrapper">
-              <input
-                type={visible ? 'text' : 'password'}
-                placeholder="Type in your password"
-                onChange={(e) => setPassword(e.target.value)}
-              />
-              <i
-                className={`fa-solid fa-eye${visible ? '' : '-slash'}`}
-                onClick={() => setVisible(!visible)}
-              ></i>
-            </div>
-          </li>
-        </ul>
-        <button className="forgotWrapper">
-          <button className="forgot">Forgot password?</button> <br />
-        </button>
-        <button className="buttonWrapper">
-          <button className="loginButton" onClick={handleLogin}>
-            Log In
-          </button>
-        </button>
-      </div>
-    </Layout>
-  );
-}
+    <div className="flex items-center justify-center min-h-screen">
+      <div className="flex shadow-lg w-full max-w-5xl">
+        {/* Login form */}
+        <div
+          className="flex flex-wrap content-center justify-center rounded-l-md bg-white"
+          style={{ width: '60%', height: '80%' }}
+        >
+          <div className="w-80 p-8">
+            {/* Heading */}
+            <h1 className="text-2xl font-semibold">Welcome back</h1>
+            <small className="text-gray-400">
+              Welcome back! Please enter your details
+            </small>
 
-export default Login
+            {/* Form */}
+            <form className="mt-4 space-y-4">
+              <div>
+                <label className="block text-sm font-semibold mb-2">
+                  Email
+                </label>
+                <input
+                  type="email"
+                  onChange={(e) => setEmail(e.target.value)}
+                  placeholder="Enter your email"
+                  className="w-full p-2 border rounded-md focus:border-orange-700 focus:outline-none focus:ring-1 focus:ring-orange-700 text-gray-500"
+                />
+              </div>
+
+              <div>
+                <label className="block text-sm font-semibold mb-2">
+                  Password
+                </label>
+                <input
+                  placeholder="*****"
+                  onChange={(e) => setPassword(e.target.value)}
+                  className="w-full p-2 border rounded-md focus:border-orange-700 focus:outline-none focus:ring-1 focus:ring-orange-700 text-gray-500"
+                />
+              </div>
+              {error && <div className="text-red-500 text-sm">{error}</div>}
+              <div className="flex items-center">
+                <Link
+                  to="/user/forgot-pass"
+                  className="text-sm font-semibold text-orange-700 ml-auto"
+                >
+                  Forgot password?
+                </Link>
+              </div>
+            </form>
+            <div className="mt-4">
+              <ButtonWithLoading
+                title={'Login'}
+                isLoading={loading}
+                onClick={onHandleSignIn}
+              ></ButtonWithLoading>
+              <button className="flex items-center justify-center w-full border border-gray-300 hover:border-gray-500 px-4 py-2 rounded-md mt-2">
+                <img
+                  className="w-5 mr-2"
+                  src="https://lh3.googleusercontent.com/COxitqgJr1sJnIDe8-jiKhxDx1FrYbtRHKJ9z_hELisAlapwE9LUPh6fcXIfb5vwpbMl4xl9H9TRFPc5NOO8Sb3VSgIBrfRYvW6cUA"
+                  alt="Google Logo"
+                />
+                Sign in with Google
+              </button>
+            </div>
+
+            {/* Footer */}
+            <div className="text-center mt-4">
+              <span className="text-xs text-gray-400 font-semibold">
+                Don't have an account?
+              </span>
+              <Link
+                to="/user/register"
+                className="text-xs font-semibold text-orange-700"
+              >
+                Sign up
+              </Link>
+            </div>
+          </div>
+        </div>
+
+        {/* Login banner */}
+        <div
+          className="flex flex-wrap content-center justify-center rounded-r-md"
+          style={{ width: '40%', height: '32rem' }}
+        >
+          <img
+            className="w-full h-full bg-center bg-no-repeat bg-cover rounded-r-md"
+            src={LoginImage}
+            alt="Login Banner"
+          />
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default LoginForm;

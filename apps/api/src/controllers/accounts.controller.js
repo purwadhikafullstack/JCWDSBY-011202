@@ -117,10 +117,7 @@ export const CreateAccount = async (req, res, next) => {
     const hashPassword = await bcrypt.hash(req.body.password, salt);
     console.log('SALT : ', salt);
     console.log('HASH : ', hashPassword);
-
     req.body.password = hashPassword;
-    // req.body.role = 'admin'
-
     const newAccount = await accounts.create(req.body);
     console.log('ACCOUNT REGISTERED : \n', newAccount);
 

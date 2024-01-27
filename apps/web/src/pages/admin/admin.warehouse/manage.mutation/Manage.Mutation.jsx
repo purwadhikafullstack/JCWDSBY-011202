@@ -1,7 +1,9 @@
 import WareHouseAdminLayout from '../../../../components/WareHouseAdminLayout';
 import MutationJournalTable from '../../../../components/MutationJournalTable';
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 const ManageMutation = () => {
+  const navigate = useNavigate();
   const [temporaryMutation, setTemporaryMutation] = useState([
     {
       product: 'Skona Sofa',
@@ -57,6 +59,9 @@ const ManageMutation = () => {
             <div className="font-bold text-xl ">Mutation Stock</div>
             <button
               style={{ cursor: 'pointer' }}
+              onClick={() =>
+                navigate('/warehouse-admin/manage-mutation/add-request')
+              }
               className="text-white rounded-md bg-[#F06105] px-4 py-1 w-fit shadow-sm hover:bg-[#E85400] transition-all duration-300"
             >
               Make Request <span className="font-bold">+</span>

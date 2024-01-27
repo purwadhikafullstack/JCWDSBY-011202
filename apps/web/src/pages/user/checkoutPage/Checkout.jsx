@@ -5,19 +5,32 @@ import { useLocation } from 'react-router-dom';
 import TemporaryNavbar from '../../../components/Temporary/Navbar';
 import TemporaryFooter from '../../../components/Temporary/Footer';
 import axios from 'axios';
-import { Loading } from '../../../components/loadingComponent';
+import { Loading, MiniLoading } from '../../../components/loadingComponent';
+import { IModalOpt,IModalCourier } from '../../../components/modalRama';
 
 const CheckoutPage = () => {
   const [firstloading, setFirstLoading] = useState(false);
+  const [secondloading, setSecondLoading] = useState(false);
+  const [thirdloading, setThirdLoading] = useState(false);
+  const [recepient,setRecepient]=useState("")
   const [cartData, setCartData] = useState([]);
-  const[coPrice,setCoPrice]=useState(0)
-  const[coWeight,setCoWeight]=useState(0)
+  const [coPrice, setCoPrice] = useState(0);
+  const [coWeight, setCoWeight] = useState(0);
   const [userData, setUserData] = useState([]);
-  const location = useLocation();
+  const [shippingCost,setShippingCost]=useState([])
+  const [userAddress,setUserAddress]=useState([])
+  const [courierOpt,setCourierOpt]=useState(false)
+  const [shippingOpt,setShippingOpt]=useState(false)
   const openLoading = (time) => {
     setFirstLoading(true);
     setTimeout(() => {
       setFirstLoading(false);
+    }, time);
+  };
+  const openMiniLoading = (time) => {
+    setSecondLoading(true);
+    setTimeout(() => {
+      setSecondLoading(false);
     }, time);
   };
   const getDataCart = async () => {
@@ -30,9 +43,8 @@ const CheckoutPage = () => {
           headers: { Authorization: `Bearer ${token}` },
         },
       );
-      console.log("1", result.data);
-      setCoPrice(result.data.checkoutPrice)
-      setCoWeight(result.data.checkoutWeight)
+      setCoPrice(result.data.checkoutPrice);
+      setCoWeight(result.data.checkoutWeight);
       setCartData(result.data.result);
     } catch (error) {
       console.log(error);
@@ -41,7 +53,6 @@ const CheckoutPage = () => {
   const getUserData = async () => {
     try {
       const token = localStorage.getItem('token');
-      console.log('ha;');
       const result = await axios.get(
         `http://localhost:8000/api/checkout/userData`,
         {
@@ -53,14 +64,47 @@ const CheckoutPage = () => {
       console.log(error);
     }
   };
+  const getUserAddress = async () => {
+    try {
+      const token = localStorage.getItem('token');
+      const result = await axios.get(
+        `http://localhost:8000/api/checkout/userAddress`,
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        },
+      );
+      return setUserAddress(result.data);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+  const getShippingCost = async (lat, lon, city, kota,weight ) => {
+    const token = localStorage.getItem('token');
+    const result = await axios.get(
+      `http://localhost:8000/api/checkout/get-shipping-cost?lat=${lat}&lon=${lon}&city=${city}&kota=${kota}&weight=${weight}`,
+      {
+        headers: { Authorization: `Bearer ${token}` },
+      },
+    );
+      setShippingCost(result.data)
+  };
   useEffect(() => {
-    openLoading(1500)
+    openLoading(3000);
     getDataCart();
     getUserData();
+    getUserAddress()
   }, []);
-  console.log('ini error', cartData);
-  console.log('ini error2', cartData.result);
-  // console.log('ini error2', userData);
+  useEffect(() => {
+    getShippingCost(
+      userData['addresses.lat'],
+      userData['addresses.lon'],
+      userData['addresses.city_id'],
+      userData.city,
+      coWeight
+    );
+    getUserAddress()
+  }, [userData]);
+  console.log('ini alamar', userAddress);
   return (
     <>
       {firstloading ? <Loading /> : ''}
@@ -90,15 +134,37 @@ const CheckoutPage = () => {
         <div className="shadow-sm md:w-[320px] md:border-[1px] rounded-md pb-2">
           {/* co payment disini */}
           <CheckoutPayment
-            recepient={userData.fullname}
+            recepient={recepient?recepient:userData.fullname}
             address={userData['addresses.address']}
             phone={userData['addresses.phone']}
             city={userData.city}
+            shippingCost={"Pilih Pengiriman"}
             province={userData.province}
             price={coPrice.toLocaleString('id')}
+            ubah={()=>{
+              setShippingOpt(true)
+              openMiniLoading(1500)
+            }}
+            onHandleCourier={()=>{setCourierOpt(true)
+            console.log("masuk kok");}}
           />
         </div>
       </div>
+      {shippingOpt?<IModalOpt
+      deskripsi1={"Penerima"}
+      deskripsi2={"Alamat Utama"}
+      confirm={"Confirm"}
+      cancel={"Cancel"}
+      valueRecepient={recepient}
+      isLoading={secondloading}
+      onHandleModalCancel={()=>setShippingOpt(false)}
+      />:""}
+      {courierOpt?<IModalCourier
+      deskripsi1={"Pilih Opsi Pengiriman"}
+      confirm={"Confirm"}
+      cancel={"Cancel"}
+      onHandleModalCancel={()=>{setCourierOpt(false)}}
+      />:""}
       <TemporaryFooter />
     </>
   );

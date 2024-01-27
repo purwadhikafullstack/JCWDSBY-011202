@@ -9,6 +9,7 @@ import jwt from "jsonwebtoken"
 // GET Summary
 export const getSummary = async (req, res, next) => {
  try {
+   console.log("masuk summary");
    let data=[]
    let price=[]
    let weight=[]

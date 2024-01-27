@@ -19,7 +19,7 @@ const CartPage = () => {
   const [changeQty, setChangeQty] = useState('');
   const [openModal, setOpenModal] = useState(false);
   const [cartCount, setCartCount] = useState(0);
-  let checkedResult = [];
+
   let checkedArray = '';
   const getDataCart = async () => {
     try {
@@ -53,60 +53,82 @@ const CartPage = () => {
       console.log(error);
     }
   };
-  const keepChecked = async () => {
-    try {
-      if (localStorage.getItem('cartId')) {
-        const items = localStorage.getItem('cartId');
-        checkedResult = items.split(',');
-        if(cartProduct){
-          let checkedItem =await document.getElementsByName('intoOrder');
-          console.log("dapat ga",checkedItem);
-          for (let i = 0; i < checkedResult.length; i++) {
-            for (let j = 0; j < checkedItem.length; j++) {
-              if (checkedResult[i] == checkedItem[j].defaultValue) {
-                checkedItem[j].checked = true;
-                checkedArray = checkedResult.join(' ');
-              }
-            }
-          }
+  const getChecked =  () => {
+      let checkedResult = [];
+      let checkedItem = document.getElementsByName('intoOrder');
+      for (let i = 0; i < checkedItem.length; i++) {
+        if (checkedItem[i].checked) {
+          checkedResult.push(checkedItem[i].value);
         }
       }
-    } catch (error) {
-      console.log(error);
-    }
-  };
-  const getChecked = () => {
-    console.log('jalan kok');
-    let checkedItem = document.getElementsByName('intoOrder');
-    for (let i = 0; i < checkedItem.length; i++) {
-      if (checkedItem[i].checked) {
-        checkedResult.push(checkedItem[i].value);
-        localStorage.setItem('cartId', checkedResult);
+      if (checkedResult.length < 1) {
+        //  setCartSummary(cartSummary.status=false)
+      } else {
+        checkedArray = checkedResult.join(' ');
       }
-    }
-    if (checkedResult.length > 0) {
-      checkedArray = checkedResult.join(' ');
-    } else {
-      localStorage.removeItem('cartId');
-      setCartSummary((cartSummary.status = false));
-    }
   };
+  // const keepChecked = async () => {
+  //   try {
+  //     if (localStorage.getItem('cartId')) {
+  //       let checkedResult = [];
+  //       const items = localStorage.getItem('cartId');
+  //       const idItems = items.split(',');
+  //       let checkedItem = await document.getElementsByName('intoOrder');
+  //       for (let i = 0; i < idItems.length; i++) {
+  //         for (let j = 0; j < checkedItem.length; j++) {
+  //           if (idItems[i] == checkedItem[j].defaultValue) {
+  //             checkedItem[j].checked = true;
+  //           }
+  //         }
+  //       }
+  //       for (let i = 0; i < checkedItem.length; i++) {
+  //         if (checkedItem[i].checked) {
+  //           checkedResult.push(checkedItem[i].value);
+  //         }
+  //       }
+  //       if (checkedResult.length < 1) {
+  //         //  setCartSummary(cartSummary.status=false)
+  //       } else {
+  //         checkedArray = checkedResult.join(' ');
+  //       }
+  //     } else {
+  //       let checkedResult = [];
+  //   let checkedItem = document.getElementsByName('intoOrder');
+  //   for (let i = 0; i < checkedItem.length; i++) {
+  //     if (checkedItem[i].checked) {
+  //       checkedResult.push(checkedItem[i].value);
+  //     }
+  //   }
+  //   if (checkedResult.length < 1) {
+  //     //  setCartSummary(cartSummary.status=false)
+  //   } else {
+  //     checkedArray = checkedResult.join(' ');
+  //   }
+  //     }
+  //   } catch (error) {
+  //     console.log(error);
+  //   }
+  // };
   useEffect(() => {
     // USEEFFECT ketika pertama load
-    // getChecked()
+    // keepChecked();
+    getChecked();
     getDataCart();
     openLoading(1500);
-    // keepChecked();
-    console.log("jalam dulu");
-   
     if (checkedArray) {
       getSummary();
     }
   }, []);
+  // useEffect(() => {
+  //   getChecked()
+  //   // keepChecked();
+  //   console.log("array2",checkedArray);
+  //   getSummary();
+  // }, [cartProduct]);
   useEffect(() => {
     // USEEFFECT ketika checkbox di klik
-    console.log("ini juga jalan");
     getChecked();
+    // keepChecked();
     if (checkedArray) {
       getSummary();
     }
@@ -197,8 +219,7 @@ const CartPage = () => {
     if (cartSummary.success) {
       document.body.style.overflow = 'auto';
       setOpenModal(false);
-      // localStorage.setItem('cartId', cartSummary.data);
-      // console.log("!23",cartSummary.da);
+      localStorage.setItem('cartId', cartSummary.data);
       navigate(`/checkout`);
     } else {
       alert('Oops data produk belum di checklist');

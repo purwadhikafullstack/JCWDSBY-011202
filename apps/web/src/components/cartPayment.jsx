@@ -36,7 +36,7 @@ const CartPayment = (props) => {
         onClick={props.onHandleCheckOut}>
           Checkout
         </button>
-        <button className="w-full bg- rounded-md p-2 bg-slate-300 text-slate-800 font-semibold hover:bg-slate-200">
+        <button className="w-full bg- rounded-md p-2 bg-slate-300 text-slate-800 font-semibold hover:bg-slate-200" onClick={()=>{navigate("/")}}>
           Kembali
         </button>
       </div>

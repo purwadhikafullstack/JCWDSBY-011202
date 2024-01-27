@@ -85,8 +85,8 @@ const ProductTable = ({ products, onDelete }) => {
             ) : (
               <tr>
                 <td
-                  colSpan="5"
-                  className="lg:px-6 lg:py-4 px-3 py-2 text-sm lg:text-sm sm:text-xs text-gray-500"
+                  colSpan="6"
+                  className="lg:px-6 lg:py-4 px-3 py-2 text-sm lg:text-sm sm:text-xs text-gray-500 text-center"
                 >
                   No products available.
                 </td>

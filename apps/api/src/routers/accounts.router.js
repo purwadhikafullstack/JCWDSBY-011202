@@ -7,18 +7,13 @@ import { Login, keepLogin } from '../controllers/login.controller';
 import { KeepLogin } from '../controllers/keepLogin.controller';
 import { ForgotPassword } from '../controllers/forgotPassword.controller';
 import { ResetPassword } from '../controllers/resetPassword.controller';
-import {
-  CreateAccount,
-  DeleteAccount,
-  GetAccounts,
-  GetAdmins,
-  GetUsers,
-  UpdateAccount,
-} from '../controllers/accounts.controller';
+import { CreateAccount, GetAccounts } from '../controllers/accounts.controller';
+import { updateAccount, deleteAccount } from '../controllers/accounts.manage';
 import {
   ValidatePassword,
   ValidateEmail,
   validateToken,
+  ValidateSuperAdmin,
 } from '../middleware/validation';
 
 const accountsRouter = Router();
@@ -34,12 +29,24 @@ accountsRouter.post('/login', Login);
 accountsRouter.post('/keep-login', validateToken, keepLogin);
 accountsRouter.post('/forgot-password', ForgotPassword);
 accountsRouter.post('reset-password', ResetPassword);
-// accountsRouter.get('/keep-login', KeepLogin);
 accountsRouter.get('/', GetAccounts);
-accountsRouter.get('/admins', GetAdmins);
-accountsRouter.get('/users', GetUsers);
-accountsRouter.post('/create-account', CreateAccount);
-accountsRouter.patch('/delete-account/:id', DeleteAccount);
-accountsRouter.patch('/update-account/:id', UpdateAccount);
+accountsRouter.post(
+  '/create-account',
+  validateToken,
+  ValidateSuperAdmin,
+  CreateAccount,
+);
+accountsRouter.patch(
+  '/update-account/:id',
+  validateToken,
+  ValidateSuperAdmin,
+  updateAccount,
+);
+accountsRouter.delete(
+  '/delete-account/:id',
+  validateToken,
+  ValidateSuperAdmin,
+  deleteAccount,
+);
 
 export { accountsRouter };

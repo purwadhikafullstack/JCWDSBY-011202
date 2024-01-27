@@ -14,19 +14,19 @@ const TemporaryNavbar = (props) => {
   const navigate = useNavigate();
   const [isScrolled, setIsScrolled] = useState(false);
   const [cartCount, setCartCount] = useState(0);
-  // const getCountCart = async () => {
-  //   try {
-  //     const token = localStorage.getItem('token');
-  //     const result = await axios.get('http://localhost:8000/api/cart/navbar', {
-  //       headers: { Authorization: `Bearer ${token}` },
-  //     });
-  //     return setCartCount(result.data.result);
-  //   } catch (error) {
-  //     console.log(error);
-  //   }
-  // };
+  const getCountCart = async () => {
+    try {
+      const token = localStorage.getItem('login');
+      const result = await axios.get('http://localhost:8000/api/cart/navbar', {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      return setCartCount(result.data.result);
+    } catch (error) {
+      console.log(error);
+    }
+  };
   useEffect(() => {
-    // getCountCart();
+    getCountCart();
     const handleScroll = () => {
       const scrollPosition = window.scrollY;
       setIsScrolled(scrollPosition > 100);

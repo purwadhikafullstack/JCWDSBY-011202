@@ -26,13 +26,14 @@ export const Login = async (req, res, next) => {
     if (!isPasswordValid) {
       return res.status(401).send({
         success: false,
-        message: 'Invalid email or password',
+        message: 'Invalid  password',
       });
     }
 
     const token = jwt.sign(
       {
         id: findAccount.id,
+        role: findAccount.role,
       },
       process.env.SCRT_TKN,
       {

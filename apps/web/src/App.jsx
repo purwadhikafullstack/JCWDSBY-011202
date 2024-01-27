@@ -34,6 +34,8 @@ import axios from 'axios';
 import ResetPassword from './components/ForgotPassword';
 import EmailVerification from './components/EmailVerification';
 import AddMutation from './components/AddMutation';
+import AddAccount from './components/AddAccount';
+import AdminLogin from './pages/admin/admin/AdminLogin';
 function App() {
   // const [role, setRole] = useState(null);
 
@@ -75,8 +77,13 @@ function App() {
         {/* ROUTES FEATURE : PRODUCT-MANAGEMENT KAI*/}
         <Route path="/admin/manage-account" element={<ManageAccount />} />
         {/* ROUTES FEATURE : PRODUCT-MANAGEMENT GIBRAN*/}
+        <Route
+          path="/admin/manage-account/add-admin"
+          element={<AddAccount />}
+        />
         <Route path="/" element={<Home />} />
         <Route path="/user/login" element={<Login />} />
+        <Route path="/admin/login" element={<AdminLogin />} />
         <Route
           path="/user/email-verification"
           element={<EmailVerification />}

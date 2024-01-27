@@ -8,7 +8,9 @@ const AddWarehouse = () => {
   const [provinces, setProvinces] = useState([]);
   const [selectedProvince, setSelectedProvince] = useState(0);
   const [cities, setCities] = useState([]);
-
+  const [selectedCity, setSelectedCity] = useState(0);
+  const [selectedAddress, setSelectedAddress] = useState('');
+  const [geometry, setGeometry] = useState({});
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -29,7 +31,6 @@ const AddWarehouse = () => {
         const response = await axios.get(
           `http://localhost:8000/api/provincesandcities/cities?prov_id=${selectedProvince}`,
         );
-        console.log(response);
         setCities(response.data.data);
       } catch (error) {
         console.log(error);
@@ -37,6 +38,20 @@ const AddWarehouse = () => {
     };
     fetchData();
   }, [selectedProvince]);
+
+  useEffect(() => {
+    const openCage = async () => {
+      try {
+        const response = await axios.get(
+          `https://api.opencagedata.com/geocode/v1/json?q=${selectedAddress}%2C+99423+${selectedCity}%2C+Indonesia&key=c4e250edc84e4f5c9f616a04b348274f`,
+        );
+        setGeometry(response.data.results[0].geometry);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    openCage();
+  }, [selectedProvince, selectedAddress]);
 
   console.log(selectedProvince);
 
@@ -114,6 +129,7 @@ const AddWarehouse = () => {
             name="address"
             className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
             placeholder="Enter warehouse address"
+            onChange={(e) => setSelectedAddress(e.target.value)}
           />
         </div>
       </AdminLayout>

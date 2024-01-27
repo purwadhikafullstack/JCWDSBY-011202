@@ -175,7 +175,7 @@ const EditStockProduct = () => {
                         onChange={(e) =>
                           setCounter(parseInt(e.target.value) || 0)
                         }
-                        className="px-4 py-1  text-center w-full focus:outline-none border-b-2"
+                        className="px-4 py-1  text-center w-full focus:outline-none border-none"
                         style={{ marginLeft: 'auto', marginRight: 'auto' }}
                       />
                       <button

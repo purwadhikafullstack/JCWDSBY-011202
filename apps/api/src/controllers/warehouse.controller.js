@@ -125,6 +125,8 @@ export const createWarehouse = async (req, res, next) => {
       prov_id: req.body.prov_id,
       city_id: req.body.city_id,
       address: req.body.address,
+      lon: req.body.lon,
+      lat: req.body.lat,
     });
 
     return res.status(201).send({

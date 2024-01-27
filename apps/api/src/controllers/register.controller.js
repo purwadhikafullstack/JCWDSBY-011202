@@ -1,69 +1,117 @@
-import accounts from '../models/accounts'
-const bcrypt = require("bcrypt");
-const jwt = require("jsonwebtoken");
-
+import accounts from '../models/accounts';
+import bcrypt from 'bcrypt';
+import transporter from '../helper/mailer';
+import jwt from 'jsonwebtoken';
 export const Register = async (req, res, next) => {
-    try {
-        const exists = await accounts.findOne({
-            where: {
-                email: req.body.email,
-                is_deleted: false
-            }
-        })
-
-        if (exists) {
-            return res.status(400).send({
-                success: false,
-                message: 'ACCOUNT ALREADY EXISTS'
-            })
-        }
-
-        if (!req.body.confirmPassword) {
-            return res.status(400).send({
-                success: false,
-                message: 'PLEASE CONFIRM PASSWORD'
-            })
-        }
-
-        // if (req.body.password !== req.body.confirmPassword && (req.body.password).length >= 8) {
-        //     return res.status(400).send({
-        //         success: false,
-        //         message: 'INVALID PASSWORD'
-        //     })
-        // }
-
-        delete req.body.confirmPassword
-
-        const salt = await bcrypt.genSalt(10)
-        const hashPassword = await bcrypt.hash(req.body.password, salt)
-        req.body.password = hashPassword
-
-        const newAccount = await accounts.create(req.body)
-
-        const mailOptions = {
-            from: 'gibrand789@gmail.com', 
-            to: req.body.email, 
-            subject: 'test',
-            text: `test`,
-          }
-      
-          transporter.sendMail(mailOptions, (error, info) => {
-            if (error) {
-              console.log(error);
-              return res.status(500).send(error)
-            }
-          })
-
-        return res.status(201).send({
-            success: true,
-            message: "REGISTER SUCCESS"
-        })
-
-    } catch (error) {
-        console.log(error);
-        return res.status(500).send({
-            success: false,
-            message: error
-        })
+  try {
+    const isExist = await accounts.findOne({
+      where: {
+        email: req.body.email,
+      },
+    });
+    if (isExist) {
+      return res
+        .status(500)
+        .send({ success: false, message: 'Account Already Exists' });
     }
-}
+
+    let generatedUsername = req.body.fullname.toLowerCase().replace(/\s/g, '_');
+    let isUsernameExist = await accounts.findOne({
+      where: {
+        username: generatedUsername,
+      },
+    });
+    let counter = 1;
+
+    while (isUsernameExist) {
+      generatedUsername =
+        req.body.fullname.toLowerCase().replace(/\s/g, '_') + counter;
+      isUsernameExist = await accounts.findOne({
+        where: {
+          username: generatedUsername,
+        },
+      });
+
+      counter++;
+    }
+
+    req.body.username = generatedUsername;
+    req.body.role = 'user';
+    console.log(req.body);
+    const result = await accounts.create(req.body);
+    console.log(result.dataValues);
+    const token = jwt.sign(
+      {
+        email: result.email,
+        id: result.id,
+        fullname: result.fullname,
+      },
+      process.env.SCRT_TKN,
+      {
+        expiresIn: '1h',
+      },
+    );
+
+    const emailHtml = `
+      <div style="background-color: #FFA500; padding: 20px; text-align: center;">
+        <h2 style="color: #fff; background-color: #FF8C00; padding: 10px; border-radius: 5px;">Thank You For Registering!</h2>
+        <p style="font-size: 16px; color: #fff;">Hello ${req.body.fullname},</p>
+        <p style="font-size: 16px; color: #fff;">Your registration was successful.</p>
+
+        <div style="margin-top: 20px;">
+          <a href="http://localhost:5173/user/email-verification?${token}" style="background-color: #FF6347; color: #fff; padding: 10px 20px; text-decoration: none; border-radius: 5px; font-weight: bold;">Complete Registration</a>
+        </div>
+      </div>
+    `;
+
+    await transporter.sendMail({
+      from: 'gibrand789@gmail.com',
+      to: req.body.email,
+      subject: 'Registration successfully',
+      html: emailHtml,
+    });
+    return res.status(201).send({
+      success: true,
+      message: 'Thanks For Registering',
+      token,
+    });
+  } catch (error) {
+    console.error(error);
+    return res
+      .status(500)
+      .send({ success: false, message: 'ERROR GETTING DATA' });
+  }
+};
+
+export const ConfirmationEmail = async (req, res, next) => {
+  try {
+    console.log(req.userData);
+    const isExist = await accounts.findOne({
+      where: {
+        id: req.userData.id,
+      },
+    });
+    if (!isExist) {
+      return res
+        .status(404)
+        .send({ success: false, message: 'Account Doesnt Exist' });
+    }
+    delete req.body.confirmpassword;
+    const salt = await bcrypt.genSalt(10);
+    const hashPassword = await bcrypt.hash(req.body.password, salt);
+    const setPassword = await accounts.update(
+      { password: hashPassword, is_verified: true },
+      { where: { id: req.userData.id } },
+    );
+    console.log(setPassword);
+    return res.status(200).send({
+      success: true,
+      message: 'Registration and Verification Successfully',
+    });
+  } catch (error) {
+    console.error(error);
+    return res
+      .status(500)
+      .send({ success: false, message: 'ERROR GETTING DATA' });
+  }
+};

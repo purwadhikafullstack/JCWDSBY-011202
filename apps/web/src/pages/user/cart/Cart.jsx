@@ -1,7 +1,6 @@
 import { useEffect, useState } from 'react';
 import CartPayment from '../../../components/cartPayment';
 import CartProductCard from '../../../components/cartProductCard';
-import Layout from '../layout/layout';
 import axios from 'axios';
 import { Loading } from '../../../components/loadingComponent';
 import { useNavigate } from 'react-router-dom';
@@ -21,13 +20,13 @@ const CartPage = () => {
   const [cartCount, setCartCount] = useState(0);
 
   let checkedArray = '';
-    const getDataCart = async () => {
+  const getDataCart = async () => {
     try {
       const token = localStorage.getItem('token');
       const result = await axios.get('http://localhost:8000/api/cart/', {
         headers: { Authorization: `Bearer ${token}` },
       });
-      setCartCount(result.data.count)
+      setCartCount(result.data.count);
       return setCartProduct(result.data.result);
     } catch (error) {
       console.log(error);
@@ -173,9 +172,7 @@ const CartPage = () => {
   return (
     <>
       {firstloading ? <Loading /> : ''}
-      <TemporaryNavbar 
-      cartCount={cartCount}
-      />
+      <TemporaryNavbar cartCount={cartCount} />
       <div className="text-center mt-4 mb-3 md:mb-8">
         <p className="text-4xl">Cart</p>
         <p>home / cart</p>
@@ -198,7 +195,9 @@ const CartPage = () => {
                   productWeightConvert={val.productWeightConvert}
                   total_weightConvert={val.total_weightConvert}
                   checkBoxValue={val.id}
-                  navigateProduct={()=>navigate(`/product-detail/${val[`product.id`]}`)}
+                  navigateProduct={() =>
+                    navigate(`/product-detail/${val[`product.id`]}`)
+                  }
                   onHandleDelete={() => onHandleDelete(val.id)}
                   onClickMinus={() => {
                     onHandlePlusMinus('minus', val.id);

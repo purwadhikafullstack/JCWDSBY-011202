@@ -103,9 +103,7 @@ const ProdutSearch = () => {
   };
   return (
     <div>
-      <TemporaryNavbar 
-      // cartCount={cartCount} 
-      />
+      <TemporaryNavbar />
       <div className="w-9/12 mx-auto">
         <div className="w-auto">
           <h1 className="text-4xl text-center">Products</h1>
@@ -196,5 +194,4 @@ const ProdutSearch = () => {
     </div>
   );
 };
-
 export default ProdutSearch;

@@ -1,40 +1,25 @@
-import { useState, useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import axios from 'axios';
-import ProductCard from './Productcard';
+import ProductCatalog from './ProductCatalogCard';
 import { formatPriceToIDR } from '../utils';
 import { useNavigate } from 'react-router-dom';
-
-const DiscoverMore = ({ products }) => {
-  const [discoverProducts, setDiscoverProducts] = useState([]);
+const HomeProduct = () => {
+  const [products, setProducts] = useState([]);
   const navigate = useNavigate();
-
   useEffect(() => {
     const fetchData = async () => {
-      try {
-        const response = await axios.get(
-          `http://localhost:8000/api/products/discovering/${products[0].category_id}/${products[0].id}`,
-        );
-        setDiscoverProducts(response.data.data);
-      } catch (error) {
-        console.error('Error fetching data:', error);
-      }
+      const response = await axios.get(
+        'http://localhost:8000/api/products?page=1',
+      );
+      setProducts(response.data);
     };
-
     fetchData();
-  }, [products]);
-
+  }, []);
   return (
-    <div className="">
-      <div className="w-6/12 mx-auto text-center cursor-pointer">
-        <h1 className="border-b hover:border-orange-500 hover:text-orange-400 transition-all duration-300">
-          Discover More
-        </h1>
-        <br />
-      </div>
-      <div className="w-8/12 mx-auto flex ">
-        {discoverProducts.map((product, index) => (
-          <ProductCard
-            key={index}
+    <div className="flex flex-wrap -mx-2">
+      {products.map((product, index) => (
+        <div key={index} className="w-1/4 p-4">
+          <ProductCatalog
             productName={product?.name || 'N/A'}
             price={formatPriceToIDR(product?.price) || 'N/A'}
             category={product?.category?.category || 'N/A'}
@@ -51,10 +36,10 @@ const DiscoverMore = ({ products }) => {
               }` || 'https://placehold.co/384x384'
             }
           />
-        ))}
-      </div>
+        </div>
+      ))}
     </div>
   );
 };
 
-export default DiscoverMore;
+export default HomeProduct;

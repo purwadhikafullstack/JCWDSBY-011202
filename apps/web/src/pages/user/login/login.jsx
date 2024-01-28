@@ -22,8 +22,17 @@ const LoginForm = () => {
         },
       );
       if (response.data.success) {
-        localStorage.setItem('login', response.data.token);
-        navigate('/');
+        if (
+          response.data.result &&
+          (response.data.result.role === 'admin' ||
+            response.data.result.role === 'superadmin' ||
+            !response.data.result.role === 'user')
+        ) {
+          setError('403 - Access Forbidden: Admin and Superadmin not allowed.');
+        } else {
+          localStorage.setItem('token', response.data.token);
+          navigate('/');
+        }
       } else {
         setError(
           response.data.message ||
@@ -32,11 +41,15 @@ const LoginForm = () => {
       }
     } catch (error) {
       console.error('Error during login:', error);
-      setError('An unexpected error occurred. Please try again.');
+      setError(
+        error.response.data.message ||
+          'An unexpected error occurred. Please try again.',
+      );
     } finally {
       setLoading(false);
     }
   };
+
   return (
     <div className="flex items-center justify-center min-h-screen">
       <div className="flex shadow-lg w-full max-w-5xl">
@@ -72,6 +85,7 @@ const LoginForm = () => {
                 </label>
                 <input
                   placeholder="*****"
+                  type="password"
                   onChange={(e) => setPassword(e.target.value)}
                   className="w-full p-2 border rounded-md focus:border-orange-700 focus:outline-none focus:ring-1 focus:ring-orange-700 text-gray-500"
                 />

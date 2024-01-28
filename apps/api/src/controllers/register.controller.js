@@ -85,7 +85,6 @@ export const Register = async (req, res, next) => {
 
 export const ConfirmationEmail = async (req, res, next) => {
   try {
-    console.log(req.userData);
     const isExist = await accounts.findOne({
       where: {
         id: req.userData.id,

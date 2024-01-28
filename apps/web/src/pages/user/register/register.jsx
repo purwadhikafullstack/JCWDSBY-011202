@@ -7,14 +7,14 @@ import ButtonWithLoading from '../../../components/ButtonWithLoading';
 const RegisterForm = () => {
   const [fullname, setFullName] = useState('');
   const [email, setEmail] = useState('');
+  const [error, setError] = useState(null);
   const [showAlert, setShowAlert] = useState(false);
   const [loading, setLoading] = useState(false);
 
   const onHandleSignup = async () => {
     try {
-      // Set loading to true when the registration process starts
       setLoading(true);
-
+      setError(null);
       const response = await axios.post(
         'http://localhost:8000/api/accounts/register',
         {
@@ -26,12 +26,15 @@ const RegisterForm = () => {
       if (response.data.success) {
         setShowAlert(true);
       } else {
-        console.error('Registration failed:', response.data.message);
+        setError(response.data.message || 'Registration failed.');
       }
     } catch (error) {
       console.error('Error during registration:', error);
+      setError(
+        error.response.data.message ||
+          'An unexpected error occurred. Please try again.',
+      );
     } finally {
-      // Set loading to false regardless of success or failure
       setLoading(false);
     }
   };
@@ -79,6 +82,7 @@ const RegisterForm = () => {
                 />
               </div>
             </form>
+            {error && <div className="text-red-500 text-sm mt-2">{error}</div>}
             <div className="mt-4">
               <ButtonWithLoading
                 onClick={onHandleSignup}

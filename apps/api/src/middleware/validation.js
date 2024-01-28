@@ -68,7 +68,8 @@ module.exports = {
       });
     }
   },
-  ValidateWarehouseAdmin: (req, res, next) => {
+  ValidateSuperAdmin: (req, res, next) => {
+    console.log(req.userData);
     try {
       if (!req.userData) {
         return res.status(400).send({

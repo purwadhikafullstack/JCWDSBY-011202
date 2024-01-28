@@ -37,7 +37,7 @@ module.exports = {
         allowNull: true,
       },
       is_verified: {
-        type: Sequelize.STRING,
+        type: Sequelize.INTEGER,
         allowNull: false,
         defaultValue: false,
       },

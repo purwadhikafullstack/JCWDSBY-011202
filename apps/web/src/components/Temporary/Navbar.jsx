@@ -14,9 +14,10 @@ const TemporaryNavbar = (props) => {
   const navigate = useNavigate();
   const [isScrolled, setIsScrolled] = useState(false);
   const [cartCount, setCartCount] = useState(0);
+
   const getCountCart = async () => {
     try {
-      const token = localStorage.getItem('login');
+      const token = localStorage.getItem('token');
       const result = await axios.get('http://localhost:8000/api/cart/navbar', {
         headers: { Authorization: `Bearer ${token}` },
       });
@@ -25,11 +26,14 @@ const TemporaryNavbar = (props) => {
       console.log(error);
     }
   };
+
   useEffect(() => {
     getCountCart();
+
     const handleScroll = () => {
       const scrollPosition = window.scrollY;
-      setIsScrolled(scrollPosition > 100);
+      // Adjust the threshold value as needed
+      setIsScrolled(scrollPosition > 50);
     };
 
     window.addEventListener('scroll', handleScroll);
@@ -38,14 +42,15 @@ const TemporaryNavbar = (props) => {
       window.removeEventListener('scroll', handleScroll);
     };
   }, []);
+
   return (
     <div
-      className={`bg-white p-4 shadow ${
-        isScrolled ? 'bg-transparent' : 'bg-white'
-      } transition-all duration-300 opacity-95 z-10`}
+      className={` top-0 left-0 right-0 z-10 p-4 transition-all duration-300 ${
+        isScrolled ? 'bg-white shadow fixed' : 'bg-transparent '
+      }`}
     >
       <div className="flex justify-between w-10/12 mx-auto">
-        <div className="flex  items-center">
+        <div className="flex items-center">
           <h1 className="font-bold text-xl text-orange-500">Ace</h1>
           <h1 className="font-bold text-xl">Warehouse</h1>
           {linksData.map((link, index) => (
@@ -58,7 +63,7 @@ const TemporaryNavbar = (props) => {
             </Link>
           ))}
         </div>
-        <div className="flex  items-center">
+        <div className="flex items-center">
           <SearchBar />
           <Link to="/cart" className="mx-2">
             <CiShoppingCart

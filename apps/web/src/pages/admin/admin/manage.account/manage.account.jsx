@@ -4,11 +4,65 @@ import AdminLayout from '../../../../components/AdminLayout';
 import AccountsTable from '../../../../components/AccountsTable';
 import { useNavigate } from 'react-router-dom';
 import { Loading } from '../../../../components/loadingComponent';
+import ConfirmationModal from '../../../../components/ConfirmationModal';
+import Toast from '../../../../components/Toast';
 
 function ManageAccount() {
+  const [showConfirmationModal, setShowConfirmationModal] = useState(false);
+  const [accountIdToDelete, setAccountIdToDelete] = useState(null);
   const [account, setAccount] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [deleteLoading, setDeleteLoading] = useState(false);
+  const [toastContent, setToastContent] = useState(null);
   const navigate = useNavigate();
+
+  const showToast = (status, message) => {
+    const content = (
+      <Toast
+        status={status}
+        message={message}
+        onClose={() => setToastContent(null)}
+      />
+    );
+    setToastContent(content);
+  };
+
+  const onHandleDelete = (accountId) => {
+    setAccountIdToDelete(accountId);
+    setShowConfirmationModal(true);
+  };
+
+  const onHandleDeleteConfirmed = async () => {
+    setDeleteLoading(true);
+    try {
+      const token = localStorage.getItem('token');
+      const response = await axios.delete(
+        `http://localhost:8000/api/accounts/delete-account/${accountIdToDelete}`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        },
+      );
+      if (response.data.success === true) {
+        showToast('success', 'Account deleted successfully');
+        const response = await axios.get(
+          'http://localhost:8000/api/accounts?role=admin&role=superadmin',
+        );
+        setAccount(response.data);
+      }
+    } catch (error) {
+      console.error('Error deleting account:', error);
+      showToast('danger', 'Error deleting account');
+    } finally {
+      setDeleteLoading(false);
+      setShowConfirmationModal(false);
+    }
+  };
+
+  const onCloseHandleDelete = () => {
+    setShowConfirmationModal(false);
+  };
 
   useEffect(() => {
     const fetchData = async () => {
@@ -19,6 +73,7 @@ function ManageAccount() {
         setAccount(response.data);
       } catch (error) {
         console.error('Error fetching data:', error);
+        showToast('danger', 'Error fetching accounts');
       } finally {
         setLoading(false);
       }
@@ -41,8 +96,25 @@ function ManageAccount() {
           </button>
         </div>
         <div className="p-4">
-          {loading ? <Loading /> : <AccountsTable accounts={account} />}
+          {loading ? (
+            <Loading />
+          ) : (
+            <AccountsTable
+              accounts={account}
+              onClickDelete={(accountId) => onHandleDelete(accountId)}
+            />
+          )}
         </div>
+        {showConfirmationModal && (
+          <ConfirmationModal
+            onClickCancel={onCloseHandleDelete}
+            onclickClose={onCloseHandleDelete}
+            title="Delete Account"
+            isLoading={deleteLoading}
+            onClick={onHandleDeleteConfirmed}
+          />
+        )}
+        {toastContent}
       </AdminLayout>
     </div>
   );

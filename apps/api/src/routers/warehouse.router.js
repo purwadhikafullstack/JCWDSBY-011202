@@ -7,6 +7,7 @@ import {
   deleteWarehouse,
   updateWarehouse,
 } from '../controllers/warehouse.manange.controller';
+
 const warehouseRouter = Router();
 
 //GET

@@ -4,20 +4,86 @@ import { IoMdArrowBack } from 'react-icons/io';
 import { useState } from 'react';
 import InputForAdmin from './InputForAdmin';
 import InputForWarehouseAdmin from './InputForWarehouseAdmin';
+import ConfirmationModal from './ConfirmationModal';
+import Toast from './Toast';
+import axios from 'axios';
 
 const AddAccount = () => {
   const navigate = useNavigate();
   const [isAdmin, setIsAdmin] = useState(true);
   const [isWarehouseAdmin, setIsWarehouseAdmin] = useState(false);
+  const [role, setRole] = useState('superadmin');
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [fullname, setFullName] = useState('');
+  const [showConfirmationModal, setShowConfirmationModal] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [toast, setToast] = useState(null);
 
   const handleToggleAdmin = () => {
     setIsAdmin(true);
     setIsWarehouseAdmin(false);
+    setRole('superadmin');
   };
 
   const handleToggleWarehouseAdmin = () => {
     setIsAdmin(false);
     setIsWarehouseAdmin(true);
+    setRole('admin');
+  };
+
+  const showToast = (status, message) => {
+    setToast({ status, message });
+    setTimeout(() => {
+      setToast(null);
+    }, 5000);
+  };
+
+  const onHandleSaveChanges = () => {
+    setShowConfirmationModal(true);
+  };
+
+  const onCloseConfirmationModal = () => {
+    setShowConfirmationModal(false);
+  };
+
+  const onHandleAdd = async () => {
+    const token = localStorage.getItem('token');
+    try {
+      setLoading(true);
+      const response = await axios.post(
+        'http://localhost:8000/api/accounts/create-account',
+        {
+          email,
+          password,
+          fullname,
+          role,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        },
+      );
+
+      if (response.data.success === true) {
+        showToast('success', 'Account created successfully');
+      } else {
+        showToast(
+          'danger',
+          error.response.data.message || 'Failed to create account',
+        );
+      }
+    } catch (error) {
+      console.error('Error creating account:', error);
+      showToast(
+        'danger',
+        error.response.data.message || 'An error occurred. Please try again.',
+      );
+    } finally {
+      setLoading(false);
+      onCloseConfirmationModal();
+    }
   };
 
   return (
@@ -37,7 +103,7 @@ const AddAccount = () => {
         </div>
         <div className="mx-6 bg-white m-8 pb-4">
           <div className="flex mx-auto w-6/12">
-            <div className="mx-auto mt-2">
+            <div className="mx-auto mt-4">
               <button
                 className={`w-[200px] mx-1 font-medium text-sm ${
                   isAdmin
@@ -62,15 +128,46 @@ const AddAccount = () => {
           </div>
           <hr className="w-11/12 mx-auto mt-3" />
           <div className="p-4">
-            {isAdmin && <InputForAdmin />}
-            {isWarehouseAdmin && <InputForWarehouseAdmin />}
+            {isAdmin && (
+              <InputForAdmin
+                onChangeEmail={(e) => setEmail(e.target.value)}
+                onChangePassword={(e) => setPassword(e.target.value)}
+                onChangeFullName={(e) => setFullName(e.target.value)}
+              />
+            )}
+            {isWarehouseAdmin && (
+              <InputForWarehouseAdmin
+                onChangeEmail={(e) => setEmail(e.target.value)}
+                onChangePassword={(e) => setPassword(e.target.value)}
+                onChangeFullName={(e) => setFullName(e.target.value)}
+              />
+            )}
             <div className="flex justify-end p-2 mt-2">
-              <button className="font-medium text-sm bg-orange-500 hover:bg-orange-600 text-white py-2 px-4 rounded-md transition-all duration-300 ease-in-out focus:outline-none">
+              <button
+                onClick={onHandleSaveChanges}
+                className="font-medium text-sm bg-orange-500 hover:bg-orange-600 text-white py-2 px-4 rounded-md transition-all duration-300 ease-in-out focus:outline-none"
+              >
                 Save Changes
               </button>
+              {showConfirmationModal && (
+                <ConfirmationModal
+                  onClickCancel={onCloseConfirmationModal}
+                  onclickClose={onCloseConfirmationModal}
+                  title="Add Account"
+                  isLoading={loading}
+                  onClick={onHandleAdd}
+                />
+              )}
             </div>
           </div>
         </div>
+        {toast && (
+          <Toast
+            status={toast.status}
+            message={toast.message}
+            onClose={() => setToast(null)}
+          />
+        )}
       </AdminLayout>
     </div>
   );

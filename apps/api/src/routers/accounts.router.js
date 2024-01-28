@@ -34,6 +34,7 @@ accountsRouter.post(
   '/create-account',
   validateToken,
   ValidateSuperAdmin,
+  ValidateEmail,
   CreateAccount,
 );
 accountsRouter.patch(

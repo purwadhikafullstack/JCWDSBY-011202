@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 
-const AccountsTable = ({ accounts }) => {
+const AccountsTable = ({ accounts, onClickDelete }) => {
   const [getAccount, setGetAccount] = useState([]);
 
   useEffect(() => {
@@ -55,7 +55,10 @@ const AccountsTable = ({ accounts }) => {
                   <button className="bg-orange-500 hover:bg-orange-700 text-white px-4 py-2 rounded mr-2">
                     Edit
                   </button>
-                  <button className="bg-slate-400 hover:bg-slate-700 text-white px-4 py-2 rounded">
+                  <button
+                    className="bg-slate-400 hover:bg-slate-700 text-white px-4 py-2 rounded"
+                    onClick={() => onClickDelete(account.id)}
+                  >
                     Delete
                   </button>
                 </td>

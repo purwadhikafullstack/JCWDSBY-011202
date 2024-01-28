@@ -27,6 +27,12 @@ module.exports = {
       phone: {
         type: Sequelize.STRING
       },
+      lat: {
+        type: Sequelize.STRING
+      },
+      lon: {
+        type: Sequelize.STRING
+      },
       createdAt: {
         allowNull: false,
         type: Sequelize.DATE

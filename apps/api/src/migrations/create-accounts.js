@@ -28,16 +28,16 @@ module.exports = {
         type: Sequelize.STRING
       },
       address_id: {
-        type: Sequelize.STRING
+        type: Sequelize.INTEGER
       },
       warehouse_id: {
-        type: Sequelize.STRING
+        type: Sequelize.INTEGER
       },
       is_verified: {
-        type: Sequelize.STRING
+        type: Sequelize.BOOLEAN
       },
       is_deleted: {
-        type: Sequelize.STRING
+        type: Sequelize.BOOLEAN
       },
       createdAt: {
         allowNull: false,

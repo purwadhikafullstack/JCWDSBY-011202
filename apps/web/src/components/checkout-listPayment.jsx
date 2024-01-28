@@ -13,7 +13,8 @@ const CheckoutPayment = (props) => {
       <div className="border-[1px] mb-8 rounded-md">
         <div className="bg-slate-200 p-2 px-3 flex justify-between">
           <p>Penerima & Alamat</p>
-          <p className="text-slate-500 cursor-pointer hover:text-slate-700">
+          <p className="text-slate-500 cursor-pointer hover:text-slate-700"
+          onClick={props.ubah}>
             Ubah
           </p>
         </div>
@@ -37,7 +38,10 @@ const CheckoutPayment = (props) => {
         </div>
         <div className="flex justify-between pt-1">
             <p>Biaya Pengiriman</p>
-            <p>Rp 500.000{props.shippingCost}</p>
+            <p></p>
+            <p  className="text-sm cursor-pointer text-slate-500 hover:underline"
+            onClick={props.onHandleCourier}
+            >{props.shippingCost}</p>
         </div>
         <div className="flex justify-between pt-5 font-bold text-lg">
             <p className="">Total</p>

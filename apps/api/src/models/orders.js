@@ -25,6 +25,7 @@ export const init = (sequelize) => {
       recepient: DataTypes.STRING,
       shipping_cost: DataTypes.INTEGER,
       total_price: DataTypes.INTEGER,
+      total_weight: DataTypes.INTEGER,
       status: DataTypes.STRING,
       payment_proof: DataTypes.STRING,
     },

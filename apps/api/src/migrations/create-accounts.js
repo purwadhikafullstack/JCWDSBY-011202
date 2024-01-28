@@ -30,14 +30,13 @@ module.exports = {
         type: Sequelize.STRING,
       },
       address_id: {
-        type: Sequelize.INTEGER,
+        type: Sequelize.INTEGER
       },
       warehouse_id: {
-        type: Sequelize.INTEGER,
-        allowNull: true,
+        type: Sequelize.INTEGER
       },
       is_verified: {
-        type: Sequelize.INTEGER,
+        type: Sequelize.BOOLEAN,
         allowNull: false,
         defaultValue: false,
       },

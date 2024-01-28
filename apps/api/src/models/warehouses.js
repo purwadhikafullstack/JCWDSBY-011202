@@ -27,7 +27,10 @@ export const init = (sequelize) => {
       prov_id: DataTypes.INTEGER,
       city_id: DataTypes.INTEGER,
       address: DataTypes.STRING,
+      lat: DataTypes.STRING,
+      lon: DataTypes.STRING,
       is_deleted: DataTypes.BOOLEAN,
+
     },
     {
       sequelize,

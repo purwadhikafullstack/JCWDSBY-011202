@@ -37,6 +37,9 @@ import EmailVerification from './components/EmailVerification';
 import AddMutation from './components/AddMutation';
 import AddAccount from './components/AddAccount';
 import AdminLogin from './pages/admin/admin/AdminLogin';
+import DashboardLanding from './pages/user/dashboard/dashboarLanding';
+import DashboardAddress from './pages/user/dashboard/dashboardAddress';
+import DashboardOrder from './pages/user/dashboard/dashboardOrder';
 function App() {
   // const [role, setRole] = useState(null);
 
@@ -141,7 +144,9 @@ function App() {
         {/* ROUTES FEATURE : PRODUCT-MANAGEMENT MAS ADHON*/}
         <Route path="/cart" element={<CartPage />} />
         <Route path="/checkout" element={<CheckoutPage />} />
-        <Route path="" />
+        <Route path="user/dashboard" element={<DashboardLanding/>}/>
+        <Route path="user/dashboard/address" element={<DashboardAddress/>}/>
+        <Route path="user/dashboard/order" element={<DashboardOrder/>}/>
         <Route path="" />
       </Routes>
     </BrowserRouter>

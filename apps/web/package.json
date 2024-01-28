@@ -16,6 +16,8 @@
     "@reduxjs/toolkit": "^2.0.1",
     "axios": "^1.6.2",
     "chart.js": "^4.4.1",
+    "flowbite": "^2.2.1",
+    "flowbite-react": "^0.7.2",
     "jsonwebtoken": "^9.0.2",
     "jwt-decode": "^4.0.0",
     "react": "^18.2.0",

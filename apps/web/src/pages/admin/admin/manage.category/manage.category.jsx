@@ -4,6 +4,7 @@ import AdminLayout from '../../../../components/AdminLayout';
 import BasicTable from '../../../../components/CategoryTable';
 import ButtonWithLoading from '../../../../components/ButtonWithLoading';
 import { IoClose } from 'react-icons/io5';
+import { Loading } from '../../../../components/loadingComponent';
 
 const ManageCategory = () => {
   const [loading, setLoading] = useState(false);
@@ -11,9 +12,10 @@ const ManageCategory = () => {
   const [isModalOpen, setModalOpen] = useState(false);
   const [newCategoryName, setNewCategoryName] = useState('');
   const [editingCategory, setEditingCategory] = useState(null);
+  const [buttonLoading, setButtonLoading] = useState(false);
 
   const handleButtonClick = async () => {
-    setLoading(true);
+    setButtonLoading(true);
     try {
       if (editingCategory) {
         await axios.patch(
@@ -33,7 +35,7 @@ const ManageCategory = () => {
     } catch (error) {
       console.error('Error:', error);
     } finally {
-      setLoading(false);
+      setButtonLoading(false);
       setModalOpen(false);
       setNewCategoryName('');
       setEditingCategory(null);
@@ -70,12 +72,15 @@ const ManageCategory = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
+        setLoading(true);
         const response = await axios.get(
           'http://localhost:8000/api/categories',
         );
         setCategories(response.data);
       } catch (error) {
         console.error('Error fetching categories:', error);
+      } finally {
+        setLoading(false);
       }
     };
 
@@ -96,11 +101,15 @@ const ManageCategory = () => {
           </button>
         </div>
         <div className="p-4">
-          <BasicTable
-            categories={categories}
-            onEdit={handleEditClick}
-            onDelete={deleteCategory}
-          />
+          {loading ? (
+            <Loading />
+          ) : (
+            <BasicTable
+              categories={categories}
+              onEdit={handleEditClick}
+              onDelete={deleteCategory}
+            />
+          )}
         </div>
         {isModalOpen && (
           <div className="fixed inset-0 bg-gray-800 bg-opacity-50 flex items-center justify-center">
@@ -127,7 +136,7 @@ const ManageCategory = () => {
               <div className="mt-2 flex justify-center items-center">
                 <ButtonWithLoading
                   title={editingCategory ? 'Confirm Edit' : 'Add Category'}
-                  isLoading={loading}
+                  isLoading={buttonLoading}
                   onClick={handleButtonClick}
                 />
               </div>

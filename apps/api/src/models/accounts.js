@@ -8,8 +8,8 @@ export default class accounts extends Model {
    */
   static associate(models) {
     // define association here
-    accounts.belongsTo(models.warehouses,{foreignKey:"warehouse_id"})
-    accounts.hasMany(models.addresses,{foreignKey:"account_id"})
+    accounts.belongsTo(models.warehouses, { foreignKey: 'warehouse_id' });
+    accounts.hasMany(models.addresses, { foreignKey: 'account_id' });
   }
 }
 
@@ -20,21 +20,12 @@ export const init = (sequelize) => {
       password: DataTypes.STRING,
       fullname: DataTypes.STRING,
       email: DataTypes.STRING,
-      role: {
-        type: DataTypes.STRING,
-        defaultValue: "user"
-      },
+      role: DataTypes.STRING,
       profile_picture: DataTypes.STRING,
       address_id: DataTypes.INTEGER,
       warehouse_id: DataTypes.INTEGER,
-      is_verified: {
-        type: DataTypes.BOOLEAN,
-        defaultValue: false, 
-      },
-      is_deleted: {
-        type: DataTypes.BOOLEAN,
-        defaultValue: false,
-      },
+      is_verified: DataTypes.BOOLEAN,
+      is_deleted: DataTypes.BOOLEAN,
     },
     {
       sequelize,

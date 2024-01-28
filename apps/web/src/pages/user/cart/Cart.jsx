@@ -1,7 +1,6 @@
 import { useEffect, useState } from 'react';
 import CartPayment from '../../../components/cartPayment';
 import CartProductCard from '../../../components/cartProductCard';
-import Layout from '../layout/layout';
 import axios from 'axios';
 import { Loading } from '../../../components/loadingComponent';
 import { useNavigate } from 'react-router-dom';

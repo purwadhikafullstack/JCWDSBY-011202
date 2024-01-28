@@ -18,7 +18,7 @@ const productsRouter = Router();
 // GET
 productsRouter.get('/?', getProduct);
 productsRouter.get('/productimage/:name', GetImages);
-productsRouter.get('/discovering/:id', ProductDiscovering);
+productsRouter.get('/discovering/:id/:productId', ProductDiscovering);
 // POST
 productsRouter.post(
   '/',

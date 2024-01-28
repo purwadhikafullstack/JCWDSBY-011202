@@ -38,7 +38,7 @@ function SearchBar() {
   };
 
   return (
-    <div className="relative">
+    <div className="relative z-10">
       <div className="flex items-center justify-center">
         <div className="flex w-full h-8 mx-10 rounded bg-white">
           <input
@@ -57,7 +57,7 @@ function SearchBar() {
         </div>
       </div>
       {query !== '' && searchResult.length > 0 && (
-        <div className="absolute top-full bg-white max-h-64  overflow-y-scroll border border-t-0">
+        <div className="absolute z-50 top-full bg-white max-h-64 overflow-y-scroll border border-t-0">
           {searchResult.map((product) => (
             <div
               key={product.id}
@@ -67,6 +67,7 @@ function SearchBar() {
               <img
                 src={`http://localhost:8000/productimage/${product?.product_images?.[0]?.image}`}
                 className="w-16 mx-2 border-2"
+                alt={product.name}
               />
               <h1 className="font-semibold text-sm">{product.name}</h1>
             </div>

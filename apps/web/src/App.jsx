@@ -23,59 +23,75 @@ import WarehouseInventory from './components/WarehouseInventory';
 import EditStockProduct from './pages/admin/admin.warehouse/edit.stock/EditStock';
 import Login from './pages/user/login/login';
 import Register from './pages/user/register/register';
-import TestLoginPage from './pages/user/layout/testLoginPage';
 import CartPage from './pages/user/cart/Cart';
 import ManageMutation from './pages/admin/admin.warehouse/manage.mutation/Manage.Mutation';
 import AddWarehouse from './components/AddWarehouse';
 import ManageWarehouse from './pages/admin/admin/manage.warehouse/manage.warehouse';
 import { useDispatch } from 'react-redux';
+import RegisterForm from './pages/user/register/register';
 import { useEffect, useState } from 'react';
 import CheckoutPage from './pages/user/checkoutPage/Checkout';
 import axios from 'axios';
-
+import ResetPassword from './components/ForgotPassword';
+import EmailVerification from './components/EmailVerification';
+import AddMutation from './components/AddMutation';
+import AddAccount from './components/AddAccount';
+import AdminLogin from './pages/admin/admin/AdminLogin';
 function App() {
-  const [role, setRole] = useState(null)
+  // const [role, setRole] = useState(null);
 
-  const handleLogin = async () => {
-    try {
-      const response = await axios.get('http://localhost:8000/api/accounts/keep-login', {
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem("token")}`
-        }
-      });
+  // const handleLogin = async () => {
+  //   try {
+  //     const response = await axios.get(
+  //       'http://localhost:8000/api/accounts/keep-login',
+  //       {
+  //         headers: {
+  //           Authorization: `Bearer ${localStorage.getItem('token')}`,
+  //         },
+  //       },
+  //     );
 
-      const { success, role } = response.data
+  //     const { success, role } = response.data;
 
-      if (success) {
-        setRole(role);
-        if (role === 'admin') {
-          return <Navigate to="/admin" />
-        } else {
-          return <Navigate to="/" />
-        }
-      } else {
-        console.log('set role failed');
-      }
-    } catch (error) {
-      console.log(error);
-    }
-  }
+  //     if (success) {
+  //       setRole(role);
+  //       if (role === 'admin') {
+  //         return <Navigate to="/admin" />;
+  //       } else {
+  //         return <Navigate to="/" />;
+  //       }
+  //     } else {
+  //       console.log('set role failed');
+  //     }
+  //   } catch (error) {
+  //     console.log(error);
+  //   }
+  // };
 
-  useEffect(() => {
-    handleLogin()
-  }, [role])
-
+  // useEffect(() => {
+  //   handleLogin();
+  // }, [role]);
 
   return (
     <BrowserRouter>
       <Routes>
-        <Route path="/" element={<Home />} />
         {/* ROUTES FEATURE : PRODUCT-MANAGEMENT KAI*/}
-        <Route path="/login" element={<Login />} />
-        <Route path="/test-page" element={<TestLoginPage />} />
-        <Route path="/register" element={<Register />} />
         <Route path="/admin/manage-account" element={<ManageAccount />} />
         {/* ROUTES FEATURE : PRODUCT-MANAGEMENT GIBRAN*/}
+        <Route
+          path="/admin/manage-account/add-admin"
+          element={<AddAccount />}
+        />
+        <Route path="/" element={<Home />} />
+        <Route path="/user/login" element={<Login />} />
+        <Route path="/admin/login" element={<AdminLogin />} />
+        <Route
+          path="/user/email-verification"
+          element={<EmailVerification />}
+        />
+        <Route path="/user/forgot-pass" element={<ResetPassword />} />
+        <Route path="/user/register" element={<RegisterForm />} />
+        <Route path="/register" element={<Register />} />
         <Route path="/admin" element={<LandingAdmin />} />
         <Route path="/admin/manage-product" element={<ManageProduct />} />
         <Route
@@ -110,6 +126,10 @@ function App() {
           element={<WarehouseInventory />}
         />
         <Route
+          path="warehouse-admin/manage-mutation/add-request"
+          element={<AddMutation />}
+        />
+        <Route
           path="/warehouse-admin/manage-mutation"
           element={<ManageMutation />}
         />
@@ -120,7 +140,7 @@ function App() {
         <Route path="*" element={<NotFoundPage />} />
         {/* ROUTES FEATURE : PRODUCT-MANAGEMENT MAS ADHON*/}
         <Route path="/cart" element={<CartPage />} />
-        <Route path="/checkout" element={<CheckoutPage/>}/>
+        <Route path="/checkout" element={<CheckoutPage />} />
         <Route path="" />
         <Route path="" />
       </Routes>

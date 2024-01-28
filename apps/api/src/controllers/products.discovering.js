@@ -6,11 +6,13 @@ import { Op, Sequelize } from 'sequelize';
 export const ProductDiscovering = async (req, res, next) => {
   try {
     const categoryId = req.params.id;
+    const productIdToExclude = req.params.productId;
 
     const result = await products.findAll({
       where: {
         category_id: categoryId,
         is_deleted: false,
+        id: { [Op.ne]: productIdToExclude },
       },
       attributes: {
         exclude: ['createdAt', 'updatedAt', 'is_deleted'],
@@ -29,21 +31,14 @@ export const ProductDiscovering = async (req, res, next) => {
 
     let additionalProducts = [];
 
-    if (result.length <= 4) {
-      let count = 0;
+    let count = 4 - result.length;
 
-      if (result.length === 3) {
-        count = 1;
-      } else if (result.length === 2) {
-        count = 2;
-      } else if (result.length === 1) {
-        count = 3;
-      }
-
+    if (count > 0) {
       additionalProducts = await products.findAll({
         where: {
           category_id: { [Op.not]: categoryId },
           is_deleted: false,
+          id: { [Op.ne]: productIdToExclude },
         },
         attributes: {
           exclude: ['createdAt', 'updatedAt', 'is_deleted'],

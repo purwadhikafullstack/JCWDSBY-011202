@@ -1,3 +1,4 @@
+import warehouses from '../models/warehouses';
 import accounts from '../models/accounts';
 const bcrypt = require('bcrypt');
 
@@ -6,6 +7,7 @@ export const GetAccounts = async (req, res, next) => {
     const filter = {
       is_deleted: false,
     };
+
     if (req.query.id) {
       filter.id = req.query.id;
     }
@@ -15,80 +17,35 @@ export const GetAccounts = async (req, res, next) => {
     if (req.query.email) {
       filter.email = req.query.email;
     }
-    if (req.query.order) {
-      req.query.order.toLowerCase() === 'desc' ? 'DESC' : 'ASC';
+    if (req.query.fullname) {
+      filter.fullname = req.query.fullname;
     }
-    const result = await accounts.findAll({
-      where: filter,
-    });
-
-    return res.status(200).send(result);
-  } catch (error) {
-    console.log(error);
-    return res.status(500).send({
-      success: false,
-      message: 'MANAGE ACCOUNT FAILED',
-    });
-  }
-};
-
-export const GetAdmins = async (req, res, next) => {
-  try {
-    const filter = {
-      is_deleted: false,
-      role: 'admin',
-    };
-    if (req.query.id) {
-      filter.id = req.query.id;
+    if (req.query.role) {
+      filter.role = req.query.role;
     }
-    if (req.query.username) {
-      filter.username = req.query.username;
-    }
-    if (req.query.email) {
-      filter.email = req.query.email;
+    if (req.query.warehouse_id) {
+      filter.warehouse_id = req.query.warehouse_id;
     }
     if (req.query.order) {
-      req.query.order.toLowerCase() === 'desc' ? 'DESC' : 'ASC';
+      filter.order = req.query.order.toLowerCase() === 'desc' ? 'DESC' : 'ASC';
     }
+
     const result = await accounts.findAll({
       where: filter,
+      attributes: { exclude: ['createdAt', 'updatedAt', 'is_deleted'] },
     });
 
-    return res.status(200).send(result);
+    const mappedResult = result.map((account) => {
+      const { is_verified, ...accountData } = account.dataValues;
+      return {
+        ...accountData,
+        verification_status: is_verified == 1 ? 'verified' : 'unverified',
+      };
+    });
+
+    return res.status(200).send(mappedResult);
   } catch (error) {
-    console.log(error);
-    return res.status(500).send({
-      success: false,
-      message: 'MANAGE ACCOUNT FAILED',
-    });
-  }
-};
-
-export const GetUsers = async (req, res, next) => {
-  try {
-    const filter = {
-      is_deleted: false,
-      role: 'user',
-    };
-    if (req.query.id) {
-      filter.id = req.query.id;
-    }
-    if (req.query.username) {
-      filter.username = req.query.username;
-    }
-    if (req.query.email) {
-      filter.email = req.query.email;
-    }
-    if (req.query.order) {
-      req.query.order.toLowerCase() === 'desc' ? 'DESC' : 'ASC';
-    }
-    const result = await accounts.findAll({
-      where: filter,
-    });
-
-    return res.status(200).send(result);
-  } catch (error) {
-    console.log(error);
+    console.error(error);
     return res.status(500).send({
       success: false,
       message: 'MANAGE ACCOUNT FAILED',
@@ -98,105 +55,87 @@ export const GetUsers = async (req, res, next) => {
 
 export const CreateAccount = async (req, res, next) => {
   try {
-    const exists = await accounts.findOne({
+    // Check if the email is already registered, including deleted accounts
+    const existingAccount = await accounts.findOne({
       where: {
-        username: req.body.email,
         email: req.body.email,
-        is_deleted: false,
       },
     });
 
-    if (exists) {
-      return res.status(500).send({
+    if (existingAccount) {
+      // If the existing account is deleted, restore it with new data
+      if (existingAccount.is_deleted) {
+        // Restore the account with new data
+        const salt = await bcrypt.genSalt(10);
+        const hashPassword = await bcrypt.hash(req.body.password, salt);
+
+        const restoredAccount = await accounts.update(
+          {
+            password: hashPassword,
+            role: req.body.role,
+            fullname: req.body.fullname,
+            warehouse_id: req.body.warehouse_id || null,
+            is_verified: true,
+            is_deleted: false,
+          },
+          {
+            where: { id: existingAccount.id },
+            returning: true,
+          },
+        );
+
+        const result = restoredAccount[1][0];
+
+        return res.status(200).json({
+          success: true,
+          message: 'Account restored with new data',
+          result,
+        });
+      } else {
+        return res.status(400).json({
+          success: false,
+          message: `${existingAccount.email} is already registered as ${existingAccount.role}`,
+        });
+      }
+    }
+
+    if (req.body.password.length < 8) {
+      return res.status(400).json({
         success: false,
-        message: 'ACCOUNT ALREADY EXISTS',
+        message: 'Password must be at least 8 characters',
       });
+    }
+
+    let generatedUsername = req.body.fullname.toLowerCase().replace(/\s/g, '_');
+    let counter = 1;
+
+    while (await accounts.findOne({ where: { username: generatedUsername } })) {
+      generatedUsername = `${req.body.fullname
+        .toLowerCase()
+        .replace(/\s/g, '_')}${counter}`;
+      counter++;
     }
 
     const salt = await bcrypt.genSalt(10);
     const hashPassword = await bcrypt.hash(req.body.password, salt);
-    console.log('SALT : ', salt);
-    console.log('HASH : ', hashPassword);
 
-    req.body.password = hashPassword;
-    // req.body.role = 'admin'
+    const result = await accounts.create({
+      password: hashPassword,
+      email: req.body.email,
+      role: req.body.role,
+      fullname: req.body.fullname,
+      username: generatedUsername,
+      warehouse_id: req.body.warehouse_id || null,
+      is_verified: true,
+    });
 
-    const newAccount = await accounts.create(req.body);
-    console.log('ACCOUNT REGISTERED : \n', newAccount);
-
-    return res.status(201).send({
+    return res.status(201).json({
       success: true,
-      message: 'REGISTER SUCCESS',
+      message: 'Account created',
+      result,
     });
   } catch (error) {
-    console.log(error);
+    console.error(error);
     return res.status(500).send(error);
-  }
-};
-
-export const DeleteAccount = async (req, res, next) => {
-  try {
-    const account = await accounts.findOne({
-      where: {
-        id: req.params.id,
-      },
-    });
-
-    if (!account) {
-      return res.status(404).send({
-        success: false,
-        message: 'ACCOUNT NOT FOUND',
-      });
-    }
-
-    await accounts.update(
-      {
-        is_deleted: true,
-      },
-      {
-        where: {
-          id: req.params.id,
-        },
-      },
-    );
-
-    return res.status(200).send({
-      success: true,
-      message: 'ACCOUNT SUCCESFULLY DELETED',
-    });
-  } catch (error) {
-    console.log(error);
-    return res.status(500).send('ERROR DELETE ACCOUNT');
-  }
-};
-
-export const UpdateAccount = async (req, res, next) => {
-  try {
-    console.log(req.params.id);
-
-    const result = await accounts.update(
-      {
-        username: req.body.username,
-        email: req.body.email,
-        address_id: req.body.address_id,
-        warehouse_id: req.body.warehouse_id,
-      },
-      {
-        where: {
-          id: req.params.id,
-        },
-      },
-    );
-    console.log(result);
-    return res.status(200).send({
-      success: true,
-      message: result,
-    });
-  } catch (error) {
-    console.log(error);
-    return res.status(500).send({
-      success: false,
-      message: error,
-    });
   }
 };

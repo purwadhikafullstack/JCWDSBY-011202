@@ -12,7 +12,7 @@ const DiscoverMore = ({ products }) => {
     const fetchData = async () => {
       try {
         const response = await axios.get(
-          `http://localhost:8000/api/products/discovering/${products[0].category_id}`,
+          `http://localhost:8000/api/products/discovering/${products[0].category_id}/${products[0].id}`,
         );
         setDiscoverProducts(response.data.data);
       } catch (error) {

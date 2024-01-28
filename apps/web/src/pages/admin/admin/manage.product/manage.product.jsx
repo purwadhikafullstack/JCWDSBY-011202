@@ -6,10 +6,13 @@ import { useNavigate } from 'react-router-dom';
 import Pagination from '../../../../components/Temporary/Pagination';
 import SearchProduct from '../../../../components/SearchProduct';
 import SearchByCategory from '../../../../components/CategoryProductFilter';
+import { Loading } from '../../../../components/loadingComponent';
+
 const ManageProduct = () => {
   const [page, setPage] = useState(1);
   const [currentPage, setCurrentPage] = useState([]);
   const [products, setProducts] = useState([]);
+  const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
 
   const handleAddButtonClick = () => {
@@ -31,10 +34,13 @@ const ManageProduct = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
+        setLoading(true);
         const response = await axios.get('http://localhost:8000/api/products');
         setProducts(response.data);
+        setLoading(false);
       } catch (error) {
         console.error('Error fetching data:', error);
+        setLoading(false);
       }
     };
 
@@ -44,12 +50,15 @@ const ManageProduct = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
+        setLoading(true);
         const response = await axios.get(
           `http://localhost:8000/api/products?page=${page}`,
         );
         setCurrentPage(response.data);
+        setLoading(false);
       } catch (error) {
         console.error('Error fetching data:', error);
+        setLoading(false);
       }
     };
 
@@ -61,7 +70,7 @@ const ManageProduct = () => {
       <AdminLayout>
         <div>
           <div className="p-4 flex justify-between items-center bg-white">
-            <div className="font-bold text-xl ">Product List</div>
+            <div className="font-bold text-xl">Product List</div>
             <button
               onClick={handleAddButtonClick}
               style={{ cursor: 'pointer' }}
@@ -78,7 +87,11 @@ const ManageProduct = () => {
           </div>
         </div>
         <div className="w-full p-4">
-          <ProductTable products={currentPage} onDelete={handleDelete} />
+          {loading ? (
+            <Loading />
+          ) : (
+            <ProductTable products={currentPage} onDelete={handleDelete} />
+          )}
         </div>
         <div className="flex justify-center mb-2">
           <Pagination

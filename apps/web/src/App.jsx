@@ -41,39 +41,31 @@ import DashboardLanding from './pages/user/dashboard/dashboarLanding';
 import DashboardAddress from './pages/user/dashboard/dashboardAddress';
 import DashboardOrder from './pages/user/dashboard/dashboardOrder';
 function App() {
-  // const [role, setRole] = useState(null);
-
-  // const handleLogin = async () => {
-  //   try {
-  //     const response = await axios.get(
-  //       'http://localhost:8000/api/accounts/keep-login',
-  //       {
-  //         headers: {
-  //           Authorization: `Bearer ${localStorage.getItem('token')}`,
-  //         },
-  //       },
-  //     );
-
-  //     const { success, role } = response.data;
-
-  //     if (success) {
-  //       setRole(role);
-  //       if (role === 'admin') {
-  //         return <Navigate to="/admin" />;
-  //       } else {
-  //         return <Navigate to="/" />;
-  //       }
-  //     } else {
-  //       console.log('set role failed');
-  //     }
-  //   } catch (error) {
-  //     console.log(error);
-  //   }
-  // };
-
-  // useEffect(() => {
-  //   handleLogin();
-  // }, [role]);
+  useEffect(() => {
+    const checkData = async () => {
+      try {
+        const token = localStorage.getItem('token');
+        const response = await axios.post(
+          `http://localhost:8000/api/accounts/keep-login`,
+          {},
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          },
+        );
+        if (response.data.success === true) {
+          localStorage.setItem('token', response.data.token);
+        } else {
+          localStorage.removeItem('token');
+        }
+      } catch (error) {
+        console.log(error);
+        localStorage.removeItem('token');
+      }
+    };
+    checkData();
+  }, []);
 
   return (
     <BrowserRouter>

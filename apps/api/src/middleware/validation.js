@@ -3,8 +3,8 @@ import jwt from 'jsonwebtoken';
 module.exports = {
   validateToken: (req, res, next) => {
     try {
-      console.log(req.token);
       const token = req.token;
+
       if (!token) {
         return res.status(400).send({
           success: false,
@@ -27,6 +27,7 @@ module.exports = {
     }
   },
   ValidateUser: (req, res, next) => {
+    console.log(req.userData);
     try {
       if (!req.userData) {
         return res.status(400).send({

@@ -34,7 +34,7 @@ const AccountsTable = ({ accounts, onClickDelete }) => {
             {getAccount.map((account) => (
               <tr key={account.id}>
                 <td className="px-6 py-4 text-sm text-gray-500 whitespace-nowrap">
-                  {account.username}
+                  {account.fullname}
                 </td>
                 <td className="px-6 py-4 text-sm text-gray-500 whitespace-nowrap">
                   {account.email}

@@ -55,7 +55,6 @@ export const GetAccounts = async (req, res, next) => {
 
 export const CreateAccount = async (req, res, next) => {
   try {
-    // Check if the email is already registered, including deleted accounts
     const existingAccount = await accounts.findOne({
       where: {
         email: req.body.email,
@@ -63,9 +62,7 @@ export const CreateAccount = async (req, res, next) => {
     });
 
     if (existingAccount) {
-      // If the existing account is deleted, restore it with new data
       if (existingAccount.is_deleted) {
-        // Restore the account with new data
         const salt = await bcrypt.genSalt(10);
         const hashPassword = await bcrypt.hash(req.body.password, salt);
 

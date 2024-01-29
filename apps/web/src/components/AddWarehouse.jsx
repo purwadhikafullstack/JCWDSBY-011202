@@ -3,57 +3,75 @@ import { useNavigate } from 'react-router-dom';
 import AdminLayout from '../components/AdminLayout';
 import { IoMdArrowBack } from 'react-icons/io';
 import axios from 'axios';
+import InputForWarehouse from './InputForWarehouse';
+import ConfirmationModal from './ConfirmationModal';
+
+import Toast from './Toast';
 const AddWarehouse = () => {
   const navigate = useNavigate();
-  const [provinces, setProvinces] = useState([]);
-  const [selectedProvince, setSelectedProvince] = useState(0);
-  const [cities, setCities] = useState([]);
-  const [selectedCity, setSelectedCity] = useState(0);
-  const [selectedAddress, setSelectedAddress] = useState('');
-  const [geometry, setGeometry] = useState({});
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await axios.get(
-          'http://localhost:8000/api/provincesandcities/provinces',
-        );
-        setProvinces(response.data.data);
-      } catch (error) {
-        console.log(error);
-      }
-    };
-    fetchData();
-  }, []);
+  const [formData, setFormData] = useState({});
+  const [showConfirmationModal, setShowConfirmationModal] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [toast, setToast] = useState(null);
+  const handleFormData = (data) => {
+    setFormData(data);
+  };
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await axios.get(
-          `http://localhost:8000/api/provincesandcities/cities?prov_id=${selectedProvince}`,
-        );
-        setCities(response.data.data);
-      } catch (error) {
-        console.log(error);
-      }
-    };
-    fetchData();
-  }, [selectedProvince]);
+  const showToast = (status, message) => {
+    setToast({ status, message });
+    setTimeout(() => {
+      setToast(null);
+    }, 5000);
+  };
 
-  useEffect(() => {
-    const openCage = async () => {
-      try {
-        const response = await axios.get(
-          `https://api.opencagedata.com/geocode/v1/json?q=${selectedAddress}%2C+99423+${selectedCity}%2C+Indonesia&key=c4e250edc84e4f5c9f616a04b348274f`,
-        );
-        setGeometry(response.data.results[0].geometry);
-      } catch (error) {
-        console.log(error);
-      }
-    };
-    openCage();
-  }, [selectedProvince, selectedAddress]);
+  const onHandleSaveChanges = () => {
+    setShowConfirmationModal(true);
+  };
 
-  console.log(selectedProvince);
+  const onCloseConfirmationModal = () => {
+    setShowConfirmationModal(false);
+  };
+
+  const onHandleAdd = async () => {
+    console.log(formData);
+    const token = localStorage.getItem('token');
+    try {
+      setLoading(true);
+      const response = await axios.post(
+        'http://localhost:8000/api/warehouses',
+        {
+          name: formData.warehouse,
+          prov_id: formData.selectedProvince,
+          city_id: formData.selectedCityIndex,
+          address: formData.selectedAddress,
+          lon: formData.geometry.lng,
+          lat: formData.geometry.lat,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        },
+      );
+      if (response.data.success === true) {
+        showToast('success', 'Account created successfully');
+      } else {
+        showToast(
+          'danger',
+          error.response.data.message || 'Failed to create account',
+        );
+      }
+    } catch (error) {
+      console.error('Error creating account:', error);
+      showToast(
+        'danger',
+        error.response.data.message || 'An error occurred. Please try again.',
+      );
+    } finally {
+      setLoading(false);
+      onCloseConfirmationModal();
+    }
+  };
 
   return (
     <div>
@@ -70,68 +88,38 @@ const AddWarehouse = () => {
             </div>
             <h1 className="mx-2 font-bold text-xl">Add New Warehouse</h1>
           </div>
+        </div>
+        <div className="w-11/12 mx-auto mt-4 bg-white p-4 rounded-md">
           <div>
-            <button className="font-medium text-sm bg-orange-500 hover:bg-orange-600 text-white py-2 px-4 rounded-md transition-all duration-300 ease-in-out focus:outline-none">
+            <h1 className="text-center text-xl font-bold">WAREHOUSE</h1>
+            <hr className="mb-4 mt-2" />
+          </div>
+          <InputForWarehouse onFormChange={handleFormData} />
+          <div className="mt-4 flex justify-end">
+            <button
+              onClick={onHandleSaveChanges}
+              className="font-medium text-sm bg-orange-500 hover:bg-orange-600 text-white py-2 px-4 rounded-md transition-all duration-300 ease-in-out focus:outline-none"
+            >
               Save Changes
             </button>
           </div>
         </div>
-
-        <div className="m-4">
-          <label className="block text-gray-700 text-sm font-bold mb-2">
-            Warehouse Name
-          </label>
-          <input
-            type="text"
-            name="name"
-            className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-            placeholder="Enter warehouse name"
+        {showConfirmationModal && (
+          <ConfirmationModal
+            onClickCancel={onCloseConfirmationModal}
+            onclickClose={onCloseConfirmationModal}
+            title="Add Warehouse"
+            isLoading={loading}
+            onClick={onHandleAdd}
           />
-
-          <label className="block text-gray-700 text-sm font-bold mt-4 mb-2">
-            Province
-          </label>
-
-          <select
-            onChange={(e) => setSelectedProvince(e.target.value)}
-            name="province"
-            className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-          >
-            <option value="">Select Province</option>
-            {provinces.map((province) => (
-              <option key={province.id} value={province.id}>
-                {province.name}
-              </option>
-            ))}
-          </select>
-
-          <label className="block text-gray-700 text-sm font-bold mt-4 mb-2">
-            City
-          </label>
-
-          <select
-            name="city"
-            className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-          >
-            <option value="">Select City</option>
-            {cities.map((city) => (
-              <option key={city.id} value={city.id}>
-                {city.name}
-              </option>
-            ))}
-          </select>
-
-          <label className="block text-gray-700 text-sm font-bold mt-4 mb-2">
-            Address
-          </label>
-          <input
-            type="text"
-            name="address"
-            className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-            placeholder="Enter warehouse address"
-            onChange={(e) => setSelectedAddress(e.target.value)}
+        )}
+        {toast && (
+          <Toast
+            status={toast.status}
+            message={toast.message}
+            onClose={() => setToast(null)}
           />
-        </div>
+        )}
       </AdminLayout>
     </div>
   );

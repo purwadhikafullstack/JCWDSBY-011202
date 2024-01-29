@@ -21,6 +21,12 @@ module.exports = {
       address: {
         type: Sequelize.STRING,
       },
+      lat: {
+        type: Sequelize.STRING,
+      },
+      lon: {
+        type: Sequelize.STRING,
+      },
       is_deleted: {
         allowNull: false,
         type: Sequelize.BOOLEAN,

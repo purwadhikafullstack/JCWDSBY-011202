@@ -3,7 +3,7 @@ import jwt from 'jsonwebtoken';
 module.exports = {
   validateToken: (req, res, next) => {
     try {
-      console.log(req.token);
+      console.log("ini tokennya",req.token);
       const token = req.token;
       if (!token) {
         return res.status(400).send({

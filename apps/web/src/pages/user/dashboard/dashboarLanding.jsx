@@ -1,12 +1,25 @@
+import { useEffect, useState } from 'react';
 import TemporaryFooter from '../../../components/Temporary/Footer';
 import TemporaryNavbar from '../../../components/Temporary/Navbar';
 import {
   DashboardSidebar,
   DashboardTitle,
 } from '../../../components/dashboard';
+import { Loading } from '../../../components/loadingComponent';
 
 const DashboardLanding = () => {
-  return (
+  const [firstloading, setFirstLoading] = useState(false);
+  const openLoading = (time) => {
+    setFirstLoading(true);
+    setTimeout(() => {
+      setFirstLoading(false);
+    }, time);
+  };
+  useEffect(()=>{
+    openLoading(1500)
+  },[])
+  return (<>
+      {firstloading ? <Loading /> : ''}
     <div>
       <TemporaryNavbar />
       <DashboardTitle title={'Profile'} subTitle={'User/Profile'} />
@@ -31,6 +44,8 @@ const DashboardLanding = () => {
       </div>
       <TemporaryFooter />
     </div>
+  
+  </>
   );
 };
 

@@ -18,7 +18,10 @@ const CheckoutPage = () => {
   const [coWeight, setCoWeight] = useState(0);
   const [userData, setUserData] = useState([]);
   const [shippingCost,setShippingCost]=useState([])
+  const [shippingPrice,setShippingPrice]=useState("")
   const [userAddress,setUserAddress]=useState([])
+  const [finalPrice,setFinalPrice]=useState("-")
+  const [changeAddress,setChangeAddress]=useState(false)
   const [courierOpt,setCourierOpt]=useState(false)
   const [shippingOpt,setShippingOpt]=useState(false)
   const openLoading = (time) => {
@@ -73,38 +76,74 @@ const CheckoutPage = () => {
           headers: { Authorization: `Bearer ${token}` },
         },
       );
-      return setUserAddress(result.data);
+      return setUserAddress(result.data.address);
     } catch (error) {
       console.log(error);
     }
   };
-  const getShippingCost = async (lat, lon, city, kota,weight ) => {
-    const token = localStorage.getItem('token');
+  const getShippingCostApi = async (lat, lon, city, kota,weight ) => {
+    try {
+      console.log("jalan uhuhuhuhu");
+      const token = localStorage.getItem('token');
     const result = await axios.get(
       `http://localhost:8000/api/checkout/get-shipping-cost?lat=${lat}&lon=${lon}&city=${city}&kota=${kota}&weight=${weight}`,
       {
         headers: { Authorization: `Bearer ${token}` },
       },
     );
+    console.log("uny", result);
       setShippingCost(result.data)
+    } catch (error) {
+     console.log(error); 
+    }
   };
+  const onHandleModalCourier =async()=>{
+    try {
+      let hargaOngkir = parseInt(sessionStorage.getItem("hargaOngkir"))
+      setCourierOpt(false)
+      openLoading(1500)
+      setShippingPrice("Rp "+hargaOngkir.toLocaleString("id"))
+      console.log("harga ongkir",hargaOngkir);
+      setFinalPrice(hargaOngkir+coPrice)
+      
+    } catch (error) {
+      console.log(error);
+    }
+  }
   useEffect(() => {
-    openLoading(3000);
+    openLoading(2000);
     getDataCart();
     getUserData();
     getUserAddress()
+    // if (userData){
+    //   console.log("halan");
+    //   getShippingCostApi(
+    //     userData['addresses.lat'],
+    //     userData['addresses.lon'],
+    //     userData['addresses.city_id'],
+    //     userData.city,
+    //     coWeight
+    //   )
+    // }
   }, []);
-  useEffect(() => {
-    getShippingCost(
-      userData['addresses.lat'],
-      userData['addresses.lon'],
-      userData['addresses.city_id'],
-      userData.city,
-      coWeight
-    );
-    getUserAddress()
-  }, [userData]);
-  console.log('ini alamar', userAddress);
+ 
+  // useEffect(() => {
+  //   console.log("eh jalan disini", userData);
+  //     getShippingCostApi(
+  //     userData['lat'],
+  //     userData['lon'],
+  //     userData['city_id'],
+  //     userData.city,
+  //     coWeight
+  //   )
+    
+  // }, [userData]);
+  // console.log('ini alamar', userAddress);
+  // console.log('ini hai', userData);
+  // console.log('idUtama', userData);
+  console.log('cost ', shippingCost);
+  // console.log("asas",userData);
+
   return (
     <>
       {firstloading ? <Loading /> : ''}
@@ -135,18 +174,31 @@ const CheckoutPage = () => {
           {/* co payment disini */}
           <CheckoutPayment
             recepient={recepient?recepient:userData.fullname}
-            address={userData['addresses.address']}
-            phone={userData['addresses.phone']}
+            address={userData['address']}
+            phone={userData['phone']}
             city={userData.city}
             shippingCost={"Pilih Pengiriman"}
             province={userData.province}
+            shippingPrice={shippingPrice?shippingPrice:""}
             price={coPrice.toLocaleString('id')}
+            finalCost = {shippingPrice?parseInt(finalPrice).toLocaleString("id"):"-"}
             ubah={()=>{
               setShippingOpt(true)
-              openMiniLoading(1500)
+              // getUserAddress()
+             
+              openMiniLoading(1000)
             }}
-            onHandleCourier={()=>{setCourierOpt(true)
-            console.log("masuk kok");}}
+            onHandleCourier={()=>{
+                setCourierOpt(true)
+                openMiniLoading(1000)
+                getShippingCostApi(
+                  userData['lat'],
+                  userData['lon'],
+                  userData['city_id'],
+                  userData.city,
+                  coWeight
+                )
+            }}
           />
         </div>
       </div>
@@ -157,12 +209,27 @@ const CheckoutPage = () => {
       cancel={"Cancel"}
       valueRecepient={recepient}
       isLoading={secondloading}
-      onHandleModalCancel={()=>setShippingOpt(false)}
+      userAddress = {userAddress}
+      idUtama = {userData["address_id"]}
+      onHandleModalClick={()=>{
+        openLoading(1000)
+        getUserData() 
+        getUserAddress()
+        // getShippingCostApi()
+      setShippingOpt(false)
+    }}
+      onHandleModalCancel={()=>{
+      setShippingOpt(false)   
+      }}
       />:""}
       {courierOpt?<IModalCourier
       deskripsi1={"Pilih Opsi Pengiriman"}
       confirm={"Confirm"}
       cancel={"Cancel"}
+      name={"courier"}
+      isLoading = {secondloading}
+      data={shippingCost}
+      onHandleModalClick={onHandleModalCourier}
       onHandleModalCancel={()=>{setCourierOpt(false)}}
       />:""}
       <TemporaryFooter />

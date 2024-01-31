@@ -57,9 +57,9 @@ const CartPage = () => {
       if (localStorage.getItem('cartId')) {
         const items = localStorage.getItem('cartId');
         checkedResult = items.split(',');
-        if(cartProduct){
-          let checkedItem =await document.getElementsByName('intoOrder');
-          console.log("dapat ga",checkedItem);
+        if (cartProduct) {
+          let checkedItem = await document.getElementsByName('intoOrder');
+          console.log('dapat ga', checkedItem);
           for (let i = 0; i < checkedResult.length; i++) {
             for (let j = 0; j < checkedItem.length; j++) {
               if (checkedResult[i] == checkedItem[j].defaultValue) {
@@ -74,27 +74,29 @@ const CartPage = () => {
       console.log(error);
     }
   };
-  const getChecked =async () => {
+  const getChecked = async () => {
     try {
       let checkedItem = document.getElementsByName('intoOrder');
       for (let i = 0; i < checkedItem.length; i++) {
         if (checkedItem[i].checked) {
           checkedResult.push(checkedItem[i].value);
+          console.log('kiat ini', checkedResult);
           localStorage.setItem('cartId', checkedResult);
         } else {
-          checkedResult = []
+          // console.log("liat berapa", checkedResult);
+          checkedResult = [];
         }
       }
       if (checkedResult.length > 0) {
         checkedArray = checkedResult.join(' ');
+        // console.log("sa",checkedArray);
       } else {
         localStorage.removeItem('cartId');
         setCartSummary((cartSummary.status = false));
       }
     } catch (error) {
-      
+      console.log(error);
     }
-   
   };
   useEffect(() => {
     // USEEFFECT ketika pertama load
@@ -102,15 +104,13 @@ const CartPage = () => {
     getDataCart();
     openLoading(1500);
     // keepChecked();
-    console.log("jalam dulu");
-   
+
     if (checkedArray) {
       getSummary();
     }
   }, []);
   useEffect(() => {
     // USEEFFECT ketika checkbox di klik
-    console.log("ini juga jalan");
     getChecked();
     if (checkedArray) {
       getSummary();
@@ -139,7 +139,7 @@ const CartPage = () => {
       let changeItem = item[idx].value;
       if (!changeItem) {
         const updateQty = await axios.patch(
-          `http://localhost:8000/api/cart/qty/${cartId}`,
+          `http://localhost:8000/api/checkout/qty/${cartId}`,
           { quantity: 0 },
           {
             headers: { Authorization: `Bearer ${token}` },
@@ -199,21 +199,21 @@ const CartPage = () => {
     }
   };
   const onHandleCheckOut = () => {
-    if (cartSummary.data.length>0) {
-      console.log("itu",cartSummary);
-      console.log("itu",cartSummary.data.length);
+    if (cartSummary.data.length > 0) {
+      console.log('itu', cartSummary);
+      console.log('itu', cartSummary.data.length);
       document.body.style.overflow = 'auto';
       setOpenModal(false);
       // localStorage.setItem('cartId', cartSummary.data);
       // console.log("!23",cartSummary.da);
       navigate(`/checkout`);
     } else {
-      console.log("ini",cartSummary);
-      console.log("ini",cartSummary.data.length);
+      console.log('ini', cartSummary);
+      console.log('ini', cartSummary.data.length);
       alert('Oops data produk belum di checklist');
     }
   };
-  console.log("cs",cartSummary);
+  console.log('cs', cartSummary);
   return (
     <>
       {firstloading ? <Loading /> : ''}
@@ -275,7 +275,7 @@ const CartPage = () => {
 
         <div className="shadow-sm md:w-[320px] md:border-[1px] rounded-md pb-2 mb-4">
           <CartPayment
-            total_item={cartSummary.success>0 ? cartSummary.totalItem : 0}
+            total_item={cartSummary.success > 0 ? cartSummary.totalItem : 0}
             total_price={
               cartSummary.success
                 ? cartSummary.allPrice.toLocaleString('id')

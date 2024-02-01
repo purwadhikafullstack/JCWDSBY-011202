@@ -1,6 +1,7 @@
 import warehouses from '../models/warehouses';
 import accounts from '../models/accounts';
 import bcrypt from 'bcrypt';
+import journal from '../models/journal';
 
 export const updateAccount = async (req, res, next) => {
   try {
@@ -24,6 +25,27 @@ export const deleteAccount = async (req, res, next) => {
       { where: { id: req.params.id } },
     );
 
+    const journalDate = new Date().toLocaleDateString('en-US', {
+      day: 'numeric',
+      month: 'long',
+      year: 'numeric',
+      hour: 'numeric',
+      minute: 'numeric',
+      second: 'numeric',
+      hour12: false,
+    });
+
+    const journalInformation = `${req.userData.fullname} deleted ${isExist.fullname} as ${isExist.role}`;
+    const journalFrom = `Accounts`;
+
+    if (delAccount) {
+      await journal.create({
+        date: journalDate,
+        information: journalInformation,
+        from: journalFrom,
+      });
+    }
+
     return res.status(200).send({
       message: 'Account deleted',
       success: true,
@@ -36,3 +58,5 @@ export const deleteAccount = async (req, res, next) => {
     });
   }
 };
+
+const checkRole = (req, res, next) => {};

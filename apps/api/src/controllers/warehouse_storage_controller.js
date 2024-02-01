@@ -5,7 +5,15 @@ import products from '../models/products';
 export const getStorage = async (req, res, next) => {
   try {
     let queryOptions;
-    if (req.query.warehouse) {
+    if (req.query.warehouse && req.query.product_id) {
+      queryOptions = {
+        where: {
+          warehouse_id: req.query.warehouse,
+          product_id: req.query.product_id,
+          is_deleted: false,
+        },
+      };
+    } else if (req.query.warehouse) {
       queryOptions = {
         where: {
           warehouse_id: req.query.warehouse,
@@ -16,6 +24,13 @@ export const getStorage = async (req, res, next) => {
       queryOptions = {
         where: {
           id: req.query.id,
+          is_deleted: false,
+        },
+      };
+    } else if (req.query.product_id) {
+      queryOptions = {
+        where: {
+          product_id: req.query.product_id,
           is_deleted: false,
         },
       };

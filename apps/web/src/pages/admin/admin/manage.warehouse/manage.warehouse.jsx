@@ -4,22 +4,71 @@ import axios from 'axios';
 import { useLocation, useNavigate } from 'react-router-dom';
 import ListWarehouse from '../../../../components/ListWarehouse';
 import { Loading } from '../../../../components/loadingComponent';
+import Toast from '../../../../components/Toast';
+import ConfirmationModal from '../../../../components/ConfirmationModal';
+import EditWarehouse from '../../../../components/EditWarehouseModal';
+
 const ManageWarehouse = () => {
   const location = useLocation();
   const navigate = useNavigate();
   const [warehouses, setWarehouses] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [toastContent, setToastContent] = useState(null);
+  const [deleteLoading, setDeleteLoading] = useState(false);
+  const [showConfirmationModal, setShowConfirmationModal] = useState(false);
+  const [warehouseIdToDelete, setWarehouseIdToDelete] = useState(null);
 
-  const onHandleDelete = async (id) => {
+  const showToast = (status, message) => {
+    const content = (
+      <Toast
+        status={status}
+        message={message}
+        onClose={() => setToastContent(null)}
+      />
+    );
+    setToastContent(content);
+  };
+
+  const onHandleEdit = (id) => {
+    navigate(
+      `/admin/manage-warehouse/edit-warehouse?warehouse=Warehouse-00${id}`,
+    );
+  };
+
+  const onHandleDelete = (id) => {
+    setWarehouseIdToDelete(id);
+    setShowConfirmationModal(true);
+  };
+
+  const onCloseHandleDelete = () => {
+    setShowConfirmationModal(false);
+  };
+
+  const onHandleDeleteConfirmed = async () => {
+    const token = localStorage.getItem('token');
+    setDeleteLoading(true);
     try {
-      const deleteWarehouse = await axios.delete(
-        `http://localhost:8000/api/warehouses/${id}`,
+      const response = await axios.delete(
+        `http://localhost:8000/api/warehouses/${warehouseIdToDelete}`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        },
       );
-      setWarehouses((prevWarehouses) =>
-        prevWarehouses.filter((warehouse) => warehouse.id !== id),
-      );
+      if (response.data.success === true) {
+        showToast('success', 'Warehouse deleted successfully');
+        const response = await axios.get(
+          'http://localhost:8000/api/warehouses',
+        );
+        setWarehouses(response.data.data);
+        setShowConfirmationModal(false);
+      }
     } catch (error) {
       console.error('Error deleting warehouse:', error);
+      showToast('error', 'Error deleting warehouse');
+    } finally {
+      setDeleteLoading(false);
     }
   };
 
@@ -61,9 +110,20 @@ const ManageWarehouse = () => {
             <ListWarehouse
               warehouses={warehouses}
               onClickDelete={onHandleDelete}
+              onClickEdit={onHandleEdit}
             />
           )}
         </div>
+        {showConfirmationModal && (
+          <ConfirmationModal
+            onClickCancel={onCloseHandleDelete}
+            onclickClose={onCloseHandleDelete}
+            title="Delete Warehouse"
+            isLoading={deleteLoading}
+            onClick={onHandleDeleteConfirmed}
+          />
+        )}
+        {toastContent}
       </AdminLayout>
     </div>
   );

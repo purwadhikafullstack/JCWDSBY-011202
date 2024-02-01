@@ -19,6 +19,7 @@ const AddAccount = () => {
   const [showConfirmationModal, setShowConfirmationModal] = useState(false);
   const [loading, setLoading] = useState(false);
   const [toast, setToast] = useState(null);
+  const [warehouse, setWarehouse] = useState(0);
 
   const handleToggleAdmin = () => {
     setIsAdmin(true);
@@ -49,6 +50,7 @@ const AddAccount = () => {
 
   const onHandleAdd = async () => {
     const token = localStorage.getItem('token');
+    console.log(warehouse);
     try {
       setLoading(true);
       const response = await axios.post(
@@ -58,6 +60,7 @@ const AddAccount = () => {
           password,
           fullname,
           role,
+          warehouse_id: warehouse,
         },
         {
           headers: {
@@ -140,6 +143,7 @@ const AddAccount = () => {
                 onChangeEmail={(e) => setEmail(e.target.value)}
                 onChangePassword={(e) => setPassword(e.target.value)}
                 onChangeFullName={(e) => setFullName(e.target.value)}
+                onChangeWarehouse={(e) => setWarehouse(e.target.value)}
               />
             )}
             <div className="flex justify-end p-2 mt-2">

@@ -8,6 +8,12 @@ export default class warehouse_mutation extends Model {
    */
   static associate(models) {
     // define association here
+    warehouse_mutation.belongsTo(models.warehouses, {
+      foreignKey: 'warehouse_id',
+    });
+    warehouse_mutation.belongsTo(models.products, {
+      foreignKey: 'product_id',
+    });
   }
 }
 
@@ -22,8 +28,9 @@ export const init = (sequelize) => {
       mutation_type: DataTypes.STRING,
       is_confirmed: DataTypes.BOOLEAN,
       status: DataTypes.STRING,
-      arrival_date: DataTypes.DATE,
-      delivery_date: DataTypes.DATE,
+      arrival_date: DataTypes.STRING,
+      delivery_date: DataTypes.STRING,
+      is_deleted: DataTypes.BOOLEAN,
     },
     {
       sequelize,

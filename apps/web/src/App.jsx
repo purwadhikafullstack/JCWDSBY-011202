@@ -40,6 +40,7 @@ import AdminLogin from './pages/admin/admin/AdminLogin';
 import DashboardLanding from './pages/user/dashboard/dashboarLanding';
 import DashboardAddress from './pages/user/dashboard/dashboardAddress';
 import DashboardOrder from './pages/user/dashboard/dashboardOrder';
+import EditWarehouse from './components/EditWarehouseModal';
 function App() {
   useEffect(() => {
     const checkData = async () => {
@@ -98,6 +99,10 @@ function App() {
         <Route path="/admin/manage-inventory?" element={<ManageInventory />} />
         <Route path="/admin/manage-warehouse" element={<ManageWarehouse />} />
         <Route
+          path="/admin/manage-warehouse/edit-warehouse?"
+          element={<EditWarehouse />}
+        />
+        <Route
           path="/admin/manage-warehouse/add-warehouse"
           element={<AddWarehouse />}
         />
@@ -136,9 +141,9 @@ function App() {
         {/* ROUTES FEATURE : PRODUCT-MANAGEMENT MAS ADHON*/}
         <Route path="/cart" element={<CartPage />} />
         <Route path="/checkout" element={<CheckoutPage />} />
-        <Route path="user/dashboard" element={<DashboardLanding/>}/>
-        <Route path="user/dashboard/address" element={<DashboardAddress/>}/>
-        <Route path="user/dashboard/order" element={<DashboardOrder/>}/>
+        <Route path="user/dashboard" element={<DashboardLanding />} />
+        <Route path="user/dashboard/address" element={<DashboardAddress />} />
+        <Route path="user/dashboard/order" element={<DashboardOrder />} />
         <Route path="" />
       </Routes>
     </BrowserRouter>

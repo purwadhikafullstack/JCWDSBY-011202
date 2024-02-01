@@ -57,9 +57,9 @@ const CartPage = () => {
       if (localStorage.getItem('cartId')) {
         const items = localStorage.getItem('cartId');
         checkedResult = items.split(',');
-        if(cartProduct){
-          let checkedItem =await document.getElementsByName('intoOrder');
-          console.log("dapat ga",checkedItem);
+        if (cartProduct) {
+          let checkedItem = await document.getElementsByName('intoOrder');
+          console.log('dapat ga', checkedItem);
           for (let i = 0; i < checkedResult.length; i++) {
             for (let j = 0; j < checkedItem.length; j++) {
               if (checkedResult[i] == checkedItem[j].defaultValue) {
@@ -74,21 +74,24 @@ const CartPage = () => {
       console.log(error);
     }
   };
-  const getChecked = () => {
-    console.log('jalan kok');
-    let checkedItem = document.getElementsByName('intoOrder');
-    for (let i = 0; i < checkedItem.length; i++) {
-      if (checkedItem[i].checked) {
-        checkedResult.push(checkedItem[i].value);
-        localStorage.setItem('cartId', checkedResult);
+  const getChecked = async () => {
+    try {
+      let checkedItem = document.getElementsByName('intoOrder');
+      for (let i = 0; i < checkedItem.length; i++) {
+        if (checkedItem[i].checked) {
+          checkedResult.push(checkedItem[i].value);
+          localStorage.setItem('cartId', checkedResult);
+        } else {
+          checkedResult = [];
+        }
       }
-    }
-    if (checkedResult.length > 0) {
-      checkedArray = checkedResult.join(' ');
-    } else {
-      localStorage.removeItem('cartId');
-      setCartSummary((cartSummary.status = false));
-    }
+      if (checkedResult.length > 0) {
+        checkedArray = checkedResult.join(' ');
+      } else {
+        localStorage.removeItem('cartId');
+        setCartSummary((cartSummary.status = false));
+      }
+    } catch (error) {}
   };
   useEffect(() => {
     // USEEFFECT ketika pertama load
@@ -96,15 +99,15 @@ const CartPage = () => {
     getDataCart();
     openLoading(1500);
     // keepChecked();
-    console.log("jalam dulu");
-   
+    console.log('jalam dulu');
+
     if (checkedArray) {
       getSummary();
     }
   }, []);
   useEffect(() => {
     // USEEFFECT ketika checkbox di klik
-    console.log("ini juga jalan");
+    console.log('ini juga jalan');
     getChecked();
     if (checkedArray) {
       getSummary();
@@ -193,22 +196,26 @@ const CartPage = () => {
     }
   };
   const onHandleCheckOut = () => {
-    if (cartSummary.success) {
+    if (cartSummary.data.length > 0) {
+      console.log('itu', cartSummary);
+      console.log('itu', cartSummary.data.length);
       document.body.style.overflow = 'auto';
       setOpenModal(false);
       // localStorage.setItem('cartId', cartSummary.data);
       // console.log("!23",cartSummary.da);
       navigate(`/checkout`);
     } else {
+      console.log('ini', cartSummary);
+      console.log('ini', cartSummary.data.length);
       alert('Oops data produk belum di checklist');
     }
   };
-
+  console.log('cs', cartSummary);
   return (
     <>
       {firstloading ? <Loading /> : ''}
       <TemporaryNavbar cartCount={cartCount} />
-      <div className="text-center mt-4 mb-3 md:mb-8">
+      <div className="text-center mt-4 mb-2 md:mb-8">
         <p className="text-4xl">Cart</p>
         <p>home / cart</p>
       </div>
@@ -265,7 +272,7 @@ const CartPage = () => {
 
         <div className="shadow-sm md:w-[320px] md:border-[1px] rounded-md pb-2 mb-4">
           <CartPayment
-            total_item={cartSummary.success ? cartSummary.totalItem : 0}
+            total_item={cartSummary.success > 0 ? cartSummary.totalItem : 0}
             total_price={
               cartSummary.success
                 ? cartSummary.allPrice.toLocaleString('id')

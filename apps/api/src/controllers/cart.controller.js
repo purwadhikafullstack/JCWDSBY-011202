@@ -10,7 +10,7 @@ import warehouse_storage from '../models/warehouse_storage';
 // untuk API ("cart/add-to-cart")
 export const addToCart = async (req, res, next) => {
     try {
-        
+
         const findCart = await carts.findOne({
             where: {
                 [Op.and]: [
@@ -74,52 +74,52 @@ export const getCart = async (req, res, next) => {
                 {
                     model: products,
                     required: true,
-                    attributes: ["name", "price", "weight","id"],
-                    include:[{model:product_images,required:true,attributes:["image"]}]
+                    attributes: ["name", "price", "weight", "id"],
+                    include: [{ model: product_images, required: true, attributes: ["image"] }]
                 }
             ],
             raw: true
         })
-        const result =[] 
-        let index=0
-        allProduct.rows.map((val,id)=>{
-            if(allProduct.rows[id].product_id != index){
+        const result = []
+        let index = 0
+        allProduct.rows.map((val, id) => {
+            if (allProduct.rows[id].product_id != index) {
                 index = allProduct.rows[id].product_id
-                result.push({ ...allProduct.rows[id], productWeightConvert: val[`product.weight`] / 1000, total_weightConvert: val.total_weight / 1000 })
+                result.push({ ...allProduct.rows[id], productWeightConvert: val[`product.weight`] / 1000, total_weightConvert: val.total_weight / 1000, isChecked: false })
             }
         })
-        const productId=[]
-       result.map((val,id)=>{productId.push(val.product_id)})
-       const stock = await warehouse_storage.findAll({
-        attributes:["product_id","stock"],where:{
-            product_id:productId
-        }, raw:true
-       })
-       const stockProduct = []
-       let filterProductId=-1
-       stock.map((val,idx)=>{
-        filterProductId=val.product_id
-        let id = stockProduct.findIndex(val=>val.product_id==filterProductId)
-        if(id<0){
-            stockProduct.push(stock[idx])
-        }else{
-            stockProduct[id].stock=stockProduct[id].stock+val.stock
-        }
-       })
-       stockProduct.map((val,id)=>{
-        let idx = result.findIndex(val=>val.product_id==stockProduct[id].product_id)
-        console.log("cari",idx);
-        // console.log("cari2",stockProduct[id].product_id);
-        if(idx>=0){
-            console.log("ini val stock",val.stock);
-            result[idx].stock=val.stock
-        } else{
-            console.log("id product tidak ditemukan");
-        }
-       })
-       console.log("result tambah stock",result);
-    //    console.log("stockproduct",stockProduct);
-    //    console.log("stock",stock);
+        const productId = []
+        result.map((val, id) => { productId.push(val.product_id) })
+        const stock = await warehouse_storage.findAll({
+            attributes: ["product_id", "stock"], where: {
+                product_id: productId
+            }, raw: true
+        })
+        const stockProduct = []
+        let filterProductId = -1
+        stock.map((val, idx) => {
+            filterProductId = val.product_id
+            let id = stockProduct.findIndex(val => val.product_id == filterProductId)
+            if (id < 0) {
+                stockProduct.push(stock[idx])
+            } else {
+                stockProduct[id].stock = stockProduct[id].stock + val.stock
+            }
+        })
+        stockProduct.map((val, id) => {
+            let idx = result.findIndex(val => val.product_id == stockProduct[id].product_id)
+            console.log("cari", idx);
+            // console.log("cari2",stockProduct[id].product_id);
+            if (idx >= 0) {
+                console.log("ini val stock", val.stock);
+                result[idx].stock = val.stock
+            } else {
+                console.log("id product tidak ditemukan");
+            }
+        })
+        console.log("result tambah stock", result);
+        //    console.log("stockproduct",stockProduct);
+        //    console.log("stock",stock);
         return res.status(200).send({
             message: "Berhasil mendapatkan data carts",
             result: result,
@@ -164,11 +164,11 @@ export const plusQty = async (req, res, next) => {
             ],
             raw: true
         })
-        if (findProduct.quantity+1>req.body.stock){
+        if (findProduct.quantity + 1 > req.body.stock) {
             const data = await carts.update({
                 quantity: req.body.stock,
-                total_price:req.body.stock*findProduct[`product.price`],
-                total_weight: req.body.stock* findProduct[`product.weight`],
+                total_price: req.body.stock * findProduct[`product.price`],
+                total_weight: req.body.stock * findProduct[`product.weight`],
             }, {
                 where: {
                     id: findProduct.id
@@ -188,7 +188,7 @@ export const plusQty = async (req, res, next) => {
                 where: {
                     id: findProduct.id
                 }
-    
+
             })
             return res.status(200).send({
                 message
@@ -213,7 +213,7 @@ export const minusQty = async (req, res, next) => {
                 {
                     model: products,
                     required: true,
-                    attributes: ["name", "price","weight"]
+                    attributes: ["name", "price", "weight"]
                 }
             ],
             raw: true

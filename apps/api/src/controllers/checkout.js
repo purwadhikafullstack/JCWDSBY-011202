@@ -65,29 +65,37 @@ export const getUserData = async (req, res, next) => {
                 id: req.userData.id
             },
             attributes: { exclude: ["password", "createdAt", "updatedAt", "is_deleted", "id"] },
-            include: [{
-                model: addresses,
-                required: true,
-                attributes: ["prov_id", "city_id", "phone", "address", "lat", "lon"]
-            }],
+            // include: [{
+            //     model: addresses,
+            //     required: true,
+            //     attributes: ["id","prov_id", "city_id", "phone", "address", "lat", "lon"]
+            // }],
+            raw: true
+        })
+        const result2 = await addresses.findOne({
+            where: {
+                id: result.address_id
+            },
             raw: true
         })
         const city = await cities.findOne({
             where: {
-                id: result["addresses.city_id"]
+                id: result2["city_id"]
             },
             attributes: ["name"],
             raw: true
         })
-        // console.log("loh dah masuk 2", city);
         const province = await provinces.findOne({
             where: {
-                id: result["addresses.prov_id"]
+                id: result2["prov_id"]
             },
             attributes: ["name"],
             raw: true
         })
-        const final = { ...result, city: city.name, province: province.name }
+        // console.log("loh dah masuk", result2);
+        // console.log("loh dah masuk 2", city);
+        // console.log("loh dah masuk 3", province);
+        const final = { ...result, ...result2, city: city.name, province: province.name }
         // console.log("hasul user data", final);
         return res.status(200).send({
             message: "success get user data",
@@ -100,45 +108,43 @@ export const getUserData = async (req, res, next) => {
 
 export const getShippingCost = async (req, res, next) => {
     try {
-        // console.log("q masuk");
-        // console.log("q untuk lokasi", req.query);
-        if(req.query.weight>30000){
-            req.query.weight=30000
+        if (req.query.weight > 30000) {
+            req.query.weight = 30000
         }
         const gudangLoc = await warehouses.findAll({
             where: {
                 is_deleted: 0
             },
             include: [
-            {
-                model: cities,
-                required: true,
-                attributes: ["name"]
-            }],
+                {
+                    model: cities,
+                    required: true,
+                    attributes: ["name"]
+                }],
             raw: true,
             attributes: { exclude: ["createdAt", "updatedAt"] }
         })
         let shortest = 0
         const origin = []
-        gudangLoc.map((val,id)=>{
-            let dist = distance(parseFloat(req.query.lat),parseFloat(req.query.lon),parseFloat(val.lat),parseFloat(val.lon))
-            if(id==0){
-                shortest=dist
+        gudangLoc.map((val, id) => {
+            let dist = distance(parseFloat(req.query.lat), parseFloat(req.query.lon), parseFloat(val.lat), parseFloat(val.lon))
+            if (id == 0) {
+                shortest = dist
                 origin.push(gudangLoc[id])
-            } else{
-                if(shortest>dist){
-                    shortest=dist
+            } else {
+                if (shortest > dist) {
+                    shortest = dist
                     origin.pop()
                     origin.push(gudangLoc[id])
                 }
             }
         })
-        const dbCity =await axios.get("https://api.rajaongkir.com/starter/city",{
-            headers:{key:"6bbe9009786e32eb45afc273fd506b31"}
+        const dbCity = await axios.get("https://api.rajaongkir.com/starter/city", {
+            headers: { key: "4497cf82b96fe9ca149f8df6974459ee" }
         })
-        const allCity=dbCity.data.rajaongkir.results
-        const originId = allCity.findIndex(val=>val.city_name==origin[0]["city.name"])
-        const destinationId=allCity.findIndex(val=>val.city_name==req.query.kota)
+        const allCity = dbCity.data.rajaongkir.results
+        const originId = allCity.findIndex(val => val.city_name == origin[0]["city.name"])
+        const destinationId = allCity.findIndex(val => val.city_name == req.query.kota)
         const formData = new FormData();
         formData.append("origin", allCity[originId].city_id)
         formData.append("destination", allCity[destinationId].city_id)
@@ -146,11 +152,15 @@ export const getShippingCost = async (req, res, next) => {
         formData.append("courier", "jne")
         const cost = await axios.post("https://api.rajaongkir.com/starter/cost", formData, {
             headers: {
-                key: '6bbe9009786e32eb45afc273fd506b31'
+                key: '4497cf82b96fe9ca149f8df6974459ee'
             }
         })
-        return res.status(200).send(cost.data.rajaongkir.results[0].costs)
+        // console.log("prabowo", cost.data.rajaongkir.results[0].costs);
+        return res.status(200).send({
+            warehouse_id:origin[0].id,
+            shipping:cost.data.rajaongkir.results[0].costs})
     } catch (error) {
-        console.log(error);
+        console.log("hai error");
+        console.log(error.message);
     }
 }

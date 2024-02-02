@@ -40,40 +40,8 @@ import AdminLogin from './pages/admin/admin/AdminLogin';
 import DashboardLanding from './pages/user/dashboard/dashboarLanding';
 import DashboardAddress from './pages/user/dashboard/dashboardAddress';
 import DashboardOrder from './pages/user/dashboard/dashboardOrder';
+import CheckoutSuccess from './pages/user/checkoutPage/CheckoutSuccess';
 function App() {
-  // const [role, setRole] = useState(null);
-
-  // const handleLogin = async () => {
-  //   try {
-  //     const response = await axios.get(
-  //       'http://localhost:8000/api/accounts/keep-login',
-  //       {
-  //         headers: {
-  //           Authorization: `Bearer ${localStorage.getItem('token')}`,
-  //         },
-  //       },
-  //     );
-
-  //     const { success, role } = response.data;
-
-  //     if (success) {
-  //       setRole(role);
-  //       if (role === 'admin') {
-  //         return <Navigate to="/admin" />;
-  //       } else {
-  //         return <Navigate to="/" />;
-  //       }
-  //     } else {
-  //       console.log('set role failed');
-  //     }
-  //   } catch (error) {
-  //     console.log(error);
-  //   }
-  // };
-
-  // useEffect(() => {
-  //   handleLogin();
-  // }, [role]);
 
   return (
     <BrowserRouter>
@@ -144,9 +112,12 @@ function App() {
         {/* ROUTES FEATURE : PRODUCT-MANAGEMENT MAS ADHON*/}
         <Route path="/cart" element={<CartPage />} />
         <Route path="/checkout" element={<CheckoutPage />} />
+        <Route path="/checkout/success?" element={<CheckoutSuccess />} />
         <Route path="user/dashboard" element={<DashboardLanding/>}/>
         <Route path="user/dashboard/address" element={<DashboardAddress/>}/>
         <Route path="user/dashboard/order" element={<DashboardOrder/>}/>
+        <Route path="user/dashboard/order-detail?" element={<DashboardOrder/>}/>
+
         <Route path="" />
       </Routes>
     </BrowserRouter>

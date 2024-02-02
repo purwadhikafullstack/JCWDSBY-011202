@@ -37,7 +37,7 @@ export const Login = async (req, res, next) => {
       },
       process.env.SCRT_TKN,
       {
-        expiresIn: '1h',
+        expiresIn: '8h',
       },
     );
 
@@ -63,16 +63,6 @@ export const Login = async (req, res, next) => {
 
 export const keepLogin = async (req, res) => {
   try {
-    const token = jwt.sign(
-      {
-        id: req.userData.id,
-      },
-      process.env.SCRT_TKN,
-      {
-        expiresIn: '1h',
-      },
-    );
-
     const resultData = await accounts.findOne({
       where: {
         id: req.userData.id,
@@ -80,6 +70,16 @@ export const keepLogin = async (req, res) => {
       attributes: { exclude: ['password', 'id'] },
       raw: true,
     });
+    const token = jwt.sign(
+      {
+        id: req.userData.id,
+        role: req.userData.role,
+      },
+      process.env.SCRT_TKN,
+      {
+        expiresIn: '1h',
+      },
+    );
 
     return res.status(200).send({
       success: true,

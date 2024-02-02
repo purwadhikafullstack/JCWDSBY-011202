@@ -23,6 +23,7 @@ export const init = (sequelize) => {
       quantity: DataTypes.INTEGER,
       total_price: DataTypes.INTEGER,
       total_weight: DataTypes.INTEGER,
+      invoice: DataTypes.STRING,
     },
     {
       sequelize,

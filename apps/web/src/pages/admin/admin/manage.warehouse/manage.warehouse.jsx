@@ -3,10 +3,12 @@ import { useEffect, useState } from 'react';
 import axios from 'axios';
 import { useLocation, useNavigate } from 'react-router-dom';
 import ListWarehouse from '../../../../components/ListWarehouse';
+import { Loading } from '../../../../components/loadingComponent';
 const ManageWarehouse = () => {
   const location = useLocation();
   const navigate = useNavigate();
   const [warehouses, setWarehouses] = useState([]);
+  const [loading, setLoading] = useState(true);
 
   const onHandleDelete = async (id) => {
     try {
@@ -28,8 +30,10 @@ const ManageWarehouse = () => {
           `http://localhost:8000/api/warehouses${location.search}`,
         );
         setWarehouses(response.data.data);
+        setLoading(false);
       } catch (error) {
         console.error('Error fetching data:', error);
+        setLoading(false);
       }
     };
 
@@ -51,10 +55,14 @@ const ManageWarehouse = () => {
           </button>
         </div>
         <div className="mt-4 mx-2 p-4">
-          <ListWarehouse
-            warehouses={warehouses}
-            onClickDelete={onHandleDelete}
-          />
+          {loading ? (
+            <Loading />
+          ) : (
+            <ListWarehouse
+              warehouses={warehouses}
+              onClickDelete={onHandleDelete}
+            />
+          )}
         </div>
       </AdminLayout>
     </div>

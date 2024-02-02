@@ -12,13 +12,13 @@ const DashboardAddress = (props) => {
       <DashboardTitle title={'Alamat'} subTitle={'User/Alamat'} />
       <div className="flex justify-center gap-4">
         <DashboardSidebar username={'Suhartono'} profPict={''} />
-        <div className="shadow-lg rounded-md md:w-[500px] p-5">
+        <div className="shadow-lg rounded-md md:w-[560px] lg:w-[800px] p-5">
           <p className="text-lg font-semibold mb-4">Alamat yang terdaftar :</p>
           <div className="flex flex-col gap-4">
-            <div className='bg-slate-100 rounded-md w-[full] h-[300px] flex justify-center items-center mb-4'>
+            {/* <div className='bg-slate-100 rounded-md w-[full] h-[300px] flex justify-center items-center mb-4'>
                 <p className='text-slate-500'>Belum ada alamat terdaftar</p>
-            </div>
-            {/* <div className="sm:w-full shadow p-4 mb-2 rounded-md">
+            </div> */}
+            <div className="sm:w-full shadow p-4 mb-2 rounded-md">
               <div className=" flex justify-between">
                 <p className="font-semibold mb-2">Jl Surabaya No 110</p>
                 <p className="text-sm text-slate-600">Alamat Utama</p>
@@ -51,8 +51,7 @@ const DashboardAddress = (props) => {
                   <CiTrash className="" />
                 </button>
               </div>
-            
-            </div> */}
+            </div>
             <button className='ml-auto bg-[#F06105] text-white font-semibold px-2 rounded-md py-2 hover:bg-orange-400' disabled={false}>Tambah Alamat</button>
           </div>
         </div>

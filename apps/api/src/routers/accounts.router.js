@@ -4,7 +4,6 @@ import {
   ConfirmationEmail,
 } from '../controllers/register.controller';
 import { Login, keepLogin } from '../controllers/login.controller';
-import { KeepLogin } from '../controllers/keepLogin.controller';
 import { ForgotPassword } from '../controllers/forgotPassword.controller';
 import { ResetPassword } from '../controllers/resetPassword.controller';
 import { CreateAccount, GetAccounts } from '../controllers/accounts.controller';

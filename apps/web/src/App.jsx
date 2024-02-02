@@ -115,6 +115,7 @@ function App() {
         <Route path="user/dashboard" element={<DashboardLanding/>}/>
         <Route path="user/dashboard/address" element={<DashboardAddress/>}/>
         <Route path="user/dashboard/order" element={<DashboardOrder/>}/>
+        <Route path="user/dashboard/order-detail?" element={<DashboardOrder/>}/>
         <Route path="" />
       </Routes>
     </BrowserRouter>

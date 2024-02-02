@@ -8,6 +8,7 @@ import { useEffect, useState } from 'react';
 const CheckoutSuccess = () => {
   const navigate = useNavigate();
   const location = useLocation()
+  const [orderData,setOrderData]=useState("") 
   const [firstloading, setFirstLoading] = useState(false);
   const openLoading = (time) => {
     setFirstLoading(true);
@@ -19,10 +20,12 @@ const CheckoutSuccess = () => {
     try {
       const token = localStorage.getItem("token")
       console.log("lokasi",location);
-      // const orderData = await axios.get(`http://localhost:8000/api/checkout`,
-      // {
-      //   headers: { Authorization: `Bearer ${token}` },
-      // },)
+      const data = await axios.get(`http://localhost:8000/api/checkout/success${location.search}`,
+      {
+        headers: { Authorization: `Bearer ${token}` },
+      },)
+      // console.log("1",data);
+      setOrderData(data.data)
     } catch (error) {
      console.log(error); 
     }
@@ -35,30 +38,30 @@ const CheckoutSuccess = () => {
     <>
       {firstloading ? <Loading /> : ''}
       <TemporaryNavbar />
-      <div className="flex flex-col items-center px-2 mt-4">
-        <p className="text-4xl text-center mb-10 md:mb-20">Checkout Berhasil</p>
+      <div className="flex flex-col items-center px-2 mt-10">
+        <p className="text-4xl text-center mb-10 md:mb-10">Checkout Berhasil</p>
         <div className="flex flex-col justify-center pb-4 shadow-sm border-[1px] md:w-[740px] lg:w-[900px] rounded-md ">
           <div className="text-center bg-[#8FD14F] mb-8 font-bold">
             Success Order
           </div>
           <div className="flex flex-col gap-y-2 text-center px-2 ">
             <p>
-              Nomor invoice anda <span className="font-bold">SYW90280KK</span>
+              Nomor invoice anda <span className="font-bold">{orderData.invoice}</span>
             </p>
             <p>
               Total belanja anda{' '}
-              <span className="text-[#F06105] font-bold">Rp 3.000.000</span>
+              <span className="text-[#F06105] font-bold">Rp {orderData.total_price?orderData.total_price.toLocaleString("id"):""}</span>
             </p>
             <button className=" mx-auto bg-slate-300 w-fit rounded-md p-1 px-2 font-semibold border-[1px] border-slate-400">
               Cetak Invoice
             </button>
             <p>
               Kami juga telah mengirim detail pesanan anda ke{' '}
-              <span className="font-bold italic px-1">rama@mail.com</span>
+              <span className="font-bold italic px-1">{orderData["account.email"]}</span>
             </p>
             <p className="mb-14">
-              Silahkan transfer dengan total Rp{' '}
-              <span className="text-[#F06105] font-semibold ">3.000.000</span>{' '}
+              Silahkan transfer dengan total {' '}
+              <span className="text-[#F06105] font-semibold ">Rp {orderData.total_price?orderData.total_price.toLocaleString("id"):""}</span>{' '}
               melalui layanan pembayaran yang kami sediakan
             </p>
             <table className=" mb-10">
@@ -79,7 +82,8 @@ const CheckoutSuccess = () => {
             </table>
             <p>
               Setelah melakukan pembayaran silahkan konfirmasi pembayaran anda{' '}
-              <span className="mx-auto bg-slate-300 w-fit rounded-md px-2 border-[1px] border-slate-400 cursor-pointer ">
+              <span className="mx-auto bg-slate-300 w-fit rounded-md px-2 border-[1px] border-slate-400 cursor-pointer "
+              onClick={()=>{navigate(`user/dashboard/order-detail${location.search}`)}}>
                 disini
               </span>
             </p>

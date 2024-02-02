@@ -1,3 +1,4 @@
+import { Op } from "sequelize";
 import accounts from "../models/accounts";
 import addresses from "../models/addresses"
 import carts from "../models/carts";
@@ -26,7 +27,6 @@ export const getUserAddress = async (req, res, next) => {
             ],
             raw: true
         })
-        // console.log("alaa cuy",address);
         return res.status(200).send({ success: "Success get address", address })
     } catch (error) {
         return res.status(500).send({ success: "FAILED get address" })
@@ -52,13 +52,13 @@ export const changeUserAddress = async (req, res, next) => {
 }
 export const createOrder = async (req, res, next) => {
     try {
-        console.log("masuk nih", req.body);
+        // console.log("masuk nih", req.body);
         const orderDetails = []
         const orderItemsId = req.body.cartId.split(",")
-        console.log("orderItems",orderItemsId);
+        // console.log("orderItems",orderItemsId);
         const countOrder = await orders.findAndCountAll({
             where:{
-                account_id:99
+                account_id:req.userData.id
             },
             attributes:["id"],
             raw:true
@@ -69,8 +69,8 @@ export const createOrder = async (req, res, next) => {
             },
             raw:true
         })
-        console.log("ini data cartnya",orderItems);
-        console.log("ini data cartnya",countOrder);
+        // console.log("ini data cartnya",orderItems);
+        // console.log("ini data cartnya",countOrder);
         const createOrder = await orders.create({
             invoice: `${req.body.invoice}${countOrder.count+1}`,
             account_id: req.userData.id,
@@ -96,11 +96,34 @@ export const createOrder = async (req, res, next) => {
                 total_weight:val.total_weight
             })
         })
-        console.log("ini yang mau di bulk create",orderDetails);
+        // console.log("ini yang mau di bulk create",orderDetails);
       const createOrderDetail = await order_details.bulkCreate(orderDetails)
     return res.status(200).send({message:"success create order",id:createOrder.id,invoice:createOrder.invoice})
     } catch (error) {
         console.log(error);
         return res.status(500).send(error)
     }
+}
+export const getOrderData = async (req, res, next) => {
+try {
+    const result = await orders.findOne({
+        where:{
+            [Op.and]:[
+                {id:parseInt(req.query.id)},
+                {invoice:req.query.inv}
+            ]
+        },
+        include: [
+            {
+                model: accounts,
+                required: true,
+                attributes: ["email"]
+            }],
+        raw:true
+    })
+    return res.status(200).send(result)
+} catch (error) {
+    console.log(error);
+    return res.status(500).send(error)
+}
 }

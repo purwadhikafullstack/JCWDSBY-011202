@@ -1,7 +1,7 @@
 import { Router } from 'express';
 import { validateToken,ValidateUser } from '../middleware/validation';
 import { getCartToCheckout, getShippingCost, getUserData } from '../controllers/checkout';
-import { changeUserAddress, createOrder, getUserAddress } from '../controllers/checkout2';
+import { changeUserAddress, createOrder, getOrderData, getUserAddress } from '../controllers/checkout2';
 const checkoutRouter = Router();
 
 // GET
@@ -9,6 +9,7 @@ checkoutRouter.get('/get-cart/:id',validateToken,ValidateUser, getCartToCheckout
 checkoutRouter.get('/userData',validateToken,ValidateUser, getUserData);
 checkoutRouter.get('/userAddress',validateToken,ValidateUser,getUserAddress);
 checkoutRouter.get("/get-shipping-cost/?",validateToken,ValidateUser,getShippingCost)
+checkoutRouter.get("/success/?",validateToken,ValidateUser,getOrderData)
 
 // POST
 checkoutRouter.post("/",validateToken,ValidateUser,createOrder)

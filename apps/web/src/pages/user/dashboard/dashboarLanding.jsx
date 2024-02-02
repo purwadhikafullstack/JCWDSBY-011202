@@ -44,7 +44,6 @@ const DashboardLanding = () => {
       </div>
       <TemporaryFooter />
     </div>
-  
   </>
   );
 };

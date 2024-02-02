@@ -42,6 +42,7 @@ import DashboardAddress from './pages/user/dashboard/dashboardAddress';
 import DashboardOrder from './pages/user/dashboard/dashboardOrder';
 import CheckoutSuccess from './pages/user/checkoutPage/CheckoutSuccess';
 function App() {
+
   return (
     <BrowserRouter>
       <Routes>
@@ -116,6 +117,7 @@ function App() {
         <Route path="user/dashboard/address" element={<DashboardAddress/>}/>
         <Route path="user/dashboard/order" element={<DashboardOrder/>}/>
         <Route path="user/dashboard/order-detail?" element={<DashboardOrder/>}/>
+
         <Route path="" />
       </Routes>
     </BrowserRouter>

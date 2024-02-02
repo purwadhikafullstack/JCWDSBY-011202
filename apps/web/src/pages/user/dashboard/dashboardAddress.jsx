@@ -51,7 +51,6 @@ const DashboardAddress = (props) => {
                   <CiTrash className="" />
                 </button>
               </div>
-            
             </div>
             <button className='ml-auto bg-[#F06105] text-white font-semibold px-2 rounded-md py-2 hover:bg-orange-400' disabled={false}>Tambah Alamat</button>
           </div>

@@ -40,32 +40,8 @@ import AdminLogin from './pages/admin/admin/AdminLogin';
 import DashboardLanding from './pages/user/dashboard/dashboarLanding';
 import DashboardAddress from './pages/user/dashboard/dashboardAddress';
 import DashboardOrder from './pages/user/dashboard/dashboardOrder';
+import CheckoutSuccess from './pages/user/checkoutPage/CheckoutSuccess';
 function App() {
-  useEffect(() => {
-    const checkData = async () => {
-      try {
-        const token = localStorage.getItem('token');
-        const response = await axios.post(
-          `http://localhost:8000/api/accounts/keep-login`,
-          {},
-          {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-          },
-        );
-        if (response.data.success === true) {
-          localStorage.setItem('token', response.data.token);
-        } else {
-          localStorage.removeItem('token');
-        }
-      } catch (error) {
-        console.log(error);
-        localStorage.removeItem('token');
-      }
-    };
-    checkData();
-  }, []);
 
   return (
     <BrowserRouter>
@@ -136,9 +112,12 @@ function App() {
         {/* ROUTES FEATURE : PRODUCT-MANAGEMENT MAS ADHON*/}
         <Route path="/cart" element={<CartPage />} />
         <Route path="/checkout" element={<CheckoutPage />} />
+        <Route path="/checkout/success?" element={<CheckoutSuccess />} />
         <Route path="user/dashboard" element={<DashboardLanding/>}/>
         <Route path="user/dashboard/address" element={<DashboardAddress/>}/>
         <Route path="user/dashboard/order" element={<DashboardOrder/>}/>
+        <Route path="user/dashboard/order-detail?" element={<DashboardOrder/>}/>
+
         <Route path="" />
       </Routes>
     </BrowserRouter>

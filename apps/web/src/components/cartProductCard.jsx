@@ -14,9 +14,10 @@ const CartProductCard = (props) => {
           {/* untuk gambar dan informasi product */}
           <div className="flex pb-2 gap-2 ">
             <input
+            // style={{focus:"ring-0"}}
               type="checkbox"
               name="intoOrder"
-              className={props.cardNames}
+              className="rounded-sm ring-transparent"
               value={props.checkBoxValue}
               onChange={props.onChangeChecked}
             />
@@ -46,25 +47,25 @@ const CartProductCard = (props) => {
           </div>
           {/* untuk qty produk dan stock*/}
           <div>
-            <div className="flex pb-1 h-fit border-b-[1px] border-[#F06105]">
+            <div className="flex mb-1 h-fit  justify-center align-middle items-center border-b-[1px] border-[#F06105]">
               <button
                 className="h-fit text-center flex justify-center px-2 rounded-sm w-[10px] bg-white font-bold hover:bg-slate-200"
                 onClick={props.onClickMinus}
               >
                 -
               </button>
-              <div className="h-fit rounded-sm bg-white font-bold">
+              <div className="rounded-sm bg-white font-bold">
                 <input
                   name={props.inputNames}
                   type="text"
                   inputMode="numeric"
-                  className="text-center  w-[40px] bg-white outline-none"
+                  className="text-center w-[40px] bg-white outline-none border-none"
                   value={props.qty}
                   onChange={props.onHandleChangeQty}
                 />
               </div>
               <button
-                className="h-fit  w-[10px] text-center flex border-b-[1px] px-2 rounded-sm justify-center font-bold hover:bg-slate-200"
+                className="w-[10px] text-center flex  px-2 rounded-sm justify-center font-bold hover:bg-slate-200"
                 onClick={props.onClickPlus}
               >
                 +

@@ -37,7 +37,7 @@ export const Login = async (req, res, next) => {
       },
       process.env.SCRT_TKN,
       {
-        expiresIn: '1h',
+        expiresIn: '8h',
       },
     );
 

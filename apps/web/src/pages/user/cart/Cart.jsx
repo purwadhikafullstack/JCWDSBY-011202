@@ -90,8 +90,7 @@ const CartPage = () => {
         }
       }
       if (checkedResult.length > 0) {
-        checkedArray = checkedResult.join(' ');
-        // console.log("sa",checkedArray);
+       checkedArray = checkedResult.join(' ');
       } else {
         localStorage.removeItem('cartId');
         return setCartSummary(cartSummary.status = false)
@@ -100,6 +99,7 @@ const CartPage = () => {
     } catch (error) {
       console.log(error);
     }
+
   };
   useEffect(() => {
     // USEEFFECT ketika pertama load
@@ -107,7 +107,6 @@ const CartPage = () => {
     getDataCart();
     openLoading(1500);
     // keepChecked();
-
     if (checkedArray) {
       getSummary();
     }
@@ -214,12 +213,9 @@ const CartPage = () => {
       // console.log("!23",cartSummary.da);
       navigate(`/checkout`);
     } else {
-      // console.log('ini', cartSummary);
       alert('Oops data produk belum di checklist');
     }
   };
-  console.log('cs', cartSummary);
-  console.log('cs2', cartProduct);
   return (
     <>
       {firstloading ? <Loading /> : ''}
@@ -281,7 +277,7 @@ const CartPage = () => {
 
         <div className="shadow-sm md:w-[320px] md:border-[1px] rounded-md pb-2 mb-4">
           <CartPayment
-            total_item={cartSummary.success ? cartSummary.totalItem : 0}
+            total_item={cartSummary.success > 0 ? cartSummary.totalItem : 0}
             total_price={
               cartSummary.success
                 ? cartSummary.allPrice.toLocaleString('id')

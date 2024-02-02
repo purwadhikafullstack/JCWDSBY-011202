@@ -1,6 +1,7 @@
 import warehouses from '../models/warehouses';
 import accounts from '../models/accounts';
 const bcrypt = require('bcrypt');
+import journal from '../models/journal';
 
 export const GetAccounts = async (req, res, next) => {
   try {
@@ -33,16 +34,23 @@ export const GetAccounts = async (req, res, next) => {
     const result = await accounts.findAll({
       where: filter,
       attributes: { exclude: ['createdAt', 'updatedAt', 'is_deleted'] },
+      include: [
+        {
+          model: warehouses,
+          as: 'warehouse',
+          attributes: ['name'],
+        },
+      ],
     });
 
     const mappedResult = result.map((account) => {
-      const { is_verified, ...accountData } = account.dataValues;
+      const { is_verified, warehouse, ...accountData } = account.dataValues;
       return {
         ...accountData,
+        warehouse_name: warehouse ? warehouse.name : null,
         verification_status: is_verified == 1 ? 'verified' : 'unverified',
       };
     });
-
     return res.status(200).send(mappedResult);
   } catch (error) {
     console.error(error);
@@ -66,20 +74,20 @@ export const CreateAccount = async (req, res, next) => {
         const salt = await bcrypt.genSalt(10);
         const hashPassword = await bcrypt.hash(req.body.password, salt);
 
-        const restoredAccount = await accounts.update(
-          {
-            password: hashPassword,
-            role: req.body.role,
-            fullname: req.body.fullname,
-            warehouse_id: req.body.warehouse_id || null,
-            is_verified: true,
-            is_deleted: false,
-          },
-          {
-            where: { id: existingAccount.id },
-            returning: true,
-          },
-        );
+        const updateData = {
+          password: hashPassword,
+          role: req.body.role,
+          fullname: req.body.fullname,
+          warehouse_id:
+            req.body.role === 'admin' ? req.body.warehouse_id : null,
+          is_verified: true,
+          is_deleted: false,
+        };
+
+        const restoredAccount = await accounts.update(updateData, {
+          where: { id: existingAccount.id },
+          returning: true,
+        });
 
         const result = restoredAccount[1][0];
 
@@ -103,6 +111,13 @@ export const CreateAccount = async (req, res, next) => {
       });
     }
 
+    if (req.body.role === 'admin' && req.body.warehouse_id === null) {
+      return res.status(400).json({
+        success: false,
+        message: 'Warehouse ID is required for admin role',
+      });
+    }
+
     let generatedUsername = req.body.fullname.toLowerCase().replace(/\s/g, '_');
     let counter = 1;
 
@@ -122,11 +137,32 @@ export const CreateAccount = async (req, res, next) => {
       role: req.body.role,
       fullname: req.body.fullname,
       username: generatedUsername,
-      warehouse_id: req.body.warehouse_id || null,
+      warehouse_id: req.body.role === 'admin' ? req.body.warehouse_id : null,
       is_verified: true,
     });
 
-    return res.status(201).json({
+    const journalDate = new Date().toLocaleDateString('en-US', {
+      day: 'numeric',
+      month: 'long',
+      year: 'numeric',
+      hour: 'numeric',
+      minute: 'numeric',
+      second: 'numeric',
+      hour12: false,
+    });
+
+    const journalInformation = `${req.userData.fullname} created ${req.body.fullname} as ${req.body.role}`;
+    const journalFrom = `Accounts`;
+
+    if (result) {
+      await journal.create({
+        date: journalDate,
+        information: journalInformation,
+        from: journalFrom,
+      });
+    }
+
+    return res.status(201).send({
       success: true,
       message: 'Account created',
       result,

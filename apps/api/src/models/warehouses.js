@@ -17,6 +17,9 @@ export default class warehouses extends Model {
     warehouses.hasMany(models.warehouse_storage, {
       foreignKey: 'warehouse_id',
     });
+    warehouses.hasMany(models.warehouse_mutation, {
+      foreignKey: 'warehouse_id',
+    });
   }
 }
 
@@ -30,7 +33,6 @@ export const init = (sequelize) => {
       lat: DataTypes.STRING,
       lon: DataTypes.STRING,
       is_deleted: DataTypes.BOOLEAN,
-
     },
     {
       sequelize,

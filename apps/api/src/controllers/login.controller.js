@@ -34,6 +34,8 @@ export const Login = async (req, res, next) => {
       {
         id: findAccount.id,
         role: findAccount.role,
+        fullname: findAccount.fullname,
+        warehouse_id: findAccount.warehouse_id,
       },
       process.env.SCRT_TKN,
       {
@@ -74,6 +76,8 @@ export const keepLogin = async (req, res) => {
       {
         id: req.userData.id,
         role: req.userData.role,
+        fullname: req.userData.fullname,
+        warehouse_id: req.userData.warehouse_id,
       },
       process.env.SCRT_TKN,
       {

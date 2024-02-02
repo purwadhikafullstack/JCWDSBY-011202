@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 
 const WarehouseTable = ({ temporaryWareHouse }) => {
   const [warehouse, setWarehouse] = useState([]);
+
   const navigate = useNavigate();
   useEffect(() => {
     if (!warehouse.length) {

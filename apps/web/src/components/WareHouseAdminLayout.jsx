@@ -1,4 +1,4 @@
-import icon from '../assets/bussinesman.png';
+import { useNavigate } from 'react-router-dom';
 import { Link } from 'react-router-dom';
 import React, { useState } from 'react';
 
@@ -12,11 +12,16 @@ const linksData = [
 
 const WareHouseAdminLayout = (props) => {
   const [isSidebarOpen, setSidebarOpen] = useState(true);
+  const navigate = useNavigate();
 
   const toggleSidebar = () => {
     setSidebarOpen(!isSidebarOpen);
   };
 
+  const handleLogout = () => {
+    localStorage.removeItem('token');
+    navigate('/admin/login');
+  };
   return (
     <div className="flex h-screen bg-gray-200">
       {/* Sidebar */}
@@ -25,11 +30,12 @@ const WareHouseAdminLayout = (props) => {
           isSidebarOpen ? 'block' : 'hidden'
         } transition-all duration-300 min-h-screen md:min-h-0`}
       >
-        <div className="flex items-center mb-4">
-          <Link to="/warehouse-admin">
-            <img src={icon} className="w-[25px]" alt="" />
-          </Link>
-          <h1 className="ml-2 font-bold text-lg">Warehouse Admin</h1>
+        <div
+          className="flex items-center mb-4 cursor-pointer"
+          onClick={() => navigate('/warehouse-admin')}
+        >
+          <h1 className="font-bold text-xl text-orange-500">Ace</h1>
+          <h1 className="font-bold text-xl">Warehouse</h1>
         </div>
         <div className="text-[12px]">
           {linksData.map((link, index) => (
@@ -42,6 +48,12 @@ const WareHouseAdminLayout = (props) => {
             </Link>
           ))}
         </div>
+        <button
+          onClick={handleLogout}
+          className="block w-full text-start mt-4 py-2 px-4 text-black-500 transition-all duration-300 hover:bg-orange-500 hover:text-white hover:rounded-md"
+        >
+          Logout
+        </button>
       </div>
 
       {/* Burger Menu Button for Mobile */}

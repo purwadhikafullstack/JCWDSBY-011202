@@ -50,6 +50,7 @@ function ManageAccount() {
           'http://localhost:8000/api/accounts?role=admin&role=superadmin',
         );
         setAccount(response.data);
+        showToast('success', 'delete account successfully');
       }
     } catch (error) {
       console.error('Error deleting account:', error);

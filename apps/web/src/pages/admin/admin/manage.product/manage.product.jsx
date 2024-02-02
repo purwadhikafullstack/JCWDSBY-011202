@@ -19,10 +19,13 @@ const ManageProduct = () => {
     navigate('add-product');
   };
 
-  const handleDelete = (deletedProductId) => {
-    setProducts((prevProducts) =>
-      prevProducts.filter((product) => product.id !== deletedProductId),
-    );
+  const handleDelete = async (deletedProductId) => {
+    try {
+      const response = await axios.get('http://localhost:8000/api/products');
+      setProducts(response.data);
+    } catch (error) {
+      console.error('Error fetching data:', error);
+    }
   };
 
   const handlePageChange = (newPage) => {
@@ -50,20 +53,17 @@ const ManageProduct = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        setLoading(true);
         const response = await axios.get(
           `http://localhost:8000/api/products?page=${page}`,
         );
         setCurrentPage(response.data);
-        setLoading(false);
       } catch (error) {
         console.error('Error fetching data:', error);
-        setLoading(false);
       }
     };
 
     fetchData();
-  }, [page]);
+  }, [page, products]);
 
   return (
     <div>

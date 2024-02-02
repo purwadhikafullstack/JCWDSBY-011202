@@ -55,7 +55,6 @@ const IModalOpt = (props) => {
                 name="inputRecepient"
                 placeholder="Masukkan Nama Penerima"
                 className="outline-blue-500 py-1 px-2 shadow-sm mb-3 w-full rounded-md border-none"
-                //   value={props.valueRecepient}
                 onChange={(e) => e.target.value}
               />
               <p className="mb-3 text-lg font-semibold">{props.deskripsi2}</p>
@@ -167,7 +166,9 @@ const IModalCourier = (props) => {
                   key={idx}
                     className={` cursor-pointer bg-slate-100 sm:w-full shadow p-4 mb-2 rounded-md`}
                     onClick={() => {
+                      console.log("mecnetak");
                       sessionStorage.setItem("idOngkir",idx)
+                      sessionStorage.setItem("service",val.service)
                       sessionStorage.setItem("hargaOngkir",val.cost[0].value)
 
                       setIdCourier(idx);
@@ -195,6 +196,7 @@ const IModalCourier = (props) => {
                       sessionStorage.setItem("idOngkir",idx)
                       sessionStorage.setItem("hargaOngkir",val.cost[0].value)
                       setIdCourier(idx);
+                      sessionStorage.setItem("service",val.service)
                     }}
                   >
                     <p className="font-bold">

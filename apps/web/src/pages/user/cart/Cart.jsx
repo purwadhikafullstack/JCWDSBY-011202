@@ -77,14 +77,16 @@ const CartPage = () => {
   const getChecked = async () => {
     try {
       let checkedItem = document.getElementsByName('intoOrder');
+      console.log("ada berapa",checkedItem);
       for (let i = 0; i < checkedItem.length; i++) {
         if (checkedItem[i].checked) {
+          console.log("ini rupanya",checkedItem[i].checked);
           checkedResult.push(checkedItem[i].value);
-          console.log('kiat ini', checkedResult);
           localStorage.setItem('cartId', checkedResult);
         } else {
-          // console.log("liat berapa", checkedResult);
-          checkedResult = [];
+          checkedItem[i].checked=false
+          console.log("loh kok amsuk");
+          // checkedResult = [];
         }
       }
       if (checkedResult.length > 0) {
@@ -92,7 +94,8 @@ const CartPage = () => {
         // console.log("sa",checkedArray);
       } else {
         localStorage.removeItem('cartId');
-        setCartSummary((cartSummary.status = false));
+        return setCartSummary(cartSummary.status = false)
+        // setCartSummary(cartSummary.sta);
       }
     } catch (error) {
       console.log(error);
@@ -112,6 +115,8 @@ const CartPage = () => {
   useEffect(() => {
     // USEEFFECT ketika checkbox di klik
     getChecked();
+    // console.log("11",cartSummary);
+    // console.log("12",cartProduct);
     if (checkedArray) {
       getSummary();
     }
@@ -199,7 +204,8 @@ const CartPage = () => {
     }
   };
   const onHandleCheckOut = () => {
-    if (cartSummary.data.length > 0) {
+    console.log("data",cartSummary);
+    if (cartSummary.success) {
       console.log('itu', cartSummary);
       console.log('itu', cartSummary.data.length);
       document.body.style.overflow = 'auto';
@@ -208,12 +214,12 @@ const CartPage = () => {
       // console.log("!23",cartSummary.da);
       navigate(`/checkout`);
     } else {
-      console.log('ini', cartSummary);
-      console.log('ini', cartSummary.data.length);
+      // console.log('ini', cartSummary);
       alert('Oops data produk belum di checklist');
     }
   };
   console.log('cs', cartSummary);
+  console.log('cs2', cartProduct);
   return (
     <>
       {firstloading ? <Loading /> : ''}
@@ -275,7 +281,7 @@ const CartPage = () => {
 
         <div className="shadow-sm md:w-[320px] md:border-[1px] rounded-md pb-2 mb-4">
           <CartPayment
-            total_item={cartSummary.success > 0 ? cartSummary.totalItem : 0}
+            total_item={cartSummary.success ? cartSummary.totalItem : 0}
             total_price={
               cartSummary.success
                 ? cartSummary.allPrice.toLocaleString('id')

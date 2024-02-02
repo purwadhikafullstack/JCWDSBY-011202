@@ -72,7 +72,6 @@ export const getUserData = async (req, res, next) => {
             // }],
             raw: true
         })
-        console.log("apa hasilnya", result);
         const result2 = await addresses.findOne({
             where: {
                 id: result.address_id
@@ -125,7 +124,6 @@ export const getShippingCost = async (req, res, next) => {
             raw: true,
             attributes: { exclude: ["createdAt", "updatedAt"] }
         })
-        console.log("masih jalan1", gudangLoc);
         let shortest = 0
         const origin = []
         gudangLoc.map((val, id) => {
@@ -141,18 +139,12 @@ export const getShippingCost = async (req, res, next) => {
                 }
             }
         })
-        console.log("masih jalan2", origin);
         const dbCity = await axios.get("https://api.rajaongkir.com/starter/city", {
             headers: { key: "4497cf82b96fe9ca149f8df6974459ee" }
         })
-        console.log("masih jalan3a");
         const allCity = dbCity.data.rajaongkir.results
-        console.log("masih jalan3b");
         const originId = allCity.findIndex(val => val.city_name == origin[0]["city.name"])
-        console.log("masih jalan3c");
         const destinationId = allCity.findIndex(val => val.city_name == req.query.kota)
-        console.log("masih jalan4",originId);
-        console.log("masih jalan5",destinationId);
         const formData = new FormData();
         formData.append("origin", allCity[originId].city_id)
         formData.append("destination", allCity[destinationId].city_id)
@@ -164,7 +156,9 @@ export const getShippingCost = async (req, res, next) => {
             }
         })
         // console.log("prabowo", cost.data.rajaongkir.results[0].costs);
-        return res.status(200).send(cost.data.rajaongkir.results[0].costs)
+        return res.status(200).send({
+            warehouse_id:origin[0].id,
+            shipping:cost.data.rajaongkir.results[0].costs})
     } catch (error) {
         console.log("hai error");
         console.log(error.message);

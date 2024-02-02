@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { IModal } from './modalRama';
 
 const CheckoutPayment = (props) => {
   const [cancelModal, setCancelModal] = useState(false);
@@ -6,7 +7,16 @@ const CheckoutPayment = (props) => {
     setCancelModal(false);
   };
 
-  return (
+  return (<>
+    {cancelModal?<IModal
+    deskripsi={"Apakah anda yakin keluar dari halaman pembayaran?"}
+    confirm={"Ya"}
+    cancel={"Tidak"}
+    onHandleModalClick={props.onHandleModalClickBatal}
+    onHandleModalCancel={()=>{
+      setCancelModal(false)
+    }}
+    />:""}
     <div className="flex flex-col p-3">
       {/* untuk list pengiriman dan penagihan */}
       <p className="text-lg mb-2 font-semibold">Pengiriman</p>
@@ -23,7 +33,6 @@ const CheckoutPayment = (props) => {
         <div className="p-3 flex flex-col gap-y-1">
           <p className="font-bold">{props.recepient}</p>
           <p>{props.address}</p>
-          {/* <p>6088{props.postcode}</p> */}
           <p>
             {props.province}, {props.city}
           </p>
@@ -62,8 +71,9 @@ const CheckoutPayment = (props) => {
 
       {/* Untuk Button lanjutkan dan batal */}
       <div className="flex flex-col gap-2">
-        <button className="w-full bg-[#F06105] text-white rounded-md p-2 font-semibold hover:bg-orange-400">
-          Lanjutkan Pembayaran
+        <button className="w-full bg-[#F06105] text-white rounded-md p-2 font-semibold hover:bg-orange-400"
+        onClick={props.onHandleLanjutkanCheckout}>
+          Lanjutkan Checkout
         </button>
         <button
           className="w-full bg-slate-300 text-slate-800 rounded-md p-2  font-semibold hover:bg-slate-200"
@@ -76,6 +86,7 @@ const CheckoutPayment = (props) => {
       </div>
       {/* {cancelModal?<CancelCheckoutModal onHandleCancel={onHandleCancel}/>:<></>} */}
     </div>
+  </>
   );
 };
 

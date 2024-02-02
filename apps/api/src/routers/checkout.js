@@ -1,7 +1,7 @@
 import { Router } from 'express';
 import { validateToken,ValidateUser } from '../middleware/validation';
 import { getCartToCheckout, getShippingCost, getUserData } from '../controllers/checkout';
-import { changeUserAddress, getUserAddress } from '../controllers/checkout2';
+import { changeUserAddress, createOrder, getUserAddress } from '../controllers/checkout2';
 const checkoutRouter = Router();
 
 // GET
@@ -11,6 +11,8 @@ checkoutRouter.get('/userAddress',validateToken,ValidateUser,getUserAddress);
 checkoutRouter.get("/get-shipping-cost/?",validateToken,ValidateUser,getShippingCost)
 
 // POST
+checkoutRouter.post("/",validateToken,ValidateUser,createOrder)
+
 // DELETE
 
 // UPDATE

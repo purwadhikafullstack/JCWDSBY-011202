@@ -21,6 +21,9 @@ module.exports = {
         type: Sequelize.STRING,
         allowNull: false,
       },
+      warehouse_id: {
+        type: Sequelize.INTEGER,
+      },
       createdAt: {
         allowNull: false,
         type: Sequelize.DATE,

@@ -92,13 +92,27 @@ export const updateStatusProcess = async (req, res, next) => {
         },
       },
     );
-    const journalInformation = `${req.userData.fullname} processing a request for ${req.body.quantity} units of product ${isExists.name} from warehouse ${isExistSourceWarehouse.name} to ${isExistDestinationWarehouse.name}, now status is on delivery`;
+    const journalInformation = `${req.userData.fullname} processing a request for ${isExists.quantity} units of product ${isExists.name} from warehouse ${isExistSourceWarehouse.name} to ${isExistDestinationWarehouse.name}, now status is on delivery`;
     const journalFrom = 'Mutation Stock';
+    const sourceInformation = `Your warehouse, ${isExistSourceWarehouse.name} deliver a request for ${isExists.quantity} units of product  ${isExistProduct.name} of warehouse ${isExistDestinationWarehouse.name} request`;
+    const destinationInformation = `Your warehouse, ${isExistDestinationWarehouse.name} request for ${isExists.quantity} units of product ${isExistProduct.name} is delivered by admin of ${isExistSourceWarehouse}`;
     if (updateStatusReversedWarehouse && updateStatus) {
       await journal.create({
         date: journalDate,
         information: journalInformation,
         from: journalFrom,
+      });
+      await journal.create({
+        date: journalDate,
+        information: destinationInformation,
+        from: journalFrom,
+        warehouse_id: isExists.destination_warehouse_id,
+      });
+      await journal.create({
+        date: journalDate,
+        information: sourceInformation,
+        from: journalFrom,
+        warehouse_id: isExists.source_warehouse_id,
       });
     }
     return res.status(200).send({
@@ -197,13 +211,27 @@ export const updateStatusArrived = async (req, res, next) => {
       second: 'numeric',
       hour12: false,
     });
-    const journalInformation = `${req.userData.fullname} confirmed arrival of ${req.body.quantity} units of product ${isExistProduct.name} from warehouse ${isExistSourceWarehouse.name} to ${isExistDestinationWarehouse.name}`;
+    const journalInformation = `${req.userData.fullname} confirmed arrival of ${isExists.quantity} units of product ${isExistProduct.name} from warehouse ${isExistSourceWarehouse.name} to ${isExistDestinationWarehouse.name}`;
     const journalFrom = 'Mutation Stock';
+    const sourceInformation = `Request for ${isExists.quantity} units of product  ${isExistProduct.name} of warehouse ${isExistDestinationWarehouse.name} request is arrived`;
+    const destinationInformation = `Request for ${isExists.quantity} units of product ${isExistProduct.name} is arrived`;
     if (updateStatusReversedWarehouse && updateStatus) {
       await journal.create({
         date: journalDate,
         information: journalInformation,
         from: journalFrom,
+      });
+      await journal.create({
+        date: journalDate,
+        information: destinationInformation,
+        from: journalFrom,
+        warehouse_id: isExists.destination_warehouse_id,
+      });
+      await journal.create({
+        date: journalDate,
+        information: sourceInformation,
+        from: journalFrom,
+        warehouse_id: isExists.source_warehouse_id,
       });
     }
     return res.status(200).send({

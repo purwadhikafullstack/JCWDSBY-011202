@@ -184,6 +184,18 @@ export const requestMutation = async (req, res, next) => {
           information: journalInformation,
           from: journalFrom,
         });
+        await journal.create({
+          date: journalDate,
+          information: `The ${req.body.quantity} units of product ${isExistProduct.name} from warehouse ${isExistSourceWarehouse.name} to ${isExistDestinationWarehouse.name}`,
+          from: journalFrom,
+          warehouse_id: isExistSourceWarehouse.id,
+        });
+        await journal.create({
+          date: journalDate,
+          information: `Your request for ${req.body.quantity} units of product ${isExistProduct.name} from warehouse ${isExistSourceWarehouse.name} to ${isExistDestinationWarehouse.name} created`,
+          from: journalFrom,
+          warehouse_id: isExistDestinationWarehouse.id,
+        });
       }
     }
 

@@ -2,7 +2,26 @@ import { FaRegTrashAlt, FaBoxOpen, FaCheck } from 'react-icons/fa';
 import { CiDeliveryTruck } from 'react-icons/ci';
 import { GiConfirmed } from 'react-icons/gi';
 
-const MutationJournalTable = ({ mutation }) => {
+const MutationJournalTable = ({
+  mutation,
+  onClickConfirmMutation,
+  onClickArrived,
+  onClickDeliver,
+  onClickDone,
+  onClickDelete,
+}) => {
+  const getPriority = (val) => {
+    const priorities = {
+      'waiting for confirmation': 1,
+      processing: 2,
+      'on delivery': 3,
+      arrived: 4,
+      done: 5,
+      canceled: 6,
+    };
+    return priorities[val.status] || 0;
+  };
+  const sortedData = mutation.sort((a, b) => getPriority(a) - getPriority(b));
   return (
     <div>
       <div className="overflow-x-auto mx-auto">
@@ -36,7 +55,7 @@ const MutationJournalTable = ({ mutation }) => {
             </tr>
           </thead>
           <tbody className="bg-white divide-y divide-gray-200">
-            {mutation.map((val) => (
+            {sortedData.map((val) => (
               <tr key={val.id}>
                 <td className="px-4 py-4 text-sm text-gray-500 whitespace-nowrap">
                   {val.productName}
@@ -63,6 +82,7 @@ const MutationJournalTable = ({ mutation }) => {
                   {val.status === 'waiting for confirmation' && (
                     <>
                       <button
+                        onClick={() => onClickConfirmMutation(val.id)}
                         className={`${
                           val.warehouse_id !== val.source_warehouse_id
                             ? 'bg-gray-400 text-gray-700 cursor-not-allowed'
@@ -86,6 +106,7 @@ const MutationJournalTable = ({ mutation }) => {
                   {val.status === 'processing' && (
                     <>
                       <button
+                        onClick={() => onClickDeliver(val.id)}
                         className={`${
                           val.warehouse_id !== val.source_warehouse_id
                             ? 'bg-gray-400 text-gray-700 cursor-not-allowed'
@@ -109,6 +130,7 @@ const MutationJournalTable = ({ mutation }) => {
                   {val.status === 'on delivery' && (
                     <>
                       <button
+                        onClick={() => onClickArrived(val.id)}
                         className={`${
                           val.warehouse_id !== val.destination_warehouse_id
                             ? 'bg-gray-400 text-gray-700 cursor-not-allowed'
@@ -134,6 +156,7 @@ const MutationJournalTable = ({ mutation }) => {
                   {val.status === 'arrived' && (
                     <>
                       <button
+                        onClick={() => onClickDone(val.id)}
                         className={`${
                           val.warehouse_id !== val.destination_warehouse_id
                             ? 'bg-gray-400 text-gray-700 cursor-not-allowed'
@@ -153,6 +176,15 @@ const MutationJournalTable = ({ mutation }) => {
                         onClick={() => handleCancel(val.id)}
                       >
                         Cancel
+                      </button>
+                    </>
+                  )}
+                  {['canceled', 'done'].includes(val.status) && (
+                    <>
+                      <button onClick={() => onClickDelete(val.id)}>
+                        <div className="flex items-center justify-center py-6">
+                          <FaRegTrashAlt className="hover:text-red-500" />
+                        </div>
                       </button>
                     </>
                   )}

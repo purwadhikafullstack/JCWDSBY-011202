@@ -17,6 +17,7 @@ export const init = (sequelize) => {
       date: DataTypes.STRING,
       information: DataTypes.STRING,
       from: DataTypes.STRING,
+      warehouse_id: DataTypes.INTEGER,
     },
     {
       sequelize,

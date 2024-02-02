@@ -9,6 +9,7 @@ import {
   updateStatusArrived,
 } from '../controllers/warehouse.mutation.status.controller';
 import { finishMutation } from '../controllers/finished.mutation';
+import { cancelMutation } from '../controllers/cancel.mutation';
 import {
   ValidatePassword,
   ValidateEmail,
@@ -52,6 +53,12 @@ warehouse_mutationRouter.patch(
   validateToken,
   ValidateAdmin,
   finishMutation,
+);
+warehouse_mutationRouter.patch(
+  '/cancel/:id',
+  validateToken,
+  ValidateAdmin,
+  cancelMutation,
 );
 //DELETE
 

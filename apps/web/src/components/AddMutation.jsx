@@ -37,6 +37,7 @@ const AddMutation = () => {
         const response = await axios.get(
           `http://localhost:8000/api/warehouse/storage?warehouse=${selectedWarehouseId}&product_id=${selectedProductId}`,
         );
+        console.log(response.data.data);
         const stock = response.data.data[0]?.stock || 0;
         setStockSelectedInventory(stock);
       } catch (error) {
@@ -58,7 +59,6 @@ const AddMutation = () => {
   const onCloseConfirmationModal = () => {
     setShowConfirmationModal(false);
   };
-
   const onHandleYes = async () => {
     const token = localStorage.getItem('token');
 

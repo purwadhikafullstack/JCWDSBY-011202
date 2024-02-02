@@ -33,6 +33,7 @@ import AdminLogin from './pages/admin/admin/AdminLogin';
 import DashboardLanding from './pages/user/dashboard/dashboarLanding';
 import DashboardAddress from './pages/user/dashboard/dashboardAddress';
 import DashboardOrder from './pages/user/dashboard/dashboardOrder';
+import CheckoutSuccess from './pages/user/checkoutPage/CheckoutSuccess';
 import EditWarehouse from './components/EditWarehouseModal';
 import { keepLogin } from './redux/slice/accountSlice';
 function App() {
@@ -51,6 +52,8 @@ function App() {
     };
     checkData();
   }, []);
+
+
 
   return (
     <BrowserRouter>
@@ -125,9 +128,11 @@ function App() {
         {/* ROUTES FEATURE : PRODUCT-MANAGEMENT MAS ADHON*/}
         <Route path="/cart" element={<CartPage />} />
         <Route path="/checkout" element={<CheckoutPage />} />
-        <Route path="user/dashboard" element={<DashboardLanding />} />
-        <Route path="user/dashboard/address" element={<DashboardAddress />} />
-        <Route path="user/dashboard/order" element={<DashboardOrder />} />
+        <Route path="/checkout/success?" element={<CheckoutSuccess />} />
+        <Route path="user/dashboard" element={<DashboardLanding/>}/>
+        <Route path="user/dashboard/address" element={<DashboardAddress/>}/>
+        <Route path="user/dashboard/order" element={<DashboardOrder/>}/>
+        <Route path="user/dashboard/order-detail?" element={<DashboardOrder/>}/>
         <Route path="" />
       </Routes>
     </BrowserRouter>

@@ -1,56 +1,33 @@
 import WareHouseAdminLayout from '../../../../components/WareHouseAdminLayout';
 import MutationJournalTable from '../../../../components/MutationJournalTable';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useSelector } from 'react-redux';
+import axios from 'axios';
+import { Loading } from '../../../../components/loadingComponent';
+
 const ManageMutation = () => {
   const navigate = useNavigate();
-  const [temporaryMutation, setTemporaryMutation] = useState([
-    {
-      product: 'Skona Sofa',
-      quantity: 1,
-      source_warehouse: 'Surabaya',
-      destination_warehouse: 'Kediri',
-      date_sent: '10 Jan 2024',
-      arrival_date: undefined,
-      status: 'Dikirim',
-    },
-    {
-      product: 'Hikari Dining Chair',
-      quantity: 2,
-      source_warehouse: 'Kediri',
-      destination_warehouse: 'Surabaya',
-      date_sent: '8 Jan 2024',
-      arrival_date: '11 Jan 2024',
-      status: 'Selesai',
-    },
-    {
-      product: 'Alladin Cussions',
-      quantity: 4,
-      source_warehouse: 'Semarang',
-      destination_warehouse: 'Jakarta',
-      date_sent: undefined,
-      arrival_date: undefined,
-      status: 'Menunggu Dikirim',
-    },
-    {
-      product: 'Skona Sofa',
-      quantity: 1,
-      source_warehouse: 'Surabaya',
-      destination_warehouse: 'Semarang',
-      date_sent: '1 Jan 2024',
-      arrival_date: '6 Jan 2024',
-      status: 'Dikirim',
-    },
-    {
-      product: 'Sharon Sofa',
-      quantity: 1,
-      source_warehouse: 'Surabaya',
-      destination_warehouse: 'Kediri',
-      date_sent: '10 Jan 2024',
-      arrival_date: undefined,
-      status: 'Dikirim',
-    },
-  ]);
+  const [temporaryMutation, setTemporaryMutation] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const userGlobal = useSelector((state) => state.accountSliceReducer);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await axios.get(
+          `http://localhost:8000/api/warehouse/mutation?warehouse_id=${userGlobal.warehouse_id}`,
+        );
+        setTemporaryMutation(response.data.data);
+      } catch (error) {
+        console.log(error);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchData();
+  }, [userGlobal.warehouse_id]);
+
   return (
     <div>
       <WareHouseAdminLayout>
@@ -69,7 +46,11 @@ const ManageMutation = () => {
           </div>
         </div>
         <div className="w-full mt-4 p-4">
-          <MutationJournalTable mutation={temporaryMutation} />
+          {loading ? (
+            <Loading />
+          ) : (
+            <MutationJournalTable mutation={temporaryMutation} />
+          )}
         </div>
       </WareHouseAdminLayout>
     </div>

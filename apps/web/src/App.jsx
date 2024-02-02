@@ -1,10 +1,4 @@
-import {
-  BrowserRouter,
-  Routes,
-  Route,
-  Navigate,
-  useNavigate,
-} from 'react-router-dom';
+import { BrowserRouter, Routes, Route, useNavigate } from 'react-router-dom';
 import Home from './pages/user/home/Home';
 import LandingAdmin from './pages/admin/admin/landing/Landing';
 import ManageProduct from './pages/admin/admin/manage.product/manage.product';
@@ -27,11 +21,10 @@ import CartPage from './pages/user/cart/Cart';
 import ManageMutation from './pages/admin/admin.warehouse/manage.mutation/Manage.Mutation';
 import AddWarehouse from './components/AddWarehouse';
 import ManageWarehouse from './pages/admin/admin/manage.warehouse/manage.warehouse';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import RegisterForm from './pages/user/register/register';
 import { useEffect, useState } from 'react';
 import CheckoutPage from './pages/user/checkoutPage/Checkout';
-import axios from 'axios';
 import ResetPassword from './components/ForgotPassword';
 import EmailVerification from './components/EmailVerification';
 import AddMutation from './components/AddMutation';
@@ -41,28 +34,19 @@ import DashboardLanding from './pages/user/dashboard/dashboarLanding';
 import DashboardAddress from './pages/user/dashboard/dashboardAddress';
 import DashboardOrder from './pages/user/dashboard/dashboardOrder';
 import EditWarehouse from './components/EditWarehouseModal';
+import { keepLogin } from './redux/slice/accountSlice';
 function App() {
+  const userGlobal = useSelector((state) => state.accountSliceReducer);
+  const dispatch = useDispatch();
+
+  console.log(userGlobal);
   useEffect(() => {
+    dispatch(keepLogin());
     const checkData = async () => {
-      try {
-        const token = localStorage.getItem('token');
-        const response = await axios.post(
-          `http://localhost:8000/api/accounts/keep-login`,
-          {},
-          {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-          },
-        );
-        if (response.data.success === true) {
-          localStorage.setItem('token', response.data.token);
-        } else {
-          localStorage.removeItem('token');
-        }
-      } catch (error) {
-        console.log(error);
-        localStorage.removeItem('token');
+      if (!userGlobal.token && !localStorage.getItem('token')) {
+        dispatch(logout());
+      } else if (userGlobal.token) {
+        dispatch(keepLogin());
       }
     };
     checkData();

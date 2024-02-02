@@ -1,8 +1,10 @@
 import { useEffect, useState } from 'react';
-import AdminLayout from './AdminLayout';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { IoMdArrowBack } from 'react-icons/io';
 import axios from 'axios';
+import AdminLayout from './AdminLayout';
+import ConfirmationModal from './ConfirmationModal';
+import Toast from './Toast';
 
 const EditWarehouse = () => {
   const navigate = useNavigate();
@@ -17,6 +19,52 @@ const EditWarehouse = () => {
   const [selectedCityIndex, setSelectedCityIndex] = useState(0);
   const [provinces, setProvinces] = useState([]);
   const [cities, setCities] = useState([]);
+  const [showConfirmationModal, setShowConfirmationModal] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [toast, setToast] = useState(null);
+
+  const onCloseConfirmationModal = () => setShowConfirmationModal(false);
+
+  const showToast = (status, message) => {
+    setToast({ status, message });
+    setTimeout(() => setToast(null), 5000);
+  };
+
+  const onHandleSaveEdit = () => setShowConfirmationModal(true);
+
+  const onHandleEdit = async () => {
+    const token = localStorage.getItem('token');
+
+    try {
+      setLoading(true);
+      const response = await axios.patch(
+        `http://localhost:8000/api/warehouses/${realIdNumber}`,
+        {
+          prov_id: selectedProvince,
+          city_id: selectedCityIndex,
+          name: warehouseName,
+          address: warehouseAddress,
+        },
+        { headers: { Authorization: `Bearer ${token}` } },
+      );
+
+      showToast(
+        response.data.success ? 'success' : 'danger',
+        response.data.success
+          ? 'warehouse edited successfully'
+          : 'Failed to edit warehouse',
+      );
+    } catch (error) {
+      console.error('Error editing warehouse:', error);
+      showToast(
+        'danger',
+        error.response?.data?.message || 'An error occurred. Please try again.',
+      );
+    } finally {
+      setLoading(false);
+      onCloseConfirmationModal();
+    }
+  };
 
   useEffect(() => {
     const fetchData = async () => {
@@ -34,7 +82,6 @@ const EditWarehouse = () => {
         console.log(error);
       }
     };
-
     fetchData();
   }, [realIdNumber]);
 
@@ -63,9 +110,7 @@ const EditWarehouse = () => {
         console.log(error);
       }
     };
-    if (selectedProvince) {
-      fetchCities();
-    }
+    if (selectedProvince) fetchCities();
   }, [selectedProvince]);
 
   console.log(selectedProvince, selectedCityIndex);
@@ -147,12 +192,31 @@ const EditWarehouse = () => {
             />
           </div>
           <div className="mt-4 flex justify-end">
-            <button className="font-medium text-sm bg-orange-500 hover:bg-orange-600 text-white py-2 px-4 rounded-md transition-all duration-300 ease-in-out focus:outline-none">
+            <button
+              onClick={onHandleSaveEdit}
+              className="font-medium text-sm bg-orange-500 hover:bg-orange-600 text-white py-2 px-4 rounded-md transition-all duration-300 ease-in-out focus:outline-none"
+            >
               Save Changes
             </button>
           </div>
         </div>
       </AdminLayout>
+      {showConfirmationModal && (
+        <ConfirmationModal
+          onClickCancel={onCloseConfirmationModal}
+          onclickClose={onCloseConfirmationModal}
+          title="Edit Warehouse"
+          isLoading={loading}
+          onClick={onHandleEdit}
+        />
+      )}
+      {toast && (
+        <Toast
+          status={toast.status}
+          message={toast.message}
+          onClose={() => setToast(null)}
+        />
+      )}
     </div>
   );
 };

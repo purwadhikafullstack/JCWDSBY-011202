@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
+import { useSelector } from 'react-redux';
 
 const InputMutation = (props) => {
   const [product, setProduct] = useState([]);
   const [warehouse, setWarehouse] = useState([]);
-
+  const userGlobal = useSelector((state) => state.accountSliceReducer);
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -62,11 +63,14 @@ const InputMutation = (props) => {
           defaultValue=""
         >
           <option value="">Choose Source Warehouse</option>
-          {warehouse.map((wh) => (
-            <option key={wh.id} value={wh.id}>
-              {wh.name}
-            </option>
-          ))}
+          {warehouse.map(
+            (wh) =>
+              wh.id != userGlobal.warehouse_id && (
+                <option key={wh.id} value={wh.id}>
+                  {wh.name}
+                </option>
+              ),
+          )}
         </select>
       </div>
     </div>

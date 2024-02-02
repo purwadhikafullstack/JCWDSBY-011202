@@ -32,15 +32,11 @@ const AdminLogin = () => {
           setError('403 - Access Forbidden: user not allowed.');
         } else {
           localStorage.setItem('token', response.data.token);
-          // try {
-
-          // } catch (error) {
-          //   console.error('Error during login:', error);
-          //   setError(
-          //     error.response?.data?.message ||
-          //       'An unexpected error occurred. Please try again.',
-          //   );
-          // }
+          if (response.data.result.role === 'admin') {
+            navigate('/warehouse-admin');
+          } else {
+            navigate('/admin');
+          }
         }
       } else {
         setError(

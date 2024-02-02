@@ -31,11 +31,12 @@ const AdminLayout = (props) => {
           isSidebarOpen ? 'block' : 'hidden'
         } transition-all duration-300 min-h-screen md:min-h-0`}
       >
-        <div className="flex items-center mb-4">
-          <Link to="/admin">
-            <img src={icon} className="w-[25px]" alt="" />
-          </Link>
-          <h1 className="ml-2 font-bold text-lg">Super Admin</h1>
+        <div
+          className="flex items-center mb-4"
+          onClick={() => navigate('/admin')}
+        >
+          <h1 className="font-bold text-xl text-orange-500">Ace</h1>
+          <h1 className="font-bold text-xl">Warehouse</h1>
         </div>
         <div>
           <div className="text-[12px]">

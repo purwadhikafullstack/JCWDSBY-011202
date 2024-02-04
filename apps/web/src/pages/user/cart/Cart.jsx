@@ -216,6 +216,7 @@ const CartPage = () => {
       alert('Oops data produk belum di checklist');
     }
   };
+  console.log("cp",cartProduct);
   return (
     <>
       {firstloading ? <Loading /> : ''}

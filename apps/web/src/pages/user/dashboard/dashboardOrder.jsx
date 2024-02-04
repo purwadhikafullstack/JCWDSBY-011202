@@ -1,8 +1,3 @@
-<<<<<<< HEAD
-const DashboardOrder = (props) => {}
-
-export default DashboardOrder
-=======
 import TemporaryFooter from '../../../components/Temporary/Footer';
 import TemporaryNavbar from '../../../components/Temporary/Navbar';
 import {
@@ -45,4 +40,3 @@ const DashboardOrder = (props) => {
 };
 
 export default DashboardOrder;
->>>>>>> 6b5c2ac85a0f98f0cf09b5462c105192fdeb622d

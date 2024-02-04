@@ -1,10 +1,12 @@
 import { useNavigate, useLocation } from 'react-router-dom';
 import WarehouseAdminLayout from '../components/WareHouseAdminLayout';
+import AdminLayout from './AdminLayout';
 import { IoMdArrowBack } from 'react-icons/io';
 import InventoryTable from './InventoryTable';
 import { useEffect, useState } from 'react';
 import { IoClose } from 'react-icons/io5';
 import axios from 'axios';
+import { useSelector } from 'react-redux';
 import ButtonWithLoading from './ButtonWithLoading';
 
 const WarehouseInventory = () => {
@@ -14,10 +16,9 @@ const WarehouseInventory = () => {
   const navigate = useNavigate();
   const [isModalOpen, setModalOpen] = useState(false);
   const [product, setProduct] = useState([]);
-  const [selectedProductId, setSelectedProductId] = useState(null);
+  const [selectedProductId, setSelectedProductId] = useState('');
   const [stock, setStock] = useState(1);
-  const searchParams = new URLSearchParams(location.search);
-  const warehouseId = searchParams.get('warehouse');
+  const userGlobal = useSelector((state) => state.accountSliceReducer);
 
   const handleAddButtonClick = () => {
     setModalOpen(true);
@@ -29,31 +30,40 @@ const WarehouseInventory = () => {
 
   const fetchData = async () => {
     try {
-      const response = await axios.get(
-        `http://localhost:8000/api/warehouse/storage${location.search}`,
-      );
-      setWarehouseInventory(response.data.data);
+      let response;
+
+      if (userGlobal.role === 'superadmin') {
+        response = await axios.get(
+          `http://localhost:8000/api/warehouse/storage${location.search}`,
+        );
+      } else if (userGlobal.role === 'admin') {
+        response = await axios.get(
+          `http://localhost:8000/api/warehouse/storage?warehouse=${userGlobal.warehouse_id}`,
+        );
+      }
+
+      setWarehouseInventory(response?.data?.data || []);
     } catch (error) {
       console.error('Error fetching data:', error);
     }
   };
 
-  const onHanldeNewAdd = async () => {
-    console.log('TEST', warehouseInventory[0]);
+  const onHandleNewAdd = async () => {
     setLoading(true);
+
     try {
-      const send = await axios.post(
-        'http://localhost:8000/api/warehouse/storage',
-        {
-          warehouse_id: warehouseId,
-          product_id: Number(selectedProductId),
-          stock: stock,
-        },
-      );
+      await axios.post('http://localhost:8000/api/warehouse/storage', {
+        warehouse_id:
+          userGlobal.role === 'superadmin'
+            ? warehouseId
+            : userGlobal.warehouse_id,
+        product_id: Number(selectedProductId),
+        stock: stock,
+      });
+
       await fetchData();
-      console.log(send);
     } catch (error) {
-      console.error(error);
+      console.error('Error adding new stock:', error);
     } finally {
       setLoading(false);
       closeModal();
@@ -62,41 +72,27 @@ const WarehouseInventory = () => {
 
   const onHandleDelete = async () => {
     try {
-      const response = await axios.get(
-        `http://localhost:8000/api/warehouse/storage${location.search}`,
-      );
-      setWarehouseInventory(response.data.data);
+      await fetchData();
     } catch (error) {
       console.error('Error deleting item:', error);
     }
   };
 
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await axios.get(
-          `http://localhost:8000/api/warehouse/storage${location.search}`,
-        );
-        setWarehouseInventory(response.data.data);
-      } catch (error) {
-        console.error('Error fetching data:', error);
-      }
-    };
-
     fetchData();
-  }, [location.search]);
+  }, [location.search, userGlobal]);
 
   useEffect(() => {
-    const fetchData = async () => {
+    const fetchProducts = async () => {
       try {
-        const response = await axios.get(`http://localhost:8000/api/products`);
+        const response = await axios.get('http://localhost:8000/api/products');
         setProduct(response.data);
       } catch (error) {
-        console.error('Error fetching data:', error);
+        console.error('Error fetching products:', error);
       }
     };
 
-    fetchData();
+    fetchProducts();
   }, []);
 
   return (
@@ -133,19 +129,18 @@ const WarehouseInventory = () => {
       </WarehouseAdminLayout>
       {isModalOpen && (
         <div className="fixed inset-0 bg-gray-800 bg-opacity-50 flex justify-center">
-          <div className="absolute top-[40%] left-[50%] transform translate-x-[-50%] translate-y-[-50%] bg-[#E6E6E6] p-2 w-[400px] h-[250px] rounded-md">
+          <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-[#E6E6E6] p-4 w-[400px] h-[250px] rounded-md">
             <IoClose
               size={24}
               onClick={closeModal}
-              className="cursor-pointer"
+              className="cursor-pointer absolute top-2 right-2"
             />
             <h1 className="text-center font-bold text-lg">ADD NEW STOCK</h1>
-            <div className="w-10/12 mx-auto mt-4 flex flex-col items-center">
+            <div className="w-10/12 mx-auto mt-4 flex flex-col border-none">
               <select
-                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                value={selectedProductId || ''}
+                className="input-style border-none"
+                value={selectedProductId}
                 onChange={(e) => setSelectedProductId(e.target.value)}
-                defaultValue=""
               >
                 <option value="" disabled hidden>
                   Choose a product
@@ -164,7 +159,7 @@ const WarehouseInventory = () => {
                   ))}
               </select>
               <select
-                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 mt-2"
+                className="input-style mt-2 border-none"
                 value={stock}
                 onChange={(e) => setStock(parseInt(e.target.value) || 1)}
               >
@@ -177,7 +172,7 @@ const WarehouseInventory = () => {
               <ButtonWithLoading
                 title={'Add New'}
                 isLoading={loading}
-                onClick={onHanldeNewAdd}
+                onClick={onHandleNewAdd}
               />
             </div>
           </div>

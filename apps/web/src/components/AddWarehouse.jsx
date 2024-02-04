@@ -5,7 +5,6 @@ import { IoMdArrowBack } from 'react-icons/io';
 import axios from 'axios';
 import InputForWarehouse from './InputForWarehouse';
 import ConfirmationModal from './ConfirmationModal';
-
 import Toast from './Toast';
 const AddWarehouse = () => {
   const navigate = useNavigate();

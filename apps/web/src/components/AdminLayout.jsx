@@ -1,5 +1,5 @@
 import icon from '../assets/bussinesman.png';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import React, { useState } from 'react';
 
 const linksData = [
@@ -13,9 +13,14 @@ const linksData = [
 
 const AdminLayout = (props) => {
   const [isSidebarOpen, setSidebarOpen] = useState(true);
-
+  const navigate = useNavigate();
   const toggleSidebar = () => {
     setSidebarOpen(!isSidebarOpen);
+  };
+
+  const handleLogout = () => {
+    localStorage.removeItem('token');
+    navigate('/admin/login');
   };
 
   return (
@@ -26,22 +31,32 @@ const AdminLayout = (props) => {
           isSidebarOpen ? 'block' : 'hidden'
         } transition-all duration-300 min-h-screen md:min-h-0`}
       >
-        <div className="flex items-center mb-4">
-          <Link to="/admin">
-            <img src={icon} className="w-[25px]" alt="" />
-          </Link>
-          <h1 className="ml-2 font-bold text-lg">Super Admin</h1>
+        <div
+          className="flex items-center mb-4"
+          onClick={() => navigate('/admin')}
+        >
+          <h1 className="font-bold text-xl text-orange-500">Ace</h1>
+          <h1 className="font-bold text-xl">Warehouse</h1>
         </div>
-        <div className="text-[12px]">
-          {linksData.map((link, index) => (
-            <Link
-              key={index}
-              to={link.to}
-              className="block py-2 px-4 transition-all duration-300 hover:bg-orange-500 hover:rounded-md hover:text-white "
-            >
-              {link.label}
-            </Link>
-          ))}
+        <div>
+          <div className="text-[12px]">
+            {linksData.map((link, index) => (
+              <Link
+                key={index}
+                to={link.to}
+                className="block py-2 px-4 transition-all duration-300 hover:bg-orange-500 hover:rounded-md hover:text-white"
+              >
+                {link.label}
+              </Link>
+            ))}
+          </div>
+          {/* Logout Button */}
+          <button
+            onClick={handleLogout}
+            className="block w-full text-start mt-4 py-2 px-4 text-black-500 transition-all duration-300 hover:bg-orange-500 hover:text-white hover:rounded-md"
+          >
+            Logout
+          </button>
         </div>
       </div>
 

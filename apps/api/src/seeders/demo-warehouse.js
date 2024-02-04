@@ -13,13 +13,13 @@ module.exports = {
      * }], {});
      */
     await queryInterface.bulkInsert(
-      'warehouse_mutation',
+      'warehouse_mutations',
       [
         {
           warehouse_id: 2,
           product_id: 3,
-          source_warehouse_storage_id: 1,
-          destination_warehouse_storage_id: 2,
+          source_warehouse_id: 1,
+          destination_warehouse_id: 2,
           quantity: 2,
           mutation_type: 'request',
           status: 'waiting for confirmation',
@@ -31,8 +31,8 @@ module.exports = {
         {
           warehouse_id: 1,
           product_id: 3,
-          source_warehouse_storage_id: 1,
-          destination_warehouse_storage_id: 2,
+          source_warehouse_id: 1,
+          destination_warehouse_id: 2,
           quantity: 2,
           mutation_type: 'requested',
           status: 'waiting for confirmation',
@@ -44,8 +44,8 @@ module.exports = {
         {
           warehouse_id: 2,
           product_id: 4,
-          source_warehouse_storage_id: 1,
-          destination_warehouse_storage_id: 2,
+          source_warehouse_id: 1,
+          destination_warehouse_id: 2,
           quantity: 2,
           mutation_type: 'request',
           status: 'waiting for process',
@@ -57,8 +57,8 @@ module.exports = {
         {
           warehouse_id: 1,
           product_id: 4,
-          source_warehouse_storage_id: 1,
-          destination_warehouse_storage_id: 2,
+          source_warehouse_id: 1,
+          destination_warehouse_id: 2,
           quantity: 2,
           mutation_type: 'requested',
           status: 'waiting for process',
@@ -70,8 +70,8 @@ module.exports = {
         {
           warehouse_id: 2,
           product_id: 5,
-          source_warehouse_storage_id: 1,
-          destination_warehouse_storage_id: 2,
+          source_warehouse_id: 1,
+          destination_warehouse_id: 2,
           quantity: 2,
           mutation_type: 'request',
           status: 'processing',
@@ -83,8 +83,8 @@ module.exports = {
         {
           warehouse_id: 1,
           product_id: 5,
-          source_warehouse_storage_id: 1,
-          destination_warehouse_storage_id: 2,
+          source_warehouse_id: 1,
+          destination_warehouse_id: 2,
           quantity: 2,
           mutation_type: 'requested',
           status: 'processing',
@@ -96,8 +96,8 @@ module.exports = {
         {
           warehouse_id: 2,
           product_id: 5,
-          source_warehouse_storage_id: 1,
-          destination_warehouse_storage_id: 2,
+          source_warehouse_id: 1,
+          destination_warehouse_id: 2,
           quantity: 2,
           mutation_type: 'request',
           status: 'on delivery',
@@ -109,8 +109,8 @@ module.exports = {
         {
           warehouse_id: 1,
           product_id: 5,
-          source_warehouse_storage_id: 1,
-          destination_warehouse_storage_id: 2,
+          source_warehouse_id: 1,
+          destination_warehouse_id: 2,
           quantity: 2,
           mutation_type: 'requested',
           status: 'on delivery',
@@ -122,8 +122,8 @@ module.exports = {
         {
           warehouse_id: 2,
           product_id: 5,
-          source_warehouse_storage_id: 1,
-          destination_warehouse_storage_id: 2,
+          source_warehouse_id: 1,
+          destination_warehouse_id: 2,
           quantity: 2,
           mutation_type: 'request',
           status: 'arrived',
@@ -135,8 +135,8 @@ module.exports = {
         {
           warehouse_id: 1,
           product_id: 5,
-          source_warehouse_storage_id: 1,
-          destination_warehouse_storage_id: 2,
+          source_warehouse_id: 1,
+          destination_warehouse_id: 2,
           quantity: 2,
           mutation_type: 'requested',
           status: 'arrived',
@@ -148,8 +148,8 @@ module.exports = {
         {
           warehouse_id: 2,
           product_id: 5,
-          source_warehouse_storage_id: 1,
-          destination_warehouse_storage_id: 2,
+          source_warehouse_id: 1,
+          destination_warehouse_id: 2,
           quantity: 2,
           mutation_type: 'request',
           status: 'done',
@@ -161,8 +161,8 @@ module.exports = {
         {
           warehouse_id: 1,
           product_id: 5,
-          source_warehouse_storage_id: 1,
-          destination_warehouse_storage_id: 2,
+          source_warehouse_id: 1,
+          destination_warehouse_id: 2,
           quantity: 2,
           mutation_type: 'requested',
           status: 'done',

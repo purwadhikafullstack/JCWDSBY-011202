@@ -1,6 +1,7 @@
 import warehouse from '../models/warehouses';
 import cities from '../models/cities';
 import provinces from '../models/provinces';
+import journal from '../models/journal';
 
 export const getWarehouse = async (req, res, next) => {
   try {
@@ -128,6 +129,27 @@ export const createWarehouse = async (req, res, next) => {
       lon: req.body.lon,
       lat: req.body.lat,
     });
+
+    const journalDate = new Date().toLocaleDateString('en-US', {
+      day: 'numeric',
+      month: 'long',
+      year: 'numeric',
+      hour: 'numeric',
+      minute: 'numeric',
+      second: 'numeric',
+      hour12: false,
+    });
+
+    const journalInformation = `${req.userData.fullname} created warehouse ${req.body.name}`;
+    const journalFrom = `Warehouse`;
+
+    if (newWarehouse) {
+      await journal.create({
+        date: journalDate,
+        information: journalInformation,
+        from: journalFrom,
+      });
+    }
 
     return res.status(201).send({
       success: true,

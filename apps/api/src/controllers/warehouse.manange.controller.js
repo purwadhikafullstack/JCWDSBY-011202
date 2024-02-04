@@ -1,5 +1,6 @@
 import warehouse from '../models/warehouses';
-
+import warehouse_storage from '../models/warehouse_storage';
+import journal from '../models/journal';
 export const deleteWarehouse = async (req, res, next) => {
   try {
     const isExist = await warehouse.findOne({
@@ -24,6 +25,37 @@ export const deleteWarehouse = async (req, res, next) => {
         },
       },
     );
+
+    const delWh = await warehouse_storage.update(
+      { is_deleted: true },
+      {
+        where: {
+          is_deleted: false,
+          warehouse_id: req.params.id,
+        },
+      },
+    );
+
+    const journalDate = new Date().toLocaleDateString('en-US', {
+      day: 'numeric',
+      month: 'long',
+      year: 'numeric',
+      hour: 'numeric',
+      minute: 'numeric',
+      second: 'numeric',
+      hour12: false,
+    });
+
+    const journalInformation = `${req.userData.fullname} deleted warehouse ${isExist.name}`;
+    const journalFrom = `Warehouse`;
+
+    if (delWh) {
+      await journal.create({
+        date: journalDate,
+        information: journalInformation,
+        from: journalFrom,
+      });
+    }
 
     return res
       .status(200)

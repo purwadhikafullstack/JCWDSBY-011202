@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 
-const ListWarehouse = ({ warehouses, onClickDelete }) => {
+const ListWarehouse = ({ warehouses, onClickDelete, onClickEdit }) => {
   const [listWarehouse, setListWarehouse] = useState([]);
   useEffect(() => {
     setListWarehouse(warehouses);
@@ -45,7 +45,12 @@ const ListWarehouse = ({ warehouses, onClickDelete }) => {
                   {val.address}
                 </td>
                 <td className="lg:px-6 lg:py-4 px-3 py-2 text-sm lg:text-sm sm:text-xs text-gray-500 whitespace-nowrap flex items-center justify-center">
-                  <button className="lg:bg-orange-500 lg:hover:bg-orange-700 text-white px-4 py-2 rounded mr-2">
+                  <button
+                    onClick={() => {
+                      onClickEdit(val.id);
+                    }}
+                    className="lg:bg-orange-500 lg:hover:bg-orange-700 text-white px-4 py-2 rounded mr-2"
+                  >
                     Edit
                   </button>
                   <button

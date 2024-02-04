@@ -134,11 +134,15 @@ const EmailVerification = () => {
       {showCongratsModal && (
         <div className="fixed top-0 left-0 w-full h-full flex items-center justify-center bg-black bg-opacity-50">
           <div className="bg-white p-8 rounded-md">
-            <p className="text-xl font-semibold mb-4">Congratulations!</p>
-            <p>Your account has been successfully verified.</p>
+            <p className="text-xl font-semibold mb-4 text-center">
+              Congratulations!
+            </p>
+            <p className="text-center">
+              Your account has been successfully verified.
+            </p>
             <button
               onClick={handleLogin}
-              className="mt-4 bg-orange-700 text-white px-4 py-2 rounded-md"
+              className="mt-4 bg-orange-700 text-white px-4 py-2 rounded-md mx-auto block"
             >
               Login
             </button>

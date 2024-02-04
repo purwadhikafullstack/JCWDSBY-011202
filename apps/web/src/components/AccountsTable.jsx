@@ -1,11 +1,14 @@
 import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 const AccountsTable = ({ accounts, onClickDelete }) => {
   const [getAccount, setGetAccount] = useState([]);
-
+  const navigate = useNavigate();
   useEffect(() => {
     setGetAccount(accounts);
   }, [accounts]);
+
+  console.log(getAccount);
 
   return (
     <div className="overflow-x-auto text">
@@ -49,10 +52,21 @@ const AccountsTable = ({ accounts, onClickDelete }) => {
                   {account.role.toUpperCase()}
                 </td>
                 <td className="px-6 py-4 text-sm text-gray-500 whitespace-nowrap">
-                  {account.warehouse_id}
+                  {account.role === 'superadmin'
+                    ? 'Admin'
+                    : account.warehouse_name}
                 </td>
                 <td className="px-6 py-4 text-sm whitespace-nowrap">
-                  <button className="bg-orange-500 hover:bg-orange-700 text-white px-4 py-2 rounded mr-2">
+                  <button
+                    onClick={() =>
+                      navigate(
+                        `admin/manage-account/edit-account?account=${
+                          account.email.split('@')[0]
+                        }-00${account.id}`,
+                      )
+                    }
+                    className="bg-orange-500 hover:bg-orange-700 text-white px-4 py-2 rounded mr-2"
+                  >
                     Edit
                   </button>
                   <button

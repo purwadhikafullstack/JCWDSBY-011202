@@ -3,6 +3,7 @@ import Register from '../../../assets/register.jpg';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
 import ButtonWithLoading from '../../../components/ButtonWithLoading';
+import { FaCheck } from 'react-icons/fa';
 
 const RegisterForm = () => {
   const [fullname, setFullName] = useState('');
@@ -122,14 +123,18 @@ const RegisterForm = () => {
       {/* Modal Alert */}
       {showAlert && (
         <div className="fixed top-0 left-0 w-full h-full flex items-center justify-center bg-black bg-opacity-50">
-          <div className="bg-white p-8 rounded-md">
+          <div className="bg-white p-8 rounded-md text-center">
+            <div className="mb-4">
+              <FaCheck size={48} className="mx-auto" />
+            </div>
             <p className="text-xl font-semibold mb-4">
               Registration successful!
             </p>
             <p>Please check your email for further instructions.</p>
+
             <button
               onClick={() => setShowAlert(false)}
-              className="mt-4 bg-orange-700 text-white px-4 py-2 rounded-md"
+              className="mt-4 bg-orange-700 text-white px-4 py-2 rounded-md mx-auto block"
             >
               Close
             </button>

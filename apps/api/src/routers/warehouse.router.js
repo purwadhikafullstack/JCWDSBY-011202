@@ -7,15 +7,31 @@ import {
   deleteWarehouse,
   updateWarehouse,
 } from '../controllers/warehouse.manange.controller';
+import {
+  ValidatePassword,
+  ValidateEmail,
+  validateToken,
+  ValidateSuperAdmin,
+} from '../middleware/validation';
 
 const warehouseRouter = Router();
 
 //GET
 warehouseRouter.get('/?', getWarehouse);
 //POST
-warehouseRouter.post('/', createWarehouse);
+warehouseRouter.post('/', validateToken, ValidateSuperAdmin, createWarehouse);
 //PATCH
-warehouseRouter.patch('/:id', updateWarehouse);
+warehouseRouter.patch(
+  '/:id',
+  validateToken,
+  ValidateSuperAdmin,
+  updateWarehouse,
+);
 //DELETE
-warehouseRouter.delete('/:id', deleteWarehouse);
+warehouseRouter.delete(
+  '/:id',
+  validateToken,
+  ValidateSuperAdmin,
+  deleteWarehouse,
+);
 export { warehouseRouter };

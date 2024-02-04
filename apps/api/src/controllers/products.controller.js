@@ -128,6 +128,7 @@ export const createProduct = async (req, res, next) => {
     }
 
     const newProduct = await products.create({
+      weight: req.body.weight,
       name: req.body.name,
       price: req.body.price,
       description: req.body.description,

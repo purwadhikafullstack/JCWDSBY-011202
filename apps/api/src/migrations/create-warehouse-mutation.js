@@ -36,18 +36,22 @@ module.exports = {
       is_confirmed: {
         type: Sequelize.BOOLEAN,
         allowNull: false,
+        defaultValue: false,
       },
       status: {
         type: Sequelize.STRING,
         allowNull: false,
       },
       arrival_date: {
-        type: Sequelize.DATE,
-        allowNull: false,
+        type: Sequelize.STRING,
       },
       delivery_date: {
-        type: Sequelize.DATE,
+        type: Sequelize.STRING,
+      },
+      is_deleted: {
+        type: Sequelize.BOOLEAN,
         allowNull: false,
+        defaultValue: false,
       },
       createdAt: {
         allowNull: false,

@@ -11,6 +11,7 @@ const AddProduct = () => {
   const [imageToUpload, setImageToUpload] = useState([]);
   const [NameProduct, setNameProduct] = useState('');
   const [Price, setPrice] = useState(0);
+  const [weight, setWeight] = useState(0);
   const [Description, setDescription] = useState('');
   const [Category_id, setCategory_id] = useState('');
   const navigate = useNavigate();
@@ -36,6 +37,7 @@ const AddProduct = () => {
       formData.append('price', Price);
       formData.append('description', Description);
       formData.append('category_id', Category_id);
+      formData.append('weight', weight);
       imageToUpload.forEach((image, index) => {
         formData.append(`filesUpload`, image);
       });
@@ -94,12 +96,13 @@ const AddProduct = () => {
               </div>
             </div>
             <div className="mx-2 w-full">
-              <div className="w-full">
+              <div className="w-full ml-4">
                 <FormProductAdd
                   onChangeName={(e) => setNameProduct(e.target.value)}
                   onChangePrice={(e) => setPrice(e.target.value)}
                   onChangeCategory={(e) => setCategory_id(e.target.value)}
                   onChangeDescription={(e) => setDescription(e.target.value)}
+                  onChangeWeight={(e) => setWeight(e.target.value)}
                 />
                 <div className="w-full ">
                   <div className="mt-2 h-32 border rounded-lg p-2 flex bg-gray-50 ">

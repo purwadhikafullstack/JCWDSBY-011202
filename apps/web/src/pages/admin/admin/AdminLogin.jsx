@@ -32,7 +32,11 @@ const AdminLogin = () => {
           setError('403 - Access Forbidden: user not allowed.');
         } else {
           localStorage.setItem('token', response.data.token);
-          navigate('/admin');
+          if (response.data.result.role === 'admin') {
+            navigate('/warehouse-admin');
+          } else {
+            navigate('/admin');
+          }
         }
       } else {
         setError(

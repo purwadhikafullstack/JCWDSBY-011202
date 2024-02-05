@@ -120,8 +120,6 @@ export const getCart = async (req, res, next) => {
             }
         })
         console.log("result tambah stock", result);
-        //    console.log("stockproduct",stockProduct);
-        //    console.log("stock",stock);
         return res.status(200).send({
             message: "Berhasil mendapatkan data carts",
             result: result,

@@ -10,6 +10,7 @@ import { warehouseRouter } from './routers/warehouse.router';
 import { provinces_and_cities_Router } from './routers/provinces.and.cities.router';
 import { checkoutRouter } from './routers/checkout';
 import { journalRouter } from './routers/journal.router';
+import { userOrderRouter } from './routers/userOrder';
 
 const router = Router();
 
@@ -34,8 +35,8 @@ router.use('/accounts', accountsRouter);
 // add another router here ...
 
 // RAMA
-
-router.use('/cart', cartRouter);
-router.use('/checkout', checkoutRouter);
+router.use('/cart', cartRouter)
+router.use('/checkout', checkoutRouter)
+router.use('/userOrder', userOrderRouter)
 
 export default router;

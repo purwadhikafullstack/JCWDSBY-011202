@@ -34,10 +34,10 @@ export const getCartToCheckout = async (req, res, next) => {
         const result = []
         const allPrice = []
         const allWeight = []
-        let index = 0
+        let index = []
         data.map((val, id) => {
-            if (data[id].product_id != index) {
-                index = data[id].product_id
+            if (!index.includes(data[id].product_id)) {
+                index.push(data[id].product_id)
                 allPrice.push(val.total_price)
                 allWeight.push(val.total_weight)
                 result.push({ ...data[id], productWeightConvert: val[`product.weight`] / 1000, total_weightConvert: val.total_weight / 1000 })

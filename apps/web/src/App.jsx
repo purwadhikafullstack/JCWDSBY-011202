@@ -37,6 +37,7 @@ import CheckoutSuccess from './pages/user/checkoutPage/CheckoutSuccess';
 import EditWarehouse from './components/EditWarehouseModal';
 import UpdateAccount from './components/UpdateAccount';
 import { keepLogin } from './redux/slice/accountSlice';
+import DashboardUploadPayment from './pages/user/dashboard/dashboardUploadPayment';
 function App() {
   const userGlobal = useSelector((state) => state.accountSliceReducer);
   const dispatch = useDispatch();
@@ -132,13 +133,10 @@ function App() {
         <Route path="/cart" element={<CartPage />} />
         <Route path="/checkout" element={<CheckoutPage />} />
         <Route path="/checkout/success?" element={<CheckoutSuccess />} />
-        <Route path="user/dashboard" element={<DashboardLanding />} />
-        <Route path="user/dashboard/address" element={<DashboardAddress />} />
-        <Route path="user/dashboard/order" element={<DashboardOrder />} />
-        <Route
-          path="user/dashboard/order-detail?"
-          element={<DashboardOrder />}
-        />
+        <Route path="user/dashboard" element={<DashboardLanding/>}/>
+        <Route path="user/dashboard/address" element={<DashboardAddress/>}/>
+        <Route path="user/dashboard/order" element={<DashboardOrder/>}/>
+        <Route path="user/dashboard/upload-payment?" element={<DashboardUploadPayment/>}/>
         <Route path="" />
       </Routes>
     </BrowserRouter>

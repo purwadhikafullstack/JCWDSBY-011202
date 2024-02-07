@@ -77,16 +77,12 @@ const CartPage = () => {
   const getChecked = async () => {
     try {
       let checkedItem = document.getElementsByName('intoOrder');
-      console.log("ada berapa",checkedItem);
       for (let i = 0; i < checkedItem.length; i++) {
         if (checkedItem[i].checked) {
-          console.log("ini rupanya",checkedItem[i].checked);
           checkedResult.push(checkedItem[i].value);
           localStorage.setItem('cartId', checkedResult);
         } else {
           checkedItem[i].checked=false
-          console.log("loh kok amsuk");
-          // checkedResult = [];
         }
       }
       if (checkedResult.length > 0) {
@@ -94,7 +90,6 @@ const CartPage = () => {
       } else {
         localStorage.removeItem('cartId');
         return setCartSummary(cartSummary.status = false)
-        // setCartSummary(cartSummary.sta);
       }
     } catch (error) {
       console.log(error);
@@ -103,10 +98,8 @@ const CartPage = () => {
   };
   useEffect(() => {
     // USEEFFECT ketika pertama load
-    // getChecked()
     getDataCart();
     openLoading(1500);
-    // keepChecked();
     if (checkedArray) {
       getSummary();
     }
@@ -114,8 +107,6 @@ const CartPage = () => {
   useEffect(() => {
     // USEEFFECT ketika checkbox di klik
     getChecked();
-    // console.log("11",cartSummary);
-    // console.log("12",cartProduct);
     if (checkedArray) {
       getSummary();
     }
@@ -203,14 +194,9 @@ const CartPage = () => {
     }
   };
   const onHandleCheckOut = () => {
-    console.log("data",cartSummary);
     if (cartSummary.success) {
-      console.log('itu', cartSummary);
-      console.log('itu', cartSummary.data.length);
       document.body.style.overflow = 'auto';
       setOpenModal(false);
-      // localStorage.setItem('cartId', cartSummary.data);
-      // console.log("!23",cartSummary.da);
       navigate(`/checkout`);
     } else {
       alert('Oops data produk belum di checklist');
@@ -300,7 +286,6 @@ const CartPage = () => {
           cancel={'Cancel'}
           onHandleModalClick={onHandleCheckOut}
           onHandleModalCancel={() => {
-            console.log('cancel');
             document.body.style.overflow = 'auto';
             setOpenModal(false);
           }}

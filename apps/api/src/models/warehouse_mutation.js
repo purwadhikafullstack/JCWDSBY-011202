@@ -30,6 +30,8 @@ export const init = (sequelize) => {
       is_confirmed: DataTypes.BOOLEAN,
       status: DataTypes.STRING,
       arrival_date: DataTypes.STRING,
+      mutation_code: DataTypes.STRING,
+      status: DataTypes.STRING,
       delivery_date: DataTypes.STRING,
       is_deleted: DataTypes.BOOLEAN,
     },

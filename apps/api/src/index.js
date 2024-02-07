@@ -59,6 +59,7 @@ const main = () => {
   app.use(bearer());
   app.use('/api', router);
   app.use('/productimage', express.static(__dirname + '/public/productimage'));
+  app.use('/paymentProof', express.static(__dirname + '/public/paymentProof'));
 
   globalAPIErrorHandler(app);
   serveWebProjectBuildResult(app);

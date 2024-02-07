@@ -2,7 +2,7 @@ import { Router } from 'express';
 import { validateToken,ValidateUser } from '../middleware/validation';
 import { getCartToCheckout, getShippingCost, getUserData } from '../controllers/checkout';
 import { changeUserAddress, createOrder, getOrderData, getUserAddress } from '../controllers/checkout2';
-import { getUsernamePict } from '../controllers/checkout3';
+import { deleteOrder, getUsernamePict } from '../controllers/checkout3';
 const checkoutRouter = Router();
 
 // GET

@@ -19,8 +19,7 @@ const DashboardLanding = () => {
     openLoading(1500)
   },[])
   return (<>
-      {firstloading ? <Loading /> : ''}
-    <div>
+    {firstloading ? <Loading /> : <div>
       <TemporaryNavbar />
       <DashboardTitle title={'Profile'} subTitle={'User/Profile'} />
       <div className='flex justify-center gap-4'>
@@ -43,7 +42,8 @@ const DashboardLanding = () => {
         </div>
       </div>
       <TemporaryFooter />
-    </div>
+    </div>}
+    
   </>
   );
 };

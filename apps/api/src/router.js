@@ -9,6 +9,7 @@ import { warehouse_storageRouter } from './routers/warehouse_storage.router';
 import { warehouseRouter } from './routers/warehouse.router';
 import { provinces_and_cities_Router } from './routers/provinces.and.cities.router';
 import { checkoutRouter } from './routers/checkout';
+import { userOrderRouter } from './routers/userOrder';
 
 
 const router = Router();
@@ -36,6 +37,6 @@ router.use('/accounts', accountsRouter);
 
 router.use('/cart', cartRouter)
 router.use('/checkout', checkoutRouter)
-
+router.use('/userOrder', userOrderRouter)
 
 export default router;

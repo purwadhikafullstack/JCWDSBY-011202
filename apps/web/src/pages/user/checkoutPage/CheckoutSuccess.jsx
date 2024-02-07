@@ -83,7 +83,7 @@ const CheckoutSuccess = () => {
             <p>
               Setelah melakukan pembayaran silahkan konfirmasi pembayaran anda{' '}
               <span className="mx-auto bg-slate-300 w-fit rounded-md px-2 border-[1px] border-slate-400 cursor-pointer "
-              onClick={()=>{navigate(`user/dashboard/order-detail${location.search}`)}}>
+              onClick={()=>{navigate(`/user/dashboard/order-detail${location.search}`)}}>
                 disini
               </span>
             </p>

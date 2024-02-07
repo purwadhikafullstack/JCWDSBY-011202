@@ -10,7 +10,6 @@ import warehouse_storage from '../models/warehouse_storage';
 // untuk API ("cart/add-to-cart")
 export const addToCart = async (req, res, next) => {
     try {
-
         const findCart = await carts.findOne({
             where: {
                 [Op.and]: [
@@ -81,13 +80,16 @@ export const getCart = async (req, res, next) => {
             raw: true
         })
         const result = []
-        let index = 0
+        let index = []
+        // console.log("0",allProduct);
+        // console.log("1",allProduct.rows);
         allProduct.rows.map((val, id) => {
-            if (allProduct.rows[id].product_id != index) {
-                index = allProduct.rows[id].product_id
+            if (!index.includes(allProduct.rows[id].product_id)) {
+                index.push(allProduct.rows[id].product_id)
                 result.push({ ...allProduct.rows[id], productWeightConvert: val[`product.weight`] / 1000, total_weightConvert: val.total_weight / 1000, isChecked: false })
             }
         })
+        console.log("uo",result);
         const productId = []
         result.map((val, id) => { productId.push(val.product_id) })
         const stock = await warehouse_storage.findAll({
@@ -118,8 +120,6 @@ export const getCart = async (req, res, next) => {
             }
         })
         console.log("result tambah stock", result);
-        //    console.log("stockproduct",stockProduct);
-        //    console.log("stock",stock);
         return res.status(200).send({
             message: "Berhasil mendapatkan data carts",
             result: result,

@@ -14,6 +14,7 @@ export default class addresses extends Model {
     addresses.belongsTo(models.cities,{foreignKey:"city_id"})
     addresses.hasMany(models.orders,{foreignKey:"address_id"})
 
+
   }
 }
 

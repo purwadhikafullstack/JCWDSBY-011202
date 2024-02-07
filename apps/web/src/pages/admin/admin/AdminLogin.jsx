@@ -2,9 +2,11 @@ import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import ButtonWithLoading from '../../../components/ButtonWithLoading';
-
+import { userLoaded } from '../../../redux/slice/accountSlice';
+import { useDispatch, useSelector } from 'react-redux';
 const AdminLogin = () => {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
@@ -31,7 +33,18 @@ const AdminLogin = () => {
         ) {
           setError('403 - Access Forbidden: user not allowed.');
         } else {
+          console.log(response.data);
           localStorage.setItem('token', response.data.token);
+          dispatch(
+            userLoaded({
+              username: response.data.result.username,
+              fullname: response.data.result.fullname,
+              email: response.data.result.email,
+              role: response.data.result.role,
+              warehouse_id: response.data.result.warehouse_id,
+              token: localStorage.getItem('token'),
+            }),
+          );
           if (response.data.result.role === 'admin') {
             navigate('/warehouse-admin');
           } else {

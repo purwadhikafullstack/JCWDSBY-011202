@@ -8,11 +8,8 @@ export const finishMutation = async (req, res, next) => {
     const isExists = await warehouse_mutation.findOne({
       where: {
         id: req.params.id,
-        mutation_type: 'request',
-        warehouse_id: req.userData.warehouse_id,
-        is_deleted: false,
         status: 'arrived',
-        is_confirmed: true,
+        mutation_type: 'request',
       },
       raw: true,
     });
@@ -54,17 +51,8 @@ export const finishMutation = async (req, res, next) => {
 
     const reversedWarehouse = await warehouse_mutation.findOne({
       where: {
-        warehouse_id: isExists.source_warehouse_id,
-        product_id: isExists.product_id,
-        destination_warehouse_id: isExists.destination_warehouse_id,
-        quantity: isExists.quantity,
+        mutation_code: isExists.mutation_code,
         mutation_type: 'requested',
-        is_confirmed: true,
-        status: 'arrived',
-        arrival_date: isExists.arrival_date,
-        delivery_date: isExists.delivery_date,
-        is_deleted: isExists.is_deleted,
-        createdAt: isExists.createdAt,
       },
       raw: true,
     });
@@ -114,7 +102,7 @@ export const finishMutation = async (req, res, next) => {
         },
       );
     }
-    const journalInformation = `${req.userData.fullname} confirmed done the mutation for ${isExists.quantity} units of product ${isExistProduct.name} from warehouse ${isExistSourceWarehouse.name} to ${isExistDestinationWarehouse.name}, the stock of stock product will be increase`;
+    const journalInformation = `${isExists.mutation_code}:${req.userData.fullname} confirmed done the mutation for ${isExists.quantity} units of product ${isExistProduct.name} from warehouse ${isExistSourceWarehouse.name} to ${isExistDestinationWarehouse.name}, the stock of stock product will be increase`;
     const journalFrom = 'Mutation Stock';
     if (updateStatusReversedWarehouse && updateStatus) {
       await journal.create({
@@ -124,19 +112,19 @@ export const finishMutation = async (req, res, next) => {
       });
       await journal.create({
         date: journalDate,
-        information: `The mutation, which your warehouse request for ${isExists.quantity} units of product ${isExistProduct.name} from ${isExistSourceWarehouse.name} is already success`,
+        information: `${isExists.mutation_code}: The mutation, which your warehouse request for ${isExists.quantity} units of product ${isExistProduct.name} from ${isExistSourceWarehouse.name} is already success`,
         from: journalFrom,
         warehouse_id: isExists.destination_warehouse_id,
       });
       await journal.create({
         date: journalDate,
-        information: `Warehouse ${isExistDestinationWarehouse.name} already update status request for ${isExists.quantity} units of product ${isExistProduct.name} to success`,
+        information: `${isExists.mutation_code}: Warehouse ${isExistDestinationWarehouse.name} already update status request for ${isExists.quantity} units of product ${isExistProduct.name} to success`,
         from: journalFrom,
         warehouse_id: isExists.source_warehouse_id,
       });
       await journal.create({
         date: journalDate,
-        information: `Your warehouse stock ${isExistProduct.name} is already increase ${isExists.quantity} by mutation from ${isExistSourceWarehouse.name}`,
+        information: `${isExists.mutation_code}: Your warehouse stock ${isExistProduct.name} is already increase ${isExists.quantity} by mutation from ${isExistSourceWarehouse.name}`,
         from: 'Storage',
         warehouse_id: isExists.destination_warehouse_id,
       });

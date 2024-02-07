@@ -14,6 +14,8 @@ const ManageProduct = () => {
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
+  const [category, setCategories] = useState([]);
+  const [filterStatus, setFilterStatus] = useState('');
 
   const handleAddButtonClick = () => {
     navigate('add-product');
@@ -32,13 +34,11 @@ const ManageProduct = () => {
     setPage(newPage);
   };
 
-  console.log(page);
-
   useEffect(() => {
     const fetchData = async () => {
       try {
         setLoading(true);
-        const response = await axios.get('http://localhost:8000/api/products');
+        const response = await axios.get('http://localhost:8000/api/products?');
         setProducts(response.data);
         setLoading(false);
       } catch (error) {
@@ -63,7 +63,22 @@ const ManageProduct = () => {
     };
 
     fetchData();
-  }, [page, products]);
+  }, [page, products, filterStatus]);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await axios.get(
+          'http://localhost:8000/api/categories',
+        );
+        setCategories(response.data);
+      } catch (error) {
+        console.error('Error fetching categories:', error);
+      }
+    };
+
+    fetchData();
+  }, []);
 
   return (
     <div>
@@ -81,7 +96,14 @@ const ManageProduct = () => {
           </div>
         </div>
         <div className="flex mt-4 mx-2">
-          <SearchByCategory />
+          <SearchByCategory
+            categories={category}
+            onClickStatus={() => {
+              setFilterStatus(
+                document.querySelector('input[name="status"]:checked').value,
+              );
+            }}
+          />
           <div>
             <SearchProduct />
           </div>

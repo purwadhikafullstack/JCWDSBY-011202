@@ -23,43 +23,50 @@ const ManageMutation = () => {
   const onCloseConfirmationModal = () => {
     setShowConfirmationModal(false);
   };
-
   const confirmMutation = (id) => {
     setIsStatusToUpdate(1);
     setMutationId(id);
     setEndPoint(`http://localhost:8000/api/warehouse/mutation/confirm/${id}`);
     setShowConfirmationModal(true);
   };
-
   const deliverMutation = (id) => {
     setIsStatusToUpdate(2);
     setMutationId(id);
     setEndPoint(`http://localhost:8000/api/warehouse/mutation/process/${id}`);
     setShowConfirmationModal(true);
   };
-
   const arrivedMutation = (id) => {
     setIsStatusToUpdate(3);
     setMutationId(id);
     setEndPoint(`http://localhost:8000/api/warehouse/mutation/arrival/${id}`);
     setShowConfirmationModal(true);
   };
-
   const doneMutation = (id) => {
     setIsStatusToUpdate(4);
     setMutationId(id);
     setEndPoint(`http://localhost:8000/api/warehouse/mutation/finish/${id}`);
     setShowConfirmationModal(true);
   };
-
+  const deleteMutation = (id) => {
+    setIsStatusToUpdate(5);
+    setMutationId(id);
+    setEndPoint(`http://localhost:8000/api/warehouse/mutation/delete/${id}`);
+    setShowConfirmationModal(true);
+  };
+  const cancelMutation = (id) => {
+    setIsStatusToUpdate(6);
+    setMutationId(id);
+    setEndPoint(`http://localhost:8000/api/warehouse/mutation/cancel/${id}`);
+    setShowConfirmationModal(true);
+  };
   const showToast = (status, message) => {
     setToast({ status, message });
     setTimeout(() => {
       setToast(null);
     }, 5000);
   };
-
   const onHandleAdd = async () => {
+    setButtonLoading(true);
     try {
       const token = localStorage.getItem('token');
       const response = await axios.patch(
@@ -71,7 +78,6 @@ const ManageMutation = () => {
           },
         },
       );
-
       if (response.data.success === true) {
         showToast(
           'success',
@@ -103,7 +109,6 @@ const ManageMutation = () => {
       onCloseConfirmationModal();
     }
   };
-
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -119,7 +124,6 @@ const ManageMutation = () => {
     };
     fetchData();
   }, [userGlobal.warehouse_id]);
-
   return (
     <div>
       <WareHouseAdminLayout>
@@ -147,6 +151,8 @@ const ManageMutation = () => {
               onClickArrived={arrivedMutation}
               onClickDeliver={deliverMutation}
               onClickDone={doneMutation}
+              onClickDelete={deleteMutation}
+              handleCancel={cancelMutation}
             />
           )}
         </div>
@@ -163,7 +169,7 @@ const ManageMutation = () => {
                     ? 'Are you sure you want to update the mutation arrived?'
                     : isStatusToUpdate === 4
                       ? 'Are you sure you want to done the mutation?'
-                      : ''
+                      : 'Are you sure you want to confirm this action?'
             }
             isLoading={buttonLoading}
             onClick={onHandleAdd}

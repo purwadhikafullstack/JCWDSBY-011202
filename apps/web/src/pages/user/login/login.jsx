@@ -3,7 +3,7 @@ import LoginImage from '../../../assets/login.jpg';
 import { Link, useNavigate } from 'react-router-dom';
 import ButtonWithLoading from '../../../components/ButtonWithLoading';
 import axios from 'axios';
-
+import { useDispatch, useSelector } from 'react-redux';
 const LoginForm = () => {
   const [loading, setLoading] = useState(false);
   const [email, setEmail] = useState('');
@@ -31,6 +31,16 @@ const LoginForm = () => {
           setError('403 - Access Forbidden: Admin and Superadmin not allowed.');
         } else {
           localStorage.setItem('token', response.data.token);
+          dispatch(
+            userLoaded({
+              username: response.data.result.username,
+              fullname: response.data.result.fullname,
+              email: response.data.result.email,
+              role: response.data.result.role,
+              warehouse_id: response.data.result.warehouse_id,
+              token: localStorage.getItem('token'),
+            }),
+          );
           navigate('/');
         }
       } else {

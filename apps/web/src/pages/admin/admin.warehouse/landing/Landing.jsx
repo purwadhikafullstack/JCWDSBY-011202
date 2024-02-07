@@ -1,12 +1,14 @@
 import WareHouseAdminLayout from '../../../../components/WareHouseAdminLayout';
-import { useNavigate } from 'react-router-dom';
 import { useState, useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import { VscAccount } from 'react-icons/vsc';
 import { Loading } from '../../../../components/loadingComponent';
-
+import ChartAdmin from '../../../../components/ChartWarehouseAdmin';
+import axios from 'axios';
 const LandingWarehouse = () => {
   const [isLoading, setIsLoading] = useState(true);
+  const [warehouse, setWarehouse] = useState([]);
+  const [products, setProducts] = useState([]);
   const userGlobal = useSelector((state) => state.accountSliceReducer);
 
   useEffect(() => {
@@ -19,11 +21,37 @@ const LandingWarehouse = () => {
     fetchData();
   }, []);
 
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await axios.get(
+          'http://localhost:8000/api/warehouses',
+        );
+        setWarehouse(response.data.data);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    fetchData();
+  }, []);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await axios.get('http://localhost:8000/api/products');
+        setProducts(response.data);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    fetchData();
+  }, []);
+
   return (
     <div>
       <WareHouseAdminLayout>
-        {isLoading || !userGlobal ? ( // Check if loading is true or userGlobal is not available
-          <Loading /> // Render the loading component while loading or userGlobal is not available
+        {isLoading || !userGlobal ? (
+          <Loading />
         ) : (
           <div className="w-full mx-auto">
             <div className="w-full mx-auto bg-orange-500 flex p-4 justify-between items-center">
@@ -43,6 +71,11 @@ const LandingWarehouse = () => {
                 />
               </div>
             </div>
+            <ChartAdmin
+              user={userGlobal}
+              warehouses={warehouse}
+              product={products}
+            />
           </div>
         )}
       </WareHouseAdminLayout>

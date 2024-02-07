@@ -10,6 +10,7 @@ import {
 } from '../controllers/warehouse.mutation.status.controller';
 import { finishMutation } from '../controllers/finished.mutation';
 import { cancelMutation } from '../controllers/cancel.mutation';
+import { deleteMutation } from '../controllers/mutation.delete.controller';
 import {
   ValidatePassword,
   ValidateEmail,
@@ -61,5 +62,11 @@ warehouse_mutationRouter.patch(
   cancelMutation,
 );
 //DELETE
+warehouse_mutationRouter.patch(
+  '/delete/:id',
+  validateToken,
+  ValidateAdmin,
+  deleteMutation,
+);
 
 export { warehouse_mutationRouter };

@@ -35,8 +35,10 @@ const AdminLayout = (props) => {
           className="flex items-center mb-4"
           onClick={() => navigate('/admin')}
         >
-          <h1 className="font-bold text-xl text-orange-500">Ace</h1>
-          <h1 className="font-bold text-xl">Warehouse</h1>
+          <h1 className="font-bold text-xl text-orange-500 cursor-pointer">
+            Ace
+          </h1>
+          <h1 className="font-bold text-xl cursor-pointer">Warehouse</h1>
         </div>
         <div>
           <div className="text-[12px]">

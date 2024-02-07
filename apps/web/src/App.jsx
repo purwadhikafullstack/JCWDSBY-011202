@@ -35,6 +35,7 @@ import DashboardAddress from './pages/user/dashboard/dashboardAddress';
 import DashboardOrder from './pages/user/dashboard/dashboardOrder';
 import CheckoutSuccess from './pages/user/checkoutPage/CheckoutSuccess';
 import EditWarehouse from './components/EditWarehouseModal';
+import UpdateAccount from './components/UpdateAccount';
 import { keepLogin } from './redux/slice/accountSlice';
 function App() {
   const userGlobal = useSelector((state) => state.accountSliceReducer);
@@ -53,14 +54,16 @@ function App() {
     checkData();
   }, []);
 
-
-
   return (
     <BrowserRouter>
       <Routes>
         {/* ROUTES FEATURE : PRODUCT-MANAGEMENT KAI*/}
-        <Route path="/admin/manage-account" element={<ManageAccount />} />
         {/* ROUTES FEATURE : PRODUCT-MANAGEMENT GIBRAN*/}
+        <Route path="/admin/manage-account" element={<ManageAccount />} />
+        <Route
+          path="/admin/manage-account/edit-account?"
+          element={<UpdateAccount />}
+        />
         <Route
           path="/admin/manage-account/add-admin"
           element={<AddAccount />}
@@ -129,10 +132,13 @@ function App() {
         <Route path="/cart" element={<CartPage />} />
         <Route path="/checkout" element={<CheckoutPage />} />
         <Route path="/checkout/success?" element={<CheckoutSuccess />} />
-        <Route path="user/dashboard" element={<DashboardLanding/>}/>
-        <Route path="user/dashboard/address" element={<DashboardAddress/>}/>
-        <Route path="user/dashboard/order" element={<DashboardOrder/>}/>
-        <Route path="user/dashboard/order-detail?" element={<DashboardOrder/>}/>
+        <Route path="user/dashboard" element={<DashboardLanding />} />
+        <Route path="user/dashboard/address" element={<DashboardAddress />} />
+        <Route path="user/dashboard/order" element={<DashboardOrder />} />
+        <Route
+          path="user/dashboard/order-detail?"
+          element={<DashboardOrder />}
+        />
         <Route path="" />
       </Routes>
     </BrowserRouter>

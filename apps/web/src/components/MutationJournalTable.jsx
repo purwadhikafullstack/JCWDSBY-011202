@@ -9,6 +9,7 @@ const MutationJournalTable = ({
   onClickDeliver,
   onClickDone,
   onClickDelete,
+  handleCancel,
 }) => {
   const getPriority = (val) => {
     const priorities = {
@@ -28,6 +29,9 @@ const MutationJournalTable = ({
         <table className="w-full max-w-full overflow-hidden border divide-y divide-gray-200 rounded-md">
           <thead className="bg-orange-50">
             <tr>
+              <th className="lg:px-4 lg:py-3 px-3 py-2 text-xs font-medium tracking-wider text-gray-500 uppercase">
+                Code
+              </th>
               <th className="lg:px-4 lg:py-3 px-3 py-2 text-xs font-medium tracking-wider text-gray-500 uppercase">
                 Product
               </th>
@@ -57,6 +61,9 @@ const MutationJournalTable = ({
           <tbody className="bg-white divide-y divide-gray-200">
             {sortedData.map((val) => (
               <tr key={val.id}>
+                <td className="px-4 py-4 text-sm text-gray-500 whitespace-nowrap">
+                  {val.mutation_code}
+                </td>
                 <td className="px-4 py-4 text-sm text-gray-500 whitespace-nowrap">
                   {val.productName}
                 </td>

@@ -1,6 +1,18 @@
 import warehouse_storage from '../models/warehouse_storage';
 import warehouse from '../models/warehouses';
 import products from '../models/products';
+import stocks_journals from '../models/stocks_journals';
+
+function formatDate(date) {
+  const year = date.getFullYear();
+  const month = String(date.getMonth() + 1).padStart(2, '0');
+  const day = String(date.getDate()).padStart(2, '0');
+  const hours = String(date.getHours()).padStart(2, '0');
+  const minutes = String(date.getMinutes()).padStart(2, '0');
+  const seconds = String(date.getSeconds()).padStart(2, '0');
+
+  return `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
+}
 
 export const getStorage = async (req, res, next) => {
   try {
@@ -104,7 +116,8 @@ export const addStorage = async (req, res, next) => {
     });
 
     if (existingStock) {
-      if (existingStock.is_deleted) {
+      console.log(existingStock);
+      if (existingStock.is_deleted === true) {
         const restoredStock = await warehouse_storage.update(
           {
             is_deleted: false,
@@ -116,6 +129,16 @@ export const addStorage = async (req, res, next) => {
             },
           },
         );
+
+        const journalDate = new Date();
+        await stocks_journals.create({
+          date: formatDate(journalDate),
+          product_id: req.body.product_id,
+          warehouse_id: req.body.warehouse_id,
+          quantity: req.body.stock,
+          operation: 'increment',
+          now_stock: req.body.stock,
+        });
 
         return res.status(200).send({
           success: true,
@@ -172,6 +195,16 @@ export const addStorage = async (req, res, next) => {
       stock: req.body.stock,
     });
 
+    const journalDate = new Date();
+    await stocks_journals.create({
+      date: formatDate(journalDate),
+      product_id: req.body.product_id,
+      warehouse_id: req.body.warehouse_id,
+      quantity: req.body.stock,
+      operation: 'increment',
+      now_stock: req.body.stock,
+    });
+
     res.status(200).send({
       success: true,
       message: 'Product stock added successfully.',
@@ -209,6 +242,17 @@ export const deleteWarehouseStorage = async (req, res, next) => {
         },
       },
     );
+
+    const journalDate = new Date();
+
+    await stocks_journals.create({
+      date: formatDate(journalDate),
+      product_id: warehouseStorageRecord.product_id,
+      warehouse_id: warehouseStorageRecord.warehouse_id,
+      quantity: warehouseStorageRecord.stock,
+      operation: 'decrement',
+      now_stock: 0,
+    });
 
     await warehouse_storage.update(
       { stock: 0 },

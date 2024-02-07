@@ -3,17 +3,18 @@ import warehouses from '../models/warehouses';
 import products from '../models/products';
 import warehouse_storage from '../models/warehouse_storage';
 import journal from '../models/journal';
+import { generateUniqueCode } from '../middleware/helper';
 
 export const cancelMutation = async (req, res, next) => {
   try {
+    const uniqueCode = generateUniqueCode();
     const mutationId = req.params.id;
-
     const existingMutation = await warehouse_mutation.findOne({
       where: { id: mutationId },
       raw: true,
     });
     console.log(req.userData.warehouse_id, existingMutation.warehouse_id);
-    if (!req.userData.warehouse_id === existingMutation.warehouse_id) {
+    if (!req.userData.warehouse_id == existingMutation.warehouse_id) {
       return res.status(404).send({
         success: false,
         message: 'You, are unauthorized admin.',
@@ -73,17 +74,8 @@ export const cancelMutation = async (req, res, next) => {
       { status: 'canceled' },
       {
         where: {
-          product_id: existingMutation.product_id,
-          warehouse_id: existingMutation.warehouse_id,
-          source_warehouse_id: existingMutation.source_warehouse_id,
-          destination_warehouse_id: existingMutation.destination_warehouse_id,
-          quantity: existingMutation.quantity,
           mutation_type: mutation_type_reversed,
-          is_confirmed: existingMutation.is_confirmed,
-          status: existingMutation.status,
-          createdAt: existingMutation.createdAt,
-          arrival_date: existingMutation.arrival_date,
-          delivery_date: existingMutation.delivery_date,
+          mutation_code: existingMutation.mutation_code,
         },
       },
     );
@@ -156,6 +148,18 @@ export const cancelMutation = async (req, res, next) => {
         from: journalFrom,
         warehouse_id: destinationWarehouse.id,
       });
+      if (
+        existingMutation.status === 'processing' ||
+        existingMutation.status === 'done' ||
+        existingMutation.status === 'arrived'
+      ) {
+        await journal.create({
+          date: journalDate,
+          information: `${existingMutation.mutation_code}: Your warehouse stock ${relatedProduct.name} is already increase ${relatedProduct.quantity} by mutation from canceled request ${existingMutation.mutation_code}`,
+          from: 'Storage',
+          warehouse_id: isExists.destination_warehouse_id,
+        });
+      }
     }
     return res.status(200).send({
       success: true,

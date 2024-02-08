@@ -4,12 +4,14 @@ import { Link, useNavigate } from 'react-router-dom';
 import ButtonWithLoading from '../../../components/ButtonWithLoading';
 import axios from 'axios';
 import { useDispatch, useSelector } from 'react-redux';
+import { userLoaded } from '../../../redux/slice/accountSlice';
 const LoginForm = () => {
   const [loading, setLoading] = useState(false);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState(null);
   const navigate = useNavigate();
+  const dispatch = useDispatch();
   const onHandleSignIn = async () => {
     try {
       setError(null);
@@ -30,6 +32,7 @@ const LoginForm = () => {
         ) {
           setError('403 - Access Forbidden: Admin and Superadmin not allowed.');
         } else {
+          console.log(response.data.result);
           localStorage.setItem('token', response.data.token);
           dispatch(
             userLoaded({

@@ -137,7 +137,7 @@ const CheckoutPage = () => {
         },
         { headers: { Authorization: `Bearer ${token}` } })
         console.log("ini hasil sudah di create",result);
-        // navigate(`/checkout/success?id=${result.data.id}&inv=${result.data.invoice}`)
+        navigate(`/checkout/success?id=${result.data.id}&inv=${result.data.invoice}`)
       } else {
         console.log("masuk kurang");
         alert("Mohon Lengkapi Terlebih Dahulu")

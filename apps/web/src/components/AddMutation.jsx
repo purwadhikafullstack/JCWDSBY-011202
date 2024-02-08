@@ -61,7 +61,12 @@ const AddMutation = () => {
   };
   const onHandleYes = async () => {
     const token = localStorage.getItem('token');
-
+    if (counter < 1) {
+      setLoading(false);
+      onCloseConfirmationModal();
+      showToast('warning', 'Quantity must be at least 1');
+      return;
+    }
     try {
       setLoading(true);
 

@@ -1,9 +1,9 @@
 import warehouse_mutation from '../models/warehouse_mutation';
 import warehouse_storage from '../models/warehouse_storage';
 import warehouses from '../models/warehouses';
-import account from '../models/accounts';
 import products from '../models/products';
 import journal from '../models/journal';
+import { generateUniqueCode } from '../middleware/helper';
 
 export const getMutation = async (req, res, next) => {
   try {
@@ -76,7 +76,7 @@ export const getMutation = async (req, res, next) => {
     });
   } catch (error) {
     console.log(error);
-    return res.status(500).json({
+    return res.status(500).send({
       success: false,
       message: 'Internal Server Error',
     });
@@ -85,6 +85,7 @@ export const getMutation = async (req, res, next) => {
 
 export const requestMutation = async (req, res, next) => {
   try {
+    const uniqueCode = generateUniqueCode();
     if (req.userData.id === req.body.source_warehouse_id) {
       return res.status(400).send({
         success: false,
@@ -144,6 +145,7 @@ export const requestMutation = async (req, res, next) => {
     }
     const createRequest = await warehouse_mutation.create({
       product_id: req.body.product_id,
+      mutation_code: uniqueCode,
       warehouse_id: req.userData.warehouse_id,
       source_warehouse_id: req.body.source_warehouse_id,
       destination_warehouse_id: req.userData.warehouse_id,
@@ -156,6 +158,7 @@ export const requestMutation = async (req, res, next) => {
     if (createRequest) {
       const createReverseRequest = await warehouse_mutation.create({
         product_id: req.body.product_id,
+        mutation_code: uniqueCode,
         warehouse_id: req.body.source_warehouse_id,
         source_warehouse_id: req.body.source_warehouse_id,
         destination_warehouse_id: req.userData.warehouse_id,
@@ -175,7 +178,7 @@ export const requestMutation = async (req, res, next) => {
         hour12: false,
       });
 
-      const journalInformation = `${req.userData.fullname} created a request for ${req.body.quantity} units of product ${isExistProduct.name} from warehouse ${isExistSourceWarehouse.name} to ${isExistDestinationWarehouse.name}`;
+      const journalInformation = `${uniqueCode}: ${req.userData.fullname} created a request for ${req.body.quantity} units of product ${isExistProduct.name} from warehouse ${isExistSourceWarehouse.name} to ${isExistDestinationWarehouse.name}`;
       const journalFrom = 'Mutation';
 
       if (createReverseRequest) {
@@ -186,13 +189,13 @@ export const requestMutation = async (req, res, next) => {
         });
         await journal.create({
           date: journalDate,
-          information: `The ${req.body.quantity} units of product ${isExistProduct.name} from warehouse ${isExistSourceWarehouse.name} to ${isExistDestinationWarehouse.name}`,
+          information: `${uniqueCode}: The ${req.body.quantity} units of product ${isExistProduct.name} from warehouse ${isExistSourceWarehouse.name} to ${isExistDestinationWarehouse.name}`,
           from: journalFrom,
           warehouse_id: isExistSourceWarehouse.id,
         });
         await journal.create({
           date: journalDate,
-          information: `Your request for ${req.body.quantity} units of product ${isExistProduct.name} from warehouse ${isExistSourceWarehouse.name} to ${isExistDestinationWarehouse.name} created`,
+          information: `${uniqueCode}: Your request for ${req.body.quantity} units of product ${isExistProduct.name} from warehouse ${isExistSourceWarehouse.name} to ${isExistDestinationWarehouse.name} created`,
           from: journalFrom,
           warehouse_id: isExistDestinationWarehouse.id,
         });

@@ -8,10 +8,11 @@ import { IoClose } from 'react-icons/io5';
 import axios from 'axios';
 import { useSelector } from 'react-redux';
 import ButtonWithLoading from './ButtonWithLoading';
+import { Loading } from './loadingComponent';
 
 const WarehouseInventory = () => {
   const [warehouseInventory, setWarehouseInventory] = useState([]);
-  const [loading, setLoading] = useState(false);
+  const [buttonLoading, setButtonLoading] = useState(false);
   const location = useLocation();
   const navigate = useNavigate();
   const [isModalOpen, setModalOpen] = useState(false);
@@ -49,14 +50,13 @@ const WarehouseInventory = () => {
   };
 
   const onHandleNewAdd = async () => {
-    setLoading(true);
-
+    console.log(stock, selectedProductId);
+    setButtonLoading(true);
+    const selected_warehouse = sessionStorage.getItem('warehouse_selected');
     try {
       await axios.post('http://localhost:8000/api/warehouse/storage', {
         warehouse_id:
-          userGlobal.role === 'superadmin'
-            ? warehouseId
-            : userGlobal.warehouse_id,
+          Number(selected_warehouse) || Number(userGlobal.warehouse_id),
         product_id: Number(selectedProductId),
         stock: stock,
       });
@@ -65,7 +65,7 @@ const WarehouseInventory = () => {
     } catch (error) {
       console.error('Error adding new stock:', error);
     } finally {
-      setLoading(false);
+      setButtonLoading(false);
       closeModal();
     }
   };
@@ -103,8 +103,12 @@ const WarehouseInventory = () => {
             <div
               className="rounded-lg border p-2 hover:bg-gray-200 cursor-pointer"
               onClick={() => {
-                navigate('/admin/manage-inventory');
-                sessionStorage.removeItem('warehouse_selected');
+                if (userGlobal.role === 'superadmin') {
+                  navigate('/admin/manage-inventory');
+                  sessionStorage.removeItem('warehouse_selected');
+                } else {
+                  navigate('/warehouse-admin');
+                }
               }}
             >
               <IoMdArrowBack className="text-gray-700" size={24} />
@@ -171,7 +175,7 @@ const WarehouseInventory = () => {
               </select>
               <ButtonWithLoading
                 title={'Add New'}
-                isLoading={loading}
+                isLoading={buttonLoading}
                 onClick={onHandleNewAdd}
               />
             </div>

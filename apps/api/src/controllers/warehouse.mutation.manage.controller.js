@@ -8,9 +8,6 @@ export const confirmMutation = async (req, res, next) => {
     const isExists = await warehouse_mutation.findOne({
       where: {
         id: req.params.id,
-        mutation_type: 'requested',
-        warehouse_id: req.userData.warehouse_id,
-        is_deleted: false,
         status: 'waiting for confirmation',
         is_confirmed: false,
       },
@@ -61,17 +58,8 @@ export const confirmMutation = async (req, res, next) => {
 
     const reversedWarehouse = await warehouse_mutation.findOne({
       where: {
-        warehouse_id: isExists.destination_warehouse_id,
-        product_id: isExists.product_id,
-        source_warehouse_id: isExists.source_warehouse_id,
-        quantity: isExists.quantity,
+        mutation_code: isExists.mutation_code,
         mutation_type: 'request',
-        is_confirmed: false,
-        status: 'waiting for confirmation',
-        arrival_date: isExists.arrival_date,
-        delivery_date: isExists.delivery_date,
-        is_deleted: isExists.is_deleted,
-        createdAt: isExists.createdAt,
       },
       raw: true,
     });
@@ -122,9 +110,9 @@ export const confirmMutation = async (req, res, next) => {
       hour12: false,
     });
 
-    const journalInformation = `${req.userData.fullname} confirmed a request for ${isExists.quantity} units of product ${isExistProduct.name} from warehouse ${isExistSourceWarehouse.name} to ${isExistDestinationWarehouse.name}, the stock of stock product will be reduce`;
-    const sourceInformation = `Your warehouse, ${isExistSourceWarehouse.name} confirmed a request for ${isExists.quantity} units of product  ${isExistProduct.name} of warehouse ${isExistDestinationWarehouse.name} request`;
-    const destinationInformation = `Your warehouse, ${isExistDestinationWarehouse.name} request for ${isExists.quantity} units of product ${isExistProduct.name} is confirmed by admin of ${isExistSourceWarehouse}`;
+    const journalInformation = `${isExists.mutation_code}: ${req.userData.fullname} confirmed a request for ${isExists.quantity} units of product ${isExistProduct.name} from warehouse ${isExistSourceWarehouse.name} to ${isExistDestinationWarehouse.name}, the stock of stock product will be reduce`;
+    const sourceInformation = `${isExists.mutation_code}: Your warehouse, ${isExistSourceWarehouse.name} confirmed a request for ${isExists.quantity} units of product  ${isExistProduct.name} of warehouse ${isExistDestinationWarehouse.name} request`;
+    const destinationInformation = `${isExists.mutation_code}:  Your warehouse, ${isExistDestinationWarehouse.name} request for ${isExists.quantity} units of product ${isExistProduct.name} is confirmed by admin of ${isExistSourceWarehouse}`;
     const journalFrom = 'Mutation Stock';
     if (updateStatusReversedWarehouse && updateStatus) {
       await journal.create({

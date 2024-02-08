@@ -2,14 +2,14 @@
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up(queryInterface, Sequelize) {
-    await queryInterface.createTable('warehouse_mutations', {
+    await queryInterface.createTable('stocks_journals', {
       id: {
         allowNull: false,
         autoIncrement: true,
         primaryKey: true,
         type: Sequelize.INTEGER,
       },
-      mutation_code: {
+      date: {
         type: Sequelize.STRING,
         allowNull: false,
       },
@@ -21,41 +21,17 @@ module.exports = {
         type: Sequelize.INTEGER,
         allowNull: false,
       },
-      source_warehouse_id: {
-        type: Sequelize.INTEGER,
-        allowNull: false,
-      },
-      destination_warehouse_id: {
-        type: Sequelize.INTEGER,
-        allowNull: false,
-      },
       quantity: {
         type: Sequelize.INTEGER,
         allowNull: false,
       },
-      mutation_type: {
+      operation: {
         type: Sequelize.STRING,
         allowNull: false,
       },
-      is_confirmed: {
-        type: Sequelize.BOOLEAN,
+      now_stock: {
+        type: Sequelize.INTEGER,
         allowNull: false,
-        defaultValue: false,
-      },
-      status: {
-        type: Sequelize.STRING,
-        allowNull: false,
-      },
-      arrival_date: {
-        type: Sequelize.STRING,
-      },
-      delivery_date: {
-        type: Sequelize.STRING,
-      },
-      is_deleted: {
-        type: Sequelize.BOOLEAN,
-        allowNull: false,
-        defaultValue: false,
       },
       createdAt: {
         allowNull: false,
@@ -68,6 +44,6 @@ module.exports = {
     });
   },
   async down(queryInterface, Sequelize) {
-    await queryInterface.dropTable('warehouse_mutations');
+    await queryInterface.dropTable('stocks_journals');
   },
 };

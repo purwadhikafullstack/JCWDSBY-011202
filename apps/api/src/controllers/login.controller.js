@@ -46,6 +46,10 @@ export const Login = async (req, res, next) => {
     const resultData = {
       username: findAccount.username,
       role: findAccount.role,
+      fullname: findAccount.fullname,
+      email: findAccount.email,
+      is_confirmed: findAccount.is_confirmed,
+      warehouse_id: findAccount.warehouse_id,
     };
 
     return res.status(200).send({

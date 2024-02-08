@@ -1,41 +1,31 @@
 import { useState, useEffect } from 'react';
 import axios from 'axios';
-const SearchByCategory = (props) => {
+const SearchByCategory = ({
+  categories,
+  checkedValue,
+  refStatus,
+  onClickStatus,
+}) => {
   const get = document.getElementById('status');
   const [selectedValue, setSelectedValue] = useState('');
-  const [category, setCategories] = useState([]);
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await axios.get(
-          'http://localhost:8000/api/categories',
-        );
-        setCategories(response.data);
-      } catch (error) {
-        console.error('Error fetching categories:', error);
-      }
-    };
-
-    fetchData();
-  }, []);
   return (
     <>
       <p className="mx-2">Category</p>
       <ul className="w-full overflow-x-auto flex gap-2 items-center h-[50px] no-scrollbar">
-        {category.map((val, id) => {
+        {categories.map((val, id) => {
           if (val === '') {
             return (
               <li className=" whitespace-nowrap  ">
                 <input
-                  checked={props.checkedValue === ''}
-                  ref={props.refStatus}
+                  checked={checkedValue === ''}
+                  ref={refStatus}
                   type="radio"
                   name={'status'}
                   value={''}
                   id={id}
                   className="peer hidden"
-                  onClick={props.onClickStatus}
+                  onClick={onClickStatus}
                 />
                 <label
                   for={id}
@@ -49,14 +39,14 @@ const SearchByCategory = (props) => {
             return (
               <li className=" whitespace-nowrap  ">
                 <input
-                  checked={props.checkedValue === val.category}
-                  ref={props.refStatus}
+                  checked={checkedValue === val.category}
+                  ref={refStatus}
                   type="radio"
-                  value={val.category}
+                  value={val.id}
                   name={'status'}
                   id={id}
                   className="peer hidden"
-                  onClick={props.onClickStatus}
+                  onClick={onClickStatus}
                 />
                 <label
                   for={id}

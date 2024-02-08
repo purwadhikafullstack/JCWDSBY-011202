@@ -35,6 +35,7 @@ import DashboardAddress from './pages/user/dashboard/dashboardAddress';
 import DashboardOrder from './pages/user/dashboard/dashboardOrder';
 import CheckoutSuccess from './pages/user/checkoutPage/CheckoutSuccess';
 import EditWarehouse from './components/EditWarehouseModal';
+import UpdateAccount from './components/UpdateAccount';
 import { keepLogin } from './redux/slice/accountSlice';
 import DashboardUploadPayment from './pages/user/dashboard/dashboardUploadPayment';
 function App() {
@@ -54,14 +55,16 @@ function App() {
     checkData();
   }, []);
 
-
-
   return (
     <BrowserRouter>
       <Routes>
         {/* ROUTES FEATURE : PRODUCT-MANAGEMENT KAI*/}
-        <Route path="/admin/manage-account" element={<ManageAccount />} />
         {/* ROUTES FEATURE : PRODUCT-MANAGEMENT GIBRAN*/}
+        <Route path="/admin/manage-account" element={<ManageAccount />} />
+        <Route
+          path="/admin/manage-account/edit-account?"
+          element={<UpdateAccount />}
+        />
         <Route
           path="/admin/manage-account/add-admin"
           element={<AddAccount />}

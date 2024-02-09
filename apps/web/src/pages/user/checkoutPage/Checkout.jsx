@@ -12,7 +12,6 @@ const CheckoutPage = () => {
   const navigate = useNavigate()
   const [firstloading, setFirstLoading] = useState(false);
   const [secondloading, setSecondLoading] = useState(false);
-  const [thirdloading, setThirdLoading] = useState(false);
   const [recepient, setRecepient] = useState('');
   const [phone, setPhone] = useState('');
   const [cartData, setCartData] = useState([]);
@@ -24,7 +23,6 @@ const CheckoutPage = () => {
   const [shippingPrice, setShippingPrice] = useState('');
   const [userAddress, setUserAddress] = useState([]);
   const [finalPrice, setFinalPrice] = useState('-');
-  const [changeAddress, setChangeAddress] = useState(false);
   const [courierOpt, setCourierOpt] = useState(false);
   const [shippingOpt, setShippingOpt] = useState(false);
   const [modalLanjutkanCheckout, setModalLanjutkanCheckout] = useState(false);
@@ -137,6 +135,9 @@ const CheckoutPage = () => {
         },
         { headers: { Authorization: `Bearer ${token}` } })
         console.log("ini hasil sudah di create",result);
+        sessionStorage.removeItem("idOngkir")
+        sessionStorage.removeItem("hargaOngkir")
+        sessionStorage.removeItem("service")
         navigate(`/checkout/success?id=${result.data.id}&inv=${result.data.invoice}`)
       } else {
         console.log("masuk kurang");

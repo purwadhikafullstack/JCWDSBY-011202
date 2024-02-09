@@ -37,6 +37,7 @@ const DashboardUploadPayment = (props) => {
       if (!media) {
         alert('Silahkan upload bukti pembayaran terlebih dahulu ');
       } else {
+        const token = localStorage.getItem("token")
         const formData = new FormData();
         // console.log('masuk sinii', fileToUpload);
         formData.append('fileUpload', fileToUpload);
@@ -44,6 +45,7 @@ const DashboardUploadPayment = (props) => {
           `http://localhost:8000/api/userOrder/upload/payment-proof${location.search}`,
           formData,
         );
+        const result2 = await axios.post(`http://localhost:8000/api/userOrder/request-mutation${location.search}`,)
         navigate("/user/dashboard/order")
         alert("Terima kasih sudah mengupload pembayaran, pembayaran anda akan segera dikonfirmasi ")
       }
@@ -66,12 +68,12 @@ const DashboardUploadPayment = (props) => {
     }
   };
   useEffect(() => {
-    if (!sessionStorage.getItem('orderItem')) {
-      navigate('/user/dashboard/order');
-    } else {
-      getOrderDetail();
-      openLoading(1500);
-    }
+    // if (!sessionStorage.getItem('orderItem')) {
+    //   navigate('/user/dashboard/order');
+    // } else {
+    // }
+    getOrderDetail();
+    openLoading(1500);
   }, []);
   return (
     <>

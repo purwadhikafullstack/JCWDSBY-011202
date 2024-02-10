@@ -16,7 +16,6 @@ const CheckoutPage = () => {
   const navigate = useNavigate();
   const [firstloading, setFirstLoading] = useState(false);
   const [secondloading, setSecondLoading] = useState(false);
-  const [thirdloading, setThirdLoading] = useState(false);
   const [recepient, setRecepient] = useState('');
   const [phone, setPhone] = useState('');
   const [cartData, setCartData] = useState([]);
@@ -28,7 +27,6 @@ const CheckoutPage = () => {
   const [shippingPrice, setShippingPrice] = useState('');
   const [userAddress, setUserAddress] = useState([]);
   const [finalPrice, setFinalPrice] = useState('-');
-  const [changeAddress, setChangeAddress] = useState(false);
   const [courierOpt, setCourierOpt] = useState(false);
   const [shippingOpt, setShippingOpt] = useState(false);
   const [modalLanjutkanCheckout, setModalLanjutkanCheckout] = useState(false);
@@ -123,37 +121,28 @@ const CheckoutPage = () => {
         console.log('masuk dah benar');
         const date = new Date();
         const token = localStorage.getItem('token');
-        const result = await axios.post(
-          `http://localhost:8000/api/checkout`,
-          {
-            invoice: `INV/${date.getFullYear()}${
-              date.getMonth() + 1 < 10
-                ? `0${date.getMonth() + 1}`
-                : date.getMonth() + 1
-            }${
-              date.getDate() < 10 ? `0${date.getDate()}` : date.getDate()
-            }/${userData.city.slice(0, 3).toUpperCase()}/${
-              userData.account_id
-            }/`,
-            // account_id,
-            cartId: localStorage.getItem('cartId'),
-            address_id: userData.address_id,
-            warehouse_id,
-            recepient: recepient ? recepient : userData.fullname,
-            // phone,
-            shipping_cost: parseInt(sessionStorage.getItem('hargaOngkir')),
-            shipping_type: sessionStorage.getItem('service'),
-            total_price: finalPrice,
-            total_weight: coWeight,
-            status: 'Menunggu Pembayaran',
-            payment_proof: '',
-          },
-          { headers: { Authorization: `Bearer ${token}` } },
-        );
-        console.log('ini hasil sudah di create', result);
-        navigate(
-          `/checkout/success?id=${result.data.id}&inv=${result.data.invoice}`,
-        );
+        const result = await axios.post(`http://localhost:8000/api/checkout`,
+        {
+          invoice:`INV/${date.getFullYear()}${date.getMonth()+1<10?`0${date.getMonth()+1}`:date.getMonth()+1}${date.getDate()<10?`0${date.getDate()}`:date.getDate()}/${userData.city.slice(0,3).toUpperCase()}/${userData.account_id}/`,
+          // account_id,
+          cartId:localStorage.getItem("cartId"),
+          address_id:userData.address_id,
+          warehouse_id,
+          recepient:recepient?recepient:userData.fullname,
+          // phone,
+          shipping_cost:parseInt(sessionStorage.getItem('hargaOngkir')),
+          shipping_type:sessionStorage.getItem("service"),
+          total_price:finalPrice,
+          total_weight:coWeight,
+          status:"Menunggu Pembayaran",
+          payment_proof:""
+        },
+        { headers: { Authorization: `Bearer ${token}` } })
+        console.log("ini hasil sudah di create",result);
+        sessionStorage.removeItem("idOngkir")
+        sessionStorage.removeItem("hargaOngkir")
+        sessionStorage.removeItem("service")
+        navigate(`/checkout/success?id=${result.data.id}&inv=${result.data.invoice}`)
       } else {
         console.log('masuk kurang');
         alert('Mohon Lengkapi Terlebih Dahulu');

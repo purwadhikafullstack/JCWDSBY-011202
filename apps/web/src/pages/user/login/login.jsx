@@ -6,6 +6,7 @@ import axios from 'axios';
 import { useDispatch, useSelector } from 'react-redux';
 import { userLoaded } from '../../../redux/slice/accountSlice';
 const LoginForm = () => {
+  const dispatch = useDispatch()
   const [loading, setLoading] = useState(false);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');

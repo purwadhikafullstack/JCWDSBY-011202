@@ -26,7 +26,7 @@ const WarehouseAdminLineStockChart = ({ product, user }) => {
       },
     ],
   };
-  console.log(selectedProduct, Number(user.warehouse_id));
+
   useEffect(() => {
     const fetchData = async () => {
       try {

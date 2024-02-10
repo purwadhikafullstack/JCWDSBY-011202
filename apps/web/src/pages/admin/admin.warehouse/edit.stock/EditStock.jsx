@@ -5,9 +5,11 @@ import DataEditStock from '../../../../components/DataEditStock';
 import { useEffect, useState } from 'react';
 import axios from 'axios';
 import ConfirmationModal from '../../../../components/ConfirmationModal';
-
+import { useSelector } from 'react-redux';
+import AdminLayout from '../../../../components/AdminLayout';
 const EditStockProduct = () => {
   const navigate = useNavigate();
+  const userGlobal = useSelector((state) => state.accountSliceReducer);
   const { id } = useParams();
   const realIdNumber = parseInt(id.replace('storage-000', ''));
   const [loading, setLoading] = useState(false);

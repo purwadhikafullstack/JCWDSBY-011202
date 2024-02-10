@@ -11,6 +11,7 @@ const LandingAdmin = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [warehouse, setWarehouse] = useState([]);
   const [products, setProducts] = useState([]);
+  const [data, setData] = useState([]);
   useEffect(() => {
     const fetchData = async () => {
       setTimeout(() => {
@@ -56,6 +57,20 @@ const LandingAdmin = () => {
     };
     fetchData();
   }, []);
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await axios.get(
+          'http://localhost:8000/api/journal/get-data',
+        );
+        setData(response.data);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    fetchData();
+  }, []);
+  console.log(data);
   return (
     <div>
       <AdminLayout>
@@ -78,7 +93,7 @@ const LandingAdmin = () => {
                       />
                     }
                     title="Admin"
-                    value="7"
+                    value={data.countadmin}
                   />
                   <ResourceCard
                     icon={
@@ -88,7 +103,7 @@ const LandingAdmin = () => {
                       />
                     }
                     title="Furnitures"
-                    value="13"
+                    value={data.countproduct}
                   />
                   <ResourceCard
                     icon={
@@ -98,7 +113,7 @@ const LandingAdmin = () => {
                       />
                     }
                     title="Warehouses"
-                    value="3"
+                    value={data.countwarehouse}
                   />
                 </div>
               </div>

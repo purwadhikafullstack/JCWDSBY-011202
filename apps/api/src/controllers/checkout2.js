@@ -1,57 +1,58 @@
-import { Op } from "sequelize";
-import accounts from "../models/accounts";
-import addresses from "../models/addresses"
-import carts from "../models/carts";
-import cities from "../models/cities";
-import order_details from "../models/order_details";
-import orders from "../models/orders";
-import provinces from "../models/provinces";
-import warehouse_storage from "../models/warehouse_storage";
-import warehouse_mutation from "../models/warehouse_mutation";
+import { Op } from 'sequelize';
+import accounts from '../models/accounts';
+import addresses from '../models/addresses';
+import carts from '../models/carts';
+import cities from '../models/cities';
+import order_details from '../models/order_details';
+import orders from '../models/orders';
+import provinces from '../models/provinces';
+import warehouse_storage from '../models/warehouse_storage';
+import warehouse_mutation from '../models/warehouse_mutation';
 
 export const getUserAddress = async (req, res, next) => {
-    try {
-        const address = await addresses.findAll({
-            where: {
-                account_id: req.userData.id
-            },
-            include: [
-                {
-                    model: provinces,
-                    required: true,
-                    attributes: ["name"]
-                },
-                {
-                    model: cities,
-                    required: true,
-                    attributes: ["name"]
-                },
-            ],
-            raw: true
-        })
-        return res.status(200).send({ success: "Success get address", address })
-    } catch (error) {
-        return res.status(500).send({ success: "FAILED get address" })
-
-    }
-}
-export const changeUserAddress = async (req, res, next) => {
-    try {
-        // console.log("haha",req.body);
-        const result = await accounts.update({
-            address_id: req.body.address
+  try {
+    const address = await addresses.findAll({
+      where: {
+        account_id: req.userData.id,
+      },
+      include: [
+        {
+          model: provinces,
+          required: true,
+          attributes: ['name'],
         },
-            {
-                where: {
-                    id: req.userData.id
-                }
-            })
-        // console.log("ganit da",result);
-        return res.status(200).send(result);
-    } catch (error) {
-        return res.status(500).send(error)
-    }
-}
+        {
+          model: cities,
+          required: true,
+          attributes: ['name'],
+        },
+      ],
+      raw: true,
+    });
+    return res.status(200).send({ success: 'Success get address', address });
+  } catch (error) {
+    return res.status(500).send({ success: 'FAILED get address' });
+  }
+};
+export const changeUserAddress = async (req, res, next) => {
+  try {
+    // console.log("haha",req.body);
+    const result = await accounts.update(
+      {
+        address_id: req.body.address,
+      },
+      {
+        where: {
+          id: req.userData.id,
+        },
+      },
+    );
+    // console.log("ganit da",result);
+    return res.status(200).send(result);
+  } catch (error) {
+    return res.status(500).send(error);
+  }
+};
 export const createOrder = async (req, res, next) => {
     try {
         // console.log("masuk nih", req.body);
@@ -168,25 +169,23 @@ export const createOrder = async (req, res, next) => {
     }
 }
 export const getOrderData = async (req, res, next) => {
-    try {
-        const result = await orders.findOne({
-            where: {
-                [Op.and]: [
-                    { id: parseInt(req.query.id) },
-                    { invoice: req.query.inv }
-                ]
-            },
-            include: [
-                {
-                    model: accounts,
-                    required: true,
-                    attributes: ["email"]
-                }],
-            raw: true
-        })
-        return res.status(200).send(result)
-    } catch (error) {
-        console.log(error);
-        return res.status(500).send(error)
-    }
-}
+  try {
+    const result = await orders.findOne({
+      where: {
+        [Op.and]: [{ id: parseInt(req.query.id) }, { invoice: req.query.inv }],
+      },
+      include: [
+        {
+          model: accounts,
+          required: true,
+          attributes: ['email'],
+        },
+      ],
+      raw: true,
+    });
+    return res.status(200).send(result);
+  } catch (error) {
+    console.log(error);
+    return res.status(500).send(error);
+  }
+};

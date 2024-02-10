@@ -12,6 +12,7 @@ const LoginForm = () => {
   const [password, setPassword] = useState('');
   const [error, setError] = useState(null);
   const navigate = useNavigate();
+  const dispatch = useDispatch();
   const onHandleSignIn = async () => {
     try {
       setError(null);
@@ -32,6 +33,7 @@ const LoginForm = () => {
         ) {
           setError('403 - Access Forbidden: Admin and Superadmin not allowed.');
         } else {
+          console.log(response.data.result);
           localStorage.setItem('token', response.data.token);
           dispatch(
             userLoaded({

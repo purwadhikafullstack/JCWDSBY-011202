@@ -90,7 +90,7 @@ const DashboardUploadPayment = (props) => {
               <div className="flex flex-col gap-y-2">
                 <p>No Invoice</p>
                 <p className="bg-slate-200 rounded-md py-1 px-2 font-semibold">
-                  {data[0].invoice}
+                  {data?data[0].invoice:""}
                 </p>
                 <p className="">Detail Transfer</p>
                 <div className="bg-slate-200 rounded-md py-1 px-2 font-semibold flex flex-col gap-y-1">

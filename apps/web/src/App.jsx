@@ -38,6 +38,7 @@ import EditWarehouse from './components/EditWarehouseModal';
 import UpdateAccount from './components/UpdateAccount';
 import { keepLogin } from './redux/slice/accountSlice';
 import DashboardUploadPayment from './pages/user/dashboard/dashboardUploadPayment';
+import WarehouseManageOrder from './pages/admin/admin.warehouse/manage.order/Manage.Order';
 function App() {
   const userGlobal = useSelector((state) => state.accountSliceReducer);
   const dispatch = useDispatch();
@@ -137,6 +138,10 @@ function App() {
         <Route path="user/dashboard/address" element={<DashboardAddress/>}/>
         <Route path="user/dashboard/order" element={<DashboardOrder/>}/>
         <Route path="user/dashboard/upload-payment?" element={<DashboardUploadPayment/>}/>
+        <Route
+          path="/warehouse-admin/manage-order"
+          element={<WarehouseManageOrder />}
+        />
         <Route path="" />
       </Routes>
     </BrowserRouter>

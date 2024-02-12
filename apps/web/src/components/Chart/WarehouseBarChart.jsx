@@ -2,27 +2,34 @@ import BarChart from './BarChart';
 import { useState, useEffect } from 'react';
 import axios from 'axios';
 
-const WarehouseAdminBarChart = ({ products, user }) => {
+const WarehouseAdminBarChart = ({ product, user }) => {
   const [data1, setData] = useState([]);
   const [selectedProduct, setSelectedProduct] = useState('');
 
   const labels = data1.map((item) => item.month);
   const salesData = data1.map((item) => item.sales);
-
+  console.log(product);
   const data = {
     labels: labels,
     datasets: [
       {
         label: 'Products sold',
         data: salesData,
-        backgroundColor: ['red', 'blue', 'yellow', 'green', 'purple', 'orange'],
+        backgroundColor: [
+          'rgba(132, 136, 114, 1)',
+          'rgba(24, 58, 55, 1)',
+          'rgba(239, 214, 172, 1)',
+          'rgba(218, 144, 86, 1)',
+          'rgba(199, 82, 11, 1)',
+          'rgba(196, 73, 0, 1)',
+        ],
         borderColor: [
-          'rgba(255, 99, 132, 1)',
-          'rgba(54, 162, 235, 1)',
-          'rgba(255, 206, 86, 1)',
-          'rgba(75, 192, 192, 1)',
-          'rgba(153, 102, 255, 1)',
-          'rgba(255, 159, 64, 1)',
+          'rgba(132, 136, 114, 1)',
+          'rgba(24, 58, 55, 1)',
+          'rgba(239, 214, 172, 1)',
+          'rgba(218, 144, 86, 1)',
+          'rgba(199, 82, 11, 1)',
+          'rgba(196, 73, 0, 1)',
         ],
         borderWidth: 1,
       },
@@ -57,8 +64,8 @@ const WarehouseAdminBarChart = ({ products, user }) => {
           onChange={handleProductChange}
         >
           <option value="">All Product</option>
-          {products &&
-            products.map((item) => (
+          {product &&
+            product.map((item) => (
               <option key={item.id} value={item.id}>
                 {item.name}
               </option>

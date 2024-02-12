@@ -8,8 +8,8 @@ const ListWarehouse = ({ warehouses, onClickDelete, onClickEdit }) => {
   }, [warehouses]);
 
   return (
-    <div className="overflow-x-auto mx-auto">
-      <div className="max-w-full overflow-hidden">
+    <div className=" mx-auto max-w-full">
+      <div className=" overflow-x-auto">
         <table className="w-full border-collapse border border-gray-200">
           <thead className="bg-orange-50">
             <tr>
@@ -45,10 +45,10 @@ const ListWarehouse = ({ warehouses, onClickDelete, onClickEdit }) => {
                 <td className="py-2 px-2 sm:px-4 text-sm text-gray-500 whitespace-nowrap text-center">
                   {val.address}
                 </td>
-                <td className="py-2 px-2 sm:px-4 text-sm text-gray-500 whitespace-nowrap flex items-center justify-center">
+                <td className="py-2 px-2 sm:px-4 text-sm text-gray-500 whitespace-nowrap flex flex-col sm:flex-row items-center justify-center">
                   <button
                     onClick={() => onClickEdit(val.id)}
-                    className="bg-orange-500 hover:bg-orange-700 text-white px-4 py-2 rounded mr-2"
+                    className="bg-orange-500 hover:bg-orange-700 text-white px-4 py-2 rounded mb-2 sm:mb-0 sm:mr-2 w-full sm:w-auto"
                   >
                     Edit
                   </button>

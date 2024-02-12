@@ -58,14 +58,14 @@ const AddProduct = () => {
           <div className="flex justify-between bg-white h-16 p-4 items-center">
             <div className="flex items-center">
               <div
-                class="rounded-lg border p-2 hover:bg-gray-200 cursor-pointer"
+                class="rounded-lg border p-2 hover:bg-gray-200 cursor-pointer sm:ml-0 ml-4"
                 onClick={() => {
                   navigate('/admin/manage-product');
                 }}
               >
                 <IoMdArrowBack class="text-gray-700" size={24} />
               </div>
-              <h1 className="mx-2 font-bold text-xl">Add New Product</h1>
+              <h1 className="mx-2 font-bold sm:text-xl">Add New Product</h1>
             </div>
             <div>
               <button
@@ -77,52 +77,46 @@ const AddProduct = () => {
             </div>
           </div>
         </div>
-        <div className="mx-6 bg-white m-8 pb-4">
+        <div className="mx-6 bg-white m-8">
           <div className="p-4">
             <h1 className="font-medium text-black ">Upload Image</h1>
             <p className="text-sm font-light">
-              Upload capitaving Images to make the product stand out
+              Upload captivating Images to make the product stand out
             </p>
             <hr className="mt-2" />
           </div>
-          <div className="mx-6 flex">
-            <div>
-              <div className="w-[400px] h-[400px]">
-                <CustomFileInput
-                  onImagePreviewsChange={handleImagePreviewsChange}
-                  onCancelPreview={handleCancelPreview}
-                />
-              </div>
+          <div className="sm:mx-6 flex sm:flex-row flex-col">
+            <div className="w-full">
+              <CustomFileInput
+                onImagePreviewsChange={handleImagePreviewsChange}
+                onCancelPreview={handleCancelPreview}
+              />
             </div>
             <div className="mx-2 w-full">
-              <div className="w-full ml-4">
-                <FormProductAdd
-                  onChangeName={(e) => setNameProduct(e.target.value)}
-                  onChangePrice={(e) => setPrice(e.target.value)}
-                  onChangeCategory={(e) => setCategory_id(e.target.value)}
-                  onChangeDescription={(e) => setDescription(e.target.value)}
-                  onChangeWeight={(e) => setWeight(e.target.value)}
-                />
-                <div className="w-full ">
-                  <div className="mt-2 h-32 border rounded-lg p-2 flex bg-gray-50 ">
-                    <h1 className="text-sm font-medium text-gray-900 dark:text-gray-400 mr-4">
-                      Other Images:
-                    </h1>
-                    {selectedImagePreviews.length > 1 && (
-                      <div className="flex flex-wrap space-x-4  item-center">
-                        {selectedImagePreviews
-                          .slice(1)
-                          .map((preview, index) => (
-                            <img
-                              key={index + 1}
-                              src={preview}
-                              className="w-24 h-24 object-cover rounded-md mb-2 md:w-[108px] md:h-[108px] md:mb-0"
-                              alt={`Image Preview ${index + 1}`}
-                            />
-                          ))}
-                      </div>
-                    )}
-                  </div>
+              <FormProductAdd
+                onChangeName={(e) => setNameProduct(e.target.value)}
+                onChangePrice={(e) => setPrice(e.target.value)}
+                onChangeCategory={(e) => setCategory_id(e.target.value)}
+                onChangeDescription={(e) => setDescription(e.target.value)}
+                onChangeWeight={(e) => setWeight(e.target.value)}
+              />
+              <div className="w-full ">
+                <div className="mt-2 h-32 border rounded-lg p-2 flex bg-gray-50 ">
+                  <h1 className="text-sm font-medium text-gray-900 dark:text-gray-400 mr-4">
+                    Other Images:
+                  </h1>
+                  {selectedImagePreviews.length > 1 && (
+                    <div className="flex flex-wrap space-x-4  item-center">
+                      {selectedImagePreviews.slice(1).map((preview, index) => (
+                        <img
+                          key={index + 1}
+                          src={preview}
+                          className="w-24 h-24 object-cover rounded-md mb-2 md:w-[108px] md:h-[108px] md:mb-0"
+                          alt={`Image Preview ${index + 1}`}
+                        />
+                      ))}
+                    </div>
+                  )}
                 </div>
               </div>
             </div>

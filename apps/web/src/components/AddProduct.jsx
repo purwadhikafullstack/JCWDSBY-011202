@@ -28,7 +28,6 @@ const AddProduct = () => {
   const handleCancelPreview = () => {
     setSelectedImagePreviews([]);
   };
-  console.log(NameProduct, Price, Description, Category_id, imageToUpload);
 
   const handleAddProduct = async () => {
     try {

@@ -58,7 +58,6 @@ export const requestMutation = async (req, res, next) => {
                 order: [["stock", "DESC"]],
                 raw: true
             })
-            console.log("masuk sini2");
             const itemMutation = []
             let date = new Date()
             for (let i = 0; i < productLessStock.length; i++) {

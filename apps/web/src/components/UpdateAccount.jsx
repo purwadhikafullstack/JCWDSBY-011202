@@ -1,9 +1,99 @@
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import AdminLayout from './AdminLayout';
 import EditWarehouseAdmin from './EditWarehouseAdmin';
 import { IoMdArrowBack } from 'react-icons/io';
+import { useState, useEffect } from 'react';
+import axios from 'axios';
+import { Loading } from './loadingComponent';
+import ConfirmationModal from './ConfirmationModal';
+import Toast from './Toast';
+
 const UpdateAccount = () => {
   const navigate = useNavigate();
+  const [showConfirmationModal, setShowConfirmationModal] = useState(false);
+  const [email, setEmail] = useState('');
+  const [fullname, setFullName] = useState('');
+  const [warehouse, setWarehouse] = useState(0);
+  const location = useLocation();
+  const [toast, setToast] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const realIdNumber = location.search.split('-')[1].replace('00', '');
+
+  useEffect(() => {
+    const fetchData = async () => {
+      setLoading(true);
+      try {
+        const response = await axios.get(
+          `http://localhost:8000/api/accounts?id=${realIdNumber}`,
+        );
+        const { email, fullname, warehouse_id } = response.data[0];
+        setEmail(email);
+        setFullName(fullname);
+        setWarehouse(parseInt(warehouse_id));
+      } catch (error) {
+        console.log(error);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchData();
+  }, [realIdNumber]);
+
+  const showToast = (status, message) => {
+    setToast({ status, message });
+    setTimeout(() => {
+      setToast(null);
+    }, 5000);
+  };
+
+  const onCloseConfirmationModal = () => {
+    setShowConfirmationModal(false);
+  };
+
+  const handleSaveChanges = () => {
+    setShowConfirmationModal(true);
+  };
+
+  const onHandleYes = async () => {
+    const token = localStorage.getItem('token');
+    console.log(warehouse);
+    try {
+      setLoading(true);
+      const response = await axios.patch(
+        `http://localhost:8000/api/accounts/update-account/${realIdNumber}`,
+        {
+          fullname,
+          email,
+          role: 'admin',
+          warehouse_id: warehouse,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        },
+      );
+
+      if (response.data.success === true) {
+        showToast('success', 'Update account successfully');
+      } else {
+        showToast(
+          'danger',
+          error.response.data.message || 'Failed to create account',
+        );
+      }
+    } catch (error) {
+      console.error('Error update account:', error);
+      showToast(
+        'danger',
+        error.response.data.message || 'An error occurred. Please try again.',
+      );
+    } finally {
+      setLoading(false);
+      onCloseConfirmationModal();
+    }
+  };
+
   return (
     <div>
       <AdminLayout>
@@ -21,24 +111,49 @@ const UpdateAccount = () => {
         </div>
         <div className="mx-6 bg-white m-8 pb-4">
           <div className="flex mx-auto w-6/12">
-            <div className="mx-auto mt-4">Warehouse Admin Update</div>
+            <div className="mx-auto mt-4 font-bold">Warehouse Admin Update</div>
           </div>
           <hr className="w-11/12 mx-auto mt-3" />
-          <div className="mt-4">
-            <EditWarehouseAdmin
-              onChangeEmail={(e) => setEmail(e.target.value)}
-              onChangePassword={(e) => setPassword(e.target.value)}
-              onChangeFullName={(e) => setFullName(e.target.value)}
-              onChangeWarehouse={(e) => setWarehouse(e.target.value)}
-            />
-          </div>
+          {loading ? (
+            <Loading />
+          ) : (
+            <div className="mt-4">
+              <EditWarehouseAdmin
+                onChangeEmail={(e) => setEmail(e.target.value)}
+                onChangeFullName={(e) => setFullName(e.target.value)}
+                onChangeWarehouse={(e) => setWarehouse(e.target.value)}
+                selectedWarehouse={warehouse}
+                emailValue={email}
+                fullNameValue={fullname}
+              />
+            </div>
+          )}
           <div className="flex justify-end p-2 mt-2">
-            <button className="font-medium text-sm bg-orange-500 hover:bg-orange-600 text-white py-2 px-4 rounded-md transition-all duration-300 ease-in-out focus:outline-none">
+            <button
+              className="font-medium text-sm bg-orange-500 hover:bg-orange-600 text-white py-2 px-4 rounded-md transition-all duration-300 ease-in-out focus:outline-none"
+              onClick={handleSaveChanges}
+            >
               Save Changes
             </button>
           </div>
         </div>
       </AdminLayout>
+      {showConfirmationModal && (
+        <ConfirmationModal
+          onClickCancel={onCloseConfirmationModal}
+          onclickClose={onCloseConfirmationModal}
+          title="Edit Admin"
+          isLoading={loading}
+          onClick={onHandleYes}
+        />
+      )}
+      {toast && (
+        <Toast
+          status={toast.status}
+          message={toast.message}
+          onClose={() => setToast(null)}
+        />
+      )}
     </div>
   );
 };

@@ -6,10 +6,14 @@ import TemporaryNavbar from '../../../components/Temporary/Navbar';
 import TemporaryFooter from '../../../components/Temporary/Footer';
 import axios from 'axios';
 import { Loading, MiniLoading } from '../../../components/loadingComponent';
-import { IModalOpt, IModalCourier, IModal } from '../../../components/modalRama';
+import {
+  IModalOpt,
+  IModalCourier,
+  IModal,
+} from '../../../components/modalRama';
 
 const CheckoutPage = () => {
-  const navigate = useNavigate()
+  const navigate = useNavigate();
   const [firstloading, setFirstLoading] = useState(false);
   const [secondloading, setSecondLoading] = useState(false);
   const [recepient, setRecepient] = useState('');
@@ -19,7 +23,7 @@ const CheckoutPage = () => {
   const [coWeight, setCoWeight] = useState(0);
   const [userData, setUserData] = useState([]);
   const [shippingCost, setShippingCost] = useState([]);
-  const [warehouse_id,serWarehouse_id]= useState(0)
+  const [warehouse_id, serWarehouse_id] = useState(0);
   const [shippingPrice, setShippingPrice] = useState('');
   const [userAddress, setUserAddress] = useState([]);
   const [finalPrice, setFinalPrice] = useState('-');
@@ -111,11 +115,11 @@ const CheckoutPage = () => {
       console.log(error);
     }
   };
-  const onHandleLanjutkanCheckout = async () =>{
+  const onHandleLanjutkanCheckout = async () => {
     try {
-      if(finalPrice!="-"){
-        console.log("masuk dah benar");
-        const date= new Date()
+      if (finalPrice != '-') {
+        console.log('masuk dah benar');
+        const date = new Date();
         const token = localStorage.getItem('token');
         const result = await axios.post(`http://localhost:8000/api/checkout`,
         {
@@ -140,13 +144,13 @@ const CheckoutPage = () => {
         sessionStorage.removeItem("service")
         navigate(`/checkout/success?order=${result.data.id}&inv=${result.data.invoice}`)
       } else {
-        console.log("masuk kurang");
-        alert("Mohon Lengkapi Terlebih Dahulu")
+        console.log('masuk kurang');
+        alert('Mohon Lengkapi Terlebih Dahulu');
       }
     } catch (error) {
       console.log(error);
     }
-  }
+  };
   useEffect(() => {
     openLoading(2000);
     getDataCart();
@@ -186,7 +190,7 @@ const CheckoutPage = () => {
           <CheckoutPayment
             recepient={recepient ? recepient : userData.fullname}
             address={userData['address']}
-            phone={phone?phone:userData['phone']}
+            phone={phone ? phone : userData['phone']}
             city={userData.city}
             shippingCost={'Pilih Pengiriman'}
             province={userData.province}
@@ -208,19 +212,18 @@ const CheckoutPage = () => {
                 userData['city_id'],
                 userData.city,
                 coWeight,
-                );
-              }}
-            onHandleModalClickBatal={()=>{
-              if(sessionStorage.getItem("hargaOngkir")){
-                sessionStorage.removeItem("hargaOngkir")
-              }
-              if(sessionStorage.getItem("idOngkir")){
-                sessionStorage.removeItem("idOngkir")
-              }      
-              navigate("/cart")  
+              );
             }}
-            onHandleLanjutkanCheckout={()=>         setModalLanjutkanCheckout(true)
-            }
+            onHandleModalClickBatal={() => {
+              if (sessionStorage.getItem('hargaOngkir')) {
+                sessionStorage.removeItem('hargaOngkir');
+              }
+              if (sessionStorage.getItem('idOngkir')) {
+                sessionStorage.removeItem('idOngkir');
+              }
+              navigate('/cart');
+            }}
+            onHandleLanjutkanCheckout={() => setModalLanjutkanCheckout(true)}
           />
         </div>
       </div>
@@ -235,14 +238,14 @@ const CheckoutPage = () => {
           userAddress={userAddress}
           idUtama={userData['address_id']}
           onHandleModalClick={() => {
-            let doc = document.getElementsByName("inputRecepient")
-            if(doc[0].value){
+            let doc = document.getElementsByName('inputRecepient');
+            if (doc[0].value) {
               setRecepient(doc[0].value);
             }
             getUserData();
             getUserAddress();
-            if(sessionStorage.getItem("hargaOngkir")){
-              sessionStorage.removeItem("hargaOngkir")
+            if (sessionStorage.getItem('hargaOngkir')) {
+              sessionStorage.removeItem('hargaOngkir');
               setShippingPrice('');
             }
             openLoading(1000);
@@ -266,19 +269,24 @@ const CheckoutPage = () => {
           onHandleModalClick={onHandleModalCourier}
           onHandleModalCancel={() => {
             setCourierOpt(false);
-            
           }}
         />
       ) : (
         ''
       )}
-      {modalLanjutkanCheckout?<IModal
-      onHandleModalClick={onHandleLanjutkanCheckout}
-      cancel={"Tidak"}
-      confirm={"Ya"}
-      deskripsi={"Apakah anda yakin untuk melanjutkan checkout?"}
-      onHandleModalCancel={()=>{setModalLanjutkanCheckout(false)}}
-      />:""}
+      {modalLanjutkanCheckout ? (
+        <IModal
+          onHandleModalClick={onHandleLanjutkanCheckout}
+          cancel={'Tidak'}
+          confirm={'Ya'}
+          deskripsi={'Apakah anda yakin untuk melanjutkan checkout?'}
+          onHandleModalCancel={() => {
+            setModalLanjutkanCheckout(false);
+          }}
+        />
+      ) : (
+        ''
+      )}
       <TemporaryFooter />
     </>
   );

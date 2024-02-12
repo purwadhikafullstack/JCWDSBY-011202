@@ -39,6 +39,7 @@ import UpdateAccount from './components/UpdateAccount';
 import { keepLogin } from './redux/slice/accountSlice';
 import DashboardUploadPayment from './pages/user/dashboard/dashboardUploadPayment';
 import WarehouseManageOrder from './pages/admin/admin.warehouse/manage.order/Manage.Order';
+import RoleRouting from './components/RoleRouting';
 function App() {
   const userGlobal = useSelector((state) => state.accountSliceReducer);
   const dispatch = useDispatch();
@@ -61,15 +62,168 @@ function App() {
       <Routes>
         {/* ROUTES FEATURE : PRODUCT-MANAGEMENT KAI*/}
         {/* ROUTES FEATURE : PRODUCT-MANAGEMENT GIBRAN*/}
-        <Route path="/admin/manage-account" element={<ManageAccount />} />
+        <Route
+          path="/admin/manage-account"
+          element={
+            <RoleRouting role="superadmin" redirect="/admin/login">
+              <ManageAccount />
+            </RoleRouting>
+          }
+        />
         <Route
           path="/admin/manage-account/edit-account?"
-          element={<UpdateAccount />}
+          element={
+            <RoleRouting role="superadmin" redirect="/admin/login">
+              <UpdateAccount />
+            </RoleRouting>
+          }
         />
         <Route
           path="/admin/manage-account/add-admin"
-          element={<AddAccount />}
+          element={
+            <RoleRouting role="superadmin" redirect="/admin/login">
+              <AddAccount />
+            </RoleRouting>
+          }
         />
+        <Route
+          path="/admin"
+          element={
+            <RoleRouting role="superadmin" redirect="/admin/login">
+              <LandingAdmin />
+            </RoleRouting>
+          }
+        />
+        <Route
+          path="/admin/manage-product"
+          element={
+            <RoleRouting role="superadmin" redirect="/admin/login">
+              <ManageProduct />
+            </RoleRouting>
+          }
+        />
+        <Route
+          path="/admin/manage-product/add-product"
+          element={
+            <RoleRouting role="superadmin" redirect="/admin/login">
+              <AddProduct />
+            </RoleRouting>
+          }
+        />
+        <Route
+          path="edit-product/:id"
+          element={
+            <RoleRouting role="superadmin" redirect="/admin/login">
+              <EditProduct />
+            </RoleRouting>
+          }
+        />
+        <Route
+          path="/admin/manage-category"
+          element={
+            <RoleRouting role="superadmin" redirect="/admin/login">
+              <ManageCategory />
+            </RoleRouting>
+          }
+        />
+        <Route
+          path="/admin/manage-inventory?"
+          element={
+            <RoleRouting role="superadmin" redirect="/admin/login">
+              <ManageInventory />
+            </RoleRouting>
+          }
+        />
+        <Route
+          path="/admin/manage-warehouse"
+          element={
+            <RoleRouting role="superadmin" redirect="/admin/login">
+              <ManageWarehouse />
+            </RoleRouting>
+          }
+        />
+        <Route
+          path="/admin/manage-warehouse/edit-warehouse?"
+          element={
+            <RoleRouting role="superadmin" redirect="/admin/login">
+              <EditWarehouse />
+            </RoleRouting>
+          }
+        />
+        <Route
+          path="/admin/manage-warehouse/add-warehouse"
+          element={
+            <RoleRouting role="superadmin" redirect="/admin/login">
+              <AddWarehouse />
+            </RoleRouting>
+          }
+        />
+        <Route
+          path="/admin/manage-warehouse/add-warehouse"
+          element={
+            <RoleRouting role="superadmin" redirect="/admin/login">
+              <AddWarehouse />
+            </RoleRouting>
+          }
+        />
+        <Route
+          path="/warehouse-admin"
+          element={
+            <RoleRouting role="admin" redirect="/admin/login">
+              <LandingWarehouse />
+            </RoleRouting>
+          }
+        />
+        <Route
+          path="/warehouse-admin/view-products"
+          element={
+            <RoleRouting role="admin" redirect="/admin/login">
+              <ViewProduct />
+            </RoleRouting>
+          }
+        />
+        <Route
+          path="/warehouse-admin/view-categories"
+          element={
+            <RoleRouting role="admin" redirect="/admin/login">
+              <ViewCategory />
+            </RoleRouting>
+          }
+        />
+        <Route
+          path="/warehouse-admin/manage-inventory"
+          element={
+            <RoleRouting role={['admin', 'superadmin']} redirect="/admin/login">
+              <WarehouseInventory />
+            </RoleRouting>
+          }
+        />
+        <Route
+          path="warehouse-admin/manage-mutation/add-request"
+          element={
+            <RoleRouting role="admin" redirect="/admin/login">
+              <AddMutation />
+            </RoleRouting>
+          }
+        />
+        <Route
+          path="/warehouse-admin/manage-mutation"
+          element={
+            <RoleRouting role="admin" redirect="/admin/login">
+              <ManageMutation />
+            </RoleRouting>
+          }
+        />
+        <Route
+          path="/warehouse-admin/edit-stock/:id"
+          element={
+            <RoleRouting role={['admin', 'superadmin']} redirect="/admin/login">
+              <EditStockProduct />
+            </RoleRouting>
+          }
+        />
+
+        {/* BELUM KE ROUTING */}
         <Route path="/" element={<Home />} />
         <Route path="/user/login" element={<Login />} />
         <Route path="/admin/login" element={<AdminLogin />} />
@@ -80,55 +234,9 @@ function App() {
         <Route path="/user/forgot-pass" element={<ResetPassword />} />
         <Route path="/user/register" element={<RegisterForm />} />
         <Route path="/register" element={<Register />} />
-        <Route path="/admin" element={<LandingAdmin />} />
-        <Route path="/admin/manage-product" element={<ManageProduct />} />
-        <Route
-          path="/admin/manage-product/add-product"
-          element={<AddProduct />}
-        />
-        <Route path="edit-product/:id" element={<EditProduct />} />
-        <Route path="/admin/manage-category" element={<ManageCategory />} />
-        <Route path="/admin/manage-inventory?" element={<ManageInventory />} />
-        <Route path="/admin/manage-warehouse" element={<ManageWarehouse />} />
-        <Route
-          path="/admin/manage-warehouse/edit-warehouse?"
-          element={<EditWarehouse />}
-        />
-        <Route
-          path="/admin/manage-warehouse/add-warehouse"
-          element={<AddWarehouse />}
-        />
         <Route path="/product-detail/:id" element={<ProductDetail />} />
         <Route path="/product-search?" element={<ProdutSearch />} />
-        <Route path="/warehouse-admin" element={<LandingWarehouse />} />
-        <Route
-          path="/warehouse-admin/view-products"
-          element={<ViewProduct />}
-        />
-        <Route
-          path="/warehouse-admin/view-categories"
-          element={<ViewCategory />}
-        />
-        <Route
-          path="/warehouse-admin/view-categories"
-          element={<ViewCategory />}
-        />
-        <Route
-          path="/warehouse-admin/manage-inventory"
-          element={<WarehouseInventory />}
-        />
-        <Route
-          path="warehouse-admin/manage-mutation/add-request"
-          element={<AddMutation />}
-        />
-        <Route
-          path="/warehouse-admin/manage-mutation"
-          element={<ManageMutation />}
-        />
-        <Route
-          path="/warehouse-admin/edit-stock/:id"
-          element={<EditStockProduct />}
-        />
+        {/* BELUM */}
         <Route path="*" element={<NotFoundPage />} />
         {/* ROUTES FEATURE : PRODUCT-MANAGEMENT MAS ADHON*/}
         <Route path="/cart" element={<CartPage />} />

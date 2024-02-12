@@ -120,8 +120,7 @@ const ModalUpdateStatus = (props) => {
         'Menunggu Konfirmasi Pembayaran',
         'Diproses',
         'Dikirim',
-        'Berhasil',
-        'Dibatalkan',
+        'Berhasil'
       ];
   }
 

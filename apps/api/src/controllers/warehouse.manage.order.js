@@ -48,22 +48,22 @@ export const getManageOrderDetail = async (req, res, next) => {
             where: {
                 order_id: req.query.id,
             },
-            include:[{
-                model:products,
-                required:true,
-                attributes:["id","name","price"],
-                include:[{
-                    model:product_images,
-                    required:true,
-                    attributes:["image"]
+            include: [{
+                model: products,
+                required: true,
+                attributes: ["id", "name", "price"],
+                include: [{
+                    model: product_images,
+                    required: true,
+                    attributes: ["image"]
                 }]
             }],
             raw: true
         })
         const result = []
         const index = []
-        data.map((val,idx)=>{
-            if(!index.includes(data[idx].product_id)){
+        data.map((val, idx) => {
+            if (!index.includes(data[idx].product_id)) {
                 index.push(data[idx].product_id)
                 result.push(val)
             }
@@ -74,18 +74,32 @@ export const getManageOrderDetail = async (req, res, next) => {
     }
 }
 export const updateStatus = async (req, res, next) => {
-try {
-    const result = await orders.update({
-        status:req.body.status
-    },{
-        where:{
-            invoice:req.body.invoice,
-            id:req.body.id
-        }
-    })
-    return res.status(200).send(result)
-
-} catch (error) {
-    return res.status(500).send(error)
+    try {
+        const result = await orders.update({
+            status: req.body.status
+        }, {
+            where: {
+                invoice: req.body.invoice,
+                id: req.body.id
+            }
+        })
+        return res.status(200).send(result)
+    } catch (error) {
+        return res.status(500).send(error)
+    }
 }
+export const cancelOrder = async (req, res, next) => {
+    try {
+        const result = await orders.update({
+            status: "Dibatalkan"
+        }, {
+            where: {
+                invoice: req.body.invoice,
+                id: req.body.id
+            }
+        })
+        return res.status(200).send(result)
+    } catch (error) {
+        return res.status(500).send(error)
+    }
 }

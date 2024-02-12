@@ -4,9 +4,10 @@ import { useDispatch, useSelector } from 'react-redux';
 import { updateItem } from '../redux/slice/orderSlice';
 import axios from 'axios';
 import { updateStatus } from '../redux/slice/statusSlice';
+import { cancelOrder } from '../redux/slice/cancelOrderAdmin';
 
 const ManageOrderTable = (props) => {
-
+  const index = ["Diproses","Dikirim","Berhasil","Dibatalkan"]
   const dispatch = useDispatch();
   const statusStyle = (status) => {
     switch (status) {
@@ -201,9 +202,17 @@ const ManageOrderTable = (props) => {
                               Detail Pesanan
                             </li>
                             <li className="border-t-[1px]"></li>
-                            <li className="hover:bg-orange-200 cursor-pointer w-full rounded-sm p-2">
+                            {!index.includes(val.status)?<li className="hover:bg-orange-200 cursor-pointer w-full rounded-sm p-2"
+                            onClick={()=>{
+                              dispatch(cancelOrder({
+                                order_id:val.id,
+                                invoice:val.invoice,
+                                status:val.status,
+                                orderDate:val.createdAt
+                              }))
+                            }}>
                               Batalkan pesanan
-                            </li>
+                            </li>:""}
                           </ul>
                         </div>
                       </div>

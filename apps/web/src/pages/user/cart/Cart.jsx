@@ -18,6 +18,7 @@ const CartPage = () => {
   const [changeQty, setChangeQty] = useState('');
   const [openModal, setOpenModal] = useState(false);
   const [cartCount, setCartCount] = useState(0);
+  const [userAddress, setUserAddress] = useState([]);
   let checkedResult = [];
   let checkedArray = '';
   const getDataCart = async () => {
@@ -28,6 +29,20 @@ const CartPage = () => {
       });
       setCartCount(result.data.count);
       return setCartProduct(result.data.result);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+  const getUserAddress = async () => {
+    try {
+      const token = localStorage.getItem('token');
+      const result = await axios.get(
+        `http://localhost:8000/api/checkout/userAddress`,
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        },
+      );
+      setUserAddress(result.data.address);
     } catch (error) {
       console.log(error);
     }
@@ -48,28 +63,6 @@ const CartPage = () => {
         },
       );
       return setCartSummary(result.data);
-    } catch (error) {
-      console.log(error);
-    }
-  };
-  const keepChecked = async () => {
-    try {
-      if (localStorage.getItem('cartId')) {
-        const items = localStorage.getItem('cartId');
-        checkedResult = items.split(',');
-        if (cartProduct) {
-          let checkedItem = await document.getElementsByName('intoOrder');
-          console.log('dapat ga', checkedItem);
-          for (let i = 0; i < checkedResult.length; i++) {
-            for (let j = 0; j < checkedItem.length; j++) {
-              if (checkedResult[i] == checkedItem[j].defaultValue) {
-                checkedItem[j].checked = true;
-                checkedArray = checkedResult.join(' ');
-              }
-            }
-          }
-        }
-      }
     } catch (error) {
       console.log(error);
     }
@@ -97,6 +90,7 @@ const CartPage = () => {
 
   };
   useEffect(() => {
+    getUserAddress()
     // USEEFFECT ketika pertama load
     getDataCart();
     openLoading(1500);
@@ -194,14 +188,20 @@ const CartPage = () => {
     }
   };
   const onHandleCheckOut = () => {
-    if (cartSummary.success) {
-      document.body.style.overflow = 'auto';
-      setOpenModal(false);
-      navigate(`/checkout`);
+    if(userAddress.length>0){
+      if (cartSummary.success) {
+        document.body.style.overflow = 'auto';
+        setOpenModal(false);
+        navigate(`/checkout`);
+      } else {
+        alert('Oops data produk belum di checklist');
+      }
     } else {
-      alert('Oops data produk belum di checklist');
+      alert("Anda belum memiliki alamat terdaftar, silahkan tambahkan alamat anda")
+      navigate("/user/dashboard/address")
     }
   };
+  console.log("alamat",userAddress);
   return (
     <>
       {firstloading ? <Loading /> : ''}

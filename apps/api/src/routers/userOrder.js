@@ -1,6 +1,6 @@
 import { Router } from 'express';
 import { validateToken,ValidateUser } from '../middleware/validation';
-import { deleteOrder, getOrderDetail, getUserOrder, uploadPaymentProof } from '../controllers/userOrder';
+import { deleteOrder, getOrderDetail, getUserOrder, orderConfirmation, uploadPaymentProof } from '../controllers/userOrder';
 import { uploader } from '../helper/uploader';
 import { requestMutation } from '../controllers/userOrder2';
 import { cancelOrder } from '../controllers/warehouse.manage.order';
@@ -18,6 +18,7 @@ uploadPaymentProof)
 userOrderRouter.post("/request-mutation/?",validateToken,ValidateUser,requestMutation)
 //PATCH
 userOrderRouter.patch("/cancel-order",validateToken,ValidateUser,cancelOrder)
+userOrderRouter.patch("/confirm-order",validateToken,ValidateUser,orderConfirmation)
 
 
 export { userOrderRouter };

@@ -180,6 +180,16 @@ export const uploadPaymentProof = async (req, res, next) => {
 };
 export const orderConfirmation = async (req, res, next) => {
   try {
+    function formatDate(date) {
+        const year = date.getFullYear();
+        const month = String(date.getMonth() + 1).padStart(2, '0');
+        const day = String(date.getDate()).padStart(2, '0');
+        const hours = String(date.getHours()).padStart(2, '0');
+        const minutes = String(date.getMinutes()).padStart(2, '0');
+        const seconds = String(date.getSeconds()).padStart(2, '0');
+      
+        return `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
+      }
     const isExist = await orders.findOne({
       where: {
         id: req.body.order,
@@ -228,6 +238,7 @@ export const orderConfirmation = async (req, res, next) => {
     }
     return res.status(200).send(result);
   } catch (error) {
+    console.log(error);
     return res.status(500).send(error);
   }
 };

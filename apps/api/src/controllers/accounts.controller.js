@@ -111,8 +111,8 @@ export const CreateAccount = async (req, res, next) => {
       });
     }
 
-    if (req.body.role === 'admin' && req.body.warehouse_id === null) {
-      return res.status(400).json({
+    if (req.body.role === 'admin' && !req.body.warehouse_id) {
+      return res.status(400).send({
         success: false,
         message: 'Warehouse ID is required for admin role',
       });

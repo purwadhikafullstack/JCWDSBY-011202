@@ -88,12 +88,18 @@ export const ConfirmationEmail = async (req, res, next) => {
     const isExist = await accounts.findOne({
       where: {
         id: req.userData.id,
+        raw: true,
       },
     });
     if (!isExist) {
       return res
         .status(404)
         .send({ success: false, message: 'Account Doesnt Exist' });
+    }
+    if (isExist.is_verified === true) {
+      return res
+        .status(404)
+        .send({ success: false, message: 'Account is verified' });
     }
     delete req.body.confirmpassword;
     const salt = await bcrypt.genSalt(10);

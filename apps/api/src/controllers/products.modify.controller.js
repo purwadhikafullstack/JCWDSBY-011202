@@ -62,12 +62,29 @@ async function deleteProductImages(productId) {
 
 export const updateProduct = async (req, res, next) => {
   try {
+    const existingProduct = await products.findOne({
+      where: {
+        name: req.body.name,
+        id: {
+          [Sequelize.Op.not]: req.params.id,
+        },
+      },
+    });
+
+    if (existingProduct) {
+      return res.status(400).send({
+        success: false,
+        message: 'Product name already exists for another product.',
+      });
+    }
+
     const result = await products.update(
       {
         name: req.body.name,
         price: req.body.price,
         category_id: req.body.category_id,
         description: req.body.description,
+        weight: req.body.weight,
       },
       {
         where: {
@@ -75,14 +92,16 @@ export const updateProduct = async (req, res, next) => {
         },
       },
     );
+
     return res.status(201).send({
       success: true,
-      message: 'Edit Data successfully',
+      message: 'Data updated successfully',
     });
   } catch (error) {
-    console.log(error);
-    return res
-      .status(200)
-      .send({ success: false, message: 'Error update data' });
+    console.error(error);
+    return res.status(500).send({
+      success: false,
+      message: 'Failed to update data',
+    });
   }
 };

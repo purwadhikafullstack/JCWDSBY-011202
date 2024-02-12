@@ -5,6 +5,7 @@ import ButtonWithLoading from '../../../components/ButtonWithLoading';
 import axios from 'axios';
 import { useDispatch, useSelector } from 'react-redux';
 import { userLoaded } from '../../../redux/slice/accountSlice';
+
 const LoginForm = () => {
   const [loading, setLoading] = useState(false);
   const [email, setEmail] = useState('');
@@ -12,6 +13,7 @@ const LoginForm = () => {
   const [error, setError] = useState(null);
   const navigate = useNavigate();
   const dispatch = useDispatch();
+
   const onHandleSignIn = async () => {
     try {
       setError(null);
@@ -65,13 +67,10 @@ const LoginForm = () => {
 
   return (
     <div className="flex items-center justify-center min-h-screen">
-      <div className="flex shadow-lg w-full max-w-5xl">
+      <div className="flex flex-col md:flex-row shadow-lg w-full max-w-5xl">
         {/* Login form */}
-        <div
-          className="flex flex-wrap content-center justify-center rounded-l-md bg-white"
-          style={{ width: '60%', height: '80%' }}
-        >
-          <div className="w-80 p-8">
+        <div className="md:w-2/3 flex flex-wrap content-center justify-center rounded-l-md bg-white">
+          <div className="w-full md:w-80 p-8">
             {/* Heading */}
             <h1 className="text-2xl font-semibold">Welcome back</h1>
             <small className="text-gray-400">
@@ -145,10 +144,7 @@ const LoginForm = () => {
         </div>
 
         {/* Login banner */}
-        <div
-          className="flex flex-wrap content-center justify-center rounded-r-md"
-          style={{ width: '40%', height: '32rem' }}
-        >
+        <div className="hidden md:block md:w-1/3">
           <img
             className="w-full h-full bg-center bg-no-repeat bg-cover rounded-r-md"
             src={LoginImage}

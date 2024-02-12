@@ -42,13 +42,10 @@ const RegisterForm = () => {
 
   return (
     <div className="flex items-center justify-center min-h-screen">
-      <div className="flex shadow-lg w-full max-w-5xl">
+      <div className="flex flex-col md:flex-row shadow-lg w-full max-w-5xl">
         {/* Registration form */}
-        <div
-          className="flex flex-wrap content-center justify-center rounded-l-md bg-white"
-          style={{ width: '60%', height: '80%' }}
-        >
-          <div className="w-80 p-8">
+        <div className="md:w-2/3 flex flex-wrap content-center justify-center rounded-l-md bg-white">
+          <div className="w-full md:w-80 p-8">
             {/* Heading */}
             <h1 className="text-2xl font-semibold">Create an Account</h1>
             <small className="text-gray-400">
@@ -108,10 +105,7 @@ const RegisterForm = () => {
         </div>
 
         {/* Registration banner */}
-        <div
-          className="flex flex-wrap content-center justify-center rounded-r-md"
-          style={{ width: '40%', height: '32rem' }}
-        >
+        <div className="hidden md:block md:w-1/3">
           <img
             className="w-full h-full bg-center bg-no-repeat bg-cover rounded-r-md"
             src={Register}

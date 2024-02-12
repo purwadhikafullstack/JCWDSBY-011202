@@ -112,7 +112,7 @@ const AddMutation = () => {
       <WareHouseAdminLayout>
         <div>
           <div className="flex justify-between bg-white h-16 p-4 items-center">
-            <div className="flex items-center">
+            <div className="flex items-center sm:ml-0 ml-4">
               <div
                 onClick={() => navigate('/warehouse-admin/manage-mutation')}
                 className="rounded-lg border p-2 hover:bg-gray-200 cursor-pointer"

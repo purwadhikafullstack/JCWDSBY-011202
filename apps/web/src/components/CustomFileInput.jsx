@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useRef } from 'react';
 import { IoCloseOutline } from 'react-icons/io5';
 
 const CustomFileInput = ({
@@ -8,14 +8,7 @@ const CustomFileInput = ({
 }) => {
   const [imagePreviews, setImagePreviews] = useState([]);
   const [filesArray, setFilesArray] = useState([]);
-  const [isInputDisabled, setIsInputDisabled] = useState(false);
   const fileInputRef = useRef(null);
-
-  useEffect(() => {
-    if (imagePreviews.length > 0 && onImagePreviewsChange) {
-      onImagePreviewsChange(filesArray);
-    }
-  }, [imagePreviews, onImagePreviewsChange, filesArray]);
 
   const handleFileChange = (e) => {
     const files = e.target.files;
@@ -30,6 +23,9 @@ const CustomFileInput = ({
           if (newPreviews.length === newFilesArray.length) {
             setImagePreviews(newPreviews);
             setFilesArray(newFilesArray);
+            if (onImagePreviewsChange) {
+              onImagePreviewsChange(newFilesArray);
+            }
           }
         };
 
@@ -45,7 +41,6 @@ const CustomFileInput = ({
   const handleCancelPreview = () => {
     setImagePreviews([]);
     setFilesArray([]);
-    setIsInputDisabled(false);
 
     if (fileInputRef.current) {
       fileInputRef.current.value = '';
@@ -101,7 +96,6 @@ const CustomFileInput = ({
           onChange={handleFileChange}
           multiple
           ref={fileInputRef}
-          disabled={isInputDisabled}
         />
       </label>
     </div>

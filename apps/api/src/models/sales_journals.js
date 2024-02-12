@@ -7,7 +7,12 @@ export default class sales_journal extends Model {
    * The `models/index` file will call this method automatically.
    */
   static associate(models) {
-    // define association here
+    sales_journal.belongsTo(models.products, {
+      foreignKey: 'product_id',
+    });
+    sales_journal.belongsTo(models.categories, {
+      foreignKey: 'category_id',
+    });
   }
 }
 

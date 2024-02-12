@@ -5,7 +5,7 @@ const ProductCatalog = (props) => {
   const [isHovered, setIsHovered] = useState(false);
 
   return (
-    <div className="w-full h-[350px] border rounded-sm my-2 mx-2">
+    <div className="w-full h-[300px] sm:h-[350px]  border rounded-sm my-2 mx-2">
       <div>
         <img
           src={isHovered ? props.src2 : props.src}

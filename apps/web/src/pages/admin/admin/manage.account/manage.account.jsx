@@ -87,7 +87,9 @@ function ManageAccount() {
     <div>
       <AdminLayout>
         <div className="p-4 flex justify-between items-center bg-white">
-          <div className="font-bold text-xl">Warehouse Admins</div>
+          <div className="font-bold ml-4 sm:ml-0 sm:text-xl">
+            Warehouse Admins
+          </div>
           <button
             onClick={() => navigate('/admin/manage-account/add-admin')}
             style={{ cursor: 'pointer' }}

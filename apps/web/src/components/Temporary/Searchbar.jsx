@@ -38,9 +38,9 @@ function SearchBar() {
   };
 
   return (
-    <div className="relative z-10">
+    <div className="relative z-10 ">
       <div className="flex items-center justify-center">
-        <div className="flex w-full h-8 mx-10 rounded bg-white">
+        <div className="flex w-full h-8 sm:mx-10 rounded bg-white">
           <input
             className="w-full bg-transparent border p-1 text-black-400 outline-none focus:outline-none"
             type="search"
@@ -66,7 +66,7 @@ function SearchBar() {
             >
               <img
                 src={`http://localhost:8000/productimage/${product?.product_images?.[0]?.image}`}
-                className="w-16 mx-2 border-2"
+                className="hidden sm:block w-16 mx-2 border-2"
                 alt={product.name}
               />
               <h1 className="font-semibold text-sm">{product.name}</h1>

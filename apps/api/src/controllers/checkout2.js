@@ -160,6 +160,9 @@ export const createOrder = async (req, res, next) => {
         total_weight: val.total_weight,
       });
     });
+    const deleteCartItems = await carts.destroy({
+      where: { id: orderItemsId },
+    });
     const createOrderDetail = await order_details.bulkCreate(orderDetails);
     return res
       .status(200)

@@ -92,7 +92,7 @@ const ManageWarehouse = () => {
     <div>
       <AdminLayout>
         <div className="p-4 flex justify-between items-center bg-white">
-          <div className="font-bold text-xl ">Warehouse List</div>
+          <div className="font-bold text-xl sm:ml-0 ml-4">Warehouse List</div>
           <button
             style={{ cursor: 'pointer' }}
             onClick={() => {

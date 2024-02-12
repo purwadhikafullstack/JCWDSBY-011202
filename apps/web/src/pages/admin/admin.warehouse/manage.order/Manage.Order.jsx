@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import ManageOrderTable from '../../../../components/ManageOrderTableComponent.jsx';
 import WareHouseAdminLayout from '../../../../components/WareHouseAdminLayout';
 import axios from 'axios';
@@ -13,7 +13,7 @@ import { IModal } from '../../../../components/modalRama.jsx';
 import cancelOrderAdmin, {
   cancelOrder,
 } from '../../../../redux/slice/cancelOrderAdmin.js';
-import { InputSearchComponent } from '../../../../components/adminOrderSearchComponent.jsx';
+import { InputSearchComponent, SearchByStatus, SearchDate } from '../../../../components/adminOrderSearchComponent.jsx';
 
 const WarehouseManageOrder = () => {
   const editItem = useSelector((state) => state.orderSlice);
@@ -23,7 +23,10 @@ const WarehouseManageOrder = () => {
   const [confirmationModalStatus, setConfirmationModalStatus] = useState(false);
   const [showModalChangeStatus, setShowModalChangeStatus] = useState(false);
   const [showModalCancelOrder, setShowModalCancelOrder] = useState(false);
+  const [filterStatus, setFilterStatus] = useState('');
+
   const [data, setData] = useState([]);
+  const ref = useRef();
   const token = localStorage.getItem('token');
   const header = [
     { th: 'Invoice', width: 'w-[130px]' },
@@ -53,12 +56,30 @@ const WarehouseManageOrder = () => {
   return (
     <>
       <WareHouseAdminLayout>
-        <div>
-
-          {/* <InputSearchComponent/> */}
-        </div>
         <div className="px-4 py-3">
           <p className="font-bold mb-5 text-xl">Manage Order</p>
+          <div className=' mb-2 flex gap-2'> 
+            <InputSearchComponent
+              inputSearchId={'searchByInv'}
+              placeholder={'Masukkan Invoice'}
+              onChange={(e)=>{
+              let doc = document.getElementById("searchByInv")
+                e.target.value
+              console.log(doc.value);}}
+            />
+            <SearchDate/>
+          </div>
+          <div>
+            <SearchByStatus 
+            checkedValue={() => {
+              setFilterStatus(document.querySelector('input[name="status"]:checked').value);
+            }}
+            onChangeStatus={() => {
+              setFilterStatus(document.querySelector('input[name="status"]:checked').value);
+            }}
+            refStatus={ref}
+            />
+          </div>
           <ManageOrderTable
             header={[
               'Invoice',
@@ -155,12 +176,17 @@ const WarehouseManageOrder = () => {
             deskripsi={'Apakah anda yakin membatalkan Pesanan ini?'}
             onHandleModalClick={async () => {
               try {
-                const batalkanOrder = await axios.patch(`http://localhost:8000/api/warehouse/order/update-status`,{
-                  status: cancelOrderItem.status,
-                  invoice: cancelOrderItem.invoice,
-                  id: cancelOrderItem.order_id,
-                })
-              } catch (error) {console.log(error);}
+                const batalkanOrder = await axios.patch(
+                  `http://localhost:8000/api/warehouse/order/update-status`,
+                  {
+                    status: cancelOrderItem.status,
+                    invoice: cancelOrderItem.invoice,
+                    id: cancelOrderItem.order_id,
+                  },
+                );
+              } catch (error) {
+                console.log(error);
+              }
             }}
             onHandleModalCancel={() => {
               dispatch(cancelOrder({ order_id: '', status: '', invoice: '' }));

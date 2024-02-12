@@ -85,7 +85,7 @@ const InventoryTable = ({ warehouseInventory, onDelete }) => {
                 </td>
                 <td className="px-3 py-2 text-sm text-gray-500 whitespace-nowrap flex flex-col sm:flex-row items-center justify-center">
                   <button
-                    className="bg-orange-500 hover:bg-orange-700 text-white px-4 py-2 rounded mb-2 sm:mb-0 mr-2"
+                    className="bg-orange-500 hover:bg-orange-700 text-white px-4 py-2 rounded mb-2 sm:mb-0 mr-2 sm:w-auto w-full"
                     onClick={() => {
                       navigate(
                         `/warehouse-admin/edit-stock/storage-000${val.id}`,
@@ -95,7 +95,7 @@ const InventoryTable = ({ warehouseInventory, onDelete }) => {
                     Edit Stock
                   </button>
                   <button
-                    className="bg-slate-400 hover:bg-slate-700 text-white px-4 py-2 rounded"
+                    className="bg-slate-400 hover:bg-slate-700 text-white px-4 py-2 rounded sm:w-auto w-full"
                     onClick={() => {
                       onHandleDelete(val.id);
                     }}

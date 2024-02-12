@@ -6,7 +6,6 @@ import ListWarehouse from '../../../../components/ListWarehouse';
 import { Loading } from '../../../../components/loadingComponent';
 import Toast from '../../../../components/Toast';
 import ConfirmationModal from '../../../../components/ConfirmationModal';
-import EditWarehouse from '../../../../components/EditWarehouseModal';
 
 const ManageWarehouse = () => {
   const location = useLocation();

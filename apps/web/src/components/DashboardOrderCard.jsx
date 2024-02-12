@@ -3,6 +3,8 @@ import { useNavigate } from 'react-router-dom';
 import { IModal } from './modalRama';
 import { useState } from 'react';
 import { ModalDetailOrder } from './modalRama2';
+import { useDispatch } from 'react-redux';
+import { updateStatus } from '../redux/slice/statusSlice';
 export const OrderCardNone = (props) => {
   // if (!props.data) {
   return (
@@ -12,6 +14,7 @@ export const OrderCardNone = (props) => {
   );
 };
 export const OrderCard = (props) => {
+  const dispatch = useDispatch()
   const [itemDisplay, setItemDisplay] = useState([props.itemDisplay]);
   const navigate = useNavigate();
   const [showModal, setShowModal] = useState(false);
@@ -99,10 +102,14 @@ export const OrderCard = (props) => {
             className=" bg-[#F06105] text-white font-semibold px-2 rounded-md py-2 hover:bg-orange-400"
             disabled={false}
             onClick={() => {
+              dispatch(updateStatus({
+                order_id:props.orderId,
+                invoice:props.invoice
+              }))
               // sessionStorage.setItem("orderItem",JSON.stringify(props.orderItem))
-              navigate(
-                `/user/dashboard/upload-payment?order=${props.orderId}&inv=${props.invoice}`,
-              );
+              // navigate(
+              //   `/user/dashboard/upload-payment?order=${props.orderId}&inv=${props.invoice}`,
+              // );
             }}
           >
             Konfirmasi Pesanan

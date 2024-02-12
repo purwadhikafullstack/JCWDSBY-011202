@@ -84,7 +84,7 @@ const EditProduct = () => {
       <AdminLayout>
         <div className="flex justify-between bg-white h-16 p-4 items-center">
           <div>
-            <div className="flex items-center">
+            <div className="flex items-center sm:ml-0 ml-4">
               <div
                 className="rounded-lg border p-2 hover:bg-gray-200 cursor-pointer"
                 onClick={() => {
@@ -103,7 +103,7 @@ const EditProduct = () => {
             Save Changes
           </button>
         </div>
-        <div className="mx-6 bg-white m-8 pb-4 rounded-sm">
+        <div className="mx-6 bg-white m-8 pb-4 rounded-sm sm:flex-row flex-col">
           <div className="p-4">
             <h1 className="font-medium text-black ">Edit Product</h1>
             <p className="text-sm font-light">
@@ -112,14 +112,14 @@ const EditProduct = () => {
             <hr className="mt-2" />
           </div>
           <div>
-            <div className="p-4 flex">
-              <div className="w-[400px] h-[400px]">
+            <div className="p-4 flex sm:flex-row flex-col">
+              <div className="w-full h-full sm:w-[400px] sm:h-[400px]">
                 <EditImage products={products} />
               </div>
-              <div className="w-full">
-                <div className="mx-2 w-full">
+              <div className="w-full mr-4">
+                <div className="sm:mx-6 w-full">
                   <div className="w-full">
-                    <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-400">
+                    <label className="block mb-2 sm:mt-0 mt-2 text-sm font-medium text-gray-900 dark:text-gray-400">
                       Product Name
                     </label>
                     <input
@@ -176,7 +176,7 @@ const EditProduct = () => {
                       onChange={(e) => setNewDescription(e.target.value)}
                     ></textarea>
                     <div className="w-full ">
-                      <div className="mt-2 h-32 border rounded-lg p-2 flex bg-gray-50 ">
+                      <div className="mt-2 sm:h-32 h-auto border rounded-lg p-2 flex bg-gray-50 ">
                         <h1 className="text-sm font-medium text-gray-900 dark:text-gray-400 mr-4">
                           Other Images:
                         </h1>

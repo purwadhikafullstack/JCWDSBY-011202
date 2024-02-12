@@ -13,7 +13,7 @@ export const InputSearchComponent = (props) => {
       >
         <GoSearch className="bg-white ml-2" />
         <input
-          name={props.inputSearchName}
+          id={props.inputSearchId}
           type={props.inputType}
           value={props.valueInputSearch}
           placeholder={props.placeholder}
@@ -25,7 +25,7 @@ export const InputSearchComponent = (props) => {
       </div>
       <div className={`${props.valueInputSearch ? 'relative' : 'hidden'}`}>
         <ul className="absolute bg-white w-full md:w-full p-1 mt-2 max-h-[400px] overflow-y-auto text-sm">
-          {props.data.map((val, idx) => {
+          {/* {props.data.map((val, idx) => {
             return (
               <li
                 key={idx}
@@ -38,7 +38,7 @@ export const InputSearchComponent = (props) => {
                 {val[props.listValue]}
               </li>
             );
-          })}
+          })} */}
         </ul>
       </div>
     </div>
@@ -54,7 +54,7 @@ export const SearchDate = (props) => {
         type="date"
         ref={props.refFrom}
         value={props.valueDateFrom}
-        className={`rounded-md py-2 px-1 w-full outline-none
+        className={`rounded-md p-1 w-full outline-none border-none
          invalid:text-slate-400
         `}
         onChange={props.onChangeFrom}
@@ -65,7 +65,7 @@ export const SearchDate = (props) => {
         type="date"
         ref={props.refTo}
         value={props.valueDateTo}
-        className={`rounded-md py-2 w-full px-1 outline-none 
+        className={`rounded-md w-full p-1 outline-none border-none
          invalid:text-slate-400`}
         onChange={props.onChangeTo}
       />
@@ -75,15 +75,14 @@ export const SearchDate = (props) => {
 
 export const SearchByStatus = (props) => {
   const get = document.getElementById('status');
-  const [selectedValue, setSelectedValue] = useState('');
   const statusOption = [
     '',
     'Menunggu Pembayaran',
     'Menunggu Konfirmasi Pembayaran',
     'Diproses',
     'Dikirim',
-    'Pesanan Dikonfirmasi',
     'Dibatalkan',
+    "Berhasil"
   ];
   return (
     <>
@@ -92,7 +91,7 @@ export const SearchByStatus = (props) => {
         {statusOption.map((val, id) => {
           if(val===""){
             return (
-              <li className=" whitespace-nowrap  ">
+              <li key={id} className=" whitespace-nowrap  ">
                 <input
                 checked={props.checkedValue===""}
                   ref={props.refStatus}
@@ -101,7 +100,7 @@ export const SearchByStatus = (props) => {
                   value={""}
                   id={id}
                   className="peer hidden"
-                  onClick={props.onClickStatus}
+                  onChange={props.onChangeStatus}
                 />
                 <label
                   for={id}
@@ -113,7 +112,7 @@ export const SearchByStatus = (props) => {
             );
           }else {
             return (
-              <li className=" whitespace-nowrap  ">
+              <li key={id} className=" whitespace-nowrap  ">
                 <input
                   checked = {props.checkedValue===val}
                   ref={props.refStatus}

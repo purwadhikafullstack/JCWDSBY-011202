@@ -68,7 +68,7 @@ const EditImage = ({ products }) => {
   };
 
   return (
-    <div className="w-[400px] h-[400px] flex items-center justify-center relative">
+    <div className="w-full sm:w-[400px] mx-auto relative">
       {image && (
         <>
           <img
@@ -76,7 +76,7 @@ const EditImage = ({ products }) => {
               previewImage ||
               `http://localhost:8000/productimage/${image.image}`
             }
-            className="w-[400px] h-[400px] border-2"
+            className="w-full h-full  border-2"
             alt=""
           />
           <label

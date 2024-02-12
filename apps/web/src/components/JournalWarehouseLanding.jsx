@@ -1,9 +1,11 @@
 import { useEffect, useState } from 'react';
 import axios from 'axios';
 import { useSelector } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
 
 const JournalWarehouseAdmin = () => {
   const [journal, setJournal] = useState([]);
+  const navigate = useNavigate();
   const userGlobal = useSelector((state) => state.accountSliceReducer);
   useEffect(() => {
     const fetchData = async () => {
@@ -24,7 +26,12 @@ const JournalWarehouseAdmin = () => {
     <div className="container mx-auto my-4 px-6 py-3 bg-white rounded-md shadow-md">
       <div className="flex justify-between items-center mb-4">
         <h1 className="text-2xl font-bold">Journal</h1>
-        <button className="text-black py-2 px-4 rounded-md transition-all duration-300 hover:text-orange-500 ">
+        <button
+          className="text-black py-2 px-4 rounded-md transition-all duration-300 hover:text-orange-500 "
+          onClick={() => {
+            navigate('/view-warehouse-journal');
+          }}
+        >
           View All
         </button>
       </div>

@@ -113,7 +113,7 @@ const WarehouseInventory = () => {
             >
               <IoMdArrowBack className="text-gray-700" size={24} />
             </div>
-            <h1 className="mx-2 font-bold text-xl">Manage Inventory</h1>
+            <h1 className="mx-2 font-bold sm:text-xl">Manage Inventory</h1>
           </div>
           <div>
             <button

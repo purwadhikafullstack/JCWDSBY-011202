@@ -10,8 +10,12 @@ import { RxHamburgerMenu } from 'react-icons/rx';
 import axios from 'axios';
 import { OrderCard, OrderCardNone } from '../../../components/DashboardOrderCard';
 import { Loading } from '../../../components/loadingComponent';
+import { IModal } from '../../../components/modalRama';
+import { useDispatch, useSelector } from 'react-redux';
+import { updateStatus } from '../../../redux/slice/statusSlice';
 const DashboardOrder = (props) => {
-  
+  const dispatch = useDispatch()
+  const showModalConfirmation = useSelector((state)=>state.statusSlice)
   const  [dataOrder,setDataOrder]=useState([])
   const [firstloading, setFirstLoading] = useState(false);
   const openLoading = (time) => {
@@ -74,12 +78,36 @@ const DashboardOrder = (props) => {
                 orderItem = {val.data}
                 idName = {`card${idx}`}
                 onHandleModalClick={onHandleModalClick}
+               
                 />
               }
             })}
           </div>
         </div>
       </div>
+      {showModalConfirmation.invoice?<IModal deskripsi={"Apakah anda yakin menyelesaikan pesanan?"} confirm={"Ya"} cancel={"Tidak"} onHandleModalClick={async()=>{
+        try {
+          const token = localStorage.getItem("token")
+          const result = await axios.patch(`http://localhost:8000/api/userOrder/confirm-order`,{
+            order:showModalConfirmation.order_id,
+            invoice:showModalConfirmation.invoice
+          }, {
+            headers: { Authorization: `Bearer ${token}` },
+          })
+          getUserOrder()
+          dispatch(updateStatus({
+            order_id:"",
+            status:"",
+            invoice:""
+          }))
+        } catch (error) {
+          console.log(error);
+        }
+      }} onHandleModalCancel={()=>{dispatch(updateStatus({
+        order_id:"",
+        status:"",
+        invoice:""
+      }))}}/>:""}
       <TemporaryFooter />
       </>
      }

@@ -169,23 +169,26 @@ export const createOrder = async (req, res, next) => {
     }
 }
 export const getOrderData = async (req, res, next) => {
-  try {
-    const result = await orders.findOne({
-      where: {
-        [Op.and]: [{ id: parseInt(req.query.id) }, { invoice: req.query.inv }],
-      },
-      include: [
-        {
-          model: accounts,
-          required: true,
-          attributes: ['email'],
-        },
-      ],
-      raw: true,
-    });
-    return res.status(200).send(result);
-  } catch (error) {
-    console.log(error);
-    return res.status(500).send(error);
-  }
-};
+    try {
+        const result = await orders.findOne({
+            where: {
+                [Op.and]: [
+                    { id: parseInt(req.query.order) },
+                    { invoice: req.query.inv }
+                ]
+            },
+            include: [
+                {
+                    model: accounts,
+                    required: true,
+                    attributes: ["email"]
+                }],
+            raw: true
+        })
+        return res.status(200).send(result)
+    } catch (error) {
+        console.log(error);
+        return res.status(500).send(error)
+    }
+}
+

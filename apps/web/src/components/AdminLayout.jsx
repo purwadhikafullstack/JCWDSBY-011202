@@ -1,5 +1,5 @@
 import { Link, useNavigate } from 'react-router-dom';
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { GiHamburgerMenu } from 'react-icons/gi';
 const linksData = [
   { to: '/admin/manage-account', label: 'Account' },
@@ -14,9 +14,20 @@ const AdminLayout = (props) => {
   const [isSidebarOpen, setSidebarOpen] = useState(true);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const navigate = useNavigate();
-  const toggleSidebar = () => {
-    setSidebarOpen(!isSidebarOpen);
-  };
+
+  useEffect(() => {
+    const handleScroll = () => {
+      if (isMobileMenuOpen) {
+        setIsMobileMenuOpen(false);
+      }
+    };
+
+    window.addEventListener('scroll', handleScroll);
+
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+    };
+  }, [isMobileMenuOpen]);
 
   const handleLogout = () => {
     localStorage.removeItem('token');
@@ -63,7 +74,7 @@ const AdminLayout = (props) => {
         </div>
       </div>
       {isMobileMenuOpen && (
-        <div className="sm:hidden fixed top-0 left-0 h-full w-64 bg-white shadow pt-4">
+        <div className="sm:hidden fixed top-0 left-0 h-full w-64 bg-white shadow pt-4 z-50">
           <div className="flex items-center mb-4">
             <button
               onClick={() => setIsMobileMenuOpen(false)}
@@ -120,15 +131,17 @@ const AdminLayout = (props) => {
       )}
       {/* Main Content */}
       <div className="flex-1 overflow-hidden overflow-y-auto">
-        <div
-          class={`space-y-2 absolute top-6 left-2 sm:hidden ${
-            isMobileMenuOpen ? 'hidden' : 'auto'
-          }`}
-          onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-        >
-          <GiHamburgerMenu />
+        <div className="relative">
+          <div
+            class={`space-y-2 absolute top-6 left-2 sm:hidden ${
+              isMobileMenuOpen ? 'hidden' : 'auto'
+            }`}
+            onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+          >
+            <GiHamburgerMenu />
+          </div>
+          {props.children}
         </div>
-        {props.children}
       </div>
     </div>
   );

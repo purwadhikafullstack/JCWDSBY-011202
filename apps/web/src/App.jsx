@@ -40,11 +40,11 @@ import { keepLogin } from './redux/slice/accountSlice';
 import DashboardUploadPayment from './pages/user/dashboard/dashboardUploadPayment';
 import WarehouseManageOrder from './pages/admin/admin.warehouse/manage.order/Manage.Order';
 import RoleRouting from './components/RoleRouting';
+import ViewAllJournal from './components/ViewJournalAdmin';
+import ViewAllJournalWarehouse from './components/ViewJournalWarehouseAdmin';
 function App() {
   const userGlobal = useSelector((state) => state.accountSliceReducer);
   const dispatch = useDispatch();
-
-  console.log(userGlobal);
   useEffect(() => {
     dispatch(keepLogin());
     const checkData = async () => {
@@ -159,7 +159,6 @@ function App() {
           }
         />
         <Route
-
           path="/warehouse-admin"
           element={
             <RoleRouting role="admin" redirect="/admin/login">
@@ -215,6 +214,22 @@ function App() {
             </RoleRouting>
           }
         />
+        <Route
+          path="/view-all-journal"
+          element={
+            <RoleRouting role={'superadmin'} redirect="/admin/login">
+              <ViewAllJournal />
+            </RoleRouting>
+          }
+        />
+        <Route
+          path="/view-warehouse-journal"
+          element={
+            <RoleRouting role={'admin'} redirect="/admin/login">
+              <ViewAllJournalWarehouse />
+            </RoleRouting>
+          }
+        />
 
         {/* BELUM KE ROUTING */}
         <Route path="/" element={<Home />} />
@@ -235,10 +250,13 @@ function App() {
         <Route path="/cart" element={<CartPage />} />
         <Route path="/checkout" element={<CheckoutPage />} />
         <Route path="/checkout/success?" element={<CheckoutSuccess />} />
-        <Route path="user/dashboard" element={<DashboardLanding/>}/>
-        <Route path="user/dashboard/address" element={<DashboardAddress/>}/>
-        <Route path="user/dashboard/order" element={<DashboardOrder/>}/>
-        <Route path="user/dashboard/upload-payment?" element={<DashboardUploadPayment/>}/>
+        <Route path="user/dashboard" element={<DashboardLanding />} />
+        <Route path="user/dashboard/address" element={<DashboardAddress />} />
+        <Route path="user/dashboard/order" element={<DashboardOrder />} />
+        <Route
+          path="user/dashboard/upload-payment?"
+          element={<DashboardUploadPayment />}
+        />
         <Route
           path="/warehouse-admin/manage-order"
           element={<WarehouseManageOrder />}

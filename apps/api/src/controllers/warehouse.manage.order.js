@@ -91,7 +91,7 @@ export const getManageOrderDetail = async (req, res, next) => {
 };
 export const updateStatus = async (req, res, next) => {
   try {
-    const isExist = await stocks_journals.findOne({
+    const isExist = await orders.findOne({
       where: {
         invoice: req.body.invoice,
         id: req.body.id,
@@ -102,13 +102,16 @@ export const updateStatus = async (req, res, next) => {
     const productsOrder = await order_details.findAll({
       where: {
         invoice: req.body.invoice,
-        id: req.body.id,
+        order_id: isExist.id,
       },
       raw: true,
     });
 
     if (isExist) {
-      if (isExist.status === 'Dikirim' && req.body.status === 'Berhasil') {
+      if (
+        isExist.status === 'Menunggu Konfirmasi Pembayaran' &&
+        req.body.status === 'Diproses'
+      ) {
         for (let i = 0; i < productsOrder.length; i++) {
           const productCheck = await products.findOne({
             where: {
@@ -116,7 +119,6 @@ export const updateStatus = async (req, res, next) => {
             },
             raw: true,
           });
-
           const isStock = await warehouse_storage.findOne({
             where: {
               warehouse_id: isExist.warehouse_id,
@@ -125,14 +127,14 @@ export const updateStatus = async (req, res, next) => {
             raw: true,
           });
 
-          await sales_journals.create({
+          await stocks_journals.create({
             date: formatDate(new Date()),
             product_id: productsOrder[i].product_id,
             warehouse_id: isExist.warehouse_id,
-            category_id: productCheck.category_id,
             quantity: productsOrder[i].quantity,
+            operation: 'decrement',
+            now_stock: isStock.stock - productsOrder[i].quantity,
           });
-
           await warehouse_storage.update(
             {
               stock: isStock.stock - productsOrder[i].quantity,
@@ -146,7 +148,24 @@ export const updateStatus = async (req, res, next) => {
           );
         }
       }
+      if (isExist.status === 'Dikirim' && req.body.status === 'Berhasil') {
+        for (let i = 0; i < productsOrder.length; i++) {
+          const productCheck = await products.findOne({
+            where: {
+              id: productsOrder[i].product_id,
+            },
+            raw: true,
+          });
 
+          await sales_journals.create({
+            date: formatDate(new Date()),
+            product_id: productsOrder[i].product_id,
+            warehouse_id: isExist.warehouse_id,
+            category_id: productCheck.category_id,
+            quantity: productsOrder[i].quantity,
+          });
+        }
+      }
       const result = await orders.update(
         {
           status: req.body.status,

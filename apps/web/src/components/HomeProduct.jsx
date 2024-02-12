@@ -18,7 +18,7 @@ const HomeProduct = () => {
   return (
     <div className="flex flex-wrap sm:-mx-2 mx-1">
       {products.map((product, index) => (
-        <div key={index} className="w-1/2 sm:w-1/4  p-4">
+        <div key={index} className="w-1/2 sm:w-1/4  p-2 sm:p-4">
           <ProductCatalog
             productName={product?.name || 'N/A'}
             price={formatPriceToIDR(product?.price) || 'N/A'}

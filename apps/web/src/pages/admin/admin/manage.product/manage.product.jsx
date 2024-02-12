@@ -85,7 +85,7 @@ const ManageProduct = () => {
       <AdminLayout>
         <div>
           <div className="p-4 flex justify-between items-center bg-white">
-            <div className="font-bold text-xl">Product List</div>
+            <div className="font-bold text-xl sm:ml-0 ml-4">Product List</div>
             <button
               onClick={handleAddButtonClick}
               style={{ cursor: 'pointer' }}
@@ -95,15 +95,7 @@ const ManageProduct = () => {
             </button>
           </div>
         </div>
-        <div className="flex mt-4 mx-2">
-          <SearchByCategory
-            categories={category}
-            onClickStatus={() => {
-              setFilterStatus(
-                document.querySelector('input[name="status"]:checked').value,
-              );
-            }}
-          />
+        <div className="flex mt-4 sm:mx-2">
           <div>
             <SearchProduct />
           </div>

@@ -88,7 +88,7 @@ const ProductDetail = () => {
       <TemporaryNavbar cartCount={cartCount} />
       <div>
         <div className="bg-gray-300 border-2 border-solid border-slate-300 ">
-          <div className="flex items-center font-normal ml-40 text-xs ">
+          <div className="flex items-center font-normal ml-6 sm:ml-40 text-sm sm:text-xs h-[55px] sm:h-[40px]">
             <Link className="hover:text-orange-400 transition-all duration-300">
               Home
             </Link>
@@ -107,11 +107,11 @@ const ProductDetail = () => {
           </div>
         </div>
       </div>
-      <div className="mx-32">
-        <div className="flex mx-6 my-8">
-          <div className="w-[600px]">
+      <div className="sm:mx-32">
+        <div className="sm:flex mx-2 sm:mx-6 my-8">
+          <div className="w-full sm:w-[600px] mx-auto">
             <img
-              className="w-[400px] h-[400px]  border-2"
+              className="w-full sm:w-[400px] h-auto border-2"
               src={
                 products.length > 0 && products[0].product_images?.length > 0
                   ? `http://localhost:8000/productimage/${products[0].product_images[0].image}`
@@ -119,7 +119,7 @@ const ProductDetail = () => {
               }
               alt="Main Image"
             />
-            <div className="grid grid-cols-4 gap-4 mt-2">
+            <div className="grid grid-cols-5 sm:grid-cols-4 gap-1 sm:gap-4 mt-2">
               {products.length > 0 &&
                 products[0].product_images
                   ?.slice(1, products[0].product_images.length)
@@ -127,20 +127,20 @@ const ProductDetail = () => {
                   .map((image, index) => (
                     <img
                       key={index}
-                      className="w-[84px] h-[90px]  border-2"
+                      className="w-16 sm:w-[84px] h-auto border-2"
                       src={`http://localhost:8000/productimage/${image.image}`}
                       alt={`Product ${index + 2}`}
                     />
                   ))}
             </div>
           </div>
-          <div className="mx-8 w-full">
+          <div className="sm:mx-8 mt-6 sm:mt-0 w-full">
             <div>
               <h1 className="text-2xl font-extrabold">
                 {products.length > 0 && products[0].name}
               </h1>
             </div>
-            <div className="mt-8">
+            <div className="mt-2 sm:mt-8">
               <p className="text-gray-500">
                 {products.length > 0 && products[0].description}
               </p>
@@ -161,11 +161,11 @@ const ProductDetail = () => {
                   </li>
                 </ul>
               </div>
-              <div className="w-full mt-16 border border-gray-300 p-2 rounded-md">
+              <div className="w-full mt-4 sm:mt-16 border border-gray-300 p-2 rounded-md">
                 <hr className="mt-1" />
-                <div className="w-10/12 mx-auto font-medium flex justify-between">
+                <div className="w-10/12 mx-auto font-medium flex sm:flex-row flex-col justify-between">
                   <div>
-                    <h2 className="text-sm pt-2 font-medium text-gray-500">
+                    <h2 className="text-sm sm:text-sm pt-2 font-medium text-gray-500">
                       Harga
                     </h2>
                     <h1 className="text-xl text-orange-500">
@@ -183,23 +183,26 @@ const ProductDetail = () => {
                       type="text"
                       inputMode="numeric"
                       value={counter}
-                      onChange={(e) =>{
-                        setCounter(parseInt(e.target.value) || 0)
-                        if(e.target.value>products[0].total_stock){
-                          setCounter(products[0].total_stock)
-                          alert(`Oops stock yang tersedia hanya ${products[0].total_stock}`)
+                      onChange={(e) => {
+                        setCounter(parseInt(e.target.value) || 0);
+                        if (e.target.value > products[0].total_stock) {
+                          setCounter(products[0].total_stock);
+                          alert(
+                            `Oops stock yang tersedia hanya ${products[0].total_stock}`,
+                          );
                         }
-                      }
-                      }
+                      }}
                       className="px-4 py-1 border-none text-center w-full focus:outline-none"
                       style={{ marginLeft: 'auto', marginRight: 'auto' }}
                     />
                     <button
                       onClick={() => {
-                        setCounter(counter + 1)
-                        if(counter>products[0].total_stock-1){
-                          setCounter(products[0].total_stock)
-                          alert(`Oops stock yang tersedia hanya ${products[0].total_stock}`)
+                        setCounter(counter + 1);
+                        if (counter > products[0].total_stock - 1) {
+                          setCounter(products[0].total_stock);
+                          alert(
+                            `Oops stock yang tersedia hanya ${products[0].total_stock}`,
+                          );
                         }
                       }}
                       className="px-4 py-1 border border-gray-500 rounded-full"

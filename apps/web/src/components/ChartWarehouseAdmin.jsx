@@ -7,24 +7,25 @@ import WarehouseProductChart from './Chart/WarehouseProductChart';
 const ChartAdmin = ({ user, product }) => {
   return (
     <div>
-      <div className="px-12 w-full flex mt-4 mb-8">
-        <div className="flex w-8/12">
-          <div className="w-full bg-white shadow-md mr-4 p-2">
+      <div className="sm:px-12 w-full flex sm:flex-row flex-col mt-4 mb-8 px-4 ">
+        <div className="flex sm:w-8/12">
+          <div className="w-full bg-white shadow-md sm:mr-4 p-2 ">
             <WarehouseAdminBarChart user={user} product={product} />
           </div>
         </div>
-        <div className="w-full bg-white shadow-md h-auto">
+        <div className="w-full bg-white shadow-md h-auto sm:mt-0 mt-4">
           <JournalAdmin />
         </div>
       </div>
-      <div className="px-12 w-full flex mt-4 mb-8">
-        <div className=" bg-white shadow-md mr-4 p-2">
+      <div className="sm:px-12 w-full flex sm:flex-row flex-col mt-4 mb-8 px-4">
+        <div className=" bg-white shadow-md sm:mr-4 p-2 ">
           <WarehouseCategoryChart user={user} />
         </div>
-        <div className="bg-white shadow-md mr-4 p-2">
+        <div className="bg-white shadow-md sm:mr-4 p-2 sm:mt-0 mt-2">
+
           <WarehouseProductChart user={user} />
         </div>
-        <div className="bg-white shadow-md mr-4 p-2 w-full">
+        <div className="bg-white shadow-md sm:mx-0 p-2 w-full sm:mt-0 mt-2">
           <WarehouseLineStockChart user={user} product={product} />
         </div>
       </div>

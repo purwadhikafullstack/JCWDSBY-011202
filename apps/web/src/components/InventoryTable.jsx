@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
+
 const InventoryTable = ({ warehouseInventory, onDelete }) => {
   const navigate = useNavigate();
   const [Inventory, setInventory] = useState([]);
@@ -27,7 +28,6 @@ const InventoryTable = ({ warehouseInventory, onDelete }) => {
       try {
         const tempProduct = [];
         const productIds = warehouseInventory.map((item) => item.product_id);
-        console.log(productIds);
 
         for (let i = 0; i < productIds.length; i++) {
           const response = await axios.get(
@@ -45,23 +45,21 @@ const InventoryTable = ({ warehouseInventory, onDelete }) => {
     fetchProduct();
   }, [warehouseInventory]);
 
-  console.log(Product);
-
   return (
     <div className="overflow-x-auto mx-auto">
       <table className="w-full max-w-full overflow-hidden border divide-y divide-gray-200 rounded-md">
         <thead className="bg-orange-50">
           <tr>
-            <th className="lg:px-6 lg:py-3 px-3 py-2 text-xs font-medium tracking-wider text-gray-500 uppercase">
+            <th className="px-3 py-2 text-xs font-medium tracking-wider text-gray-500 uppercase">
               Product Preview
             </th>
-            <th className="lg:px-6 lg:py-3 px-3 py-2 text-xs font-medium tracking-wider text-gray-500 uppercase">
+            <th className="px-3 py-2 text-xs font-medium tracking-wider text-gray-500 uppercase">
               Product
             </th>
-            <th className="lg:px-6 lg:py-3 px-3 py-2 text-xs font-medium tracking-wider text-gray-500 uppercase">
+            <th className="px-3 py-2 text-xs font-medium tracking-wider text-gray-500 uppercase">
               Stock
             </th>
-            <th className="lg:px-6 lg:py-3 px-3 py-2 text-xs font-medium tracking-wider text-gray-500 uppercase">
+            <th className="px-3 py-2 text-xs font-medium tracking-wider text-gray-500 uppercase">
               Action
             </th>
           </tr>
@@ -71,7 +69,7 @@ const InventoryTable = ({ warehouseInventory, onDelete }) => {
             const productImage = Product[index]?.product_images?.[0]?.image;
             return (
               <tr key={index}>
-                <td className="lg:px-6 lg:py-4 px-3 py-2 text-sm lg:text-sm sm:text-xs text-gray-500 whitespace-nowrap">
+                <td className="px-3 py-2 text-sm text-gray-500 whitespace-nowrap">
                   {productImage && (
                     <img
                       src={`http://localhost:8000/productimage/${productImage}`}
@@ -79,15 +77,15 @@ const InventoryTable = ({ warehouseInventory, onDelete }) => {
                     />
                   )}
                 </td>
-                <td className="lg:px-6 lg:py-4 px-3 py-2 text-sm lg:text-sm sm:text-xs text-gray-500 whitespace-nowrap text-center">
+                <td className="px-3 py-2 text-sm text-gray-500 whitespace-nowrap text-center">
                   {val.product_name}
                 </td>
-                <td className="lg:px-6 lg:py-4 px-3 py-2 text-sm lg:text-sm sm:text-xs text-gray-500 whitespace-nowrap text-center">
+                <td className="px-3 py-2 text-sm text-gray-500 whitespace-nowrap text-center">
                   {val.stock}
                 </td>
-                <td className="lg:px-6 lg:py-4 px-3 py-2 text-sm lg:text-sm sm:text-xs text-gray-500 whitespace-nowrap flex items-center justify-center">
+                <td className="px-3 py-2 text-sm text-gray-500 whitespace-nowrap flex flex-col sm:flex-row items-center justify-center">
                   <button
-                    className="lg:bg-orange-500 lg:hover:bg-orange-700 text-white px-4 py-2 rounded mr-2"
+                    className="bg-orange-500 hover:bg-orange-700 text-white px-4 py-2 rounded mb-2 sm:mb-0 mr-2"
                     onClick={() => {
                       navigate(
                         `/warehouse-admin/edit-stock/storage-000${val.id}`,
@@ -97,7 +95,7 @@ const InventoryTable = ({ warehouseInventory, onDelete }) => {
                     Edit Stock
                   </button>
                   <button
-                    className="lg:bg-slate-400 lg:hover:bg-slate-700 text-white px-4 py-2 rounded"
+                    className="bg-slate-400 hover:bg-slate-700 text-white px-4 py-2 rounded"
                     onClick={() => {
                       onHandleDelete(val.id);
                     }}

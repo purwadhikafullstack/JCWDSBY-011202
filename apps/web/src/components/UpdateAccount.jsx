@@ -99,18 +99,18 @@ const UpdateAccount = () => {
       <AdminLayout>
         <div className="flex justify-between bg-white h-16 p-4 items-center">
           <div className="flex items-center">
-            <div className="rounded-lg border p-2 hover:bg-gray-200 cursor-pointer">
+            <div className="rounded-lg border p-2 hover:bg-gray-200 cursor-pointer sm:block hidden">
               <IoMdArrowBack
                 className="text-gray-700"
                 size={24}
                 onClick={() => navigate('/admin/manage-account')}
               />
             </div>
-            <h1 className="mx-2 font-bold text-xl">Add Admin</h1>
+            <h1 className="mx-2 font-bold text-xl sm:ml-2 ml-4">Add Admin</h1>
           </div>
         </div>
         <div className="mx-6 bg-white m-8 pb-4">
-          <div className="flex mx-auto w-6/12">
+          <div className="flex mx-auto sm:w-6/12">
             <div className="mx-auto mt-4 font-bold">Warehouse Admin Update</div>
           </div>
           <hr className="w-11/12 mx-auto mt-3" />

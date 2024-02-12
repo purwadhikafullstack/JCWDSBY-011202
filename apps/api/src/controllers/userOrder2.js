@@ -102,7 +102,6 @@ export const requestMutation = async (req, res, next) => {
             console.log("masuk sini3", itemMutation);
             const createMutation = await warehouse_mutation.bulkCreate(itemMutation)
         }
-
         return res.status(200).send("Success create mutation")
     } catch (error) {
         console.log("error hy");

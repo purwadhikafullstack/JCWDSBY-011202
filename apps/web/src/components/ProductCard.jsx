@@ -5,7 +5,7 @@ const ProductCard = (props) => {
   const [isHovered, setIsHovered] = useState(false);
 
   return (
-    <div className="w-3/12  border rounded-sm my-2 mx-2">
+    <div className="sm:w-3/12  border rounded-sm my-4 sm:my-2 mx-2">
       <div>
         <img
           src={isHovered ? props.src2 : props.src}
@@ -16,13 +16,15 @@ const ProductCard = (props) => {
         />
       </div>
       <div className="flex flex-col justify-between p-1">
-        <h1 className="text-slate-500 text-sm font-medium mt-2 h-12">
+        <h1 className="text-slate-500 text-xl sm:text-sm font-medium mt-2 h-12">
           {props.productName}
         </h1>
         <div className="flex justify-between mt-2 mb-2">
           <div>
-            <h2 className="text-orange-500">{props.price}</h2>
-            <p className="text-sm font-medium text-gray-500">
+            <h2 className="text-xl sm:text-sm text-orange-500">
+              {props.price}
+            </h2>
+            <p className="text-xl sm:text-sm font-medium text-gray-500">
               {props.category}
             </p>
           </div>

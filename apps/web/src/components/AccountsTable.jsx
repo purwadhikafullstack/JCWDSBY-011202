@@ -1,82 +1,64 @@
-import React, { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useEffect, useState } from 'react';
 
-const AccountsTable = ({ accounts, onClickDelete }) => {
-  const [getAccount, setGetAccount] = useState([]);
-  const navigate = useNavigate();
+const ListWarehouse = ({ warehouses, onClickDelete, onClickEdit }) => {
+  const [listWarehouse, setListWarehouse] = useState([]);
+
   useEffect(() => {
-    setGetAccount(accounts);
-  }, [accounts]);
-
-  console.log(getAccount);
+    setListWarehouse(warehouses);
+  }, [warehouses]);
 
   return (
-    <div className="overflow-x-auto text">
-      {getAccount.length > 0 ? (
-        <table className="min-w-full border divide-y divide-gray-200">
+    <div className="overflow-x-auto mx-auto">
+      <div className="max-w-full overflow-hidden">
+        <table
+          className={`w-full border-collapse border border-gray-200 ${
+            window.innerWidth < 640 ? 'overflow-x-auto' : ''
+          }`}
+        >
           <thead className="bg-orange-50">
             <tr>
-              <th className="px-6 py-3 text-xs font-medium tracking-wider text-left text-gray-500 uppercase">
-                Full Name
-              </th>
-              <th className="px-6 py-3 text-xs font-medium tracking-wider text-left text-gray-500 uppercase">
-                Email
-              </th>
-              <th className="px-6 py-3 text-xs font-medium tracking-wider  text-gray-500 uppercase text-center">
-                Role
-              </th>
-              <th className="px-6 py-3 text-xs font-medium tracking-wider text-left text-gray-500 uppercase">
+              <th className="py-3 px-2 sm:px-4 text-xs sm:text-sm font-medium text-gray-500 uppercase">
                 Warehouse
               </th>
-              <th className="px-6 py-3 text-xs font-medium tracking-wider text-left text-gray-500 uppercase">
+              <th className="py-3 px-2 sm:px-4 text-xs sm:text-sm font-medium text-gray-500 uppercase">
+                Provinsi
+              </th>
+              <th className="py-3 px-2 sm:px-4 text-xs sm:text-sm font-medium text-gray-500 uppercase">
+                Kota
+              </th>
+              <th className="py-3 px-2 sm:px-4 text-xs sm:text-sm font-medium text-gray-500 uppercase">
+                Address
+              </th>
+              <th className="py-3 px-2 sm:px-4 text-xs sm:text-sm font-medium text-gray-500 uppercase">
                 Action
               </th>
             </tr>
           </thead>
           <tbody className="bg-white divide-y divide-gray-200">
-            {getAccount.map((account) => (
-              <tr key={account.id}>
-                <td className="px-6 py-4 text-sm text-gray-500 whitespace-nowrap">
-                  {account.fullname}
+            {listWarehouse.map((val, index) => (
+              <tr key={index}>
+                <td className="py-2 px-2 sm:px-4 text-sm text-gray-500 whitespace-nowrap">
+                  {val.name}
                 </td>
-                <td className="px-6 py-4 text-sm text-gray-500 whitespace-nowrap">
-                  {account.email}
+                <td className="py-2 px-2 sm:px-4 text-sm text-gray-500 whitespace-nowrap">
+                  {val.province_name}
                 </td>
-                <td
-                  className={`px-6 text-center py-4 text-sm whitespace-nowrap ${
-                    account.role === 'superadmin'
-                      ? 'text-red-500'
-                      : 'text-gray-500'
-                  }`}
-                >
-                  {account.role.toUpperCase()}
+                <td className="py-2 px-2 sm:px-4 text-sm text-gray-500 whitespace-nowrap">
+                  {val.city_name}
                 </td>
-                <td className="px-6 py-4 text-sm text-gray-500 whitespace-nowrap">
-                  {account.role === 'superadmin'
-                    ? 'Admin'
-                    : account.warehouse_name}
+                <td className="py-2 px-2 sm:px-4 text-sm text-gray-500 whitespace-nowrap text-center">
+                  {val.address}
                 </td>
-                <td className="px-6 py-4 text-sm whitespace-nowrap">
+                <td className="py-2 px-2 sm:px-4 text-sm text-gray-500 whitespace-nowrap flex items-center justify-center">
                   <button
-                    onClick={() =>
-                      navigate(
-                        `/admin/manage-account/edit-account?account=${
-                          account.email.split('@')[0]
-                        }-00${account.id}`,
-                      )
-                    }
-                    className={`${
-                      account.role === 'superadmin'
-                        ? 'bg-gray-300 cursor-not-allowed'
-                        : 'bg-orange-500 hover:bg-orange-700'
-                    } text-white px-4 py-2 rounded mr-2`}
-                    disabled={account.role === 'superadmin'}
+                    onClick={() => onClickEdit(val.id)}
+                    className="bg-orange-500 hover:bg-orange-700 text-white px-4 py-2 rounded mr-2"
                   >
                     Edit
                   </button>
                   <button
+                    onClick={() => onClickDelete(val.id)}
                     className="bg-slate-400 hover:bg-slate-700 text-white px-4 py-2 rounded"
-                    onClick={() => onClickDelete(account.id)}
                   >
                     Delete
                   </button>
@@ -85,11 +67,9 @@ const AccountsTable = ({ accounts, onClickDelete }) => {
             ))}
           </tbody>
         </table>
-      ) : (
-        <p>No accounts available.</p>
-      )}
+      </div>
     </div>
   );
 };
 
-export default AccountsTable;
+export default ListWarehouse;

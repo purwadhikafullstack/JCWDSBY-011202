@@ -62,17 +62,15 @@ const EmailVerification = () => {
 
   return (
     <div className="flex items-center justify-center min-h-screen">
-      <div className="flex shadow-lg w-full max-w-5xl">
-        <div
-          className="flex flex-wrap content-center justify-center rounded-l-md bg-white"
-          style={{ width: '60%', height: '80%' }}
-        >
-          <div className="w-80 p-8 mt-8">
+      <div className="flex flex-col md:flex-row shadow-lg w-full max-w-5xl">
+        {/* Verification form */}
+        <div className="md:w-2/3 flex flex-wrap content-center justify-center rounded-l-md bg-white">
+          <div className="w-full md:w-80 p-8 mt-8">
             <h1 className="text-2xl font-semibold">Email Verification</h1>
             <small className="text-gray-400">
               Please verify your email and set your password.
             </small>
-            {/* Formulir */}
+            {/* Form */}
             <form className="mt-4 space-y-4">
               <div>
                 <label
@@ -117,11 +115,8 @@ const EmailVerification = () => {
             </div>
           </div>
         </div>
-        {/* Banner registrasi */}
-        <div
-          className="flex flex-wrap content-center justify-center rounded-r-md"
-          style={{ width: '40%', height: '32rem' }}
-        >
+        {/* Verification banner */}
+        <div className="hidden md:block md:w-1/3">
           <img
             className="w-full h-full bg-center bg-no-repeat bg-cover rounded-r-md"
             src={Register}
@@ -129,7 +124,6 @@ const EmailVerification = () => {
           />
         </div>
       </div>
-
       {/* Congrats Modal */}
       {showCongratsModal && (
         <div className="fixed top-0 left-0 w-full h-full flex items-center justify-center bg-black bg-opacity-50">

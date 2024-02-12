@@ -113,7 +113,7 @@ const IModalOpt = (props) => {
                   );
                 }
               })}
-             
+
               <div className="flex gap-3 mt-8 justify-end">
                 <button
                   className=" bg-[#F06105] text-white rounded-md p-2 font-semibold hover:bg-orange-400"
@@ -144,14 +144,16 @@ const IModalCourier = (props) => {
     }, time);
   };
   // const [data, setData] = useState([prop]);
-  const idNumber = sessionStorage.getItem("idOngkir")?sessionStorage.getItem("idOngkir"):999
-  const [idCourier,setIdCourier] =useState(idNumber);
+  const idNumber = sessionStorage.getItem('idOngkir')
+    ? sessionStorage.getItem('idOngkir')
+    : 999;
+  const [idCourier, setIdCourier] = useState(idNumber);
   return (
     <div className="fixed inset-0 bg-opacity-80 flex flex-col justify-center bg-slate-100 items-center content-center gap-y-3 ">
       {props.isLoading ? (
         <div className="h-[400px] w-full md:w-[700px]">
-        <MiniLoading />
-      </div>
+          <MiniLoading />
+        </div>
       ) : (
         <div className="bg-white p-5 w-full rounded-md flex flex-col shadow md:w-[700px] md:p-10">
           <p className="mb-3  sm:w-full text-lg font-semibold flex items-center gap-1">
@@ -163,13 +165,13 @@ const IModalCourier = (props) => {
               if (idx == idCourier) {
                 return (
                   <div
-                  key={idx}
+                    key={idx}
                     className={` cursor-pointer bg-slate-100 sm:w-full shadow p-4 mb-2 rounded-md`}
                     onClick={() => {
-                      console.log("mecnetak");
-                      sessionStorage.setItem("idOngkir",idx)
-                      sessionStorage.setItem("service",val.service)
-                      sessionStorage.setItem("hargaOngkir",val.cost[0].value)
+                      console.log('mecnetak');
+                      sessionStorage.setItem('idOngkir', idx);
+                      sessionStorage.setItem('service', val.service);
+                      sessionStorage.setItem('hargaOngkir', val.cost[0].value);
 
                       setIdCourier(idx);
                     }}
@@ -187,16 +189,16 @@ const IModalCourier = (props) => {
                     </p>
                   </div>
                 );
-              } else if(idx!=idCourier){
+              } else if (idx != idCourier) {
                 return (
                   <div
                     key={idx}
                     className={` cursor-pointer hover:bg-slate-100 sm:w-full shadow p-4 mb-2 rounded-md`}
                     onClick={() => {
-                      sessionStorage.setItem("idOngkir",idx)
-                      sessionStorage.setItem("hargaOngkir",val.cost[0].value)
+                      sessionStorage.setItem('idOngkir', idx);
+                      sessionStorage.setItem('hargaOngkir', val.cost[0].value);
                       setIdCourier(idx);
-                      sessionStorage.setItem("service",val.service)
+                      sessionStorage.setItem('service', val.service);
                     }}
                   >
                     <p className="font-bold">

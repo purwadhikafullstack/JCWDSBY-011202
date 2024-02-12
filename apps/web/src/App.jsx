@@ -249,6 +249,7 @@ function App() {
         <Route
           path="/warehouse-admin/manage-order"
           element={<WarehouseManageOrder />}
+
         />
         <Route path="" />
       </Routes>

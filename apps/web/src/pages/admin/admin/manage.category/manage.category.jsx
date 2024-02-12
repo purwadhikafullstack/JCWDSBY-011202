@@ -91,7 +91,7 @@ const ManageCategory = () => {
     <div>
       <AdminLayout>
         <div className="p-4 flex justify-between items-center bg-white">
-          <div className="font-bold text-xl">Category List</div>
+          <div className="font-bold sm:ml-0 ml-4 text-xl">Category List</div>
           <button
             onClick={handleAddButtonClick}
             style={{ cursor: 'pointer' }}

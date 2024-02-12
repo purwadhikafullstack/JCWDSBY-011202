@@ -6,7 +6,7 @@ import { useEffect, useState } from 'react';
 import axios from 'axios';
 import ConfirmationModal from '../../../../components/ConfirmationModal';
 import { useSelector } from 'react-redux';
-import AdminLayout from '../../../../components/AdminLayout';
+
 const EditStockProduct = () => {
   const navigate = useNavigate();
   const userGlobal = useSelector((state) => state.accountSliceReducer);
@@ -66,6 +66,7 @@ const EditStockProduct = () => {
       setConfirmationModal(true);
     }
   };
+
   const onConfirmationClose = () => setConfirmationModal(false);
 
   const handleSaveChanges = async () => {
@@ -97,9 +98,9 @@ const EditStockProduct = () => {
       <WareHouseAdminLayout>
         <div>
           <div className="flex justify-between bg-white h-16 p-4 items-center">
-            <div className="flex items-center">
+            <div className="flex items-center sm:mx-0 mx-4">
               <div
-                className="rounded-lg border p-2 hover:bg-gray-200 cursor-pointer"
+                className="rounded-lg border p-2 hover:bg-gray-200 cursor-pointer "
                 onClick={() => {
                   navigate(
                     `/warehouse-admin/manage-inventory?warehouse=${sessionStorage.getItem(
@@ -131,20 +132,21 @@ const EditStockProduct = () => {
               </p>
               <hr className="mt-2" />
             </div>
-            <div className="mx-6 flex">
-              <div>
-                <div className="w-[400px] h-[400px]">
+            <div className="mx-6 flex flex-col lg:flex-row">
+              <div className="lg:w-1/3">
+                <div className="w-full h-full sm:w-[400px] sm:h-[400px]">
                   <img
                     src={
                       productSelected?.product_images?.[0]?.image
                         ? `http://localhost:8000/productimage/${productSelected.product_images[0].image}`
                         : `https://placehold.co/400x400`
                     }
-                    className="w-[400px] h-[400px]"
+                    className="w-full"
+                    alt="Product Preview"
                   />
                 </div>
               </div>
-              <div className="mx-8 w-full">
+              <div className="sm:mx-8 sm:mt-0 mt-2 w-full">
                 <DataEditStock product={productSelected} />
                 <div className="w-full mt-2 mb-2">
                   <div className="w-full mx-1 flex justify-center items-center">

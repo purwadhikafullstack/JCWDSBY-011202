@@ -50,6 +50,7 @@ const DashboardUploadPayment = (props) => {
           headers: { Authorization: `Bearer ${token}` },
         },)
         // navigate("/user/dashboard/order")
+
         alert("Terima kasih sudah mengupload pembayaran, pembayaran anda akan segera dikonfirmasi ")
       }
     } catch (error) {

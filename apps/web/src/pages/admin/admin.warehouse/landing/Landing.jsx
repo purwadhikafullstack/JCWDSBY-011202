@@ -1,10 +1,9 @@
-import WareHouseAdminLayout from '../../../../components/WareHouseAdminLayout';
 import { useState, useEffect } from 'react';
-import { useSelector } from 'react-redux';
-import { VscAccount } from 'react-icons/vsc';
 import { Loading } from '../../../../components/loadingComponent';
 import ChartAdmin from '../../../../components/ChartWarehouseAdmin';
 import axios from 'axios';
+import LandingWareHouseAdminLayout from './Layout';
+import { useSelector } from 'react-redux';
 const LandingWarehouse = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [warehouse, setWarehouse] = useState([]);
@@ -49,28 +48,11 @@ const LandingWarehouse = () => {
 
   return (
     <div>
-      <WareHouseAdminLayout>
+      <LandingWareHouseAdminLayout>
         {isLoading || !userGlobal ? (
           <Loading />
         ) : (
           <div className="w-full mx-auto">
-            <div className="w-full mx-auto bg-orange-500 flex p-4 justify-between items-center">
-              <h1 className="text-2xl font-bold text-white cursor-pointer">
-                Welcome, Admin
-              </h1>
-              <div className="flex items-center">
-                <div className="mr-4">
-                  <h1 className="text-[10px] font-semibold text-white">
-                    {userGlobal.fullname}
-                  </h1>
-                  <h2 className="text-[10px] text-white">{userGlobal.role}</h2>
-                </div>
-                <VscAccount
-                  size={24}
-                  className="text-white hover:text-orange-200 transition-all duration-300 cursor-pointer"
-                />
-              </div>
-            </div>
             <ChartAdmin
               user={userGlobal}
               warehouses={warehouse}
@@ -78,7 +60,7 @@ const LandingWarehouse = () => {
             />
           </div>
         )}
-      </WareHouseAdminLayout>
+      </LandingWareHouseAdminLayout>
     </div>
   );
 };

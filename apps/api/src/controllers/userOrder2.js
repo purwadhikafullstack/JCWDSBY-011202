@@ -14,6 +14,7 @@ export const requestMutation = async (req, res, next) => {
         })
         const productId = orderItems.map((val, idx) => { return val.product_id })
         console.log("orderitems", orderItems);
+
         console.log("pro id", productId);
         const productStock = await warehouse_storage.findAll({
             where: {
@@ -104,7 +105,6 @@ export const requestMutation = async (req, res, next) => {
         }
         return res.status(200).send("Success create mutation")
     } catch (error) {
-        console.log("error hy");
         return res.status(500).send(error)
     }
 }

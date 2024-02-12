@@ -50,7 +50,7 @@ const AddAccount = () => {
 
   const onHandleAdd = async () => {
     const token = localStorage.getItem('token');
-    console.log(warehouse);
+    console.log(email, warehouse);
     try {
       setLoading(true);
       const response = await axios.post(

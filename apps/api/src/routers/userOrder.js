@@ -5,7 +5,6 @@ import { uploader } from '../helper/uploader';
 import { requestMutation } from '../controllers/userOrder2';
 import { cancelOrder } from '../controllers/warehouse.manage.order';
 
-
 const userOrderRouter = Router();
 // GET
 userOrderRouter.get('/',validateToken,ValidateUser, getUserOrder);
@@ -19,7 +18,6 @@ uploadPaymentProof)
 userOrderRouter.post("/request-mutation/?",validateToken,ValidateUser,requestMutation)
 //PATCH
 userOrderRouter.patch("/cancel-order",validateToken,ValidateUser,cancelOrder)
-
 
 
 export { userOrderRouter };

@@ -18,7 +18,7 @@ export const updateAccount = async (req, res, next) => {
     }
 
     const isEmailTaken = await accounts.findOne({
-      where: { email: req.body.email, id: { [Op.not]: existingAccount.id } },
+      where: { email: req.body.email, id: { [Op.ne]: existingAccount.id } },
     });
 
     if (isEmailTaken) {

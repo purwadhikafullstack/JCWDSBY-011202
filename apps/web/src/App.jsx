@@ -159,14 +159,7 @@ function App() {
           }
         />
         <Route
-          path="/admin/manage-warehouse/add-warehouse"
-          element={
-            <RoleRouting role="superadmin" redirect="/admin/login">
-              <AddWarehouse />
-            </RoleRouting>
-          }
-        />
-        <Route
+
           path="/warehouse-admin"
           element={
             <RoleRouting role="admin" redirect="/admin/login">
@@ -249,7 +242,6 @@ function App() {
         <Route
           path="/warehouse-admin/manage-order"
           element={<WarehouseManageOrder />}
-
         />
         <Route path="" />
       </Routes>

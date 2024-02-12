@@ -3,11 +3,20 @@ import warehouses from '../models/warehouses';
 import products from '../models/products';
 import warehouse_storage from '../models/warehouse_storage';
 import journal from '../models/journal';
-import { generateUniqueCode } from '../middleware/helper';
+import stocks_journals from '../models/stocks_journals';
+function formatDate(date) {
+  const year = date.getFullYear();
+  const month = String(date.getMonth() + 1).padStart(2, '0');
+  const day = String(date.getDate()).padStart(2, '0');
+  const hours = String(date.getHours()).padStart(2, '0');
+  const minutes = String(date.getMinutes()).padStart(2, '0');
+  const seconds = String(date.getSeconds()).padStart(2, '0');
+
+  return `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
+}
 
 export const cancelMutation = async (req, res, next) => {
   try {
-    const uniqueCode = generateUniqueCode();
     const mutationId = req.params.id;
     const existingMutation = await warehouse_mutation.findOne({
       where: { id: mutationId },
@@ -104,7 +113,8 @@ export const cancelMutation = async (req, res, next) => {
 
     if (
       existingMutation.status === 'processing' ||
-      existingMutation.status === 'on delivery'
+      existingMutation.status === 'on delivery' ||
+      existingMutation.status === 'arrived'
     ) {
       await warehouse_storage.update(
         {
@@ -116,6 +126,14 @@ export const cancelMutation = async (req, res, next) => {
           },
         },
       );
+      await stocks_journals.create({
+        date: formatDate(new Date()),
+        product_id: existingMutation.product_id,
+        warehouse_id: existingMutation.source_warehouse_id,
+        quantity: existingMutation.quantity,
+        operation: 'increment',
+        now_stock: isStock.stock + existingMutation.quantity,
+      });
     }
 
     const journalDate = new Date().toLocaleDateString('en-US', {
@@ -157,7 +175,7 @@ export const cancelMutation = async (req, res, next) => {
           date: journalDate,
           information: `${existingMutation.mutation_code}: Your warehouse stock ${relatedProduct.name} is already increase ${relatedProduct.quantity} by mutation from canceled request ${existingMutation.mutation_code}`,
           from: 'Storage',
-          warehouse_id: isExists.destination_warehouse_id,
+          warehouse_id: existingMutation.destination_warehouse_id,
         });
       }
     }

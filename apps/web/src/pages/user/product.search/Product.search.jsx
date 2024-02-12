@@ -8,6 +8,7 @@ import { useState, useEffect } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { FaFilter } from 'react-icons/fa';
 import Pagination from '../../../components/Temporary/Pagination';
+import { IoMdClose } from 'react-icons/io';
 const ProdutSearch = () => {
   const [isFilterOpen, setFilterOpen] = useState(false);
   const [products, setProducts] = useState([]);
@@ -204,24 +205,10 @@ const ProdutSearch = () => {
         <div className="sm:hidden fixed top-0 right-0 h-full w-64 bg-white shadow">
           <div className="flex justify-between items-center p-4">
             <h1 className="text-lg font-bold">Filter</h1>
-            <button
+            <IoMdClose
               onClick={() => setFilterOpen(false)}
               className="text-gray-600 focus:outline-none"
-            >
-              <svg
-                className="h-6 w-6"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth="2"
-                  d="M6 18L18 6M6 6l12 12"
-                />
-              </svg>
-            </button>
+            />
           </div>
           <div className="mx-4">
             <ProductCategorySearch />

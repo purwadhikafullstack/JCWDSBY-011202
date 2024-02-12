@@ -7,7 +7,7 @@ import TemporaryNavbar from '../../../components/Temporary/Navbar';
 import TemporaryFooter from '../../../components/Temporary/Footer';
 import { formatPriceToIDR } from '../../../utils';
 import DiscoverMore from '../../../components/DiscoverMore';
-import ClipLoader from 'react-spinners/ClipLoader';
+
 import ButtonWithLoading from '../../../components/ButtonWithLoading';
 
 const ProductDetail = () => {
@@ -82,6 +82,7 @@ const ProductDetail = () => {
       setLoading(false);
     }
   };
+  console.log(products[0]);
 
   return (
     <div className="flex flex-col min-h-screen">
@@ -89,13 +90,22 @@ const ProductDetail = () => {
       <div>
         <div className="bg-gray-300 border-2 border-solid border-slate-300 ">
           <div className="flex items-center font-normal ml-6 sm:ml-40 text-sm sm:text-xs h-[55px] sm:h-[40px]">
-            <Link className="hover:text-orange-400 transition-all duration-300">
+            <Link
+              to={'/'}
+              className="hover:text-orange-400 transition-all duration-300"
+            >
+
               Home
             </Link>
             <span>
               <MdNavigateNext size={20} />
             </span>
-            <Link className="hover:text-orange-400 transition-all duration-300">
+            <Link
+              to={`/product-search?category_id=${
+                products.length > 0 && products[0].category_id
+              }`}
+              className="hover:text-orange-400 transition-all duration-300"
+            >
               {products.length > 0 && products[0].category.category}
             </Link>
             <span>

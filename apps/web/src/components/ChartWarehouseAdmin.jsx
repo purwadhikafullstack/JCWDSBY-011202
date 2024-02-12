@@ -22,6 +22,7 @@ const ChartAdmin = ({ user, product }) => {
           <WarehouseCategoryChart user={user} />
         </div>
         <div className="bg-white shadow-md sm:mr-4 p-2 sm:mt-0 mt-2">
+
           <WarehouseProductChart user={user} />
         </div>
         <div className="bg-white shadow-md sm:mx-0 p-2 w-full sm:mt-0 mt-2">

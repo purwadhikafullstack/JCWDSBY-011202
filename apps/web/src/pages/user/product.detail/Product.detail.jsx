@@ -94,6 +94,7 @@ const ProductDetail = () => {
               to={'/'}
               className="hover:text-orange-400 transition-all duration-300"
             >
+
               Home
             </Link>
             <span>

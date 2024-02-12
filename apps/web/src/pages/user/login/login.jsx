@@ -5,15 +5,14 @@ import ButtonWithLoading from '../../../components/ButtonWithLoading';
 import axios from 'axios';
 import { useDispatch, useSelector } from 'react-redux';
 import { userLoaded } from '../../../redux/slice/accountSlice';
-
 const LoginForm = () => {
+  const dispatch = useDispatch()
   const [loading, setLoading] = useState(false);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState(null);
   const navigate = useNavigate();
   const dispatch = useDispatch();
-
   const onHandleSignIn = async () => {
     try {
       setError(null);

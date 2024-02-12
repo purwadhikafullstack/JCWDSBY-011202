@@ -128,7 +128,7 @@ const MultiEditImage = ({ products }) => {
               previewImages[index] ||
               `http://localhost:8000/productimage/${val.image}`
             }
-            className="w-24 h-24 object-cover rounded-md mb-2 md:w-[108px] md:h-[108px] md:mb-0"
+            className="sm:w-24 sm:h-24 w-20 object-cover rounded-md mb-2 md:w-[108px] md:h-[108px] md:mb-0"
             alt={`Image Preview ${index + 1}`}
           />
           <div className="flex absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
@@ -164,7 +164,7 @@ const MultiEditImage = ({ products }) => {
       {images.length < 5 && (
         <label
           htmlFor={`add-input`}
-          className="w-24 h-24 object-cover text-center rounded-full mb-2 md:w-8 md:h-8 md:mb-0 border border-black text-black hover:border-orange-500 transition-all duration-300 hover:text-orange-500"
+          className="sm:w-24 sm:h-24 w-8 h-8 object-cover text-center rounded-full mb-2 md:w-8 md:h-8 md:mb-0 border border-black text-black hover:border-orange-500 transition-all duration-300 hover:text-orange-500"
         >
           +
           <input

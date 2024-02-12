@@ -12,8 +12,8 @@ const WarehouseTable = ({ temporaryWareHouse }) => {
   }, [temporaryWareHouse, warehouse]);
 
   return (
-    <div className="overflow-x-auto mx-auto">
-      <div className="max-w-full overflow-hidden">
+    <div className=" mx-auto">
+      <div className="max-w-full overflow-hidden overflow-x-auto">
         <table className="w-full border-collapse border border-gray-200">
           <thead className="bg-orange-50">
             <tr>

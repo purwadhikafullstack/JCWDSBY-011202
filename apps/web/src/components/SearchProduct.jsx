@@ -49,7 +49,7 @@ function SearchProduct() {
   return (
     <div className="relative">
       <div className="flex items-center justify-center">
-        <div className="flex w-full h-8 mx-10 rounded bg-white">
+        <div className="flex sm:w-full h-8 mx-4 sm:m-4 sm:mx-2 rounded bg-white">
           <input
             className="w-full bg-transparent border p-1 text-black-400 outline-none focus:outline-none"
             type="search"

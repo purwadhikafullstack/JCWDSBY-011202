@@ -121,40 +121,28 @@ const CheckoutPage = () => {
         console.log('masuk dah benar');
         const date = new Date();
         const token = localStorage.getItem('token');
-        const result = await axios.post(
-          `http://localhost:8000/api/checkout`,
-          {
-            invoice: `INV/${date.getFullYear()}${
-              date.getMonth() + 1 < 10
-                ? `0${date.getMonth() + 1}`
-                : date.getMonth() + 1
-            }${
-              date.getDate() < 10 ? `0${date.getDate()}` : date.getDate()
-            }/${userData.city.slice(0, 3).toUpperCase()}/${
-              userData.account_id
-            }/`,
-            // account_id,
-            cartId: localStorage.getItem('cartId'),
-            address_id: userData.address_id,
-            warehouse_id,
-            recepient: recepient ? recepient : userData.fullname,
-            // phone,
-            shipping_cost: parseInt(sessionStorage.getItem('hargaOngkir')),
-            shipping_type: sessionStorage.getItem('service'),
-            total_price: finalPrice,
-            total_weight: coWeight,
-            status: 'Menunggu Pembayaran',
-            payment_proof: '',
-          },
-          { headers: { Authorization: `Bearer ${token}` } },
-        );
-        console.log('ini hasil sudah di create', result);
-        sessionStorage.removeItem('idOngkir');
-        sessionStorage.removeItem('hargaOngkir');
-        sessionStorage.removeItem('service');
-        navigate(
-          `/checkout/success?id=${result.data.id}&inv=${result.data.invoice}`,
-        );
+        const result = await axios.post(`http://localhost:8000/api/checkout`,
+        {
+          invoice:`INV/${date.getFullYear()}${date.getMonth()+1<10?`0${date.getMonth()+1}`:date.getMonth()+1}${date.getDate()<10?`0${date.getDate()}`:date.getDate()}/${userData.city.slice(0,3).toUpperCase()}/${userData.account_id}/`,
+          // account_id,
+          cartId:localStorage.getItem("cartId"),
+          address_id:userData.address_id,
+          warehouse_id,
+          recepient:recepient?recepient:userData.fullname,
+          // phone,
+          shipping_cost:parseInt(sessionStorage.getItem('hargaOngkir')),
+          shipping_type:sessionStorage.getItem("service"),
+          total_price:finalPrice,
+          total_weight:coWeight,
+          status:"Menunggu Pembayaran",
+          payment_proof:""
+        },
+        { headers: { Authorization: `Bearer ${token}` } })
+        console.log("ini hasil sudah di create",result);
+        sessionStorage.removeItem("idOngkir")
+        sessionStorage.removeItem("hargaOngkir")
+        sessionStorage.removeItem("service")
+        navigate(`/checkout/success?order=${result.data.id}&inv=${result.data.invoice}`)
       } else {
         console.log('masuk kurang');
         alert('Mohon Lengkapi Terlebih Dahulu');

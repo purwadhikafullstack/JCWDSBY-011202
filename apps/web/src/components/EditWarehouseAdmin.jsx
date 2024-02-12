@@ -73,6 +73,7 @@ const EditWarehouseAdmin = (props) => {
               </option>
             ))}
           </select>
+
         </div>
       </div>
     </div>

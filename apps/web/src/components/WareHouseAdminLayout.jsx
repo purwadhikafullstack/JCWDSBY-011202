@@ -5,7 +5,7 @@ import { GiHamburgerMenu } from 'react-icons/gi';
 const linksData = [
   { to: '/warehouse-admin/view-products', label: 'Products' },
   { to: '/warehouse-admin/view-categories', label: 'Categories' },
-  { to: '/warehouse-admin/transaction', label: 'Transaction' },
+  { to: '/warehouse-admin/manage-order', label: 'Order' },
   { to: '/warehouse-admin/manage-inventory', label: 'Inventory' },
   { to: '/warehouse-admin/manage-mutation', label: 'Mutation' },
 ];

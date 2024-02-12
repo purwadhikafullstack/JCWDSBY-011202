@@ -1,7 +1,7 @@
 import { Router } from 'express';
+import { addStorage } from '../controllers/add.storage';
 import {
   getStorage,
-  addStorage,
   deleteWarehouseStorage,
 } from '../controllers/warehouse_storage_controller';
 import { editStock } from '../controllers/warehouse.storage.manage.controller';

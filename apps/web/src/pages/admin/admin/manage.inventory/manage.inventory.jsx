@@ -29,7 +29,7 @@ const ManageInventory = () => {
     <div>
       <AdminLayout>
         <div className="p-4 flex justify-between items-center bg-white">
-          <div className="font-bold text-xl">Manage Inventory</div>
+          <div className="font-bold text-xl sm:ml-0 ml-4">Manage Inventory</div>
         </div>
         <div className="p-4">
           <WarehouseTable temporaryWareHouse={temporaryWareHouse} />

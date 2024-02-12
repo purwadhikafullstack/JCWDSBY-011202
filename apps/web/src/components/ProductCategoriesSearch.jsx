@@ -24,6 +24,14 @@ const ProductCategorySearch = () => {
     <div>
       <h4 className="text-[18px] font-light">PRODUCT CATEGORIES</h4>
       <ul className="mt-4">
+        <li
+          className="flex font-light hover:text-orange-400 transition-all duration-300 cursor-pointer"
+          onClick={() => {
+            navigate(`/product-search`);
+          }}
+        >
+          All
+        </li>
         {categories.map((category, index) => (
           <li
             key={index}

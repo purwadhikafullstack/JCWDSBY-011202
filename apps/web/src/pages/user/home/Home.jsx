@@ -8,10 +8,10 @@ function Home() {
     <div className="flex flex-col min-h-screen justify-between">
       <TemporaryNavbar />
       <div>
-        <div className="w-[80vw] h-[auto] mx-auto mt-8">
+        <div className="w-full sm:w-[80vw] h-[auto] mx-auto sm:mt-8 ">
           <Carousel />
         </div>
-        <div className="mt-8 w-8/12 mx-auto ">
+        <div className="mt-8 w-full sm:w-8/12 mx-auto">
           <HomeGallery />
           <h1 className="mt-8 font-bold text-3xl text-center">
             Telusuri Produk Kami

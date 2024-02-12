@@ -59,10 +59,6 @@ export const getUserOrder = async (req, res, next) => {
                 }
             }
         }
-        console.log("1", result);
-        // console.log("2",result[0].data);
-        // console.log("3",result[1].data);
-        // console.log("4",result[3].data);
         return res.status(200).send(result)
     } catch (error) {
         return res.status(500).send(error)
@@ -70,7 +66,6 @@ export const getUserOrder = async (req, res, next) => {
 }
 export const deleteOrder = async (req, res, next) => {
     try {
-        console.log("req.body", req.body);
         const result = await orders.update({
             status: "Dibatalkan"
         },
@@ -126,15 +121,14 @@ export const uploadPaymentProof = async (req, res, next) => {
         })
         console.log("masuk 2", uploadProof);
 
-        if (uploadProof.payment_proof) {
+        if (uploadProof.payment_proof) {    
             const filePath = path.join(
                 __dirname,
-                '../../src/public/productimage',
-                req.file.filename
+                '../../src/public/paymentProof',
+                uploadProof.payment_proof
             )
             fs.unlinkSync(filePath)
         }
-        console.log("masuk ga3?");
         const edit = await orders.update({
             payment_proof: req.file.filename,
             status: "Menunggu Konfirmasi Pembayaran"

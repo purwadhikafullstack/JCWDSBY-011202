@@ -160,6 +160,9 @@ export const createOrder = async (req, res, next) => {
         total_weight: val.total_weight,
       });
     });
+    const deleteCartItems = await carts.destroy({
+      where: { id: orderItemsId },
+    });
     const createOrderDetail = await order_details.bulkCreate(orderDetails);
     return res
       .status(200)
@@ -177,7 +180,10 @@ export const getOrderData = async (req, res, next) => {
   try {
     const result = await orders.findOne({
       where: {
-        [Op.and]: [{ id: parseInt(req.query.id) }, { invoice: req.query.inv }],
+        [Op.and]: [
+          { id: parseInt(req.query.order) },
+          { invoice: req.query.inv },
+        ],
       },
       include: [
         {

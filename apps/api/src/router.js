@@ -11,6 +11,8 @@ import { provinces_and_cities_Router } from './routers/provinces.and.cities.rout
 import { checkoutRouter } from './routers/checkout';
 import { journalRouter } from './routers/journal.router';
 import { userOrderRouter } from './routers/userOrder';
+import { userSetting } from './routers/userSetting';
+import { warehouseOrder } from './routers/warehouse_order';
 
 const router = Router();
 
@@ -38,5 +40,7 @@ router.use('/accounts', accountsRouter);
 router.use('/cart', cartRouter)
 router.use('/checkout', checkoutRouter)
 router.use('/userOrder', userOrderRouter)
+router.use('/userSetting', userSetting)
+router.use('/warehouse/order', warehouseOrder)
 
 export default router;

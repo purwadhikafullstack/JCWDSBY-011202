@@ -120,14 +120,16 @@ const EditWarehouse = () => {
         <div className="flex justify-between bg-white h-16 p-4 items-center">
           <div className="flex items-center">
             <div
-              className="rounded-lg border p-2 hover:bg-gray-200 cursor-pointer"
+              className="rounded-lg border p-2 hover:bg-gray-200 cursor-pointer sm:block hidden"
               onClick={() => {
                 navigate('/admin/manage-warehouse');
               }}
             >
               <IoMdArrowBack className="text-gray-700" size={24} />
             </div>
-            <h1 className="mx-2 font-bold text-xl">Edit Warehouse</h1>
+            <h1 className="mx-2 font-bold text-xl sm:ml-0 ml-4">
+              Edit Warehouse
+            </h1>
           </div>
         </div>
         <div className="w-11/12 mx-auto mt-4 bg-white p-4 rounded-md">

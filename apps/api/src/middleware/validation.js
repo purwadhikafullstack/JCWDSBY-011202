@@ -4,7 +4,6 @@ module.exports = {
   validateToken: (req, res, next) => {
     try {
       const token = req.token;
-
       if (!token) {
         return res.status(400).send({
           success: false,
@@ -119,8 +118,13 @@ module.exports = {
   ValidateEmail: (req, res, next) => {
     try {
       const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-
-      if (!req.body.email || !emailPattern.test(req.body.email)) {
+      console.log(req.body.email);
+      console.log(emailPattern.test(req.body.email));
+      if (
+        !req.body.email ||
+        !req.body.email.includes('@') ||
+        !req.body.email.includes('.com')
+      ) {
         return res.status(400).send({
           success: false,
           message: 'Invalid email format',

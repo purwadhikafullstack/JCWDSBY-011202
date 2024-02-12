@@ -128,8 +128,8 @@ const ManageMutation = () => {
     <div>
       <WareHouseAdminLayout>
         <div>
-          <div className="p-4 flex justify-between items-center bg-white">
-            <div className="font-bold text-xl">Mutation Stock</div>
+          <div className="p-4 flex justify-between items-center bg-white ">
+            <div className="font-bold text-xl sm:ml-0 ml-4">Mutation Stock</div>
             <button
               style={{ cursor: 'pointer' }}
               onClick={() =>

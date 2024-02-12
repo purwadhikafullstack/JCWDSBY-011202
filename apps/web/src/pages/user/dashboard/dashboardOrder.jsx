@@ -33,7 +33,7 @@ const DashboardOrder = (props) => {
   };
   const onHandleModalClick = async()=>{
     try {
-      const deleteItem=JSON.parse(sessionStorage.getItem("deleteOrderId"))
+      // const deleteItem=JSON.parse(sessionStorage.getItem("deleteOrderId"))
       const token = localStorage.getItem('token');
       const result = await axios.patch(`http://localhost:8000/api/userOrder/delete`,{id:deleteItem.id,invoice:deleteItem.inv},{
         headers: { Authorization: `Bearer ${token}` },

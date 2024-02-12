@@ -5,7 +5,7 @@ import Toast from './Toast';
 import axios from 'axios';
 const DashboardTitle = (props) => {
   return (
-    <div className="mb-8 mt-4">
+    <div className="mb-2 mt-4">
       <p className="text-center text-3xl font-semibold mb-2">{props.title}</p>
       <p className="text-center text-md">{props.subTitle}</p>
     </div>

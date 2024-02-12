@@ -138,7 +138,7 @@ const CheckoutPage = () => {
         sessionStorage.removeItem("idOngkir")
         sessionStorage.removeItem("hargaOngkir")
         sessionStorage.removeItem("service")
-        navigate(`/checkout/success?id=${result.data.id}&inv=${result.data.invoice}`)
+        navigate(`/checkout/success?order=${result.data.id}&inv=${result.data.invoice}`)
       } else {
         console.log("masuk kurang");
         alert("Mohon Lengkapi Terlebih Dahulu")

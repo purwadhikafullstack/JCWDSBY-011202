@@ -172,7 +172,7 @@ export const getOrderData = async (req, res, next) => {
         const result = await orders.findOne({
             where: {
                 [Op.and]: [
-                    { id: parseInt(req.query.id) },
+                    { id: parseInt(req.query.order) },
                     { invoice: req.query.inv }
                 ]
             },

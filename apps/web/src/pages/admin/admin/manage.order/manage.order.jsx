@@ -1,6 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
 import ManageOrderTable from '../../../../components/ManageOrderTableComponent.jsx';
-import WareHouseAdminLayout from '../../../../components/WareHouseAdminLayout';
 import axios from 'axios';
 import { useDispatch, useSelector } from 'react-redux';
 import {
@@ -9,18 +8,15 @@ import {
 } from '../../../../components/modalRama3.jsx';
 import { updateItem } from '../../../../redux/slice/orderSlice.js';
 import { updateStatus } from '../../../../redux/slice/statusSlice.js';
-import { IModal } from '../../../../components/modalRama.jsx';
-import cancelOrderAdmin, {
-  cancelOrder,
-} from '../../../../redux/slice/cancelOrderAdmin.js';
 import {
   InputSearchComponent,
   SearchByStatus,
   SearchDate,
 } from '../../../../components/adminOrderSearchComponent.jsx';
 import { useNavigate } from 'react-router-dom';
+import AdminLayout from '../../../../components/AdminLayout.jsx';
 
-const WarehouseManageOrder = () => {
+const AdminManageOrder = () => {
   const navigate = useNavigate()
   const editItem = useSelector((state) => state.orderSlice);
   const editStatus = useSelector((state) => state.statusSlice);
@@ -63,7 +59,7 @@ const WarehouseManageOrder = () => {
   }, []);
   return (
     <>
-      <WareHouseAdminLayout>
+      <AdminLayout>
         <div className="px-4 py-3">
           <p className="font-bold mb-5 text-xl">Manage Order</p>
           <div className=" mb-2 flex gap-2">
@@ -119,6 +115,7 @@ const WarehouseManageOrder = () => {
           </div>
           <ManageOrderTable
             header={[
+            'Gudang',
               'Invoice',
               'Date Invoice',
               'Alamat Pengiriman',
@@ -170,71 +167,9 @@ const WarehouseManageOrder = () => {
         ) : (
           ''
         )}
-        {confirmationModalStatus ? (
-          <IModal
-            confirm={'Ya'}
-            cancel={'Tidak'}
-            deskripsi={'Apakah anda yakin mengubah status order ini?'}
-            onHandleModalClick={async () => {
-              try {
-                const token = localStorage.getItem('token');
-                let doc = document.getElementById('update');
-                const result = await axios.patch(
-                  `http://localhost:8000/api/warehouse/order/update-status`,
-                  {
-                    status: doc.value,
-                    invoice: editStatus.invoice,
-                    id: editStatus.order_id,
-                  },
-                  {
-                    headers: { Authorization: `Bearer ${token}` },
-                  },
-                );
-                setConfirmationModalStatus(false);
-                dispatch(
-                  updateStatus({ order_id: '', status: '', invoice: '' }),
-                );
-                getDataOrder();
-              } catch (error) {
-                console.log(error);
-              }
-            }}
-            onHandleModalCancel={() => {
-              setConfirmationModalStatus(false);
-            }}
-          />
-        ) : (
-          ''
-        )}
-        {cancelOrderItem.status ? (
-          <IModal
-            confirm={'Ya'}
-            cancel={'Tidak'}
-            deskripsi={'Apakah anda yakin membatalkan Pesanan ini?'}
-            onHandleModalClick={async () => {
-              try {
-                const batalkanOrder = await axios.patch(
-                  `http://localhost:8000/api/warehouse/order/update-status`,
-                  {
-                    status: cancelOrderItem.status,
-                    invoice: cancelOrderItem.invoice,
-                    id: cancelOrderItem.order_id,
-                  },
-                );
-              } catch (error) {
-                console.log(error);
-              }
-            }}
-            onHandleModalCancel={() => {
-              dispatch(cancelOrder({ order_id: '', status: '', invoice: '' }));
-            }}
-          />
-        ) : (
-          ''
-        )}
-      </WareHouseAdminLayout>
+      </AdminLayout>
     </>
   );
 };
 
-export default WarehouseManageOrder;
+export default AdminManageOrder;

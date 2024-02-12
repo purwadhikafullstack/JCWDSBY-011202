@@ -13,6 +13,7 @@ import { journalRouter } from './routers/journal.router';
 import { userOrderRouter } from './routers/userOrder';
 import { userSetting } from './routers/userSetting';
 import { warehouseOrder } from './routers/warehouse_order';
+import { adminOrder } from './routers/admin_order';
 
 const router = Router();
 
@@ -42,5 +43,6 @@ router.use('/checkout', checkoutRouter)
 router.use('/userOrder', userOrderRouter)
 router.use('/userSetting', userSetting)
 router.use('/warehouse/order', warehouseOrder)
+router.use('/admin/order', adminOrder)
 
 export default router;

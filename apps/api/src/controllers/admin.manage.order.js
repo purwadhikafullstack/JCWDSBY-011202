@@ -1,11 +1,14 @@
-
+import fs from 'fs/promises';
+import path from 'path';
 import { Op, Sequelize } from 'sequelize';
 import orders from '../models/orders';
 import addresses from '../models/addresses';
 import warehouses from '../models/warehouses';
 import accounts from '../models/accounts';
+import { templateResponseError } from '../helper/utils';
+import { emitWarning } from 'process';
 
-export const getWarehouseSearchOrder = async (req, res, next) => {
+export const getOrder = async (req, res, next) => {
     try {
         const page = parseInt(req.query.page) || 1;
         const limit = parseInt(req.query.limit) || 10;

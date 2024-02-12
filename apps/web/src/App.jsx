@@ -42,6 +42,7 @@ import WarehouseManageOrder from './pages/admin/admin.warehouse/manage.order/Man
 import RoleRouting from './components/RoleRouting';
 import ViewAllJournal from './components/ViewJournalAdmin';
 import ViewAllJournalWarehouse from './components/ViewJournalWarehouseAdmin';
+import AdminManageOrder from './pages/admin/admin/manage.order/manage.order';
 function App() {
   const userGlobal = useSelector((state) => state.accountSliceReducer);
   const dispatch = useDispatch();
@@ -260,6 +261,10 @@ function App() {
         <Route
           path="/warehouse-admin/manage-order"
           element={<WarehouseManageOrder />}
+        />
+        <Route
+          path="/admin/manage-order"
+          element={<AdminManageOrder />}
         />
         <Route path="" />
       </Routes>

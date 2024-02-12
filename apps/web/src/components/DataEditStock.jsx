@@ -23,7 +23,7 @@ const DataEditStock = ({ product }) => {
             value={product.price}
           />
         </div>
-        <div className="w-full mx-1 mt-2">
+        <div className="w-full mx-1 ">
           <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-400">
             Categories
           </label>
@@ -39,7 +39,7 @@ const DataEditStock = ({ product }) => {
           </select>
         </div>
       </div>
-      <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-400">
+      <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-400 mt-2 ">
         Description
       </label>
       <textarea

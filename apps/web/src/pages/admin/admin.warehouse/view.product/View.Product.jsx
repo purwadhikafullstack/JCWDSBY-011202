@@ -21,7 +21,7 @@ const ViewProduct = () => {
   return (
     <div>
       <WareHouseAdminLayout>
-        <div>
+        <div className='px-4 py-2'>
           <div className="sm:p-1 p-4 flex justify-between items-center">
             <div className="font-bold text-xl">Product List</div>
           </div>

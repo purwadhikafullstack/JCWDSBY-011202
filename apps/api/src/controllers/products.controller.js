@@ -2,7 +2,7 @@ import products from '../models/products';
 import categories from '../models/categories';
 import products_images from '../models/product_images';
 import warehouse_storage from '../models/warehouse_storage';
-
+import { Op } from 'sequelize';
 export const getProduct = async (req, res, next) => {
   try {
     const warehouseStorage = await warehouse_storage.findAll({
@@ -36,6 +36,12 @@ export const getProduct = async (req, res, next) => {
     }
     if (req.query.category_id) {
       filter.category_id = req.query.category_id;
+    }
+    if (req.query.min_price) {
+      filter.price = { [Op.gte]: req.query.min_price };
+    }
+    if (req.query.max_price) {
+      filter.price = { ...filter.price, [Op.lte]: req.query.max_price };
     }
 
     const order = [];

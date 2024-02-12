@@ -3,6 +3,17 @@ import warehouse_storage from '../models/warehouse_storage';
 import journal from '../models/journal';
 import warehouse_mutation from '../models/warehouse_mutation';
 import products from '../models/products';
+import stocks_journals from '../models/stocks_journals';
+function formatDate(date) {
+  const year = date.getFullYear();
+  const month = String(date.getMonth() + 1).padStart(2, '0');
+  const day = String(date.getDate()).padStart(2, '0');
+  const hours = String(date.getHours()).padStart(2, '0');
+  const minutes = String(date.getMinutes()).padStart(2, '0');
+  const seconds = String(date.getSeconds()).padStart(2, '0');
+
+  return `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
+}
 export const confirmMutation = async (req, res, next) => {
   try {
     const isExists = await warehouse_mutation.findOne({
@@ -115,6 +126,14 @@ export const confirmMutation = async (req, res, next) => {
     const destinationInformation = `${isExists.mutation_code}:  Your warehouse, ${isExistDestinationWarehouse.name} request for ${isExists.quantity} units of product ${isExistProduct.name} is confirmed by admin of ${isExistSourceWarehouse}`;
     const journalFrom = 'Mutation Stock';
     if (updateStatusReversedWarehouse && updateStatus) {
+      await stocks_journals.create({
+        date: formatDate(new Date()),
+        product_id: isExists.product_id,
+        warehouse_id: isExists.source_warehouse_id,
+        quantity: isExists.quantity,
+        operation: 'decrement',
+        now_stock: isStock.stock - isExists.quantity,
+      });
       await journal.create({
         date: journalDate,
         information: journalInformation,

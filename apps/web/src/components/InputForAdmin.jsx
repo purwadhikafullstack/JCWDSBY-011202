@@ -1,7 +1,7 @@
 const InputForAdmin = (props) => {
   return (
-    <div>
-      <div className="flex">
+    <div className="sm:block flex flex-col">
+      <div className="flex flex-col sm:flex-row">
         <div className="w-full mx-2">
           <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-400">
             Full Name
@@ -25,7 +25,7 @@ const InputForAdmin = (props) => {
           />
         </div>
       </div>
-      <div className="flex mt-4">
+      <div className="flex mt-4 flex-col sm:flex-row">
         <div className="w-full mx-2">
           <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-400">
             Password

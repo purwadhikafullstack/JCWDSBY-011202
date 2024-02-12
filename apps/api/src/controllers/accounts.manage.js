@@ -18,7 +18,7 @@ export const updateAccount = async (req, res, next) => {
     }
 
     const isEmailTaken = await accounts.findOne({
-      where: { email: req.body.email, id: { [Op.not]: existingAccount.id } },
+      where: { email: req.body.email, id: { [Op.ne]: existingAccount.id } },
     });
 
     if (isEmailTaken) {
@@ -28,14 +28,10 @@ export const updateAccount = async (req, res, next) => {
       });
     }
 
-    const salt = await bcrypt.genSalt(10);
-    const hashPassword = await bcrypt.hash(req.body.password, salt);
-
     const updatedAccount = await accounts.update(
       {
-        name: req.body.name,
+        fullname: req.body.fullname,
         email: req.body.email,
-        password: hashPassword,
         warehouse_id: req.body.warehouse_id,
       },
       {
@@ -51,7 +47,7 @@ export const updateAccount = async (req, res, next) => {
   } catch (error) {
     console.log(error);
     return res.status(500).send({
-      message: 'Error deleting data',
+      message: 'Error updating data',
       success: false,
     });
   }
@@ -99,6 +95,18 @@ export const deleteAccount = async (req, res, next) => {
       message: 'Account deleted',
       success: true,
     });
+  } catch (error) {
+    console.log(error);
+    return res.status(500).send({
+      message: 'Error deleting data',
+      success: false,
+    });
+  }
+};
+
+export const authCheck = (req, res) => {
+  try {
+    return res.status(200).send(req.userData.role);
   } catch (error) {
     console.log(error);
     return res.status(500).send({

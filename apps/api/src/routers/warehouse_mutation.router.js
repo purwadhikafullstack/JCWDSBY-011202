@@ -1,13 +1,9 @@
 import { Router } from 'express';
-import {
-  getMutation,
-  requestMutation,
-} from '../controllers/warehouse_mutation_controller';
+import { updateStatusArrived } from '../controllers/arrivedmutation';
+import { requestMutation } from '../controllers/request.mutation';
+import { getMutation } from '../controllers/warehouse_mutation_controller';
 import { confirmMutation } from '../controllers/warehouse.mutation.manage.controller';
-import {
-  updateStatusProcess,
-  updateStatusArrived,
-} from '../controllers/warehouse.mutation.status.controller';
+import { updateStatusProcess } from '../controllers/warehouse.mutation.status.controller';
 import { finishMutation } from '../controllers/finished.mutation';
 import { cancelMutation } from '../controllers/cancel.mutation';
 import { deleteMutation } from '../controllers/mutation.delete.controller';

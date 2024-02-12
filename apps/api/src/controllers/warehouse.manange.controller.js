@@ -1,6 +1,7 @@
 import warehouse from '../models/warehouses';
 import warehouse_storage from '../models/warehouse_storage';
 import journal from '../models/journal';
+import accounts from '../models/accounts';
 export const deleteWarehouse = async (req, res, next) => {
   try {
     const isExist = await warehouse.findOne({
@@ -27,6 +28,16 @@ export const deleteWarehouse = async (req, res, next) => {
     );
 
     const delWh = await warehouse_storage.update(
+      { is_deleted: true },
+      {
+        where: {
+          is_deleted: false,
+          warehouse_id: req.params.id,
+        },
+      },
+    );
+
+    const delAcc = await accounts.update(
       { is_deleted: true },
       {
         where: {
@@ -82,6 +93,16 @@ export const updateWarehouse = async (req, res, next) => {
         .send({ success: false, message: 'Warehouse data not found' });
     }
     const { name, prov_id, city_id, address } = req.body;
+    const existingWarehouseExist = await warehouse.findOne({
+      where: {
+        name: name || existingWarehouse.name,
+      },
+    });
+    if (existingWarehouseExist) {
+      return res
+        .status(400)
+        .send({ success: false, message: 'Warehouse is already exist' });
+    }
     const numOfUpdatedRows = await warehouse.update(
       {
         name: name || existingWarehouse.name,

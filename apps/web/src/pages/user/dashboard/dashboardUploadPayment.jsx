@@ -37,14 +37,19 @@ const DashboardUploadPayment = (props) => {
       if (!media) {
         alert('Silahkan upload bukti pembayaran terlebih dahulu ');
       } else {
+        const token = localStorage.getItem("token")
         const formData = new FormData();
         // console.log('masuk sinii', fileToUpload);
         formData.append('fileUpload', fileToUpload);
-        const result = await axios.patch(
-          `http://localhost:8000/api/userOrder/upload/payment-proof${location.search}`,
-          formData,
-        );
-        navigate("/user/dashboard/order")
+        // const result = await axios.patch(
+        //   `http://localhost:8000/api/userOrder/upload/payment-proof${location.search}`,
+        //   formData,
+        // );
+        console.log("lokasi",location.search);
+        const result2 = await axios.post(`http://localhost:8000/api/userOrder/request-mutation${location.search}`,{},{
+          headers: { Authorization: `Bearer ${token}` },
+        },)
+        // navigate("/user/dashboard/order")
         alert("Terima kasih sudah mengupload pembayaran, pembayaran anda akan segera dikonfirmasi ")
       }
     } catch (error) {
@@ -66,13 +71,15 @@ const DashboardUploadPayment = (props) => {
     }
   };
   useEffect(() => {
-    if (!sessionStorage.getItem('orderItem')) {
-      navigate('/user/dashboard/order');
-    } else {
-      getOrderDetail();
-      openLoading(1500);
-    }
+    // if (!sessionStorage.getItem('orderItem')) {
+    //   navigate('/user/dashboard/order');
+    // } else {
+    // }
+    openLoading(1500);
+    getOrderDetail();
   }, []);
+  console.log("data",data);
+    console.log("order detaul",orderDetail );
   return (
     <>
       {firstloading ? (
@@ -90,7 +97,7 @@ const DashboardUploadPayment = (props) => {
               <div className="flex flex-col gap-y-2">
                 <p>No Invoice</p>
                 <p className="bg-slate-200 rounded-md py-1 px-2 font-semibold">
-                  {data?data[0].invoice:""}
+                  {orderDetail.invoice}
                 </p>
                 <p className="">Detail Transfer</p>
                 <div className="bg-slate-200 rounded-md py-1 px-2 font-semibold flex flex-col gap-y-1">

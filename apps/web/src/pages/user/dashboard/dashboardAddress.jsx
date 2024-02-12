@@ -1,3 +1,4 @@
+import { useEffect, useRef, useState } from 'react';
 import TemporaryFooter from '../../../components/Temporary/Footer';
 import TemporaryNavbar from '../../../components/Temporary/Navbar';
 import {
@@ -5,58 +6,337 @@ import {
   DashboardTitle,
 } from '../../../components/dashboard';
 import { CiTrash } from 'react-icons/ci';
+import axios from 'axios';
+import {
+  ModalUserEditAddress,
+  ModalUserSettingAddress,
+} from '../../../components/modalRama2';
+import { RxComponentPlaceholder } from 'react-icons/rx';
+import {
+  AddressCardMain,
+  AddressCardSub,
+} from '../../../components/addressCard';
+import { Loading } from '../../../components/loadingComponent';
 const DashboardAddress = (props) => {
+  const ref = useRef();
+  const [userAddress, setUserAddress] = useState([]);
+  const [provinces, setProvinces] = useState([]);
+  const [userProvince, setUserProvince] = useState(0);
+  const [cities, setCities] = useState([]);
+  const [userCity, setUserCity] = useState(0);
+  const [userNewAddress, setUserNewAddress] = useState('');
+  const [firstloading, setFirstLoading] = useState(false);
+  const [userMainAddress, setUserMainAddress] = useState(0);
+  const [showModal, setShowModal] = useState(false);
+  const [showModalEdit, setShowModalEdit] = useState(false);
+  const [dataEdit, setDataEdit] = useState([]);
+  const [idEdit, setIdEdit] = useState(0);
+  const token = localStorage.getItem('token');
+  const getUserAddress = async () => {
+    try {
+      console.log("jalan tak");
+      const result = await axios.get(
+        `http://localhost:8000/api/checkout/userAddress`,
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        },
+      );
+      return setUserAddress(result.data.address);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+  const getUserMainAddressId = async () => {
+    try {
+      const result = await axios.get(
+        `http://localhost:8000/api/userSetting/main-address`,
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        },
+      );
+      setUserMainAddress(result.data.address_id);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+  const getProvinces = async () => {
+    const result = await axios.get(
+      `http://localhost:8000/api/provincesandcities/provinces`,
+    );
+    setProvinces(result.data.data);
+  };
+  const getCity = async () => {
+    try {
+      const getCity = await axios.get(
+        `http://localhost:8000/api/userSetting/getCity/${userProvince}`,
+      );
+      setCities(getCity.data.data);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+  const onHandleChangeProvince = async () => {
+    try {
+      let doc = document.getElementById('province');
+      setUserProvince(doc.value);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+  const onHandleChangeCity = () => {
+    try {
+      let doc = document.getElementById('city');
+      setUserCity(doc.value);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+  const addNewAddress = async () => {
+    try {
+      const doc = document.getElementById('alamat');
+      const doc2 = document.getElementById('phone');
+      if (doc.value && doc2.value && userCity && userProvince) {
+        openLoading(1500);
+        const result = await axios.post(
+          `http://localhost:8000/api/userSetting/add-address`,
+          {
+            prov_id: userProvince,
+            city_id: userCity,
+            address: doc.value,
+            phone: String(doc2.value),
+          },
+          {
+            headers: { Authorization: `Bearer ${token}` },
+          },
+        );
+        getUserAddress();
+        setShowModal(false);
+        document.body.style.overflow = 'auto';
+      } else {
+        alert('Silahkan lengkapi dahulu data alamat anda');
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+  const onHandleEditAddress = async () => {
+    try {
+      const doc = document.getElementById('alamat');
+      const doc2 = document.getElementById('phone');
+      console.log('in id', userCity, doc.value, doc2.value, userProvince);
+      if (userCity && doc.value && doc2.value && userProvince) {
+        openLoading(1500);
+        const result = await axios.patch(
+          `http://localhost:8000/api/userSetting/edit-address`,
+          {
+            prov_id: userProvince,
+            city_id: userCity,
+            address: doc.value,
+            phone: String(doc2.value),
+            addressId: dataEdit.id,
+          },
+          {
+            headers: { Authorization: `Bearer ${token}` },
+          },
+        );
+        setShowModalEdit(false);
+        document.body.style.overflow = 'auto';
+        getUserAddress();
+        alert("Perubahan data berhasil disimpan")
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+  const openLoading = (time) => {
+    setFirstLoading(true);
+    setTimeout(() => {
+      setFirstLoading(false);
+    }, time);
+  };
+  useEffect(() => {
+    openLoading(1500);
+    getUserAddress();
+    getUserMainAddressId();
+    getProvinces();
+  }, []);
+  useEffect(() => {
+    getCity();
+  }, [userProvince]);
   return (
     <div>
+      {firstloading ? <Loading /> : ''}
       <TemporaryNavbar />
       <DashboardTitle title={'Alamat'} subTitle={'User/Alamat'} />
       <div className="flex justify-center gap-4">
         <DashboardSidebar username={'Suhartono'} profPict={''} />
         <div className="shadow-lg rounded-md md:w-[560px] lg:w-[800px] p-5">
           <p className="text-lg font-semibold mb-4">Alamat yang terdaftar :</p>
-          <div className="flex flex-col gap-4">
-            {/* <div className='bg-slate-100 rounded-md w-[full] h-[300px] flex justify-center items-center mb-4'>
-                <p className='text-slate-500'>Belum ada alamat terdaftar</p>
-            </div> */}
-            <div className="sm:w-full shadow p-4 mb-2 rounded-md">
-              <div className=" flex justify-between">
-                <p className="font-semibold mb-2">Jl Surabaya No 110</p>
-                <p className="text-sm text-slate-600">Alamat Utama</p>
+          <div className="flex flex-col gap-4  min-h-[320px]">
+            {userAddress.length > 0 ? (
+              userAddress.map((val, idx) => {
+                if (val.id == userMainAddress) {
+                  return (
+                    <AddressCardMain
+                      key={idx}
+                      userAddress={userAddress[idx]}
+                      onHandleDeleteMainAddress={async () => {
+                        try {
+                          openLoading(500);
+                          const index = (mainId) => {
+                            switch (mainId) {
+                              case 0:
+                                return 1;
+                              default:
+                                return 0;
+                            }
+                          };
+                          const token = localStorage.getItem('token');
+                          const result = await axios.delete(
+                            `http://localhost:8000/api/userSetting/delete-main-address?id=${
+                              val.id
+                            }&other=${userAddress[index(idx)].id}`,
+                            {
+                              headers: { Authorization: `Bearer ${token}` },
+                            },
+                          );
+                          getUserAddress();
+                          getUserMainAddressId();
+                        } catch (error) {
+                          console.log(error);
+                        }
+                      }}
+                      showModalForEdit={() => {
+                        setShowModalEdit(true);
+                        document.body.style.overflow = 'hidden';
+                        setDataEdit(val);
+                        setUserProvince(val.prov_id);
+                        setUserCity(val.city_id);
+                        setIdEdit(val.id);
+                      }}
+                    />
+                  );
+                }
+              })
+            ) : (
+              <div className="bg-slate-100 rounded-md w-[full] h-[270px] flex justify-center items-center mb-4">
+                <p className="text-slate-500">Belum ada alamat terdaftar</p>
               </div>
-              <div>
-                <p>Surabaya, Jawa Timur</p>
-              </div>
-              <div className='text-end'>
-              <button
-                  className="rounded-full p-1 hover:bg-slate-200 text-lg"
-                  onClick={props.onHandleDelete}
-                >
-                  <CiTrash className="" />
-                </button>
-              </div>
-            </div>
-            <div className="sm:w-full shadow p-4 mb-2 rounded-md">
-              <div className=" flex justify-between">
-                <p className="font-semibold mb-2">Jl Surabaya No 110</p>
-                <p className="text-sm text-slate-600 cursor-pointer hover:underline hover:text-[#F06105]">Set Alamat Utama</p>
-              </div>
-              <div>
-                <p>Surabaya, Jawa Timur</p>
-              </div>
-              <div className='text-end'>
-              <button
-                  className="rounded-full p-1 hover:bg-slate-200 text-lg"
-                  onClick={props.onHandleDelete}
-                >
-                  <CiTrash className="" />
-                </button>
-              </div>
-            </div>
-            <button className='ml-auto bg-[#F06105] text-white font-semibold px-2 rounded-md py-2 hover:bg-orange-400' disabled={false}>Tambah Alamat</button>
+            )}
+            {userAddress.length > 1
+              ? userAddress.map((val, idx) => {
+                  if (val.id != userMainAddress) {
+                    return (
+                      <AddressCardSub
+                        key={idx}
+                        userAddress={userAddress[idx]}
+                        onHandleDeleteAddress={async () => {
+                          try {
+                            const token = localStorage.getItem('token');
+                            const result = await axios.delete(
+                              `http://localhost:8000/api/userSetting/delete-address/${val.id}`,
+                              {
+                                headers: { Authorization: `Bearer ${token}` },
+                              },
+                            );
+                            openLoading(500);
+                            getUserAddress();
+                          } catch (error) {
+                            console.log(error);
+                          }
+                        }}
+                        onHandleChangeMainAddress={async () => {
+                          try {
+                            const token = localStorage.getItem('token');
+                            const result = await axios.patch(
+                              `http://localhost:8000/api/checkout/changeUserAddress`,
+                              { address: val.id },
+                              {
+                                headers: { Authorization: `Bearer ${token}` },
+                              },
+                            );
+                            openLoading(500);
+                            getUserAddress();
+                            getUserMainAddressId();
+                          } catch (error) {
+                            console.log(error);
+                          }
+                        }}
+                        showModalForEdit={() => {
+                          setShowModalEdit(true);
+                          setDataEdit(val);
+                          setUserProvince(val.prov_id);
+                          setIdEdit(val.id);
+                          setUserCity(val.city_id);
+                        }}
+                      />
+                    );
+                  }
+                })
+              : ''}
+          </div>
+          <div className="flex justify-end">
+            <button
+              className=" bg-[#F06105] text-white font-semibold px-2 rounded-md py-2 hover:bg-orange-400"
+              disabled={false}
+              onClick={() => {
+                if (userAddress.length == 3) {
+                  alert('Maksimal alamat yang terdaftar adalah 3');
+                } else {
+                  setShowModal(true);
+                  document.body.style.overflow = 'hidden';
+                }
+              }}
+            >
+              Tambah Alamat
+            </button>
           </div>
         </div>
       </div>
       <TemporaryFooter />
+      {showModal ? (
+        <ModalUserSettingAddress
+          confirm={'Simpan Alamat'}
+          cancel={'Cancel'}
+          deskripsi={'Tambah Alamat Baru : '}
+          provinces={provinces}
+          cities={cities}
+          onChangeProvince={onHandleChangeProvince}
+          onHandleChangeCity={onHandleChangeCity}
+          onHandleModalCancel={() => {
+            setShowModal(false);
+            ref.current.value = '';
+            setUserCity('');
+            setUserAddress('');
+
+            document.body.style.overflow = 'auto';
+          }}
+          onHandleModalClick={addNewAddress}
+        />
+      ) : (
+        ''
+      )}
+      {showModalEdit ? (
+        <ModalUserEditAddress
+          confirm={'Simpan Perubahan'}
+          cancel={'Cancel'}
+          deskripsi={'Edit alamat : '}
+          provinces={provinces}
+          cities={cities}
+          data={dataEdit}
+          onChangeProvince={onHandleChangeProvince}
+          onHandleChangeCity={onHandleChangeCity}
+          onHandleModalCancel={() => {
+            setShowModalEdit(false);
+
+            // ref.current.value = '';
+            document.body.style.overflow = 'auto';
+          }}
+          onHandleModalClick={onHandleEditAddress}
+        />
+      ) : (
+        ''
+      )}
     </div>
   );
 };

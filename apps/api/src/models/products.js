@@ -14,6 +14,9 @@ export default class products extends Model {
     products.hasMany(models.warehouse_mutation, {
       foreignKey: 'product_id',
     });
+    products.hasMany(models.sales_journal, {
+      foreignKey: 'product_id',
+    });
   }
 }
 

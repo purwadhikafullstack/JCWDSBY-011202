@@ -31,7 +31,7 @@ const DiscoverMore = ({ products }) => {
         </h1>
         <br />
       </div>
-      <div className="w-8/12 mx-auto flex ">
+      <div className="sm:w-8/12 mx-auto sm:flex ">
         {discoverProducts.map((product, index) => (
           <ProductCard
             key={index}

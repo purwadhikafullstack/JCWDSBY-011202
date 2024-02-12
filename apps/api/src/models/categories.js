@@ -5,6 +5,9 @@ export default class categories extends Model {
     categories.hasMany(models.products, {
       foreignKey: 'category_id',
     });
+    categories.hasMany(models.sales_journal, {
+      foreignKey: 'category_id',
+    });
   }
 }
 

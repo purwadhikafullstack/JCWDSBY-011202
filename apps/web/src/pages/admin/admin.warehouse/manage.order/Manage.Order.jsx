@@ -18,10 +18,11 @@ import {
   SearchByStatus,
   SearchDate,
 } from '../../../../components/adminOrderSearchComponent.jsx';
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 
 const WarehouseManageOrder = () => {
-  const navigate = useNavigate()
+  const location = useLocation();
+  const navigate = useNavigate();
   const editItem = useSelector((state) => state.orderSlice);
   const editStatus = useSelector((state) => state.statusSlice);
   const cancelOrderItem = useSelector((state) => state.cancelOrderSlice);
@@ -32,35 +33,49 @@ const WarehouseManageOrder = () => {
   const [filterStatus, setFilterStatus] = useState('');
   const [filterDateFrom, setFilterDateFrom] = useState('');
   const [filterDateTo, setFilterDateTo] = useState('');
+  const [filterInvoice, setFilterInvoice] = useState('');
 
   const [data, setData] = useState([]);
   const ref = useRef();
   const token = localStorage.getItem('token');
-  const header = [
-    { th: 'Invoice', width: 'w-[130px]' },
-    { th: 'Date Invoice', width: 'w-[150px]' },
-    { th: 'Lokasi Gudang', width: 'w-[180px]' },
-    { th: 'Bukti Pembayaran', width: 'w-[160px]' },
-    { th: 'Total Price', width: 'w-[180px]' },
-    { th: 'Status', width: 'w-[150px]' },
-    { th: 'Action', width: 'w-[100px]' },
-  ];
   const getDataOrder = async () => {
     try {
-      const result = await axios.get(
-        `http://localhost:8000/api/warehouse/order`,
-        {
-          headers: { Authorization: `Bearer ${token}` },
-        },
-      );
-      setData(result.data);
+      if (location.search) {
+        const result = await axios.get(
+          `http://localhost:8000/api/warehouse/order/search-order${location.search}`,
+          {
+            headers: { Authorization: `Bearer ${token}` },
+          },
+        );
+        return setData(result.data);
+      } else {
+        const result = await axios.get(
+          `http://localhost:8000/api/warehouse/order`,
+          {
+            headers: { Authorization: `Bearer ${token}` },
+          },
+        );
+        return setData(result.data);
+      }
     } catch (error) {
       console.log(error);
     }
   };
+  const getQuery = ()=>{
+    if(location.search){
+      console.log(location.search);
+      console.log(location.hash);
+    }
+  }
   useEffect(() => {
+    getQuery()
     getDataOrder();
   }, []);
+  useEffect(() => {
+    getQuery()
+    getDataOrder();
+  }, [location.search]);
+
   return (
     <>
       <WareHouseAdminLayout>
@@ -69,69 +84,100 @@ const WarehouseManageOrder = () => {
           <div className=" mb-2 flex gap-2">
             <InputSearchComponent
               inputSearchId={'searchByInv'}
+              valueInputSearch={filterInvoice}
               placeholder={'Masukkan Invoice'}
               onChange={(e) => {
                 let doc = document.getElementById('searchByInv');
                 e.target.value;
-                console.log(doc.value);
+                setFilterInvoice(doc.value);
               }}
             />
-            <SearchDate />
+            <SearchDate
+              onChangeFrom={(e) => {
+                let doc = document.getElementById('from');
+                e.target.value;
+                setFilterDateFrom(doc.value);
+              }}
+              onChangeTo={(e) => {
+                let doc = document.getElementById('to');
+                e.target.value;
+                setFilterDateTo(doc.value);
+              }}
+            />
           </div>
-          <div>
+          <div className="flex justify-between  ">
             <SearchByStatus
+              checked={filterStatus}
               checkedValue={() => {
                 setFilterStatus(
                   document.querySelector('input[name="status"]:checked').value,
                 );
               }}
-              onChangeStatus={() => {
+              onClickStatus={() => {
                 setFilterStatus(
                   document.querySelector('input[name="status"]:checked').value,
                 );
               }}
               refStatus={ref}
             />
+          </div>
+          <div className="flex gap-2 mb-3 justify-end">
             <button
-              className=" bg-[#F06105] text-white font-semibold px-2 rounded-md py-2 hover:bg-orange-400"
+              className=" bg-[#F06105] text-white font-semibold my-auto px-4 rounded-md py-2 hover:bg-orange-400"
               disabled={false}
-              onClick={() => {
-                let doc = document.getElementById("searchByInv")
-                const object = {
-                  invoice: doc.value,
-                  status: filterStatus,
-                  from: filterDateFrom,
-                  to: filterDateTo,
-                };
-                const result = [];
-
-                for (const key in object) {
-                  if (object[key]) {
-                    result.push(`${key}=${object[key]}`);
+              onClick={async () => {
+                try {
+                  const object = {
+                    invoice: filterInvoice,
+                    status: filterStatus,
+                    from: filterDateFrom,
+                    to: filterDateTo,
+                  };
+                  const result = [];
+                  console.log('yang dicari', object);
+                  for (const key in object) {
+                    if (object[key]) {
+                      result.push(`${key}=${object[key]}`);
+                    }
                   }
+                  const finalresult = result.join('&');
+                  navigate(`/warehouse-admin/manage-order?${finalresult}`);
+                  getDataOrder();
+                } catch (error) {
+                  console.log(error);
                 }
-                const finalresult = result.join('&');
-                navigate(`/search-order?${finalresult}`)
               }}
             >
               Search
             </button>
+            <button
+              className=" bg-slate-300 font-semibold my-auto px-4 rounded-md py-2 hover:bg-slate-100"
+              disabled={false}
+              onClick={() => {
+                navigate(`/warehouse-admin/manage-order`);
+                setFilterDateFrom('');
+                setFilterDateTo('');
+                setFilterInvoice('');
+                setFilterStatus('');
+              }}
+            >
+              Reset
+            </button>
           </div>
-          <ManageOrderTable
-            header={[
-              'Invoice',
-              'Date Invoice',
-              'Alamat Pengiriman',
-              'Bukti Pembayaran',
-              'Total Price',
-              'Status',
-              'Action',
-            ]}
-            // showModalChangeStatus={() => {
-            //   setShowModalChangeStatus(true);
-            // }}
-            data={data}
-          />
+          <div className="">
+            <ManageOrderTable
+              header={[
+                'Invoice',
+                'Date Invoice',
+                'Alamat Pengiriman',
+                'Bukti Pembayaran',
+                'Total Price',
+                'Status',
+                'Action',
+              ]}
+              data={data}
+            />
+          </div>
         </div>
         {editItem.order_id ? (
           <ModalOrderInformation

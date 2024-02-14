@@ -1,121 +1,107 @@
 import WareHouseAdminLayout from '../../../../components/WareHouseAdminLayout';
-import MutationJournalTable from '../../../../components/MutationJournalTable';
 import { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import axios from 'axios';
 import { Loading } from '../../../../components/loadingComponent';
 import ConfirmationModal from '../../../../components/ConfirmationModal';
 import Toast from '../../../../components/Toast';
-
+import MutationJournalTable from '../../../../components/MutationJournalTable';
+import Pagination from '../../../../components/Temporary/Pagination';
+import MutationFilter from '../../../../components/MutationFIlter';
 const ManageMutation = () => {
   const navigate = useNavigate();
+  const userGlobal = useSelector((state) => state.accountSliceReducer);
   const [temporaryMutation, setTemporaryMutation] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [isStatusToUpdate, setIsStatusToUpdate] = useState(0);
-  const userGlobal = useSelector((state) => state.accountSliceReducer);
   const [buttonLoading, setButtonLoading] = useState(false);
   const [toast, setToast] = useState(null);
   const [showConfirmationModal, setShowConfirmationModal] = useState(false);
-  const [isMutationId, setMutationId] = useState(0);
+  const [page, setPage] = useState(1);
   const [endPoint, setEndPoint] = useState('');
+  const [totalPage, setTotalPage] = useState(0);
+  const location = useLocation();
+  const query = location.search;
+  const onCloseConfirmationModal = () => setShowConfirmationModal(false);
 
-  const onCloseConfirmationModal = () => {
-    setShowConfirmationModal(false);
+  const handleMutationAction = async (status, id) => {
+    try {
+      let actionEndpoint = '';
+      switch (status) {
+        case 1:
+          actionEndpoint = `http://localhost:8000/api/warehouse/mutation/confirm/${id}`;
+          break;
+        case 2:
+          actionEndpoint = `http://localhost:8000/api/warehouse/mutation/process/${id}`;
+          break;
+        case 3:
+          actionEndpoint = `http://localhost:8000/api/warehouse/mutation/arrival/${id}`;
+          break;
+        case 4:
+          actionEndpoint = `http://localhost:8000/api/warehouse/mutation/finish/${id}`;
+          break;
+        case 5:
+          actionEndpoint = `http://localhost:8000/api/warehouse/mutation/delete/${id}`;
+          break;
+        case 6:
+          actionEndpoint = `http://localhost:8000/api/warehouse/mutation/cancel/${id}`;
+          break;
+        default:
+          break;
+      }
+
+      const token = localStorage.getItem('token');
+      const response = await axios.patch(
+        actionEndpoint,
+        {},
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        },
+      );
+
+      const successMessage = response.data.success
+        ? response.data.message || 'Mutation status updated successfully'
+        : 'Mutation status update failed';
+
+      showToast(response.data.success ? 'success' : 'danger', successMessage);
+
+      if (response.data.success) {
+        const mutationResponse = await axios.get(
+          `http://localhost:8000/api/warehouse/mutation?warehouse_id=${userGlobal.warehouse_id}&page=${page}`,
+        );
+        setTemporaryMutation(mutationResponse.data.data);
+      }
+    } catch (error) {
+      console.error('Error updating mutation status:', error);
+      showToast(
+        'danger',
+        error.response?.data.message || 'An error occurred. Please try again.',
+      );
+    } finally {
+      setButtonLoading(false);
+      setShowConfirmationModal(false);
+    }
   };
-  const confirmMutation = (id) => {
-    setIsStatusToUpdate(1);
-    setMutationId(id);
-    setEndPoint(`http://localhost:8000/api/warehouse/mutation/confirm/${id}`);
-    setShowConfirmationModal(true);
-  };
-  const deliverMutation = (id) => {
-    setIsStatusToUpdate(2);
-    setMutationId(id);
-    setEndPoint(`http://localhost:8000/api/warehouse/mutation/process/${id}`);
-    setShowConfirmationModal(true);
-  };
-  const arrivedMutation = (id) => {
-    setIsStatusToUpdate(3);
-    setMutationId(id);
-    setEndPoint(`http://localhost:8000/api/warehouse/mutation/arrival/${id}`);
-    setShowConfirmationModal(true);
-  };
-  const doneMutation = (id) => {
-    setIsStatusToUpdate(4);
-    setMutationId(id);
-    setEndPoint(`http://localhost:8000/api/warehouse/mutation/finish/${id}`);
-    setShowConfirmationModal(true);
-  };
-  const deleteMutation = (id) => {
-    setIsStatusToUpdate(5);
-    setMutationId(id);
-    setEndPoint(`http://localhost:8000/api/warehouse/mutation/delete/${id}`);
-    setShowConfirmationModal(true);
-  };
-  const cancelMutation = (id) => {
-    setIsStatusToUpdate(6);
-    setMutationId(id);
-    setEndPoint(`http://localhost:8000/api/warehouse/mutation/cancel/${id}`);
-    setShowConfirmationModal(true);
-  };
+
   const showToast = (status, message) => {
     setToast({ status, message });
     setTimeout(() => {
       setToast(null);
     }, 5000);
   };
-  const onHandleAdd = async () => {
-    setButtonLoading(true);
-    try {
-      const token = localStorage.getItem('token');
-      const response = await axios.patch(
-        endPoint,
-        {},
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        },
-      );
-      if (response.data.success === true) {
-        showToast(
-          'success',
-          response.data.message || 'Mutation status updated successfully',
-        );
 
-        const mutationResponse = await axios.get(
-          `http://localhost:8000/api/warehouse/mutation?warehouse_id=${userGlobal.warehouse_id}`,
-        );
-
-        setTemporaryMutation(mutationResponse.data.data);
-      } else {
-        showToast(
-          'danger',
-          response.data.message || 'Failed to update mutation status',
-        );
-      }
-    } catch (error) {
-      console.error('Error updating mutation status:', error);
-      showToast(
-        'danger',
-        error.response.data.message || 'An error occurred. Please try again.',
-      );
-    } finally {
-      setIsStatusToUpdate(0);
-      setMutationId(0);
-      setEndPoint('');
-      setButtonLoading(false);
-      onCloseConfirmationModal();
-    }
-  };
   useEffect(() => {
     const fetchData = async () => {
+      console.log(query);
       try {
         const response = await axios.get(
-          `http://localhost:8000/api/warehouse/mutation?warehouse_id=${userGlobal.warehouse_id}`,
+          `http://localhost:8000/api/warehouse/mutation${
+            query || `?warehouse_id=${userGlobal.warehouse_id}&page=${page}`
+          }`,
         );
+        console.log(response);
         setTemporaryMutation(response.data.data);
+        setTotalPage(response.data.totalPages);
       } catch (error) {
         console.log(error);
       } finally {
@@ -123,7 +109,8 @@ const ManageMutation = () => {
       }
     };
     fetchData();
-  }, [userGlobal.warehouse_id]);
+  }, [userGlobal.warehouse_id, location, page]);
+
   return (
     <div>
       <WareHouseAdminLayout>
@@ -145,34 +132,35 @@ const ManageMutation = () => {
           {loading ? (
             <Loading />
           ) : (
-            <MutationJournalTable
-              mutation={temporaryMutation}
-              onClickConfirmMutation={confirmMutation}
-              onClickArrived={arrivedMutation}
-              onClickDeliver={deliverMutation}
-              onClickDone={doneMutation}
-              onClickDelete={deleteMutation}
-              handleCancel={cancelMutation}
-            />
+            <div>
+              <MutationFilter page={page} />
+              <MutationJournalTable
+                mutation={temporaryMutation}
+                onClickConfirmMutation={(id) => handleMutationAction(1, id)}
+                onClickArrived={(id) => handleMutationAction(3, id)}
+                onClickDeliver={(id) => handleMutationAction(2, id)}
+                onClickDone={(id) => handleMutationAction(4, id)}
+                onClickDelete={(id) => handleMutationAction(5, id)}
+                handleCancel={(id) => handleMutationAction(6, id)}
+              />
+              <div className="flex justify-center">
+                <Pagination
+                  products={totalPage}
+                  page={page}
+                  onClickPrevious={() => setPage(page - 1)}
+                  onClickNext={() => setPage(page + 1)}
+                />
+              </div>
+            </div>
           )}
         </div>
         {showConfirmationModal && (
           <ConfirmationModal
             onClickCancel={onCloseConfirmationModal}
             onclickClose={onCloseConfirmationModal}
-            title={
-              isStatusToUpdate === 1
-                ? 'Are you sure you want to confirm and process the mutation?'
-                : isStatusToUpdate === 2
-                  ? 'Are you sure you want to deliver?'
-                  : isStatusToUpdate === 3
-                    ? 'Are you sure you want to update the mutation arrived?'
-                    : isStatusToUpdate === 4
-                      ? 'Are you sure you want to done the mutation?'
-                      : 'Are you sure you want to confirm this action?'
-            }
+            title={'Are you sure to do this action?'}
             isLoading={buttonLoading}
-            onClick={onHandleAdd}
+            onClick={handleAction}
           />
         )}
         {toast && (

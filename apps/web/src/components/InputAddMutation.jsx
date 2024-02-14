@@ -10,7 +10,7 @@ const InputMutation = (props) => {
     const fetchData = async () => {
       try {
         const response = await axios.get(`http://localhost:8000/api/products`);
-        setProduct(response.data);
+        setProduct(response.data.products);
       } catch (error) {
         console.error('Error fetching product data:', error);
       }

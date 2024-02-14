@@ -12,6 +12,7 @@ const SearchBar = (props) => {
         />
         <button
           type="submit"
+          onClick={props.onClick}
           className="bg-orange-600 px-4 py-2 text-white rounded-e-full"
         >
           <CiSearch />

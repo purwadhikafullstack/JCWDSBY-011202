@@ -159,18 +159,6 @@ function ManageAccount() {
                 </div>
                 <div className="flex sm:w-1/2 w-full sm:mx-2">
                   <select
-                    onChange={(e) => setSelectedWarehouse(e.target.value)}
-                    className="w-1/2 h-8 mx-1 bg-gray-50 border text-xs border-gray-300 text-gray-900  rounded-lg focus:ring-blue-500 focus:border-blue-500 block  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 sm:my-4"
-                  >
-                    <option value="">Warehouse</option>
-                    {warehouses &&
-                      warehouses.map((item) => (
-                        <option key={item.id} value={item.id}>
-                          {item.name}
-                        </option>
-                      ))}
-                  </select>
-                  <select
                     onChange={(e) => setSelectedRole(e.target.value)}
                     className="w-5/12 h-8 mx-1 bg-gray-50 border text-xs border-gray-300 text-gray-900  rounded-lg focus:ring-blue-500 focus:border-blue-500 block  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 sm:my-4"
                   >

@@ -200,7 +200,7 @@ function App() {
           }
         />
         <Route
-          path="/warehouse-admin/manage-mutation"
+          path="/warehouse-admin/manage-mutation?"
           element={
             <RoleRouting role="admin" redirect="/admin/login">
               <ManageMutation />
@@ -262,10 +262,7 @@ function App() {
           path="/warehouse-admin/manage-order"
           element={<WarehouseManageOrder />}
         />
-        <Route
-          path="/admin/manage-order"
-          element={<AdminManageOrder />}
-        />
+        <Route path="/admin/manage-order" element={<AdminManageOrder />} />
         <Route path="" />
       </Routes>
     </BrowserRouter>

@@ -111,17 +111,17 @@ const ModalOrderInformation = (props) => {
 };
 const ModalUpdateStatus = (props) => {
   const data = props.data;
-  let updateTo = []
+  let updateTo = [];
   if (data.status == 'Dikirim') {
     updateTo = ['Diproses', 'Berhasil'];
   } else {
     updateTo = [
-        'Menunggu Pembayaran',
-        'Menunggu Konfirmasi Pembayaran',
-        'Diproses',
-        'Dikirim',
-        'Berhasil'
-      ];
+      'Menunggu Pembayaran',
+      'Menunggu Konfirmasi Pembayaran',
+      'Diproses',
+      'Dikirim',
+      'Berhasil',
+    ];
   }
 
   return (
@@ -131,20 +131,22 @@ const ModalUpdateStatus = (props) => {
         <div className="font-semibold">
           <p>{data.invoice}</p>
         </div>
-        <div className="flex justify-between w-full mx-auto md:w-[530px] ">
-          <div className="text-left">
+        <div className="flex md:gap-10 gap-2 w-full mx-auto md:w-[590px] ">
+          <div className="text-left  w-full">
             <p className="font-semibold text-center mb-2">From</p>
-            <p className="text-sm bg-slate-200 p-2 rounded-md">{data.status}</p>
+            <p className="text-sm bg-slate-200 p-2 rounded-md md:w-[260px] mx-auto truncate">
+              {data.status}
+            </p>
           </div>
-          <div>
-            <p className="font-semibold text-center mb-2">To</p>
+          <div className="md:w-full w-[1/2]">
+            <p className="font-semibold text-center mb-2 ">To</p>
             <select
               name="update"
               id="update"
-              className="rounded-md p-2 text-sm"
+              className="rounded-md p-2 text-sm truncate"
             >
               {updateTo.map((val, idx) => {
-                return <option value={val}>{val}</option>;
+                return <option key={idx} value={val}>{val}</option>;
               })}
             </select>
           </div>

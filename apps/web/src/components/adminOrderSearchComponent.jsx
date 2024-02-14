@@ -51,9 +51,10 @@ export const SearchDate = (props) => {
       {/* <span>Rentang :</span> */}
       <input
         name="from"
+        id="from"
         type="date"
         ref={props.refFrom}
-        value={props.valueDateFrom}
+        // value={props.valueDateFrom}
         className={`rounded-md p-1 w-full outline-none border-none
          invalid:text-slate-400
         `}
@@ -62,9 +63,10 @@ export const SearchDate = (props) => {
       <span>-</span>
       <input
         name="to"
+        id="to"
         type="date"
         ref={props.refTo}
-        value={props.valueDateTo}
+        // value={props.valueDateTo}
         className={`rounded-md w-full p-1 outline-none border-none
          invalid:text-slate-400`}
         onChange={props.onChangeTo}
@@ -85,9 +87,9 @@ export const SearchByStatus = (props) => {
     "Berhasil"
   ];
   return (
-    <>
-      <p>Status :</p>
-      <ul className="w-full overflow-x-auto flex gap-2 items-center h-[50px] no-scrollbar">
+    <div className='flex w-full items-center '>
+      <p className='w-[65px] font-semibold'>Status :</p>
+      <ul className="overflow-x-auto flex gap-2 items-center h-[50px] no-scrollbar w-[370px] md:w-full ">
         {statusOption.map((val, id) => {
           if(val===""){
             return (
@@ -97,14 +99,15 @@ export const SearchByStatus = (props) => {
                   ref={props.refStatus}
                   type="radio"
                   name={"status"}
-                  value={""}
+                  value={val}
                   id={id}
                   className="peer hidden"
-                  onChange={props.onChangeStatus}
+
+                  onClick={props.onClickStatus}
                 />
                 <label
                   for={id}
-                  className="cursor-pointer peer-checked:border-[#F06105] peer-checked:text-[#F06105] border-[1px] border-slate-400 rounded-md py-1 px-3"
+                  className={`cursor-pointer ${props.checked==val?"text-[#F06105] border-[#F06105]":"border-slate-400"}  border-[1px]  rounded-md py-1 px-3`}
                 >
                   Semua
                 </label>
@@ -126,7 +129,7 @@ export const SearchByStatus = (props) => {
                 <label
                   for={id}
                   // onClick={props.onChange}
-                  className="cursor-pointer peer-checked:border-[#F06105] peer-checked:text-[#F06105] border-[1px] border-slate-400 rounded-md py-1 px-3"
+                  className={`cursor-pointer ${props.checked==val?"text-[#F06105] border-[#F06105]":"border-slate-400"} border-[1px] rounded-md py-1 px-3`}
                 >
                   {val}
                 </label>
@@ -135,6 +138,6 @@ export const SearchByStatus = (props) => {
           }
         })}
       </ul>
-    </>
+    </div>
   );
 };

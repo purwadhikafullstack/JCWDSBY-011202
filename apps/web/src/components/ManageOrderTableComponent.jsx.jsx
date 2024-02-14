@@ -26,8 +26,8 @@ const ManageOrderTable = (props) => {
   let activeHamburger = null;
   const data = [props.data];
   return (
-    <div className="overflow-auto">
-      <table className="table-fixed overflow-x-auto w-full">
+    <div className=' overflow-scroll'>
+      <table className="table-fixed overflow-scroll w-full">
         <thead className="bg-[rgb(240,97,5)] text-white font-semibold ">
           <tr className="">
             {props.header.map((val, idx) => {
@@ -35,7 +35,7 @@ const ManageOrderTable = (props) => {
                 return (
                   <th
                     key={idx}
-                    className="lg:px-1 lg:py-1 px-3 py-2 text-[13px] font-medium tracking-wide uppercase w-[30px]"
+                    className="lg:px-1 lg:py-1 px-3 py-2 text-[13px] font-medium tracking-wide uppercase w-[150px]"
                   >
                     {val}
                   </th>
@@ -44,7 +44,7 @@ const ManageOrderTable = (props) => {
                 return (
                   <th
                     key={idx}
-                    className="lg:px-1 lg:py-1 px-3 py-2 text-[13px] font-medium tracking-wide uppercase w-[20px]"
+                    className="lg:px-1 lg:py-1 px-3 py-2 text-[13px] font-medium tracking-wide uppercase w-[100px]"
                   >
                     {val}
                   </th>
@@ -53,7 +53,7 @@ const ManageOrderTable = (props) => {
                 return (
                   <th
                     key={idx}
-                    className="lg:px-1 lg:py-1 px-3 py-2 text-[13px] font-medium tracking-wide uppercase w-[30px]"
+                    className="lg:px-1 lg:py-1 px-3 py-2 text-[13px] font-medium tracking-wide uppercase w-[150px]"
                   >
                     <div className="flex items-center justify-between w-fit">
                       {val}{' '}
@@ -109,7 +109,7 @@ const ManageOrderTable = (props) => {
                   </td>
                   <td className="">
                     <div className=" align-middle font-semibold px-2">
-                      {`Rp ${val.total_price.toLocaleString('id')}`}
+                      Rp <span className='text-right'>{val.total_price.toLocaleString('id')}</span>
                     </div>
                   </td>
                   <td className="">

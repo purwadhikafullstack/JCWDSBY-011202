@@ -17,7 +17,7 @@ import { useNavigate } from 'react-router-dom';
 import AdminLayout from '../../../../components/AdminLayout.jsx';
 
 const AdminManageOrder = () => {
-  const navigate = useNavigate()
+  const navigate = useNavigate();
   const editItem = useSelector((state) => state.orderSlice);
   const editStatus = useSelector((state) => state.statusSlice);
   const cancelOrderItem = useSelector((state) => state.cancelOrderSlice);
@@ -28,6 +28,7 @@ const AdminManageOrder = () => {
   const [filterStatus, setFilterStatus] = useState('');
   const [filterDateFrom, setFilterDateFrom] = useState('');
   const [filterDateTo, setFilterDateTo] = useState('');
+  const [filterInvoice, setFilterInvoice] = useState('');
 
   const [data, setData] = useState([]);
   const ref = useRef();
@@ -57,6 +58,9 @@ const AdminManageOrder = () => {
   useEffect(() => {
     getDataOrder();
   }, []);
+  useEffect(() => {
+    getDataOrder();
+  }, [location.search]);
   return (
     <>
       <AdminLayout>
@@ -64,12 +68,13 @@ const AdminManageOrder = () => {
           <p className="font-bold mb-5 text-xl">Manage Order</p>
           <div className=" mb-2 flex gap-2">
             <InputSearchComponent
+              valueInputSearch={filterInvoice}
               inputSearchId={'searchByInv'}
               placeholder={'Masukkan Invoice'}
               onChange={(e) => {
                 let doc = document.getElementById('searchByInv');
                 e.target.value;
-                console.log(doc.value);
+                setFilterInvoice(doc.value);
               }}
             />
             <SearchDate />
@@ -88,34 +93,50 @@ const AdminManageOrder = () => {
               }}
               refStatus={ref}
             />
+          </div>
+          <div className="flex gap-2 mb-3 justify-end">
             <button
-              className=" bg-[#F06105] text-white font-semibold px-2 rounded-md py-2 hover:bg-orange-400"
+              className=" bg-[#F06105] text-white font-semibold my-auto px-4 rounded-md py-2 hover:bg-orange-400"
               disabled={false}
               onClick={() => {
-                let doc = document.getElementById("searchByInv")
                 const object = {
-                  invoice: doc.value,
+                  invoice: filterInvoice,
                   status: filterStatus,
                   from: filterDateFrom,
                   to: filterDateTo,
                 };
                 const result = [];
-
+                console.log('yang dicari', object);
                 for (const key in object) {
                   if (object[key]) {
                     result.push(`${key}=${object[key]}`);
                   }
                 }
                 const finalresult = result.join('&');
-                navigate(`/search-order?${finalresult}`)
+                navigate(`/warehouse-admin/manage-order?${finalresult}`);
+                // getDataOrder();
               }}
             >
               Search
             </button>
+            <button
+              className=" bg-slate-300 font-semibold my-auto px-4 rounded-md py-2 hover:bg-slate-100"
+              disabled={false}
+              onClick={() => {
+                navigate(`/warehouse-admin/manage-order`);
+                setFilterDateFrom('');
+                setFilterDateTo('');
+                setFilterInvoice('');
+                setFilterStatus('');
+              }}
+            >
+              Reset
+            </button>
           </div>
+          <div></div>
           <ManageOrderTable
             header={[
-            'Gudang',
+              'Gudang',
               'Invoice',
               'Date Invoice',
               'Alamat Pengiriman',

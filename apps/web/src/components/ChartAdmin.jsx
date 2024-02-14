@@ -1,5 +1,4 @@
 import JournalAdmin from './JornalAdminLanding';
-
 import AdminLineStockChart from './Chart/AdminLineStockChart';
 import AdminBarChart from './Chart/AdminBarChart';
 import AdminProductChart from './Chart/AdminProductsChart';

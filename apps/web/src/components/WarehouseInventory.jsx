@@ -1,10 +1,9 @@
 import { useNavigate, useLocation } from 'react-router-dom';
 import WarehouseAdminLayout from '../components/WareHouseAdminLayout';
-import AdminLayout from './AdminLayout';
-import { IoMdArrowBack } from 'react-icons/io';
+import Pagination from './Temporary/Pagination';
+import { IoMdArrowBack, IoMdClose } from 'react-icons/io';
 import InventoryTable from './InventoryTable';
 import { useEffect, useState } from 'react';
-import { IoClose } from 'react-icons/io5';
 import axios from 'axios';
 import { useSelector } from 'react-redux';
 import ButtonWithLoading from './ButtonWithLoading';
@@ -12,6 +11,7 @@ import { Loading } from './loadingComponent';
 
 const WarehouseInventory = () => {
   const [warehouseInventory, setWarehouseInventory] = useState([]);
+  const [page, setPage] = useState(1);
   const [buttonLoading, setButtonLoading] = useState(false);
   const location = useLocation();
   const navigate = useNavigate();
@@ -19,48 +19,42 @@ const WarehouseInventory = () => {
   const [product, setProduct] = useState([]);
   const [selectedProductId, setSelectedProductId] = useState('');
   const [stock, setStock] = useState(1);
+  const [totalPages, setTotalPages] = useState(0);
+  const [avalaibleProduct, setAvalaibleProduct] = useState([]);
   const userGlobal = useSelector((state) => state.accountSliceReducer);
-
-  const handleAddButtonClick = () => {
-    setModalOpen(true);
-  };
-
-  const closeModal = () => {
-    setModalOpen(false);
-  };
 
   const fetchData = async () => {
     try {
-      let response;
-
-      if (userGlobal.role === 'superadmin') {
-        response = await axios.get(
-          `http://localhost:8000/api/warehouse/storage${location.search}`,
-        );
-      } else if (userGlobal.role === 'admin') {
-        response = await axios.get(
-          `http://localhost:8000/api/warehouse/storage?warehouse=${userGlobal.warehouse_id}`,
-        );
-      }
-
-      setWarehouseInventory(response?.data?.data || []);
+      const response = await axios.get(getApiUrl());
+      setWarehouseInventory(response.data.data || []);
+      setTotalPages(response.data.totalPages || 0);
     } catch (error) {
       console.error('Error fetching data:', error);
     }
   };
 
+  const getApiUrl = () => {
+    if (userGlobal.role === 'superadmin') {
+      return `http://localhost:8000/api/warehouse/storage${location.search}&page=${page}`;
+    } else if (userGlobal.role === 'admin') {
+      return `http://localhost:8000/api/warehouse/storage?warehouse=${userGlobal.warehouse_id}&page=${page}`;
+    }
+  };
+
+  const handleAddButtonClick = () => setModalOpen(true);
+
+  const closeModal = () => setModalOpen(false);
+
   const onHandleNewAdd = async () => {
-    console.log(stock, selectedProductId);
     setButtonLoading(true);
-    const selected_warehouse = sessionStorage.getItem('warehouse_selected');
+    const selectedWarehouse =
+      sessionStorage.getItem('warehouse_selected') || userGlobal.warehouse_id;
     try {
       await axios.post('http://localhost:8000/api/warehouse/storage', {
-        warehouse_id:
-          Number(selected_warehouse) || Number(userGlobal.warehouse_id),
+        warehouse_id: Number(selectedWarehouse),
         product_id: Number(selectedProductId),
         stock: stock,
       });
-
       await fetchData();
     } catch (error) {
       console.error('Error adding new stock:', error);
@@ -71,28 +65,46 @@ const WarehouseInventory = () => {
   };
 
   const onHandleDelete = async () => {
-    try {
-      await fetchData();
-    } catch (error) {
-      console.error('Error deleting item:', error);
-    }
+    await fetchData();
   };
 
   useEffect(() => {
     fetchData();
-  }, [location.search, userGlobal]);
+  }, [location.search, userGlobal, page]);
 
   useEffect(() => {
     const fetchProducts = async () => {
       try {
-        const response = await axios.get('http://localhost:8000/api/products');
-        setProduct(response.data);
+        const response = await axios.get(
+          `http://localhost:8000/api/warehouse/storage${location.search}`,
+        );
+        setProduct(response.data.products || []);
       } catch (error) {
         console.error('Error fetching products:', error);
       }
     };
-
     fetchProducts();
+  }, []);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        let response;
+        if (userGlobal.role === 'superadmin') {
+          response = await axios.get(
+            `http://localhost:8000/api/warehouse/storage${location.search}`,
+          );
+        } else if (userGlobal.role === 'admin') {
+          response = await axios.get(
+            `http://localhost:8000/api/warehouse/storage?warehouse=${userGlobal.warehouse_id}`,
+          );
+        }
+        setAvalaibleProduct(response?.data?.data || []);
+      } catch (error) {
+        console.error('Error fetching data:', error);
+      }
+    };
+    fetchData();
   }, []);
 
   return (
@@ -130,11 +142,19 @@ const WarehouseInventory = () => {
             onDelete={onHandleDelete}
           />
         </div>
+        <div className="flex justify-center">
+          <Pagination
+            products={totalPages}
+            onClickPrevious={() => setPage(page - 1)}
+            onClickNext={() => setPage(page + 1)}
+            page={page}
+          />
+        </div>
       </WarehouseAdminLayout>
       {isModalOpen && (
         <div className="fixed inset-0 bg-gray-800 bg-opacity-50 flex justify-center">
           <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-[#E6E6E6] p-4 w-[400px] h-[250px] rounded-md">
-            <IoClose
+            <IoMdClose
               size={24}
               onClick={closeModal}
               className="cursor-pointer absolute top-2 right-2"
@@ -146,21 +166,32 @@ const WarehouseInventory = () => {
                 value={selectedProductId}
                 onChange={(e) => setSelectedProductId(e.target.value)}
               >
-                <option value="" disabled hidden>
-                  Choose a product
-                </option>
-                {product
-                  .filter(
-                    (prod) =>
-                      !warehouseInventory.some(
-                        (inv) => inv.product_id === prod.id,
-                      ),
-                  )
-                  .map((prod) => (
-                    <option key={prod.id} value={prod.id}>
-                      {prod.name}
+                {product.filter(
+                  (prod) =>
+                    !avalaibleProduct.some((inv) => inv.product_id === prod.id),
+                ).length === 0 ? (
+                  <option value="" disabled hidden>
+                    You have all products in your storage
+                  </option>
+                ) : (
+                  <>
+                    <option value="" disabled hidden>
+                      Choose a product
                     </option>
-                  ))}
+                    {product
+                      .filter(
+                        (prod) =>
+                          !avalaibleProduct.some(
+                            (inv) => inv.product_id === prod.id,
+                          ),
+                      )
+                      .map((prod) => (
+                        <option key={prod.id} value={prod.id}>
+                          {prod.name}
+                        </option>
+                      ))}
+                  </>
+                )}
               </select>
               <select
                 className="input-style mt-2 border-none"

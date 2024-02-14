@@ -86,13 +86,13 @@ const AddProduct = () => {
             <hr className="mt-2" />
           </div>
           <div className="sm:mx-6 flex sm:flex-row flex-col">
-            <div className="w-full">
+            <div className="w-auto">
               <CustomFileInput
                 onImagePreviewsChange={handleImagePreviewsChange}
                 onCancelPreview={handleCancelPreview}
               />
             </div>
-            <div className="mx-2 w-full">
+            <div className="mx-2 w-full pb-2 pr-4">
               <FormProductAdd
                 onChangeName={(e) => setNameProduct(e.target.value)}
                 onChangePrice={(e) => setPrice(e.target.value)}
@@ -101,7 +101,7 @@ const AddProduct = () => {
                 onChangeWeight={(e) => setWeight(e.target.value)}
               />
               <div className="w-full ">
-                <div className="mt-2 h-32 border rounded-lg p-2 flex bg-gray-50 ">
+                <div className="mt-2 sm:h-32 h-auto border rounded-lg p-2 flex bg-gray-50 ">
                   <h1 className="text-sm font-medium text-gray-900 dark:text-gray-400 mr-4">
                     Other Images:
                   </h1>

@@ -5,28 +5,28 @@ import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import Pagination from '../../../../components/Temporary/Pagination';
 import SearchProduct from '../../../../components/SearchProduct';
-import SearchByCategory from '../../../../components/CategoryProductFilter';
 import { Loading } from '../../../../components/loadingComponent';
 
 const ManageProduct = () => {
   const [page, setPage] = useState(1);
   const [currentPage, setCurrentPage] = useState([]);
-  const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
   const [category, setCategories] = useState([]);
   const [selectedCategories, setSelectedCategories] = useState(0);
   const [selectedPriceSorting, setSelectedPriceSorting] = useState('');
   const [endPoint, setEndPoint] = useState('');
-  const [endPointAll, setEndPointAll] = useState(``);
+  const [totalPages, setTotalPages] = useState(0);
   const handleAddButtonClick = () => {
     navigate('add-product');
   };
 
   const handleDelete = async (deletedProductId) => {
     try {
-      const response = await axios.get('http://localhost:8000/api/products');
-      setProducts(response.data);
+      const response = await axios.get(
+        `http://localhost:8000/api/products${endPoint || '?page=1'}`,
+      );
+      setCurrentPage(response.data);
     } catch (error) {
       console.error('Error fetching data:', error);
     }
@@ -48,46 +48,23 @@ const ManageProduct = () => {
   }, [page, selectedCategories, selectedPriceSorting]);
 
   useEffect(() => {
-    const filter = [`?`];
-    if (selectedCategories > 0) {
-      filter.push(`&category_id=${selectedCategories}`);
-    }
-    if (selectedPriceSorting !== '') {
-      filter.push(`&price=${selectedPriceSorting}`);
-    }
-    setEndPointAll(filter.join(''));
-  }, [selectedCategories, selectedPriceSorting]);
-
-  useEffect(() => {
     const fetchData = async () => {
       try {
         const response = await axios.get(
           `http://localhost:8000/api/products${endPoint || '?page=1'}`,
         );
-        setCurrentPage(response.data);
+        setCurrentPage(response.data.products);
+        setTotalPages(response.data.totalPages);
         setLoading(false);
       } catch (error) {
         console.error('Error fetching data:', error);
+      } finally {
+        setLoading(false);
       }
     };
 
     fetchData();
   }, [endPoint]);
-
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await axios.get(
-          `http://localhost:8000/api/products?${endPointAll}`,
-        );
-        setProducts(response.data);
-      } catch (error) {
-        console.error('Error fetching products:', error);
-      }
-    };
-
-    fetchData();
-  }, []);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -158,7 +135,7 @@ const ManageProduct = () => {
         </div>
         <div className="flex justify-center mb-2">
           <Pagination
-            products={products}
+            products={totalPages}
             onClickPrevious={() => handlePageChange(page - 1)}
             onClickNext={() => handlePageChange(page + 1)}
             page={page}

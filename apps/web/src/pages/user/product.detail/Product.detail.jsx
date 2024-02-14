@@ -47,7 +47,7 @@ const ProductDetail = () => {
         if (response.data.length === 0) {
           navigate('/not-found');
         } else {
-          setProducts(response.data);
+          setProducts(response.data.products);
         }
       } catch (error) {
         console.error('Error fetching data:', error);
@@ -94,7 +94,6 @@ const ProductDetail = () => {
               to={'/'}
               className="hover:text-orange-400 transition-all duration-300"
             >
-
               Home
             </Link>
             <span>

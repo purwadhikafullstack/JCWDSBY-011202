@@ -33,7 +33,7 @@ const InventoryTable = ({ warehouseInventory, onDelete }) => {
           const response = await axios.get(
             `http://localhost:8000/api/products?id=${productIds[i]}`,
           );
-          tempProduct.push(response.data[0]);
+          tempProduct.push(response.data.products[0]);
         }
 
         setProduct(tempProduct);

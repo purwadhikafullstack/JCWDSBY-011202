@@ -1,5 +1,5 @@
 const Pagination = ({ products, page, onClickPrevious, onClickNext }) => {
-  const pageCount = Math.ceil(products.length / 12);
+  const pageCount = Math.ceil(products);
   const pages = Array.from({ length: pageCount }, (_, index) => index + 1);
 
   return (

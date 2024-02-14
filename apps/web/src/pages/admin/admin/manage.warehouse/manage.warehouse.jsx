@@ -6,6 +6,8 @@ import ListWarehouse from '../../../../components/ListWarehouse';
 import { Loading } from '../../../../components/loadingComponent';
 import Toast from '../../../../components/Toast';
 import ConfirmationModal from '../../../../components/ConfirmationModal';
+import Pagination from '../../../../components/Temporary/Pagination';
+import SearchBar from '../../../../components/SearchBar';
 
 const ManageWarehouse = () => {
   const location = useLocation();
@@ -16,6 +18,11 @@ const ManageWarehouse = () => {
   const [deleteLoading, setDeleteLoading] = useState(false);
   const [showConfirmationModal, setShowConfirmationModal] = useState(false);
   const [warehouseIdToDelete, setWarehouseIdToDelete] = useState(null);
+  const [totalPages, setTotalPages] = useState(0);
+  const [page, setPage] = useState(1);
+  const [selectedProvinceId, setSelectedProvinceId] = useState('');
+  const [provinces, setProvinces] = useState([]);
+  const [searchQuery, setSearchQuery] = useState('');
 
   const showToast = (status, message) => {
     const content = (
@@ -28,22 +35,22 @@ const ManageWarehouse = () => {
     setToastContent(content);
   };
 
-  const onHandleEdit = (id) => {
+  const handleEdit = (id) => {
     navigate(
       `/admin/manage-warehouse/edit-warehouse?warehouse=Warehouse-00${id}`,
     );
   };
 
-  const onHandleDelete = (id) => {
+  const handleDelete = (id) => {
     setWarehouseIdToDelete(id);
     setShowConfirmationModal(true);
   };
 
-  const onCloseHandleDelete = () => {
+  const handleCloseDelete = () => {
     setShowConfirmationModal(false);
   };
 
-  const onHandleDeleteConfirmed = async () => {
+  const handleDeleteConfirmed = async () => {
     const token = localStorage.getItem('token');
     setDeleteLoading(true);
     try {
@@ -57,11 +64,12 @@ const ManageWarehouse = () => {
       );
       if (response.data.success === true) {
         showToast('success', 'Warehouse deleted successfully');
-        const response = await axios.get(
-          'http://localhost:8000/api/warehouses',
+        const res = await axios.get(
+          `http://localhost:8000/api/warehouses?page=${page}&province_id=${selectedProvinceId}&name=${searchQuery}${location.search}`,
         );
-        setWarehouses(response.data.data);
+        setWarehouses(res.data.data);
         setShowConfirmationModal(false);
+        setLoading(false);
       }
     } catch (error) {
       console.error('Error deleting warehouse:', error);
@@ -74,30 +82,42 @@ const ManageWarehouse = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get(
-          `http://localhost:8000/api/warehouses${location.search}`,
+        const res = await axios.get(
+          `http://localhost:8000/api/warehouses?page=${page}&province_id=${selectedProvinceId}&name=${searchQuery}${location.search}`,
         );
-        setWarehouses(response.data.data);
+        setWarehouses(res.data.data);
+        setTotalPages(res.data.totalPages);
         setLoading(false);
       } catch (error) {
         console.error('Error fetching data:', error);
         setLoading(false);
       }
     };
-
     fetchData();
-  }, [location.search]);
+  }, [location.search, page, selectedProvinceId, searchQuery]);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const res = await axios.get(
+          'http://localhost:8000/api/provincesandcities/provinces',
+        );
+        setProvinces(res.data.data);
+      } catch (error) {
+        console.error(error);
+      }
+    };
+    fetchData();
+  }, []);
+
   return (
     <div>
       <AdminLayout>
         <div className="p-4 flex justify-between items-center bg-white">
           <div className="font-bold text-xl sm:ml-0 ml-4">Warehouse List</div>
           <button
-            style={{ cursor: 'pointer' }}
-            onClick={() => {
-              navigate('/admin/manage-warehouse/add-warehouse');
-            }}
             className="text-white rounded-md bg-[#F06105] px-4 py-1 w-fit shadow-sm hover:bg-[#E85400] transition-all duration-300"
+            onClick={() => navigate('/admin/manage-warehouse/add-warehouse')}
           >
             Add Warehouse <span className="font-bold">+</span>
           </button>
@@ -106,20 +126,54 @@ const ManageWarehouse = () => {
           {loading ? (
             <Loading />
           ) : (
-            <ListWarehouse
-              warehouses={warehouses}
-              onClickDelete={onHandleDelete}
-              onClickEdit={onHandleEdit}
-            />
+            <div>
+              <div className="flex w-full mb-2">
+                <div className="w-1/2">
+                  <SearchBar
+                    placeholder="Search Warehouse"
+                    onChange={(e) => setSearchQuery(e.target.value)}
+                  />
+                </div>
+                <div className="w-1/2">
+                  <select
+                    className="w-full sm:w-1/5 sm:ml-4 ml-2 h-8 mx-1 bg-gray-50 border text-xs border-gray-300 text-gray-900  rounded-lg focus:ring-blue-500 focus:border-blue-500 block  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 sm:my-4"
+                    onChange={(e) => setSelectedProvinceId(e.target.value)}
+                  >
+                    <option value="">Provinces</option>
+                    {provinces.map((item) => (
+                      <option key={item.id} value={item.id}>
+                        {item.name}
+                      </option>
+                    ))}
+                  </select>
+                  <h1 className="text-end text-[14px] mt-1">
+                    Showing <span>{warehouses.length}</span> Results
+                  </h1>
+                </div>
+              </div>
+              <ListWarehouse
+                warehouses={warehouses}
+                onClickDelete={handleDelete}
+                onClickEdit={handleEdit}
+              />
+              <div className="flex justify-center my-4">
+                <Pagination
+                  page={page}
+                  products={totalPages}
+                  onClickPrevious={() => setPage(page - 1)}
+                  onClickNext={() => setPage(page + 1)}
+                />
+              </div>
+            </div>
           )}
         </div>
         {showConfirmationModal && (
           <ConfirmationModal
-            onClickCancel={onCloseHandleDelete}
-            onclickClose={onCloseHandleDelete}
+            onClickCancel={handleCloseDelete}
+            onclickClose={handleCloseDelete}
             title="Delete Warehouse"
             isLoading={deleteLoading}
-            onClick={onHandleDeleteConfirmed}
+            onClick={handleDeleteConfirmed}
           />
         )}
         {toastContent}

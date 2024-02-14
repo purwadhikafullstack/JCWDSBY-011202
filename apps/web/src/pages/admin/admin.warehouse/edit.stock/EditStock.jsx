@@ -33,7 +33,7 @@ const EditStockProduct = () => {
         const responseProduct = await axios.get(
           `http://localhost:8000/api/products?id=${selectedInventory.product_id}`,
         );
-        setProductSelected(responseProduct.data[0] || {});
+        setProductSelected(responseProduct.data.products[0] || {});
       }
     } catch (error) {
       console.error('Error fetching data:', error);

@@ -146,7 +146,7 @@ const CheckoutPage = () => {
           { headers: { Authorization: `Bearer ${token}` } },
         );
         navigate(
-          `/checkout/success?id=${result.data.id}&inv=${result.data.invoice}`,
+          `/checkout/success?order=${result.data.id}&inv=${result.data.invoice}`,
         );
       } else {
         alert('Mohon Lengkapi Terlebih Dahulu');

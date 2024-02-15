@@ -33,7 +33,6 @@ const AdminLineStockChart = ({ warehouses, products }) => {
       },
     ],
   };
-  console.log(selectedProduct, selectedWarehouse);
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -42,7 +41,7 @@ const AdminLineStockChart = ({ warehouses, products }) => {
         );
         setData2(response.data.reverse());
       } catch (error) {
-        console.log(error);
+        console.error(error);
       }
     };
     fetchData();

@@ -34,8 +34,6 @@ const AdminLayout = (props) => {
     navigate('/admin/login');
   };
 
-  console.log(isMobileMenuOpen);
-
   return (
     <div className="flex h-screen bg-gray-200">
       {/* Sidebar */}

@@ -26,7 +26,7 @@ const LandingWarehouse = () => {
         const response = await API_CALL.get('/warehouses');
         setWarehouse(response.data.data);
       } catch (error) {
-        console.log(error);
+        console.error(error);
       }
     };
     fetchData();
@@ -38,7 +38,7 @@ const LandingWarehouse = () => {
         const response = await API_CALL.get('/products');
         setProducts(response.data.products);
       } catch (error) {
-        console.log(error);
+        console.error(error);
       }
     };
     fetchData();

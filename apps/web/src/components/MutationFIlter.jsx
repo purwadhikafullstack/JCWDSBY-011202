@@ -17,7 +17,7 @@ const MutationFilter = ({ page }) => {
         const response = await API_CALL.get('/products');
         setProducts(response.data.products);
       } catch (error) {
-        console.log(error);
+        console.error(error);
       }
     };
     fetchData();
@@ -35,13 +35,11 @@ const MutationFilter = ({ page }) => {
 
   useEffect(() => {
     if (product_id === 0 && status !== '') {
-      console.log('masuk 1');
       navigate(
         `?warehouse_id=${userGlobal.warehouse_id}&page=${page}&status=${status}`,
       );
     }
     if (product_id > 0 && status === '') {
-      console.log('masuk 2');
       navigate(
         `?warehouse_id=${userGlobal.warehouse_id}&page=${page}&product_id=${product_id}`,
       );
@@ -49,7 +47,6 @@ const MutationFilter = ({ page }) => {
     if (product_id === 0 && status === '') {
       navigate(`?warehouse_id=${userGlobal.warehouse_id}&page=${page}`);
     } else {
-      console.log('MASUK 2');
       if (codeQuery) {
         navigate(
           `?warehouse_id=${

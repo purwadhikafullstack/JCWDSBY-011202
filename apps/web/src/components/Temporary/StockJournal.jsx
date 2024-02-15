@@ -18,7 +18,7 @@ const JournalStock = ({ onPageChange }) => {
         setJournal(response.data.stockJournals);
         setTotalPages(response.data.totalPages);
       } catch (error) {
-        console.log(error);
+        console.error(error);
       }
     };
     fetchData();

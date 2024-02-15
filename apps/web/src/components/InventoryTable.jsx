@@ -36,7 +36,7 @@ const InventoryTable = ({ warehouseInventory, onDelete }) => {
       onDelete();
       showToast('success', 'Item deleted successfully.');
     } catch (error) {
-      console.log(error);
+      console.error(error);
       showToast('error', 'Failed to delete item. Please try again.');
     } finally {
       setLoading(false);

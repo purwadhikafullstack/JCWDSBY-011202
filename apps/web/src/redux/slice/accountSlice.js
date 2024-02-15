@@ -47,7 +47,6 @@ export const keepLogin = () => {
           },
         },
       );
-      console.log(response.data);
       dispatch(
         userLoaded({
           username: response.data.result.username,
@@ -60,7 +59,7 @@ export const keepLogin = () => {
       );
       localStorage.setItem('token', response.data.token);
     } catch (error) {
-      console.log(error);
+      console.error(error);
       if (
         error.response.data.message.toLowerCase().includes('invalid') ||
         error.response.data.message.toLowerCase().includes('empty')

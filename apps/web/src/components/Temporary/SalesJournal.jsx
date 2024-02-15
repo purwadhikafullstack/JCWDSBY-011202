@@ -19,7 +19,7 @@ const JournalSales = ({ onPageChange }) => {
         setJournal(response.data.salesJournals);
         setTotalPages(response.data.totalPages);
       } catch (error) {
-        console.log(error);
+        console.error(error);
       }
     };
     fetchData();

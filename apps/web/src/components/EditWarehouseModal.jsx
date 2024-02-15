@@ -111,7 +111,6 @@ const EditWarehouse = () => {
     if (selectedProvince) fetchCities();
   }, [selectedProvince]);
 
-  console.log(selectedProvince, selectedCityIndex);
   return (
     <div>
       <AdminLayout>

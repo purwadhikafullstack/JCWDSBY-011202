@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useLocation, Navigate, useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { Loading } from './loadingComponent';
 import NotFoundPage from './Temporary/404';
 import API_CALL from '../helpers/API';
@@ -22,7 +22,6 @@ const RoleRouting = ({ children, role, redirect }) => {
         setCurrentRole(response.data);
         setLoading(false);
       } catch (error) {
-        console.log(error);
         setLoading(false);
       }
     };
@@ -33,8 +32,6 @@ const RoleRouting = ({ children, role, redirect }) => {
   if (loading) {
     return <Loading />;
   }
-
-  console.log(role, currentRole, redirect);
 
   if (currentRole === undefined) {
     if (redirect) {

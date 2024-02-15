@@ -29,7 +29,7 @@ const UpdateAccount = () => {
         setFullName(fullname);
         setWarehouse(parseInt(warehouse_id));
       } catch (error) {
-        console.log(error);
+        console.error(error);
       } finally {
         setLoading(false);
       }
@@ -54,7 +54,6 @@ const UpdateAccount = () => {
 
   const onHandleYes = async () => {
     const token = localStorage.getItem('token');
-    console.log(warehouse);
     try {
       setLoading(true);
       const response = await API_CALL.patch(

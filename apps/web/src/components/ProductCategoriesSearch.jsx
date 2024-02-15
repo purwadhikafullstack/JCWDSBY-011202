@@ -17,7 +17,6 @@ const ProductCategorySearch = () => {
     fetchData();
   }, []);
 
-  console.log(categories);
   return (
     <div>
       <h4 className="text-[18px] font-light">PRODUCT CATEGORIES</h4>

@@ -30,7 +30,7 @@ const CartPage = () => {
       setCartCount(result.data.count);
       return setCartProduct(result.data.result);
     } catch (error) {
-      console.log(error);
+      console.error(error);
     }
   };
   const getUserAddress = async () => {
@@ -44,7 +44,7 @@ const CartPage = () => {
       );
       setUserAddress(result.data.address);
     } catch (error) {
-      console.log(error);
+      console.error(error);
     }
   };
   const openLoading = (time) => {
@@ -64,7 +64,7 @@ const CartPage = () => {
       );
       return setCartSummary(result.data);
     } catch (error) {
-      console.log(error);
+      console.error(error);
     }
   };
   const getChecked = async () => {
@@ -75,22 +75,21 @@ const CartPage = () => {
           checkedResult.push(checkedItem[i].value);
           localStorage.setItem('cartId', checkedResult);
         } else {
-          checkedItem[i].checked=false
+          checkedItem[i].checked = false;
         }
       }
       if (checkedResult.length > 0) {
-       checkedArray = checkedResult.join(' ');
+        checkedArray = checkedResult.join(' ');
       } else {
         localStorage.removeItem('cartId');
-        return setCartSummary(cartSummary.status = false)
+        return setCartSummary((cartSummary.status = false));
       }
     } catch (error) {
-      console.log(error);
+      console.error(error);
     }
-
   };
   useEffect(() => {
-    getUserAddress()
+    getUserAddress();
     // USEEFFECT ketika pertama load
     getDataCart();
     openLoading(1500);
@@ -118,7 +117,7 @@ const CartPage = () => {
       getDataCart();
       setOnChangeCheckedValue(!onChangeCheckedValue);
     } catch (error) {
-      console.log(error);
+      console.error(error);
     }
   };
   const onHandleChangeQty = async (cartId, idx, stock) => {
@@ -152,7 +151,7 @@ const CartPage = () => {
         setOnChangeCheckedValue(!onChangeCheckedValue);
       }
     } catch (error) {
-      console.log(error);
+      console.error(error);
     }
   };
   const onHandlePlusMinus = async (operator, id, qty, stock) => {
@@ -184,11 +183,11 @@ const CartPage = () => {
         setOnChangeCheckedValue(!onChangeCheckedValue);
       }
     } catch (error) {
-      console.log(error);
+      console.error(error);
     }
   };
   const onHandleCheckOut = () => {
-    if(userAddress.length>0){
+    if (userAddress.length > 0) {
       if (cartSummary.success) {
         document.body.style.overflow = 'auto';
         setOpenModal(false);
@@ -197,11 +196,12 @@ const CartPage = () => {
         alert('Oops data produk belum di checklist');
       }
     } else {
-      alert("Anda belum memiliki alamat terdaftar, silahkan tambahkan alamat anda")
-      navigate("/user/dashboard/address")
+      alert(
+        'Anda belum memiliki alamat terdaftar, silahkan tambahkan alamat anda',
+      );
+      navigate('/user/dashboard/address');
     }
   };
-  console.log("alamat",userAddress);
   return (
     <>
       {firstloading ? <Loading /> : ''}

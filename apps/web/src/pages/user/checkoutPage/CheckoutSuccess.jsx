@@ -7,8 +7,8 @@ import { useEffect, useState } from 'react';
 
 const CheckoutSuccess = () => {
   const navigate = useNavigate();
-  const location = useLocation()
-  const [orderData,setOrderData]=useState("") 
+  const location = useLocation();
+  const [orderData, setOrderData] = useState('');
   const [firstloading, setFirstLoading] = useState(false);
   const openLoading = (time) => {
     setFirstLoading(true);
@@ -16,23 +16,23 @@ const CheckoutSuccess = () => {
       setFirstLoading(false);
     }, time);
   };
-  const getOrderData = async()=>{
+  const getOrderData = async () => {
     try {
-      const token = localStorage.getItem("token")
-      console.log("lokasi",location);
-      const data = await axios.get(`http://localhost:8000/api/checkout/success${location.search}`,
-      {
-        headers: { Authorization: `Bearer ${token}` },
-      },)
-      // console.log("1",data);
-      setOrderData(data.data)
+      const token = localStorage.getItem('token');
+      const data = await axios.get(
+        `http://localhost:8000/api/checkout/success${location.search}`,
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        },
+      );
+      setOrderData(data.data);
     } catch (error) {
-     console.log(error); 
+      console.error(error);
     }
-  }
+  };
   useEffect(() => {
     openLoading(2000);
-    getOrderData()
+    getOrderData();
   }, []);
   return (
     <>
@@ -46,22 +46,35 @@ const CheckoutSuccess = () => {
           </div>
           <div className="flex flex-col gap-y-2 text-center px-2 ">
             <p>
-              Nomor invoice anda <span className="font-bold">{orderData.invoice}</span>
+              Nomor invoice anda{' '}
+              <span className="font-bold">{orderData.invoice}</span>
             </p>
             <p>
               Total belanja anda{' '}
-              <span className="text-[#F06105] font-bold">Rp {orderData.total_price?orderData.total_price.toLocaleString("id"):""}</span>
+              <span className="text-[#F06105] font-bold">
+                Rp{' '}
+                {orderData.total_price
+                  ? orderData.total_price.toLocaleString('id')
+                  : ''}
+              </span>
             </p>
             <button className=" mx-auto bg-slate-300 w-fit rounded-md p-1 px-2 font-semibold border-[1px] border-slate-400">
               Cetak Invoice
             </button>
             <p>
               Kami juga telah mengirim detail pesanan anda ke{' '}
-              <span className="font-bold italic px-1">{orderData["account.email"]}</span>
+              <span className="font-bold italic px-1">
+                {orderData['account.email']}
+              </span>
             </p>
             <p className="mb-14">
-              Silahkan transfer dengan total {' '}
-              <span className="text-[#F06105] font-semibold ">Rp {orderData.total_price?orderData.total_price.toLocaleString("id"):""}</span>{' '}
+              Silahkan transfer dengan total{' '}
+              <span className="text-[#F06105] font-semibold ">
+                Rp{' '}
+                {orderData.total_price
+                  ? orderData.total_price.toLocaleString('id')
+                  : ''}
+              </span>{' '}
               melalui layanan pembayaran yang kami sediakan
             </p>
             <table className=" mb-10">
@@ -73,17 +86,21 @@ const CheckoutSuccess = () => {
                 </tr>
               </thead>
               <tbody>
-              <tr className="border-b-[1px]">
-                <td>BCA</td>
-                <td>088292093</td>
-                <td>PT. Ace Warehouse</td>
-              </tr>
+                <tr className="border-b-[1px]">
+                  <td>BCA</td>
+                  <td>088292093</td>
+                  <td>PT. Ace Warehouse</td>
+                </tr>
               </tbody>
             </table>
             <p>
               Setelah melakukan pembayaran silahkan konfirmasi pembayaran anda{' '}
-              <span className="mx-auto bg-slate-300 w-fit rounded-md px-2 border-[1px] border-slate-400 cursor-pointer "
-              onClick={()=>{navigate(`/user/dashboard/upload-payment${location.search}`)}}>
+              <span
+                className="mx-auto bg-slate-300 w-fit rounded-md px-2 border-[1px] border-slate-400 cursor-pointer "
+                onClick={() => {
+                  navigate(`/user/dashboard/upload-payment${location.search}`);
+                }}
+              >
                 disini
               </span>
             </p>

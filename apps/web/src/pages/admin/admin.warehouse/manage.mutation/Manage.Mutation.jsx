@@ -32,7 +32,6 @@ const ManageMutation = () => {
   };
 
   const handleMutationAction = async (status, id) => {
-    console.log('35', status, id);
     try {
       let actionEndpoint = '';
       switch (status) {
@@ -100,18 +99,16 @@ const ManageMutation = () => {
 
   useEffect(() => {
     const fetchData = async () => {
-      console.log(query);
       try {
         const response = await API_CALL.get(
           `/warehouse/mutation${
             query || `?warehouse_id=${userGlobal.warehouse_id}&page=${page}`
           }`,
         );
-        console.log(response);
         setTemporaryMutation(response.data.data);
         setTotalPage(response.data.totalPages);
       } catch (error) {
-        console.log(error);
+        console.error(error);
       } finally {
         setLoading(false);
       }

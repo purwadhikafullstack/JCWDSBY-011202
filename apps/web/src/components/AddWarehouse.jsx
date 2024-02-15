@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import AdminLayout from '../components/AdminLayout';
 import { IoMdArrowBack } from 'react-icons/io';
@@ -32,7 +32,6 @@ const AddWarehouse = () => {
   };
 
   const onHandleAdd = async () => {
-    console.log(formData);
     const token = localStorage.getItem('token');
     try {
       setLoading(true);

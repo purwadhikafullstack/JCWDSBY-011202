@@ -4,7 +4,6 @@ import WarehouseAdminBarChart from './Chart/WarehouseBarChart';
 import WarehouseCategoryChart from './Chart/WarehouseCategoriesChart';
 import WarehouseProductChart from './Chart/WarehouseProductChart';
 const ChartAdmin = ({ user, product }) => {
-  console.log(product);
   return (
     <div>
       <div className="sm:px-12 w-full flex sm:flex-row flex-col mt-4 mb-8 px-4 ">

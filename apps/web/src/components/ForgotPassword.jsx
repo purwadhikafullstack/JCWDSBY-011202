@@ -18,15 +18,12 @@ const ResetPassword = () => {
 
   const handleSubmitEmail = (event) => {
     event.preventDefault();
-    // Add logic to send reset password link to the provided email
-    // Update the step to move to the Confirm Reset Password page
+
     setStep(2);
   };
 
   const handleSubmitNewPassword = (event) => {
     event.preventDefault();
-    // Add logic to confirm reset password and update the password
-    // Redirect user to the login page or any other desired page
   };
 
   return (

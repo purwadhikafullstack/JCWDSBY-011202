@@ -28,7 +28,6 @@ const EditImage = ({ products }) => {
   };
 
   const handleImageUpload = async () => {
-    console.log('MASUK');
     if (!newImage) {
       console.error('No new image selected for upload.');
       return;
@@ -49,10 +48,7 @@ const EditImage = ({ products }) => {
         );
       }
 
-      console.log(response.data.data);
-
       if (response.status >= 200 && response.status < 300) {
-        console.log('Image updated successfully');
         setImage(response.data.data.result);
         setPreviewImage(null);
         setNewImage(null);

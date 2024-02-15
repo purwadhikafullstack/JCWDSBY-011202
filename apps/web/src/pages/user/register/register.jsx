@@ -24,7 +24,7 @@ const RegisterForm = () => {
         });
         setCurrentRole(response.data);
       } catch (error) {
-        console.log(error);
+        console.error(error);
         setLoading(false);
       }
     };

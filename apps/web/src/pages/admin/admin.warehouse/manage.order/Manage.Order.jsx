@@ -59,13 +59,13 @@ const WarehouseManageOrder = () => {
         return setData(result.data);
       }
     } catch (error) {
-      console.log(error);
+      console.error(error);
     }
   };
   const getQuery = () => {
     if (location.search) {
-      console.log(location.search);
-      console.log(location.hash);
+      console.error(location.search);
+      console.error(location.hash);
     }
   };
   useEffect(() => {
@@ -81,7 +81,7 @@ const WarehouseManageOrder = () => {
     <>
       <WareHouseAdminLayout>
         <div className="px-4 py-3">
-          <div className='bg-white'>
+          <div className="bg-white">
             <p className="font-bold mb-5 text-xl ">Manage Order</p>
           </div>
           <div className=" mb-2 flex gap-2">
@@ -137,7 +137,6 @@ const WarehouseManageOrder = () => {
                     to: filterDateTo,
                   };
                   const result = [];
-                  console.log('yang dicari', object);
                   for (const key in object) {
                     if (object[key]) {
                       result.push(`${key}=${object[key]}`);
@@ -147,7 +146,7 @@ const WarehouseManageOrder = () => {
                   navigate(`/warehouse-admin/manage-order?${finalresult}`);
                   getDataOrder();
                 } catch (error) {
-                  console.log(error);
+                  console.error(error);
                 }
               }}
             >
@@ -245,7 +244,7 @@ const WarehouseManageOrder = () => {
                 );
                 getDataOrder();
               } catch (error) {
-                console.log(error);
+                console.error(error);
               }
             }}
             onHandleModalCancel={() => {
@@ -271,7 +270,7 @@ const WarehouseManageOrder = () => {
                   },
                 );
               } catch (error) {
-                console.log(error);
+                console.error(error);
               }
             }}
             onHandleModalCancel={() => {

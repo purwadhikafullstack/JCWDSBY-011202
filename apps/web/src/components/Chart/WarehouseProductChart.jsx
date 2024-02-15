@@ -32,18 +32,15 @@ const WarehouseProductChart = ({ user }) => {
     ],
   };
 
-  console.log(user);
-
   useEffect(() => {
     const fetchData = async () => {
       try {
         const response = await API_CALL.get(
           `/journal/product-sold?warehouse_id=${Number(user.warehouse_id)}`,
         );
-        console.log(response);
         setData(response.data);
       } catch (error) {
-        console.log(error);
+        console.error(error);
       }
     };
     fetchData();

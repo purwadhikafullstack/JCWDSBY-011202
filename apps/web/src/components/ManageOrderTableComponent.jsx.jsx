@@ -153,10 +153,6 @@ const ManageOrderTable = (props) => {
                             activeHamburger = null;
                           } else if (doc.style.display == 'none') {
                             doc.style.display = 'block';
-                            // let doc2=document.getElementById(`hamburger${activeHamburger}`);
-                            // console.log("jhalan ga",doc2);
-                            // doc2.style.display = 'none';
-                            // activeHamburger=id
                           }
                         }}
                       >
@@ -202,7 +198,7 @@ const ManageOrderTable = (props) => {
                                     }),
                                   );
                                 } catch (error) {
-                                  console.log(error);
+                                  console.error(error);
                                 }
                               }}
                             >

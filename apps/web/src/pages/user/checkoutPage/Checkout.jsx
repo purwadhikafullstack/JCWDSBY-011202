@@ -56,7 +56,7 @@ const CheckoutPage = () => {
       setCoWeight(result.data.checkoutWeight);
       setCartData(result.data.result);
     } catch (error) {
-      console.log(error);
+      console.error(error);
     }
   };
 
@@ -68,7 +68,7 @@ const CheckoutPage = () => {
       });
       setUserData(result.data.final);
     } catch (error) {
-      console.log(error);
+      console.error(error);
     }
   };
 
@@ -83,7 +83,7 @@ const CheckoutPage = () => {
       );
       setUserAddress(result.data.address);
     } catch (error) {
-      console.log(error);
+      console.error(error);
     }
   };
 
@@ -99,7 +99,7 @@ const CheckoutPage = () => {
       serWarehouse_id(result.data.warehouse_id);
       setShippingCost(result.data.shipping);
     } catch (error) {
-      console.log(error);
+      console.error(error);
     }
   };
 
@@ -111,14 +111,13 @@ const CheckoutPage = () => {
       setShippingPrice('Rp ' + hargaOngkir.toLocaleString('id'));
       setFinalPrice(hargaOngkir + coPrice);
     } catch (error) {
-      console.log(error);
+      console.error(error);
     }
   };
 
   const onHandleLanjutkanCheckout = async () => {
     try {
       if (finalPrice !== '-') {
-        console.log('masuk dah benar');
         const date = new Date();
         const token = localStorage.getItem('token');
         const result = await axios.post(
@@ -146,16 +145,14 @@ const CheckoutPage = () => {
           },
           { headers: { Authorization: `Bearer ${token}` } },
         );
-        console.log('ini hasil sudah di create', result);
         navigate(
           `/checkout/success?id=${result.data.id}&inv=${result.data.invoice}`,
         );
       } else {
-        console.log('masuk kurang');
         alert('Mohon Lengkapi Terlebih Dahulu');
       }
     } catch (error) {
-      console.log(error);
+      console.error(error);
     }
   };
 

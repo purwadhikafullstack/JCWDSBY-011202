@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import LoginImage from '../../../assets/login.jpg';
 import { Link, useNavigate } from 'react-router-dom';
 import ButtonWithLoading from '../../../components/ButtonWithLoading';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { userLoaded } from '../../../redux/slice/accountSlice';
 import API_CALL from '../../../helpers/API';
 const LoginForm = () => {
@@ -25,7 +25,7 @@ const LoginForm = () => {
         });
         setCurrentRole(response.data);
       } catch (error) {
-        console.log(error);
+        console.error(error);
         setLoading(false);
       }
     };

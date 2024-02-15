@@ -8,7 +8,7 @@ const AdminBarChart = ({ warehouses, products }) => {
   const [selectedProduct, setSelectedProduct] = useState('');
   const labels = data1.map((item) => item.month);
   const salesData = data1.map((item) => item.sales);
-  console.log(products);
+
   const data = {
     labels: labels,
     datasets: [
@@ -52,7 +52,7 @@ const AdminBarChart = ({ warehouses, products }) => {
         );
         setData(response.data);
       } catch (error) {
-        console.log(error);
+        console.error(error);
       }
     };
     fetchData();

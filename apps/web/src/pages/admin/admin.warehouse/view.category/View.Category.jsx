@@ -15,7 +15,6 @@ const ViewCategory = () => {
 
     fetchData();
   }, []);
-  console.log(categories);
 
   return (
     <div>

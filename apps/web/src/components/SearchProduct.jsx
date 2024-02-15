@@ -9,7 +9,6 @@ function SearchProduct() {
   const [products, setProducts] = useState([]);
   const [searchResult, setSearchResult] = useState([]);
   const [debouncedQuery, setDebouncedQuery] = useState('');
-  console.log(products);
 
   useEffect(() => {
     const fetchData = async () => {

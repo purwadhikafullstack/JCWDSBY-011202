@@ -44,7 +44,7 @@ const WarehouseAdminLineStockChart = ({ product, user }) => {
         );
         setData2(response.data.reverse());
       } catch (error) {
-        console.log(error);
+        console.error(error);
       }
     };
     fetchData();

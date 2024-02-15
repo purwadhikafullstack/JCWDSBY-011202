@@ -168,7 +168,6 @@ const IModalCourier = (props) => {
                     key={idx}
                     className={` cursor-pointer bg-slate-100 sm:w-full shadow p-4 mb-2 rounded-md`}
                     onClick={() => {
-                      console.log('mecnetak');
                       sessionStorage.setItem('idOngkir', idx);
                       sessionStorage.setItem('service', val.service);
                       sessionStorage.setItem('hargaOngkir', val.cost[0].value);

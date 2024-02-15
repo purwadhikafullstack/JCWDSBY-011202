@@ -25,7 +25,7 @@ const TemporaryNavbar = (props) => {
       });
       return setCartCount(result.data.result);
     } catch (error) {
-      console.log(error);
+      console.error(error);
     }
   };
 

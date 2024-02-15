@@ -122,8 +122,6 @@ function ManageAccount() {
     fetchData();
   }, []);
 
-  console.log(currentPage, endPoint);
-
   return (
     <div>
       <AdminLayout>

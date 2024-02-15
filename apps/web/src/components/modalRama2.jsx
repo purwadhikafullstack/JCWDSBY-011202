@@ -23,7 +23,8 @@ const ModalDetailOrder = (props) => {
 };
 
 const ModalUserSettingAddress = (props) => {
-   return <div className="fixed inset-0 bg-opacity-80 flex justify-center items-center bg-slate-100 gap-y-3 p-2">
+  return (
+    <div className="fixed inset-0 bg-opacity-80 flex justify-center items-center bg-slate-100 gap-y-3 p-2">
       <div className="w-full bg-white p-5 rounded-md flex flex-col gap-y-2 md:w-[700px]">
         <div>
           <p className="font-semibold">Ubah alamat anda</p>
@@ -100,10 +101,11 @@ const ModalUserSettingAddress = (props) => {
         </div>
       </div>
     </div>
-  }
+  );
+};
 const ModalUserEditAddress = (props) => {
-  console.log("ii lo",props.data);
-   return <div className="fixed inset-0 bg-opacity-80 flex justify-center items-center bg-slate-100 gap-y-3 p-2">
+  return (
+    <div className="fixed inset-0 bg-opacity-80 flex justify-center items-center bg-slate-100 gap-y-3 p-2">
       <div className="w-full bg-white p-5 rounded-md flex flex-col gap-y-2 md:w-[700px]">
         <div>
           <p className="font-semibold">Ubah alamat anda</p>
@@ -184,5 +186,6 @@ const ModalUserEditAddress = (props) => {
         </div>
       </div>
     </div>
-  }
+  );
+};
 export { ModalDetailOrder, ModalUserSettingAddress, ModalUserEditAddress };

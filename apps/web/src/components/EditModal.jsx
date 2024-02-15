@@ -15,8 +15,6 @@ const EditModal = ({ closeModal, onEdit, initialData }) => {
     category_id: '',
   });
 
-  console.log('Product Id:', id);
-
   const handleCategoryChange = (e) => {
     const { value } = e.target;
     setFormData((prevData) => ({
@@ -39,16 +37,12 @@ const EditModal = ({ closeModal, onEdit, initialData }) => {
         category_id: categoryId,
       };
 
-      console.log('MASUK');
-      console.log(formDataToSend);
-
       await API_CALL.patch(`/products/${id}`, formDataToSend);
 
       const updatedProduct = await API_CALL.get(`/products?id=${id}`);
 
       if (onEdit) {
         onEdit(updatedProduct.data);
-        console.log(updatedProduct.data);
       }
       setFormData({
         name: '',
@@ -72,10 +66,9 @@ const EditModal = ({ closeModal, onEdit, initialData }) => {
     const fetchData = async () => {
       try {
         const response = await API_CALL.get('/categories');
-        console.log(response.data);
         setCategories(response.data);
       } catch (error) {
-        console.log(error);
+        console.error(error);
       }
     };
 

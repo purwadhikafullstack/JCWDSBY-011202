@@ -37,23 +37,27 @@ const DashboardUploadPayment = (props) => {
       if (!media) {
         alert('Silahkan upload bukti pembayaran terlebih dahulu ');
       } else {
-        const token = localStorage.getItem("token")
+        const token = localStorage.getItem('token');
         const formData = new FormData();
-        // console.log('masuk sinii', fileToUpload);
         formData.append('fileUpload', fileToUpload);
         // const result = await axios.patch(
         //   `http://localhost:8000/api/userOrder/upload/payment-proof${location.search}`,
         //   formData,
         // );
-        console.log("lokasi",location.search);
-        const result2 = await axios.post(`http://localhost:8000/api/userOrder/request-mutation${location.search}`,{},{
-          headers: { Authorization: `Bearer ${token}` },
-        },)
+        const result2 = await axios.post(
+          `http://localhost:8000/api/userOrder/request-mutation${location.search}`,
+          {},
+          {
+            headers: { Authorization: `Bearer ${token}` },
+          },
+        );
         // navigate("/user/dashboard/order")
-        alert("Terima kasih sudah mengupload pembayaran, pembayaran anda akan segera dikonfirmasi ")
+        alert(
+          'Terima kasih sudah mengupload pembayaran, pembayaran anda akan segera dikonfirmasi ',
+        );
       }
     } catch (error) {
-      console.log(error);
+      console.error(error);
     }
   };
   const getOrderDetail = async () => {
@@ -67,7 +71,7 @@ const DashboardUploadPayment = (props) => {
       );
       setOrderDetail(result.data[0]);
     } catch (error) {
-      console.log(error);
+      console.error(error);
     }
   };
   useEffect(() => {
@@ -78,8 +82,7 @@ const DashboardUploadPayment = (props) => {
     openLoading(1500);
     getOrderDetail();
   }, []);
-  console.log("data",data);
-    console.log("order detaul",orderDetail );
+
   return (
     <>
       {firstloading ? (
@@ -136,7 +139,6 @@ const DashboardUploadPayment = (props) => {
                     className="inputImage hidden bg-slate-200]"
                     onChange={({ target: { files } }) => {
                       setImageFile(files[0]);
-                      // console.log("ini image file", imageFile);
                       files[0] && setFileName(files[0].name);
                       if (files) {
                         setfileToUpload(files[0]);

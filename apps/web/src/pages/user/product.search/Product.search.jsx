@@ -38,7 +38,7 @@ const ProductSearch = () => {
         });
         setCurrentRole(response.data);
       } catch (error) {
-        console.log(error);
+        console.error(error);
         setLoading(false);
       }
     };
@@ -77,7 +77,7 @@ const ProductSearch = () => {
         setTotalPage(response.data.totalPages);
         setLoading(false);
       } catch (error) {
-        console.log(error);
+        console.error(error);
       } finally {
         setLoading(false);
       }

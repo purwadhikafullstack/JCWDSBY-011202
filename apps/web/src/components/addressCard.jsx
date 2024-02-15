@@ -1,10 +1,8 @@
-import { useState } from 'react';
 import { CiTrash } from 'react-icons/ci';
-import { LiaEdit } from "react-icons/lia";
+import { LiaEdit } from 'react-icons/lia';
 export const AddressCardMain = (props) => {
-//   const [userAddress, setUserAddress] = useState([props.userAddress]);
-const userAddress =[props.userAddress]
-  console.log('main', userAddress);
+  //   const [userAddress, setUserAddress] = useState([props.userAddress]);
+  const userAddress = [props.userAddress];
   {
     return userAddress.map((val, id) => {
       return (
@@ -19,10 +17,19 @@ const userAddress =[props.userAddress]
             </p>
             <p>{val.phone}</p>
           </div>
-          <div className='flex justify-end'>
-            <p className='rounded-full hover:bg-slate-200 p-1'><CiTrash className='cursor-pointer 'onClick={props.onHandleDeleteMainAddress}/></p>
-            <p className='rounded-full hover:bg-slate-200 p-1'><LiaEdit className='cursor-pointer 'onClick={props.showModalForEdit}/></p>
-
+          <div className="flex justify-end">
+            <p className="rounded-full hover:bg-slate-200 p-1">
+              <CiTrash
+                className="cursor-pointer "
+                onClick={props.onHandleDeleteMainAddress}
+              />
+            </p>
+            <p className="rounded-full hover:bg-slate-200 p-1">
+              <LiaEdit
+                className="cursor-pointer "
+                onClick={props.showModalForEdit}
+              />
+            </p>
           </div>
         </div>
       );
@@ -31,7 +38,7 @@ const userAddress =[props.userAddress]
 };
 
 export const AddressCardSub = (props) => {
-const userAddress =[props.userAddress]
+  const userAddress = [props.userAddress];
 
   return userAddress.map((val, idx) => {
     return (
@@ -51,14 +58,21 @@ const userAddress =[props.userAddress]
           </p>
           <p>{val.phone}</p>
         </div>
-        <div className='flex justify-end'>
-            <p className='rounded-full hover:bg-slate-200 p-1'><CiTrash className='cursor-pointer'
-            onClick={props.onHandleDeleteAddress}/></p>
-            <p className='rounded-full hover:bg-slate-200 p-1'><LiaEdit className='cursor-pointer 'onClick={props.showModalForEdit}/></p>
-          </div>
-        <div>
-
+        <div className="flex justify-end">
+          <p className="rounded-full hover:bg-slate-200 p-1">
+            <CiTrash
+              className="cursor-pointer"
+              onClick={props.onHandleDeleteAddress}
+            />
+          </p>
+          <p className="rounded-full hover:bg-slate-200 p-1">
+            <LiaEdit
+              className="cursor-pointer "
+              onClick={props.showModalForEdit}
+            />
+          </p>
         </div>
+        <div></div>
       </div>
     );
   });

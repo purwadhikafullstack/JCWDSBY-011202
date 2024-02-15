@@ -34,7 +34,6 @@ const DashboardAddress = (props) => {
   const token = localStorage.getItem('token');
   const getUserAddress = async () => {
     try {
-      console.log("jalan tak");
       const result = await axios.get(
         `http://localhost:8000/api/checkout/userAddress`,
         {
@@ -43,7 +42,7 @@ const DashboardAddress = (props) => {
       );
       return setUserAddress(result.data.address);
     } catch (error) {
-      console.log(error);
+      console.error(error);
     }
   };
   const getUserMainAddressId = async () => {
@@ -56,7 +55,7 @@ const DashboardAddress = (props) => {
       );
       setUserMainAddress(result.data.address_id);
     } catch (error) {
-      console.log(error);
+      console.error(error);
     }
   };
   const getProvinces = async () => {
@@ -72,7 +71,7 @@ const DashboardAddress = (props) => {
       );
       setCities(getCity.data.data);
     } catch (error) {
-      console.log(error);
+      console.error(error);
     }
   };
   const onHandleChangeProvince = async () => {
@@ -80,7 +79,7 @@ const DashboardAddress = (props) => {
       let doc = document.getElementById('province');
       setUserProvince(doc.value);
     } catch (error) {
-      console.log(error);
+      console.error(error);
     }
   };
   const onHandleChangeCity = () => {
@@ -88,7 +87,7 @@ const DashboardAddress = (props) => {
       let doc = document.getElementById('city');
       setUserCity(doc.value);
     } catch (error) {
-      console.log(error);
+      console.error(error);
     }
   };
   const addNewAddress = async () => {
@@ -116,14 +115,13 @@ const DashboardAddress = (props) => {
         alert('Silahkan lengkapi dahulu data alamat anda');
       }
     } catch (error) {
-      console.log(error);
+      console.error(error);
     }
   };
   const onHandleEditAddress = async () => {
     try {
       const doc = document.getElementById('alamat');
       const doc2 = document.getElementById('phone');
-      console.log('in id', userCity, doc.value, doc2.value, userProvince);
       if (userCity && doc.value && doc2.value && userProvince) {
         openLoading(1500);
         const result = await axios.patch(
@@ -142,10 +140,10 @@ const DashboardAddress = (props) => {
         setShowModalEdit(false);
         document.body.style.overflow = 'auto';
         getUserAddress();
-        alert("Perubahan data berhasil disimpan")
+        alert('Perubahan data berhasil disimpan');
       }
     } catch (error) {
-      console.log(error);
+      console.error(error);
     }
   };
   const openLoading = (time) => {
@@ -203,7 +201,7 @@ const DashboardAddress = (props) => {
                           getUserAddress();
                           getUserMainAddressId();
                         } catch (error) {
-                          console.log(error);
+                          console.error(error);
                         }
                       }}
                       showModalForEdit={() => {
@@ -242,7 +240,7 @@ const DashboardAddress = (props) => {
                             openLoading(500);
                             getUserAddress();
                           } catch (error) {
-                            console.log(error);
+                            console.error(error);
                           }
                         }}
                         onHandleChangeMainAddress={async () => {
@@ -259,7 +257,7 @@ const DashboardAddress = (props) => {
                             getUserAddress();
                             getUserMainAddressId();
                           } catch (error) {
-                            console.log(error);
+                            console.error(error);
                           }
                         }}
                         showModalForEdit={() => {

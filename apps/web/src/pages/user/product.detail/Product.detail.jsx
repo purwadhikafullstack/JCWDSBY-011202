@@ -30,7 +30,7 @@ const ProductDetail = () => {
         });
         setCurrentRole(response.data);
       } catch (error) {
-        console.log(error);
+        console.error(error);
         setLoading(false);
       }
     };
@@ -43,14 +43,14 @@ const ProductDetail = () => {
   useEffect(() => {
     const getCountCart = async () => {
       try {
-        console.log('jalan');
+        console.error('jalan');
         const token = localStorage.getItem('token');
         const result = await API_CALL.get('/cart/navbar', {
           headers: { Authorization: `Bearer ${token}` },
         });
         return setCartCount(result.data.result);
       } catch (error) {
-        console.log(error);
+        console.error(error);
       }
     };
 
@@ -61,7 +61,7 @@ const ProductDetail = () => {
     const fetchData = async () => {
       try {
         const response = await API_CALL.get(`/products?name=${id}`);
-        if (response.data.length === 0) {
+        if (response.data.products.length === 0) {
           navigate('/not-found');
         } else {
           setProducts(response.data.products);
@@ -102,12 +102,12 @@ const ProductDetail = () => {
       alert('Berhasil menambahkan data');
       getCountCart();
     } catch (error) {
-      console.log(error);
+      console.error(error);
     } finally {
       setLoading(false);
     }
   };
-  console.log(products[0]);
+  console.error(products[0]);
 
   return (
     <div className="flex flex-col min-h-screen">

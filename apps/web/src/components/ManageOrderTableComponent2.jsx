@@ -7,7 +7,7 @@ import { updateStatus } from '../redux/slice/statusSlice';
 import { cancelOrder } from '../redux/slice/cancelOrderAdmin';
 
 const ManageOrderTable2 = (props) => {
-  const index = ["Diproses","Dikirim","Berhasil","Dibatalkan"]
+  const index = ['Diproses', 'Dikirim', 'Berhasil', 'Dibatalkan'];
   const dispatch = useDispatch();
   const statusStyle = (status) => {
     switch (status) {
@@ -26,7 +26,7 @@ const ManageOrderTable2 = (props) => {
   let activeHamburger = null;
   const data = [props.data];
   return (
-    <div className=' overflow-scroll'>
+    <div className=" overflow-scroll">
       <table className="table-fixed overflow-scroll w-full">
         <thead className="bg-[rgb(240,97,5)] text-white font-semibold ">
           <tr className="">
@@ -79,7 +79,7 @@ const ManageOrderTable2 = (props) => {
                 >
                   <td className="">
                     <div className=" align-middle py-4 px-2 overflow-hidden text-ellipsis whitespace-nowrap">
-                      {val["warehouse.name"]}
+                      {val['warehouse.name']}
                     </div>
                   </td>
                   <td className="">
@@ -114,7 +114,10 @@ const ManageOrderTable2 = (props) => {
                   </td>
                   <td className="">
                     <div className=" align-middle font-semibold px-2">
-                      Rp <span className='text-right'>{val.total_price.toLocaleString('id')}</span>
+                      Rp{' '}
+                      <span className="text-right">
+                        {val.total_price.toLocaleString('id')}
+                      </span>
                     </div>
                   </td>
                   <td className="">
@@ -132,12 +135,14 @@ const ManageOrderTable2 = (props) => {
                         className="rounded-md  bg-[#F06105] text-white py-1 px-2 hover:bg-orange-400 "
                         type="button"
                         onClick={() => {
-                          dispatch(updateStatus({
-                            order_id:val.id,
-                            invoice:val.invoice,
-                            orderDate:val.createdAt,
-                            status:val.status
-                          }))
+                          dispatch(
+                            updateStatus({
+                              order_id: val.id,
+                              invoice: val.invoice,
+                              orderDate: val.createdAt,
+                              status: val.status,
+                            }),
+                          );
                         }}
                       >
                         Update Status
@@ -151,10 +156,6 @@ const ManageOrderTable2 = (props) => {
                             activeHamburger = null;
                           } else if (doc.style.display == 'none') {
                             doc.style.display = 'block';
-                            // let doc2=document.getElementById(`hamburger${activeHamburger}`);
-                            // console.log("jhalan ga",doc2);
-                            // doc2.style.display = 'none';
-                            // activeHamburger=id
                           }
                         }}
                       >
@@ -207,17 +208,25 @@ const ManageOrderTable2 = (props) => {
                               Detail Pesanan
                             </li>
                             <li className="border-t-[1px]"></li>
-                            {!index.includes(val.status)?<li className="hover:bg-orange-200 cursor-pointer w-full rounded-sm p-2"
-                            onClick={()=>{
-                              dispatch(cancelOrder({
-                                order_id:val.id,
-                                invoice:val.invoice,
-                                status:val.status,
-                                orderDate:val.createdAt
-                              }))
-                            }}>
-                              Batalkan pesanan
-                            </li>:""}
+                            {!index.includes(val.status) ? (
+                              <li
+                                className="hover:bg-orange-200 cursor-pointer w-full rounded-sm p-2"
+                                onClick={() => {
+                                  dispatch(
+                                    cancelOrder({
+                                      order_id: val.id,
+                                      invoice: val.invoice,
+                                      status: val.status,
+                                      orderDate: val.createdAt,
+                                    }),
+                                  );
+                                }}
+                              >
+                                Batalkan pesanan
+                              </li>
+                            ) : (
+                              ''
+                            )}
                           </ul>
                         </div>
                       </div>

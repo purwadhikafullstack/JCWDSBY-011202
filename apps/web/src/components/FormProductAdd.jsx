@@ -10,7 +10,7 @@ const FormProductAdd = (props) => {
         const response = await API_CALL.get('/categories');
         setCategories(response.data);
       } catch (error) {
-        console.log(error);
+        console.error(error);
       }
     };
 

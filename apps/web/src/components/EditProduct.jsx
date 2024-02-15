@@ -30,7 +30,6 @@ const EditProduct = () => {
   const getAgainProduct = async () => {
     try {
       const response = await API_CALL.get(`/products?id=${id}`);
-      console.log(response.data.products);
       if (!response.data.products.length) {
         navigate('not-found');
       }
@@ -58,7 +57,7 @@ const EditProduct = () => {
         const response = await API_CALL.get('/categories');
         setCategories(response.data);
       } catch (error) {
-        console.log(error);
+        console.error(error);
       }
     };
 

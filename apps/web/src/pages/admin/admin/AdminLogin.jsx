@@ -24,7 +24,7 @@ const AdminLogin = () => {
         });
         setCurrentRole(response.data);
       } catch (error) {
-        console.log(error);
+        console.error(error);
         setLoading(false);
       }
     };
@@ -57,7 +57,6 @@ const AdminLogin = () => {
         ) {
           setError('403 - Access Forbidden: user not allowed.');
         } else {
-          console.log(response.data);
           localStorage.setItem('token', response.data.token);
           dispatch(
             userLoaded({

@@ -41,7 +41,7 @@ const LandingAdmin = () => {
         const response = await API_CALL.get('/warehouses');
         setWarehouse(response.data.data);
       } catch (error) {
-        console.log(error);
+        console.error(error);
       }
     };
     fetchData();
@@ -53,7 +53,7 @@ const LandingAdmin = () => {
         const response = await API_CALL.get('/products');
         setProducts(response.data.products);
       } catch (error) {
-        console.log(error);
+        console.error(error);
       }
     };
     fetchData();
@@ -64,12 +64,11 @@ const LandingAdmin = () => {
         const response = await API_CALL.get('/journal/get-data');
         setData(response.data);
       } catch (error) {
-        console.log(error);
+        console.error(error);
       }
     };
     fetchData();
   }, []);
-  console.log(data);
   return (
     <div>
       <LandingAdminLayout>

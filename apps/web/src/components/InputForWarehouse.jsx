@@ -17,7 +17,7 @@ const InputForWarehouse = ({ onFormChange }) => {
         const response = await API_CALL.get('/provincesandcities/provinces');
         setProvinces(response.data.data);
       } catch (error) {
-        console.log(error);
+        console.error(error);
       }
     };
     fetchData();
@@ -29,7 +29,7 @@ const InputForWarehouse = ({ onFormChange }) => {
         const response = await API_CALL.get('/provincesandcities/cities');
         setCitiesList(response.data.data);
       } catch (error) {
-        console.log(error);
+        console.error(error);
       }
     };
     fetchData();
@@ -43,7 +43,7 @@ const InputForWarehouse = ({ onFormChange }) => {
         );
         setCities(response.data.data);
       } catch (error) {
-        console.log(error);
+        console.error(error);
       }
     };
     fetchData();
@@ -57,21 +57,18 @@ const InputForWarehouse = ({ onFormChange }) => {
           ? selectedCityObject.name
           : '';
 
-        console.log(cityNameForOpenCage);
-
         const response = await axios.get(
           `https://api.opencagedata.com/geocode/v1/json?q=${selectedAddress}%2C+99423+${cityNameForOpenCage}%2C+Indonesia&key=c4e250edc84e4f5c9f616a04b348274f`,
         );
         setGeometry(response.data.results[0].geometry);
       } catch (error) {
-        console.log(error);
+        console.error(error);
       }
     };
     openCage();
   }, [selectedProvince, selectedCityIndex, selectedAddress, cities]);
 
   useEffect(() => {
-    console.log(selectedCityIndex);
     onFormChange({
       warehouse,
       selectedCityIndex,

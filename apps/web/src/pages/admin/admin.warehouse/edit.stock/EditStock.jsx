@@ -97,7 +97,7 @@ const EditStockProduct = () => {
         showToast('success', `Succes Edit Stock`);
       }
     } catch (error) {
-      console.log(error);
+      console.error(error);
       showToast('danger', `Internal Server Error`);
     } finally {
       setLoading(false);

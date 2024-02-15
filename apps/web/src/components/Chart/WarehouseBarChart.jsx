@@ -8,7 +8,6 @@ const WarehouseAdminBarChart = ({ product, user }) => {
 
   const labels = data1.map((item) => item.month);
   const salesData = data1.map((item) => item.sales);
-  console.log(product);
   const data = {
     labels: labels,
     datasets: [

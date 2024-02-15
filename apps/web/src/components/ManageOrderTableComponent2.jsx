@@ -6,8 +6,8 @@ import axios from 'axios';
 import { updateStatus } from '../redux/slice/statusSlice';
 import { cancelOrder } from '../redux/slice/cancelOrderAdmin';
 
-const ManageOrderTable = (props) => {
-  const index = ['Diproses', 'Dikirim', 'Berhasil', 'Dibatalkan'];
+const ManageOrderTable2 = (props) => {
+  const index = ["Diproses","Dikirim","Berhasil","Dibatalkan"]
   const dispatch = useDispatch();
   const statusStyle = (status) => {
     switch (status) {
@@ -16,8 +16,6 @@ const ManageOrderTable = (props) => {
       case 'Dikirim':
         return 'bg-blue-300';
       case 'Pesanan Dikonfirmasi':
-        return 'bg-green-300';
-      case 'Berhasil':
         return 'bg-green-300';
       case 'Dibatalkan':
         return 'bg-red-300 ';
@@ -28,7 +26,7 @@ const ManageOrderTable = (props) => {
   let activeHamburger = null;
   const data = [props.data];
   return (
-    <div className=" overflow-scroll">
+    <div className=' overflow-scroll'>
       <table className="table-fixed overflow-scroll w-full">
         <thead className="bg-[rgb(240,97,5)] text-white font-semibold ">
           <tr className="">
@@ -81,6 +79,11 @@ const ManageOrderTable = (props) => {
                 >
                   <td className="">
                     <div className=" align-middle py-4 px-2 overflow-hidden text-ellipsis whitespace-nowrap">
+                      {val["warehouse.name"]}
+                    </div>
+                  </td>
+                  <td className="">
+                    <div className=" align-middle py-4 px-2 overflow-hidden text-ellipsis whitespace-nowrap">
                       {val.invoice}
                     </div>
                   </td>
@@ -111,10 +114,7 @@ const ManageOrderTable = (props) => {
                   </td>
                   <td className="">
                     <div className=" align-middle font-semibold px-2">
-                      Rp{' '}
-                      <span className="text-right">
-                        {val.total_price.toLocaleString('id')}
-                      </span>
+                      Rp <span className='text-right'>{val.total_price.toLocaleString('id')}</span>
                     </div>
                   </td>
                   <td className="">
@@ -132,14 +132,12 @@ const ManageOrderTable = (props) => {
                         className="rounded-md  bg-[#F06105] text-white py-1 px-2 hover:bg-orange-400 "
                         type="button"
                         onClick={() => {
-                          dispatch(
-                            updateStatus({
-                              order_id: val.id,
-                              invoice: val.invoice,
-                              orderDate: val.createdAt,
-                              status: val.status,
-                            }),
-                          );
+                          dispatch(updateStatus({
+                            order_id:val.id,
+                            invoice:val.invoice,
+                            orderDate:val.createdAt,
+                            status:val.status
+                          }))
                         }}
                       >
                         Update Status
@@ -209,25 +207,17 @@ const ManageOrderTable = (props) => {
                               Detail Pesanan
                             </li>
                             <li className="border-t-[1px]"></li>
-                            {!index.includes(val.status) ? (
-                              <li
-                                className="hover:bg-orange-200 cursor-pointer w-full rounded-sm p-2"
-                                onClick={() => {
-                                  dispatch(
-                                    cancelOrder({
-                                      order_id: val.id,
-                                      invoice: val.invoice,
-                                      status: val.status,
-                                      orderDate: val.createdAt,
-                                    }),
-                                  );
-                                }}
-                              >
-                                Batalkan pesanan
-                              </li>
-                            ) : (
-                              ''
-                            )}
+                            {!index.includes(val.status)?<li className="hover:bg-orange-200 cursor-pointer w-full rounded-sm p-2"
+                            onClick={()=>{
+                              dispatch(cancelOrder({
+                                order_id:val.id,
+                                invoice:val.invoice,
+                                status:val.status,
+                                orderDate:val.createdAt
+                              }))
+                            }}>
+                              Batalkan pesanan
+                            </li>:""}
                           </ul>
                         </div>
                       </div>
@@ -253,4 +243,4 @@ const ManageOrderTable = (props) => {
     </div>
   );
 };
-export default ManageOrderTable;
+export default ManageOrderTable2;

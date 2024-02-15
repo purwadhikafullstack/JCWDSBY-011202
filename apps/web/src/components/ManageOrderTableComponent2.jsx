@@ -6,7 +6,7 @@ import axios from 'axios';
 import { updateStatus } from '../redux/slice/statusSlice';
 import { cancelOrder } from '../redux/slice/cancelOrderAdmin';
 
-const ManageOrderTable = (props) => {
+const ManageOrderTable2 = (props) => {
   const index = ["Diproses","Dikirim","Berhasil","Dibatalkan"]
   const dispatch = useDispatch();
   const statusStyle = (status) => {
@@ -77,6 +77,11 @@ const ManageOrderTable = (props) => {
                   }`}
                   key={id}
                 >
+                  <td className="">
+                    <div className=" align-middle py-4 px-2 overflow-hidden text-ellipsis whitespace-nowrap">
+                      {val["warehouse.name"]}
+                    </div>
+                  </td>
                   <td className="">
                     <div className=" align-middle py-4 px-2 overflow-hidden text-ellipsis whitespace-nowrap">
                       {val.invoice}
@@ -238,4 +243,4 @@ const ManageOrderTable = (props) => {
     </div>
   );
 };
-export default ManageOrderTable;
+export default ManageOrderTable2;

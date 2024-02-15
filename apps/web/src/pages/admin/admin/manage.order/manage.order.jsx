@@ -15,6 +15,7 @@ import {
 } from '../../../../components/adminOrderSearchComponent.jsx';
 import { useNavigate } from 'react-router-dom';
 import AdminLayout from '../../../../components/AdminLayout.jsx';
+import ManageOrderTable2 from '../../../../components/ManageOrderTableComponent2.jsx';
 
 const AdminManageOrder = () => {
   const navigate = useNavigate();
@@ -23,29 +24,20 @@ const AdminManageOrder = () => {
   const cancelOrderItem = useSelector((state) => state.cancelOrderSlice);
   const dispatch = useDispatch();
   const [confirmationModalStatus, setConfirmationModalStatus] = useState(false);
-  const [showModalChangeStatus, setShowModalChangeStatus] = useState(false);
-  const [showModalCancelOrder, setShowModalCancelOrder] = useState(false);
   const [filterStatus, setFilterStatus] = useState('');
   const [filterDateFrom, setFilterDateFrom] = useState('');
   const [filterDateTo, setFilterDateTo] = useState('');
   const [filterInvoice, setFilterInvoice] = useState('');
+  const [filterNamaGudang, setFilterNamaGudang] = useState('');
+  const [filterIdGudang, setFilterIdGudang] = useState(0);
 
   const [data, setData] = useState([]);
   const ref = useRef();
   const token = localStorage.getItem('token');
-  const header = [
-    { th: 'Invoice', width: 'w-[130px]' },
-    { th: 'Date Invoice', width: 'w-[150px]' },
-    { th: 'Lokasi Gudang', width: 'w-[180px]' },
-    { th: 'Bukti Pembayaran', width: 'w-[160px]' },
-    { th: 'Total Price', width: 'w-[180px]' },
-    { th: 'Status', width: 'w-[150px]' },
-    { th: 'Action', width: 'w-[100px]' },
-  ];
   const getDataOrder = async () => {
     try {
       const result = await axios.get(
-        `http://localhost:8000/api/warehouse/order`,
+        `http://localhost:8000/api/admin/order`,
         {
           headers: { Authorization: `Bearer ${token}` },
         },
@@ -61,12 +53,26 @@ const AdminManageOrder = () => {
   useEffect(() => {
     getDataOrder();
   }, [location.search]);
+  console.log("data",data);
   return (
     <>
       <AdminLayout>
+        <div className="bg-white p-4 flex justify-between align-middle">
+          <p className="font-bold text-xl ">Manage Order</p>
+          
+        </div>
         <div className="px-4 py-3">
-          <p className="font-bold mb-5 text-xl">Manage Order</p>
           <div className=" mb-2 flex gap-2">
+            <InputSearchComponent
+              valueInputSearch={filterInvoice}
+              inputSearchId={'searchByGudang'}
+              placeholder={'Masukkan Nama Gudang'}
+              onChange={(e) => {
+                let doc = document.getElementById('searchByGudang');
+                e.target.value;
+                setFilterNamaGudang(doc.value);
+              }}
+            />
             <InputSearchComponent
               valueInputSearch={filterInvoice}
               inputSearchId={'searchByInv'}
@@ -77,16 +83,28 @@ const AdminManageOrder = () => {
                 setFilterInvoice(doc.value);
               }}
             />
-            <SearchDate />
+            <SearchDate
+              onChangeFrom={(e) => {
+                let doc = document.getElementById('from');
+                e.target.value;
+                setFilterDateFrom(doc.value);
+              }}
+              onChangeTo={(e) => {
+                let doc = document.getElementById('to');
+                e.target.value;
+                setFilterDateTo(doc.value);
+              }}
+            />
           </div>
           <div>
             <SearchByStatus
+              checked={filterStatus}
               checkedValue={() => {
                 setFilterStatus(
                   document.querySelector('input[name="status"]:checked').value,
                 );
               }}
-              onChangeStatus={() => {
+              onClickStatus={() => {
                 setFilterStatus(
                   document.querySelector('input[name="status"]:checked').value,
                 );
@@ -94,12 +112,15 @@ const AdminManageOrder = () => {
               refStatus={ref}
             />
           </div>
-          <div className="flex gap-2 mb-3 justify-end">
+          
+          <div>
+          <div className="flex gap-2 justify-end mb-3">
             <button
               className=" bg-[#F06105] text-white font-semibold my-auto px-4 rounded-md py-2 hover:bg-orange-400"
               disabled={false}
               onClick={() => {
                 const object = {
+                  warehouse_id:filterIdGudang,
                   invoice: filterInvoice,
                   status: filterStatus,
                   from: filterDateFrom,
@@ -133,8 +154,8 @@ const AdminManageOrder = () => {
               Reset
             </button>
           </div>
-          <div></div>
-          <ManageOrderTable
+          </div>
+          <ManageOrderTable2
             header={[
               'Gudang',
               'Invoice',
@@ -145,9 +166,6 @@ const AdminManageOrder = () => {
               'Status',
               'Action',
             ]}
-            // showModalChangeStatus={() => {
-            //   setShowModalChangeStatus(true);
-            // }}
             data={data}
           />
         </div>

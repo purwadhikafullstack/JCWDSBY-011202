@@ -27,7 +27,7 @@ const ProductCategorySearch = () => {
         <li
           className="flex font-light hover:text-orange-400 transition-all duration-300 cursor-pointer"
           onClick={() => {
-            navigate(`/product-search`);
+            navigate(`/product-search?page=1`);
           }}
         >
           All
@@ -37,7 +37,7 @@ const ProductCategorySearch = () => {
             key={index}
             className="flex font-light hover:text-orange-400 transition-all duration-300 cursor-pointer"
             onClick={() => {
-              navigate(`?category_id=${category.id}`);
+              navigate(`?category_id=${category.id}&page=1`);
             }}
           >
             {category.category} (<span>{category.productCount}</span>)

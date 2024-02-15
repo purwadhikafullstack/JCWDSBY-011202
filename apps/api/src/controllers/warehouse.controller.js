@@ -2,10 +2,10 @@ import warehouse from '../models/warehouses';
 import cities from '../models/cities';
 import provinces from '../models/provinces';
 import journal from '../models/journal';
-
+import { Op } from 'sequelize';
 export const getWarehouse = async (req, res, next) => {
   try {
-    const { city_id, province_id, page, warehouse_id } = req.query;
+    const { city_id, province_id, page, warehouse_id, name } = req.query;
 
     const filterOptions = {
       is_deleted: false,
@@ -23,10 +23,14 @@ export const getWarehouse = async (req, res, next) => {
       filterOptions.id = warehouse_id;
     }
 
-    const pageSize = 10;
+    if (name) {
+      filterOptions.name = { [Op.like]: `%${name}%` };
+    }
+
+    const pageSize = 12;
     const offset = page ? (page - 1) * pageSize : 0;
 
-    const results = await warehouse.findAll({
+    const results = await warehouse.findAndCountAll({
       where: filterOptions,
       include: [
         {
@@ -46,7 +50,10 @@ export const getWarehouse = async (req, res, next) => {
       raw: true,
     });
 
-    const modifiedResults = results.map((result) => {
+    const totalWarehouses = results.count;
+    const totalPages = Math.ceil(totalWarehouses / pageSize);
+
+    const modifiedResults = results.rows.map((result) => {
       const {
         'city.name': cityName,
         'province.name': provinceName,
@@ -60,7 +67,11 @@ export const getWarehouse = async (req, res, next) => {
       };
     });
 
-    return res.status(200).send({ success: true, data: modifiedResults });
+    return res.status(200).send({
+      success: true,
+      data: modifiedResults,
+      totalPages: totalPages,
+    });
   } catch (error) {
     console.error(error);
     return res

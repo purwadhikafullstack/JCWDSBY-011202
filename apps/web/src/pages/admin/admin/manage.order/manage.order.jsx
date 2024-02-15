@@ -53,7 +53,6 @@ const AdminManageOrder = () => {
   useEffect(() => {
     getDataOrder();
   }, [location.search]);
-  console.log("data",data);
   return (
     <>
       <AdminLayout>
@@ -112,7 +111,6 @@ const AdminManageOrder = () => {
               refStatus={ref}
             />
           </div>
-          
           <div>
           <div className="flex gap-2 justify-end mb-3">
             <button

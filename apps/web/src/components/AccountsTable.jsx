@@ -1,14 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-
 const AccountsTable = ({ accounts, onClickDelete }) => {
   const [getAccount, setGetAccount] = useState([]);
+
   const navigate = useNavigate();
   useEffect(() => {
-    setGetAccount(accounts);
+    setGetAccount(accounts || []);
   }, [accounts]);
-
-  console.log(getAccount);
 
   return (
     <div className="overflow-x-auto text">
@@ -88,6 +86,7 @@ const AccountsTable = ({ accounts, onClickDelete }) => {
       ) : (
         <p>No accounts available.</p>
       )}
+      <div className="flex justify-center mt-4"></div>
     </div>
   );
 };

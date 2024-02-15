@@ -16,8 +16,8 @@ const AddAccount = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [fullname, setFullName] = useState('');
-  const [showConfirmationModal, setShowConfirmationModal] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [showConfirmationModal, setShowConfirmationModal] = useState(false);
   const [toast, setToast] = useState(null);
   const [warehouse, setWarehouse] = useState(0);
 

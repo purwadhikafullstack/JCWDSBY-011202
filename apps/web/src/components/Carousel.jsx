@@ -10,16 +10,16 @@ function CarouselComponent() {
   return (
     <div className="h-56 sm:h-64 xl:h-80 2xl:h-96 z-0">
       <Carousel className="w-full ">
-        <Link to="/product-detail/5">
+        <Link to="/product-detail/Sharon Relax Sofa (Brown-Cream)">
           <img src={Carousel1} alt="..." className="w-full cursor-pointer" />
         </Link>
-        <Link to="/product-detail/28">
+        <Link to="/product-detail/Chelsea Bed">
           <img src={Carousel2} alt="..." className="w-full cursor-pointer" />
         </Link>
-        <Link to="product-detail/26">
+        <Link to="product-detail/Wise Night Stand (Ivory) ">
           <img src={Carousel3} alt="..." className="w-full cursor-pointer" />
         </Link>
-        <Link to="product-detail/27">
+        <Link to="product-detail/Kokoro Coffee Table (White-Pink)">
           <img src={Carousel4} alt="..." className="w-full cursor-pointer" />
         </Link>
       </Carousel>

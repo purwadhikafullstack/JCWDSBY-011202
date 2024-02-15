@@ -9,15 +9,46 @@ const EmailVerification = () => {
   const [confirmPassword, setConfirmPassword] = useState('');
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
-  const [token, setToken] = useState('');
+  const [token, setTokenVerif] = useState('');
   const [showCongratsModal, setShowCongratsModal] = useState(false);
   const navigate = useNavigate();
   const location = useLocation();
+  const [currentRole, setCurrentRole] = useState('');
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const tokenAuth = localStorage.getItem('token');
+        const response = await axios.get(
+          'http://localhost:8000/api/accounts/authcheck',
+          {
+            headers: {
+              Authorization: `Bearer ${tokenAuth}`,
+            },
+          },
+        );
+        setCurrentRole(response.data);
+      } catch (error) {
+        console.log(error);
+        setLoading(false);
+      }
+    };
+    fetchData();
+  }, []);
+
+  if (
+    currentRole === 'admin' ||
+    currentRole === 'superadmin' ||
+    currentRole === 'user'
+  ) {
+    navigate('/not-authorized');
+  }
 
   useEffect(() => {
     const tokenQuery = location.search.split('?')[1];
-    setToken(tokenQuery);
+    setTokenVerif(tokenQuery);
   }, [location.search]);
+
+  console.log(token);
 
   const handleVerification = async () => {
     try {

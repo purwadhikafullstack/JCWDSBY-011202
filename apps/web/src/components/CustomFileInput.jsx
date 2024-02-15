@@ -52,8 +52,8 @@ const CustomFileInput = ({
   };
 
   return (
-    <div className="w-full h-full">
-      <label className="flex justify-center w-[400px] h-[400px]  transition bg-white border-2 border-gray-300 rounded-md appearance-none cursor-pointer hover:border-orange-500 focus:outline-none">
+    <div className="w-full h-full mb-2 sm:mb-0">
+      <label className="flex justify-center sm:w-[400px] sm:h-[400px] w-[300px] h-[300px] mx-auto transition bg-white border-2 border-gray-300 rounded-md appearance-none cursor-pointer hover:border-orange-500 focus:outline-none">
         {imagePreviews.length > 0 ? (
           <div className="relative">
             <img

@@ -43,6 +43,8 @@ import RoleRouting from './components/RoleRouting';
 import ViewAllJournal from './components/ViewJournalAdmin';
 import ViewAllJournalWarehouse from './components/ViewJournalWarehouseAdmin';
 import AdminManageOrder from './pages/admin/admin/manage.order/manage.order';
+import AdminManageInventory from './components/AdminManageInventory';
+import AdminEditStock from './pages/admin/admin.warehouse/edit.stock/AdminEditStock';
 function App() {
   const userGlobal = useSelector((state) => state.accountSliceReducer);
   const dispatch = useDispatch();
@@ -66,7 +68,7 @@ function App() {
         <Route
           path="/admin/manage-account"
           element={
-            <RoleRouting role="superadmin" redirect="/admin/login">
+            <RoleRouting role="superadmin" redirect="/unauthorized">
               <ManageAccount />
             </RoleRouting>
           }
@@ -74,7 +76,7 @@ function App() {
         <Route
           path="/admin/manage-account/edit-account?"
           element={
-            <RoleRouting role="superadmin" redirect="/admin/login">
+            <RoleRouting role="superadmin" redirect="/unauthorized">
               <UpdateAccount />
             </RoleRouting>
           }
@@ -82,7 +84,7 @@ function App() {
         <Route
           path="/admin/manage-account/add-admin"
           element={
-            <RoleRouting role="superadmin" redirect="/admin/login">
+            <RoleRouting role="superadmin" redirect="/unauthorized">
               <AddAccount />
             </RoleRouting>
           }
@@ -90,7 +92,7 @@ function App() {
         <Route
           path="/admin"
           element={
-            <RoleRouting role="superadmin" redirect="/admin/login">
+            <RoleRouting role="superadmin" redirect="/unauthorized">
               <LandingAdmin />
             </RoleRouting>
           }
@@ -98,7 +100,7 @@ function App() {
         <Route
           path="/admin/manage-product"
           element={
-            <RoleRouting role="superadmin" redirect="/admin/login">
+            <RoleRouting role="superadmin" redirect="/unauthorized">
               <ManageProduct />
             </RoleRouting>
           }
@@ -106,15 +108,15 @@ function App() {
         <Route
           path="/admin/manage-product/add-product"
           element={
-            <RoleRouting role="superadmin" redirect="/admin/login">
+            <RoleRouting role="superadmin" redirect="/unauthorized">
               <AddProduct />
             </RoleRouting>
           }
         />
         <Route
-          path="edit-product/:id"
+          path="/edit-product/:id"
           element={
-            <RoleRouting role="superadmin" redirect="/admin/login">
+            <RoleRouting role="superadmin" redirect="/unauthorized">
               <EditProduct />
             </RoleRouting>
           }
@@ -122,7 +124,7 @@ function App() {
         <Route
           path="/admin/manage-category"
           element={
-            <RoleRouting role="superadmin" redirect="/admin/login">
+            <RoleRouting role="superadmin" redirect="/unauthorized">
               <ManageCategory />
             </RoleRouting>
           }
@@ -130,7 +132,7 @@ function App() {
         <Route
           path="/admin/manage-inventory?"
           element={
-            <RoleRouting role="superadmin" redirect="/admin/login">
+            <RoleRouting role="superadmin" redirect="/unauthorized">
               <ManageInventory />
             </RoleRouting>
           }
@@ -138,7 +140,7 @@ function App() {
         <Route
           path="/admin/manage-warehouse"
           element={
-            <RoleRouting role="superadmin" redirect="/admin/login">
+            <RoleRouting role="superadmin" redirect="/unauthorized">
               <ManageWarehouse />
             </RoleRouting>
           }
@@ -146,7 +148,7 @@ function App() {
         <Route
           path="/admin/manage-warehouse/edit-warehouse?"
           element={
-            <RoleRouting role="superadmin" redirect="/admin/login">
+            <RoleRouting role="superadmin" redirect="/unauthorized">
               <EditWarehouse />
             </RoleRouting>
           }
@@ -154,7 +156,7 @@ function App() {
         <Route
           path="/admin/manage-warehouse/add-warehouse"
           element={
-            <RoleRouting role="superadmin" redirect="/admin/login">
+            <RoleRouting role="superadmin" redirect="/unauthorized">
               <AddWarehouse />
             </RoleRouting>
           }
@@ -162,7 +164,7 @@ function App() {
         <Route
           path="/warehouse-admin"
           element={
-            <RoleRouting role="admin" redirect="/admin/login">
+            <RoleRouting role="admin" redirect="/unauthorized">
               <LandingWarehouse />
             </RoleRouting>
           }
@@ -170,7 +172,7 @@ function App() {
         <Route
           path="/warehouse-admin/view-products"
           element={
-            <RoleRouting role="admin" redirect="/admin/login">
+            <RoleRouting role="admin" redirect="/unauthorized">
               <ViewProduct />
             </RoleRouting>
           }
@@ -178,7 +180,7 @@ function App() {
         <Route
           path="/warehouse-admin/view-categories"
           element={
-            <RoleRouting role="admin" redirect="/admin/login">
+            <RoleRouting role="admin" redirect="/unauthorized">
               <ViewCategory />
             </RoleRouting>
           }
@@ -192,17 +194,25 @@ function App() {
           }
         />
         <Route
+          path="/admin/manage-warehouse-inventory"
+          element={
+            <RoleRouting role={['admin', 'superadmin']} redirect="/admin/login">
+              <AdminManageInventory />
+            </RoleRouting>
+          }
+        />
+        <Route
           path="warehouse-admin/manage-mutation/add-request"
           element={
-            <RoleRouting role="admin" redirect="/admin/login">
+            <RoleRouting role="admin" redirect="/unauthorized">
               <AddMutation />
             </RoleRouting>
           }
         />
         <Route
-          path="/warehouse-admin/manage-mutation"
+          path="/warehouse-admin/manage-mutation?"
           element={
-            <RoleRouting role="admin" redirect="/admin/login">
+            <RoleRouting role="admin" redirect="/unauthorized">
               <ManageMutation />
             </RoleRouting>
           }
@@ -212,6 +222,14 @@ function App() {
           element={
             <RoleRouting role={['admin', 'superadmin']} redirect="/admin/login">
               <EditStockProduct />
+            </RoleRouting>
+          }
+        />
+        <Route
+          path="/admin/edit-stock/:id"
+          element={
+            <RoleRouting role={['admin', 'superadmin']} redirect="/admin/login">
+              <AdminEditStock />
             </RoleRouting>
           }
         />
@@ -231,8 +249,6 @@ function App() {
             </RoleRouting>
           }
         />
-
-        {/* BELUM KE ROUTING */}
         <Route path="/" element={<Home />} />
         <Route path="/user/login" element={<Login />} />
         <Route path="/admin/login" element={<AdminLogin />} />
@@ -240,10 +256,11 @@ function App() {
           path="/user/email-verification"
           element={<EmailVerification />}
         />
-        <Route path="/user/forgot-pass" element={<ResetPassword />} />
         <Route path="/user/register" element={<RegisterForm />} />
-        <Route path="/register" element={<Register />} />
         <Route path="/product-detail/:id" element={<ProductDetail />} />
+        {/* BELUM KE ROUTING */}
+        {/* TEST */}
+        <Route path="/user/forgot-pass" element={<ResetPassword />} />
         <Route path="/product-search?" element={<ProdutSearch />} />
         {/* BELUM */}
         <Route path="*" element={<NotFoundPage />} />
@@ -262,10 +279,7 @@ function App() {
           path="/warehouse-admin/manage-order"
           element={<WarehouseManageOrder />}
         />
-        <Route
-          path="/admin/manage-order"
-          element={<AdminManageOrder />}
-        />
+        <Route path="/admin/manage-order" element={<AdminManageOrder />} />
         <Route path="" />
       </Routes>
     </BrowserRouter>

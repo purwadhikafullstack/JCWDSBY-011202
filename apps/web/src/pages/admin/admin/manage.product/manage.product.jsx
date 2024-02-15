@@ -5,26 +5,28 @@ import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import Pagination from '../../../../components/Temporary/Pagination';
 import SearchProduct from '../../../../components/SearchProduct';
-import SearchByCategory from '../../../../components/CategoryProductFilter';
 import { Loading } from '../../../../components/loadingComponent';
 
 const ManageProduct = () => {
   const [page, setPage] = useState(1);
   const [currentPage, setCurrentPage] = useState([]);
-  const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
   const [category, setCategories] = useState([]);
-  const [filterStatus, setFilterStatus] = useState('');
-
+  const [selectedCategories, setSelectedCategories] = useState(0);
+  const [selectedPriceSorting, setSelectedPriceSorting] = useState('');
+  const [endPoint, setEndPoint] = useState('');
+  const [totalPages, setTotalPages] = useState(0);
   const handleAddButtonClick = () => {
     navigate('add-product');
   };
 
   const handleDelete = async (deletedProductId) => {
     try {
-      const response = await axios.get('http://localhost:8000/api/products');
-      setProducts(response.data);
+      const response = await axios.get(
+        `http://localhost:8000/api/products${endPoint || `?page=${page}`}`,
+      );
+      setCurrentPage(response.data.products);
     } catch (error) {
       console.error('Error fetching data:', error);
     }
@@ -35,35 +37,34 @@ const ManageProduct = () => {
   };
 
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        setLoading(true);
-        const response = await axios.get('http://localhost:8000/api/products?');
-        setProducts(response.data);
-        setLoading(false);
-      } catch (error) {
-        console.error('Error fetching data:', error);
-        setLoading(false);
-      }
-    };
-
-    fetchData();
-  }, []);
+    const filter = [`?page=${page}`];
+    if (selectedCategories > 0) {
+      filter.push(`&category_id=${selectedCategories}`);
+    }
+    if (selectedPriceSorting !== '') {
+      filter.push(`&price=${selectedPriceSorting}`);
+    }
+    setEndPoint(filter.join(''));
+  }, [page, selectedCategories, selectedPriceSorting]);
 
   useEffect(() => {
     const fetchData = async () => {
       try {
         const response = await axios.get(
-          `http://localhost:8000/api/products?page=${page}`,
+          `http://localhost:8000/api/products${endPoint || '?page=1'}`,
         );
-        setCurrentPage(response.data);
+        setCurrentPage(response.data.products);
+        setTotalPages(response.data.totalPages);
+        setLoading(false);
       } catch (error) {
         console.error('Error fetching data:', error);
+      } finally {
+        setLoading(false);
       }
     };
 
     fetchData();
-  }, [page, products, filterStatus]);
+  }, [endPoint]);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -95,10 +96,35 @@ const ManageProduct = () => {
             </button>
           </div>
         </div>
-        <div className="flex mt-4 sm:mx-2">
+        <div className="flex mt-4 sm:mx-2 justify-between">
           <div>
             <SearchProduct />
+            <div className="w-[200px] sm:ml-0 ml-3 sm:mt-0 mt-2  sm:w-full sm:pr-2 flex">
+              <select
+                onChange={(e) => setSelectedCategories(e.target.value)}
+                className="w-full h-8 mx-1 bg-gray-50 border text-xs border-gray-300 text-gray-900  rounded-lg focus:ring-blue-500 focus:border-blue-500 block  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+              >
+                <option value="">All Category</option>
+                {category &&
+                  category.map((item) => (
+                    <option key={item.id} value={item.id}>
+                      {item.category}
+                    </option>
+                  ))}
+              </select>
+              <select
+                onChange={(e) => setSelectedPriceSorting(e.target.value)}
+                className="w-full h-8 mx-1 bg-gray-50 border text-xs border-gray-300 text-gray-900  rounded-lg focus:ring-blue-500 focus:border-blue-500 block  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+              >
+                <option value="">By Price</option>
+                <option value="asc">Ascending</option>
+                <option value="desc">Descending</option>
+              </select>
+            </div>
           </div>
+          <h1 className="self-end sm:mx-4 text-[14px] sm:w-auto w-[200px]">
+            Showing <span>{currentPage.length}</span> Results
+          </h1>
         </div>
         <div className="w-full p-4">
           {loading ? (
@@ -109,7 +135,7 @@ const ManageProduct = () => {
         </div>
         <div className="flex justify-center mb-2">
           <Pagination
-            products={products}
+            products={totalPages}
             onClickPrevious={() => handlePageChange(page - 1)}
             onClickNext={() => handlePageChange(page + 1)}
             page={page}

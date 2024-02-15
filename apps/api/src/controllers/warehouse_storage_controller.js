@@ -16,40 +16,10 @@ function formatDate(date) {
 
 export const getStorage = async (req, res, next) => {
   try {
-    let queryOptions;
-    if (req.query.warehouse && req.query.product_id) {
-      queryOptions = {
-        where: {
-          warehouse_id: req.query.warehouse,
-          product_id: req.query.product_id,
-          is_deleted: false,
-        },
-      };
-    } else if (req.query.warehouse) {
-      queryOptions = {
-        where: {
-          warehouse_id: req.query.warehouse,
-          is_deleted: false,
-        },
-      };
-    } else if (req.query.id) {
-      queryOptions = {
-        where: {
-          id: req.query.id,
-          is_deleted: false,
-        },
-      };
-    } else if (req.query.product_id) {
-      queryOptions = {
-        where: {
-          product_id: req.query.product_id,
-          is_deleted: false,
-        },
-      };
-    }
-
-    const result = await warehouse_storage.findAll({
-      ...queryOptions,
+    let queryOptions = {
+      where: {
+        is_deleted: false,
+      },
       include: [
         {
           model: warehouse,
@@ -84,7 +54,48 @@ export const getStorage = async (req, res, next) => {
         exclude: ['createdAt', 'updatedAt', 'is_deleted'],
       },
       raw: true,
+    };
+
+    if (req.query.warehouse && req.query.product_id) {
+      queryOptions.where = {
+        ...queryOptions.where,
+        warehouse_id: req.query.warehouse,
+        product_id: req.query.product_id,
+      };
+    } else if (req.query.warehouse) {
+      queryOptions.where = {
+        ...queryOptions.where,
+        warehouse_id: req.query.warehouse,
+      };
+    } else if (req.query.id) {
+      queryOptions.where = {
+        ...queryOptions.where,
+        id: req.query.id,
+      };
+    } else if (req.query.product_id) {
+      queryOptions.where = {
+        ...queryOptions.where,
+        product_id: req.query.product_id,
+      };
+    }
+
+    const totalCount = await warehouse_storage.count({
+      where: queryOptions.where,
     });
+
+    let totalPages = 0;
+    let limit = 0;
+    let page = 1;
+
+    if (req.query.page) {
+      page = parseInt(req.query.page);
+      limit = parseInt(req.query.limit) || 12;
+      queryOptions.limit = limit;
+      queryOptions.offset = (page - 1) * limit;
+      totalPages = Math.ceil(totalCount / limit);
+    }
+
+    const result = await warehouse_storage.findAll(queryOptions);
 
     const modifiedResult = result.map((storage) => {
       const {
@@ -99,7 +110,11 @@ export const getStorage = async (req, res, next) => {
       };
     });
 
-    res.status(200).send({ success: true, data: modifiedResult });
+    res.status(200).send({
+      success: true,
+      data: modifiedResult,
+      totalPages: totalPages,
+    });
   } catch (error) {
     console.error(error);
     res.status(500).send({ success: false, message: 'ERROR GETTING DATA' });

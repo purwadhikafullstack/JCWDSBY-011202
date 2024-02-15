@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import LoginImage from '../../../assets/login.jpg';
 import { Link, useNavigate } from 'react-router-dom';
 import ButtonWithLoading from '../../../components/ButtonWithLoading';
@@ -12,6 +12,32 @@ const LoginForm = () => {
   const [error, setError] = useState(null);
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  const [currentRole, setCurrentRole] = useState('');
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const token = localStorage.getItem('token');
+        const response = await axios.get(
+          'http://localhost:8000/api/accounts/authcheck',
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          },
+        );
+        setCurrentRole(response.data);
+      } catch (error) {
+        console.log(error);
+        setLoading(false);
+      }
+    };
+    fetchData();
+  }, []);
+
+  if (currentRole === 'admin' || currentRole === 'superadmin') {
+    navigate('/not-authorized');
+  }
   const onHandleSignIn = async () => {
     try {
       setError(null);

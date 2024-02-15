@@ -1,5 +1,4 @@
 import { useNavigate, useLocation } from 'react-router-dom';
-import WarehouseAdminLayout from '../components/WareHouseAdminLayout';
 import Pagination from './Temporary/Pagination';
 import { IoMdArrowBack, IoMdClose } from 'react-icons/io';
 import InventoryTable from './InventoryTable';
@@ -8,7 +7,7 @@ import axios from 'axios';
 import { useSelector } from 'react-redux';
 import ButtonWithLoading from './ButtonWithLoading';
 import { Loading } from './loadingComponent';
-
+import AdminLayout from './AdminLayout';
 const WarehouseInventory = () => {
   const [warehouseInventory, setWarehouseInventory] = useState([]);
   const [page, setPage] = useState(1);
@@ -116,7 +115,7 @@ const WarehouseInventory = () => {
 
   return (
     <div>
-      <WarehouseAdminLayout>
+      <AdminLayout>
         <div className="flex justify-between bg-white h-16 p-4 items-center">
           <div className="flex items-center sm:ml-0 ml-4">
             <div
@@ -157,7 +156,7 @@ const WarehouseInventory = () => {
             page={page}
           />
         </div>
-      </WarehouseAdminLayout>
+      </AdminLayout>
       {isModalOpen && (
         <div className="fixed inset-0 bg-gray-800 bg-opacity-50 flex justify-center">
           <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-[#E6E6E6] p-4 w-[400px] h-[250px] rounded-md">

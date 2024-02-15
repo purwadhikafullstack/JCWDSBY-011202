@@ -5,6 +5,20 @@ import journal from '../models/journal';
 
 export const GetAccounts = async (req, res, next) => {
   try {
+    let limit = null;
+
+    let offset = 0;
+
+    if (req.query.page) {
+      const page = parseInt(req.query.page);
+      if (page > 0) {
+        limit = 12;
+        offset = (page - 1) * limit;
+      } else {
+        throw new Error('Invalid page number');
+      }
+    }
+
     const filter = {
       is_deleted: false,
     };
@@ -31,7 +45,7 @@ export const GetAccounts = async (req, res, next) => {
       filter.order = req.query.order.toLowerCase() === 'desc' ? 'DESC' : 'ASC';
     }
 
-    const result = await accounts.findAll({
+    const result = await accounts.findAndCountAll({
       where: filter,
       attributes: { exclude: ['createdAt', 'updatedAt', 'is_deleted'] },
       include: [
@@ -41,17 +55,25 @@ export const GetAccounts = async (req, res, next) => {
           attributes: ['name'],
         },
       ],
+      limit: limit,
+      offset: offset,
     });
 
-    const mappedResult = result.map((account) => {
-      const { is_verified, warehouse, ...accountData } = account.dataValues;
+    const totalPages = limit ? Math.ceil(result.count / limit) : 1;
+
+    const mappedResult = result.rows.map((account) => {
+      const { is_verified, warehouse, ...accountData } = account.toJSON();
       return {
         ...accountData,
         warehouse_name: warehouse ? warehouse.name : null,
         verification_status: is_verified == 1 ? 'verified' : 'unverified',
       };
     });
-    return res.status(200).send(mappedResult);
+
+    return res.status(200).send({
+      accounts: mappedResult,
+      totalPages: totalPages,
+    });
   } catch (error) {
     console.error(error);
     return res.status(500).send({

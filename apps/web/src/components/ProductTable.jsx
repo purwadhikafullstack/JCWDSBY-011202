@@ -2,9 +2,15 @@ import React from 'react';
 import axios from 'axios';
 import { formatPriceToIDR } from '../utils';
 import { useNavigate } from 'react-router-dom';
-
+import Toast from './Toast';
+import ConfirmationModal from './ConfirmationModal';
+import { useState } from 'react';
 const ProductTable = ({ products, onDelete }) => {
   const navigate = useNavigate();
+  const [showConfirmationModal, setShowConfirmationModal] = useState(false);
+  const [toast, setToast] = useState(null);
+  const [buttonLoading, setButtonLoading] = useState(false);
+  const [selectedProduct, setProduct] = useState();
 
   const truncateDescription = (description) => {
     const maxLength = 15;
@@ -15,12 +21,39 @@ const ProductTable = ({ products, onDelete }) => {
   };
 
   const handleDelete = async (product) => {
+    setButtonLoading(true);
     try {
-      await axios.delete(`http://localhost:8000/api/products/${product.id}`);
-      onDelete(product.id);
+      await axios.delete(
+        `http://localhost:8000/api/products/${selectedProduct.id}`,
+      );
+      onDelete(selectedProduct.id);
+      setButtonLoading(false);
+      setShowConfirmationModal(false);
+      showToast('success', 'Product deleted successfully');
     } catch (error) {
+      lo;
+      setShowConfirmationModal(false);
+      showToast('warning', 'Product deleted failed');
       console.error('Error deleting product:', error);
+    } finally {
+      setShowConfirmationModal(false);
     }
+  };
+
+  const showToast = (status, message) => {
+    setToast({ status, message });
+    setTimeout(() => {
+      setToast(null);
+    }, 5000);
+  };
+
+  const onHandleSaveChanges = (product) => {
+    setProduct(product);
+    setShowConfirmationModal(true);
+  };
+
+  const onCloseConfirmationModal = () => {
+    setShowConfirmationModal(false);
   };
 
   return (
@@ -77,7 +110,7 @@ const ProductTable = ({ products, onDelete }) => {
                     Edit
                   </button>
                   <button
-                    onClick={() => handleDelete(product)}
+                    onClick={() => onHandleSaveChanges(product)}
                     className="bg-slate-400 hover:bg-slate-700 text-white px-4 py-2 rounded"
                   >
                     Delete
@@ -97,6 +130,22 @@ const ProductTable = ({ products, onDelete }) => {
           )}
         </tbody>
       </table>
+      {showConfirmationModal && (
+        <ConfirmationModal
+          onClickCancel={onCloseConfirmationModal}
+          onclickClose={onCloseConfirmationModal}
+          title="Add Product"
+          isLoading={buttonLoading}
+          onClick={handleDelete}
+        />
+      )}
+      {toast && (
+        <Toast
+          status={toast.status}
+          message={toast.message}
+          onClose={() => setToast(null)}
+        />
+      )}
     </div>
   );
 };

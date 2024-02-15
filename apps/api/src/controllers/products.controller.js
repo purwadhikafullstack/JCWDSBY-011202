@@ -3,6 +3,7 @@ import categories from '../models/categories';
 import products_images from '../models/product_images';
 import warehouse_storage from '../models/warehouse_storage';
 import { Op } from 'sequelize';
+
 export const getProduct = async (req, res, next) => {
   try {
     const warehouseStorage = await warehouse_storage.findAll({
@@ -63,7 +64,7 @@ export const getProduct = async (req, res, next) => {
       page = parseInt(req.query.page);
     }
 
-    const result = await products.findAll({
+    const result = await products.findAndCountAll({
       where: filter,
       attributes: {
         exclude: ['createdAt', 'updatedAt', 'is_deleted'],
@@ -83,7 +84,13 @@ export const getProduct = async (req, res, next) => {
       offset: req.query.page ? (page - 1) * limit : undefined,
     });
 
-    const resultWithStock = result.map((product) => {
+    const isPages = await products.findAll({ where: filter, raw: true });
+    console.log(isPages.length);
+
+    const totalProducts = isPages.length;
+    const totalPages = Math.ceil(totalProducts / limit);
+
+    const resultWithStock = result.rows.map((product) => {
       const product_id = product.id;
       const total_stock = warehouseStockMap[product_id] || 0;
       return {
@@ -92,7 +99,7 @@ export const getProduct = async (req, res, next) => {
       };
     });
 
-    return res.status(200).send(resultWithStock);
+    return res.status(200).send({ products: resultWithStock, totalPages });
   } catch (error) {
     console.error(error);
     return res

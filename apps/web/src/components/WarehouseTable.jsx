@@ -48,7 +48,7 @@ const WarehouseTable = ({ temporaryWareHouse }) => {
                     className="bg-orange-500 hover:bg-orange-700 text-white px-4 py-2 rounded mr-2"
                     onClick={() => {
                       navigate(
-                        `/warehouse-admin/manage-inventory?warehouse=${val.id}`,
+                        `/admin/manage-warehouse-inventory?warehouse=${val.id}`,
                       );
                       sessionStorage.setItem('warehouse_selected', val.id);
                     }}

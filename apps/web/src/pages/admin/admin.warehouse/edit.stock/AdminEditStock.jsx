@@ -1,5 +1,4 @@
 import { useNavigate, useParams } from 'react-router-dom';
-import WareHouseAdminLayout from '../../../../components/WareHouseAdminLayout';
 import { IoMdArrowBack } from 'react-icons/io';
 import DataEditStock from '../../../../components/DataEditStock';
 import { useEffect, useState } from 'react';
@@ -8,6 +7,7 @@ import ConfirmationModal from '../../../../components/ConfirmationModal';
 import { useSelector } from 'react-redux';
 import { Loading } from '../../../../components/loadingComponent';
 import Toast from '../../../../components/Toast';
+import AdminLayout from '../../../../components/AdminLayout';
 const EditStockProduct = () => {
   const navigate = useNavigate();
   const userGlobal = useSelector((state) => state.accountSliceReducer);
@@ -111,7 +111,7 @@ const EditStockProduct = () => {
 
   return (
     <div>
-      <WareHouseAdminLayout>
+      <AdminLayout>
         <div>
           <div className="flex justify-between bg-white h-16 p-4 items-center">
             <div className="flex items-center sm:mx-0 mx-4">
@@ -228,7 +228,7 @@ const EditStockProduct = () => {
             </div>
           </div>
         </div>
-      </WareHouseAdminLayout>
+      </AdminLayout>
       {isConfirmationModal && (
         <ConfirmationModal
           title={'Edit Stock'}

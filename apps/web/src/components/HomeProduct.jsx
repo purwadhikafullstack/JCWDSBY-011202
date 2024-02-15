@@ -11,7 +11,7 @@ const HomeProduct = () => {
       const response = await axios.get(
         'http://localhost:8000/api/products?page=1',
       );
-      setProducts(response.data);
+      setProducts(response.data.products);
     };
     fetchData();
   }, []);

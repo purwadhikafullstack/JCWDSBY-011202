@@ -1,23 +1,52 @@
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
-
+import ConfirmationModal from './ConfirmationModal';
+import Toast from './Toast';
+import { useSelector } from 'react-redux';
 const InventoryTable = ({ warehouseInventory, onDelete }) => {
   const navigate = useNavigate();
   const [Inventory, setInventory] = useState([]);
   const [Product, setProduct] = useState([]);
+  const [isConfirmationModal, setConfirmationModal] = useState(false);
+  const [toast, setToast] = useState(null);
+  const [deleteId, setDeleteId] = useState(0);
+  const [loading, setLoading] = useState(false);
+  const userGlobal = useSelector((state) => state.accountSliceReducer);
+
+  const showToast = (status, message) => {
+    setToast({ status, message });
+    setTimeout(() => {
+      setToast(null);
+    }, 5000);
+  };
+
+  const onHandleConfirmation = (id) => {
+    setDeleteId(id);
+    setConfirmationModal(true);
+  };
 
   const onHandleDelete = async (id) => {
     try {
-      await axios.delete(`http://localhost:8000/api/warehouse/storage/${id}`);
+      setLoading(true);
+      await axios.delete(
+        `http://localhost:8000/api/warehouse/storage/${deleteId}`,
+      );
       setInventory((prevInventory) =>
         prevInventory.filter((item) => item.id !== id),
       );
       onDelete();
+      showToast('success', 'Item deleted successfully.');
     } catch (error) {
       console.log(error);
+      showToast('error', 'Failed to delete item. Please try again.');
+    } finally {
+      setLoading(false);
+      setConfirmationModal(false);
     }
   };
+
+  const onConfirmationClose = () => setConfirmationModal(false);
 
   useEffect(() => {
     setInventory(warehouseInventory);
@@ -33,7 +62,7 @@ const InventoryTable = ({ warehouseInventory, onDelete }) => {
           const response = await axios.get(
             `http://localhost:8000/api/products?id=${productIds[i]}`,
           );
-          tempProduct.push(response.data[0]);
+          tempProduct.push(response.data.products[0]);
         }
 
         setProduct(tempProduct);
@@ -87,9 +116,11 @@ const InventoryTable = ({ warehouseInventory, onDelete }) => {
                   <button
                     className="bg-orange-500 hover:bg-orange-700 text-white px-4 py-2 rounded mb-2 sm:mb-0 mr-2 sm:w-auto w-full"
                     onClick={() => {
-                      navigate(
-                        `/warehouse-admin/edit-stock/storage-000${val.id}`,
-                      );
+                      userGlobal.role === 'admin'
+                        ? navigate(
+                            `/warehouse-admin/edit-stock/storage-000${val.id}`,
+                          )
+                        : navigate(`/admin/edit-stock/storage-000${val.id}`);
                     }}
                   >
                     Edit Stock
@@ -97,7 +128,7 @@ const InventoryTable = ({ warehouseInventory, onDelete }) => {
                   <button
                     className="bg-slate-400 hover:bg-slate-700 text-white px-4 py-2 rounded sm:w-auto w-full"
                     onClick={() => {
-                      onHandleDelete(val.id);
+                      onHandleConfirmation(val.id);
                     }}
                   >
                     Delete
@@ -108,6 +139,22 @@ const InventoryTable = ({ warehouseInventory, onDelete }) => {
           })}
         </tbody>
       </table>
+      {isConfirmationModal && (
+        <ConfirmationModal
+          title={'Delete Storage'}
+          onclickClose={onConfirmationClose}
+          onClickCancel={onConfirmationClose}
+          isLoading={loading}
+          onClick={onHandleDelete}
+        />
+      )}
+      {toast && (
+        <Toast
+          status={toast.status}
+          message={toast.message}
+          onClose={() => setToast(null)}
+        />
+      )}
     </div>
   );
 };

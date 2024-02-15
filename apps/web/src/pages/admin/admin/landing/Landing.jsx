@@ -53,7 +53,7 @@ const LandingAdmin = () => {
     const fetchData = async () => {
       try {
         const response = await axios.get('http://localhost:8000/api/products');
-        setProducts(response.data);
+        setProducts(response.data.products);
       } catch (error) {
         console.log(error);
       }

@@ -1,4 +1,3 @@
-import { Op, where } from 'sequelize';
 import order_details from '../models/order_details';
 import orders from '../models/orders';
 import product_images from '../models/product_images';
@@ -9,16 +8,7 @@ import provinces from '../models/provinces';
 import fs from 'fs';
 import path from 'path';
 import sales_journal from '../models/sales_journals';
-function formatDate(date) {
-  const year = date.getFullYear();
-  const month = String(date.getMonth() + 1).padStart(2, '0');
-  const day = String(date.getDate()).padStart(2, '0');
-  const hours = String(date.getHours()).padStart(2, '0');
-  const minutes = String(date.getMinutes()).padStart(2, '0');
-  const seconds = String(date.getSeconds()).padStart(2, '0');
 
-  return `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
-}
 export const getUserOrder = async (req, res, next) => {
   try {
     const userOrder = await orders.findAll({
@@ -63,8 +53,7 @@ export const getUserOrder = async (req, res, next) => {
       ],
       raw: true,
     });
-    // console.log("1", userOrder);
-    // console.log("2", userOrderItem);
+
     const result = [];
     for (let i = 0; i < userOrder.length; i++) {
       result.push(userOrder[i]);
@@ -136,13 +125,11 @@ export const getOrderDetail = async (req, res, next) => {
     });
     return res.status(200).send(userOrder);
   } catch (error) {
-    console.log(error);
     return res.status(500).send(error);
   }
 };
 export const uploadPaymentProof = async (req, res, next) => {
   try {
-    console.log('masuk 1', req.file);
     const uploadProof = await orders.findOne({
       where: {
         id: req.query.order,
@@ -151,7 +138,6 @@ export const uploadPaymentProof = async (req, res, next) => {
       attributes: ['payment_proof'],
       raw: true,
     });
-    console.log('masuk 2', uploadProof);
 
     if (uploadProof.payment_proof) {
       const filePath = path.join(
@@ -181,15 +167,15 @@ export const uploadPaymentProof = async (req, res, next) => {
 export const orderConfirmation = async (req, res, next) => {
   try {
     function formatDate(date) {
-        const year = date.getFullYear();
-        const month = String(date.getMonth() + 1).padStart(2, '0');
-        const day = String(date.getDate()).padStart(2, '0');
-        const hours = String(date.getHours()).padStart(2, '0');
-        const minutes = String(date.getMinutes()).padStart(2, '0');
-        const seconds = String(date.getSeconds()).padStart(2, '0');
-      
-        return `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
-      }
+      const year = date.getFullYear();
+      const month = String(date.getMonth() + 1).padStart(2, '0');
+      const day = String(date.getDate()).padStart(2, '0');
+      const hours = String(date.getHours()).padStart(2, '0');
+      const minutes = String(date.getMinutes()).padStart(2, '0');
+      const seconds = String(date.getSeconds()).padStart(2, '0');
+
+      return `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
+    }
     const isExist = await orders.findOne({
       where: {
         id: req.body.order,
@@ -228,7 +214,7 @@ export const orderConfirmation = async (req, res, next) => {
         raw: true,
       });
 
-      await sales_journals.create({
+      await sales_journal.create({
         date: formatDate(new Date()),
         product_id: productsOrder[i].product_id,
         warehouse_id: isExist.warehouse_id,
@@ -238,7 +224,6 @@ export const orderConfirmation = async (req, res, next) => {
     }
     return res.status(200).send(result);
   } catch (error) {
-    console.log(error);
     return res.status(500).send(error);
   }
 };

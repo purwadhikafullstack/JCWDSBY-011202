@@ -1,5 +1,5 @@
-import axios from 'axios';
 import { useEffect, useState } from 'react';
+import API_CALL from '../helpers/API';
 
 const FormProductAdd = (props) => {
   const [categories, setCategories] = useState([]);
@@ -7,9 +7,7 @@ const FormProductAdd = (props) => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get(
-          'http://localhost:8000/api/categories',
-        );
+        const response = await API_CALL.get('/categories');
         setCategories(response.data);
       } catch (error) {
         console.log(error);

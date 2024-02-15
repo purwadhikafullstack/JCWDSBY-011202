@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { FiEdit2 } from 'react-icons/fi';
-import axios from 'axios';
+import API_CALL from '../helpers/API';
 
 const EditImage = ({ products }) => {
   const [image, setImage] = useState({});
@@ -41,13 +41,10 @@ const EditImage = ({ products }) => {
       let response;
 
       if (image.id === undefined) {
-        response = await axios.post(
-          'http://localhost:8000/api/products/add-image',
-          formData,
-        );
+        response = await API_CALL.post('/products/add-image', formData);
       } else {
-        response = await axios.patch(
-          `http://localhost:8000/api/products/edit-image/${image.id}`,
+        response = await API_CALL.patch(
+          `/products/edit-image/${image.id}`,
           formData,
         );
       }

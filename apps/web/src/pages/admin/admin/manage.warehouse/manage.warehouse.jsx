@@ -1,6 +1,5 @@
 import AdminLayout from '../../../../components/AdminLayout';
 import { useEffect, useState } from 'react';
-import axios from 'axios';
 import { useLocation, useNavigate } from 'react-router-dom';
 import ListWarehouse from '../../../../components/ListWarehouse';
 import { Loading } from '../../../../components/loadingComponent';
@@ -8,6 +7,7 @@ import Toast from '../../../../components/Toast';
 import ConfirmationModal from '../../../../components/ConfirmationModal';
 import Pagination from '../../../../components/Temporary/Pagination';
 import SearchBar from '../../../../components/SearchBar';
+import API_CALL from '../../../../helpers/API';
 
 const ManageWarehouse = () => {
   const location = useLocation();
@@ -54,8 +54,8 @@ const ManageWarehouse = () => {
     const token = localStorage.getItem('token');
     setDeleteLoading(true);
     try {
-      const response = await axios.delete(
-        `http://localhost:8000/api/warehouses/${warehouseIdToDelete}`,
+      const response = await API_CALL.delete(
+        `/warehouses/${warehouseIdToDelete}`,
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -64,8 +64,8 @@ const ManageWarehouse = () => {
       );
       if (response.data.success === true) {
         showToast('success', 'Warehouse deleted successfully');
-        const res = await axios.get(
-          `http://localhost:8000/api/warehouses?page=${page}&province_id=${selectedProvinceId}&name=${searchQuery}${location.search}`,
+        const res = await API_CALL.get(
+          `/warehouses?page=${page}&province_id=${selectedProvinceId}&name=${searchQuery}${location.search}`,
         );
         setWarehouses(res.data.data);
         setShowConfirmationModal(false);
@@ -82,8 +82,8 @@ const ManageWarehouse = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const res = await axios.get(
-          `http://localhost:8000/api/warehouses?page=${page}&province_id=${selectedProvinceId}&name=${searchQuery}${location.search}`,
+        const res = await API_CALL.get(
+          `/warehouses?page=${page}&province_id=${selectedProvinceId}&name=${searchQuery}${location.search}`,
         );
         setWarehouses(res.data.data);
         setTotalPages(res.data.totalPages);
@@ -99,9 +99,7 @@ const ManageWarehouse = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const res = await axios.get(
-          'http://localhost:8000/api/provincesandcities/provinces',
-        );
+        const res = await API_CALL.get('/provincesandcities/provinces');
         setProvinces(res.data.data);
       } catch (error) {
         console.error(error);

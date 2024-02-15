@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import axios from 'axios';
 import AdminLayout from '../../../../components/AdminLayout';
 import AccountsTable from '../../../../components/AccountsTable';
 import { useNavigate, useSubmit } from 'react-router-dom';
@@ -8,6 +7,7 @@ import ConfirmationModal from '../../../../components/ConfirmationModal';
 import Toast from '../../../../components/Toast';
 import SearchBar from '../../../../components/SearchBar';
 import Pagination from '../../../../components/Temporary/Pagination';
+import API_CALL from '../../../../helpers/API';
 function ManageAccount() {
   const [showConfirmationModal, setShowConfirmationModal] = useState(false);
   const [accountIdToDelete, setAccountIdToDelete] = useState(null);
@@ -18,7 +18,6 @@ function ManageAccount() {
   const [page, setPage] = useState(1);
   const [currentPage, setCurrentPage] = useState();
   const [endPoint, setEndPoint] = useState('');
-  const [endPointAll, setEndPointAll] = useState(``);
   const [selectedRole, setSelectedRole] = useState('');
   const [selectedAccount, setSelectedAccount] = useState('');
   const [selectedWarehouse, setSelectedWarehouse] = useState(0);
@@ -45,8 +44,8 @@ function ManageAccount() {
     setDeleteLoading(true);
     try {
       const token = localStorage.getItem('token');
-      const response = await axios.delete(
-        `http://localhost:8000/api/accounts/delete-account/${accountIdToDelete}`,
+      const response = await API_CALL.delete(
+        `/accounts/delete-account/${accountIdToDelete}`,
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -55,10 +54,8 @@ function ManageAccount() {
       );
       if (response.data.success === true) {
         showToast('success', 'Account deleted successfully');
-        const response = await axios.get(
-          `http://localhost:8000/api/accounts${
-            endPoint || `?page=1&role=admin&role=superadmin`
-          }`,
+        const response = await API_CALL.get(
+          `/accounts${endPoint || `?page=1&role=admin&role=superadmin`}`,
         );
         setCurrentPage(response.data.accounts);
         showToast('success', 'delete account successfully');
@@ -95,10 +92,8 @@ function ManageAccount() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get(
-          `http://localhost:8000/api/accounts${
-            endPoint || `?page=1&role=admin&role=superadmin`
-          }`,
+        const response = await API_CALL.get(
+          `/accounts${endPoint || `?page=1&role=admin&role=superadmin`}`,
         );
         setTotalPages(response.data.totalPages);
         setCurrentPage(response.data.accounts);
@@ -115,9 +110,7 @@ function ManageAccount() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get(
-          'http://localhost:8000/api/warehouses',
-        );
+        const response = await API_CALL.get('/warehouses');
         setWarehouses(response.data.data);
       } catch (error) {
         console.error('Error fetching data:', error);
@@ -165,6 +158,18 @@ function ManageAccount() {
                     <option value="">Role</option>
                     <option value="admin">Admin</option>
                     <option value="superadmin">Superadmin</option>
+                  </select>
+                  <select
+                    onChange={(e) => setSelectedWarehouse(e.target.value)}
+                    className="w-5/12 h-8 mx-1 bg-gray-50 border text-xs border-gray-300 text-gray-900  rounded-lg focus:ring-blue-500 focus:border-blue-500 block  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 sm:my-4"
+                  >
+                    <option value="">Warehouse</option>
+                    {warehouses &&
+                      warehouses.map((item) => (
+                        <option key={item.id} value={item.id}>
+                          {item.name}
+                        </option>
+                      ))}
                   </select>
                 </div>
               </div>

@@ -1,14 +1,12 @@
 import WareHouseAdminLayout from '../../../../components/WareHouseAdminLayout';
 import { useState, useEffect } from 'react';
-import axios from 'axios';
+import API_CALL from '../../../../helpers/API';
 const ViewCategory = () => {
   const [categories, setCategories] = useState([]);
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get(
-          'http://localhost:8000/api/categories',
-        );
+        const response = await API_CALL.get('/categories');
         setCategories(response.data);
       } catch (error) {
         console.error('Error fetching categories:', error);

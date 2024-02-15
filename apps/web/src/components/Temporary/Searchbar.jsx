@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { CiSearch } from 'react-icons/ci';
-import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
+import API_CALL from '../../helpers/API';
 
 function SearchBar() {
   const navigate = useNavigate();
@@ -12,7 +12,7 @@ function SearchBar() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get(`http://localhost:8000/api/products`);
+        const response = await API_CALL.get(`/products`);
         setProducts(response.data);
       } catch (error) {
         console.error('Error fetching data:', error);

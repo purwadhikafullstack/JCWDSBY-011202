@@ -1,6 +1,6 @@
 import BarChart from './BarChart';
 import { useState, useEffect } from 'react';
-import axios from 'axios';
+import API_CALL from '../../helpers/API';
 
 const WarehouseCategoryChart = ({ user }) => {
   const [isData, setData] = useState([]);
@@ -35,10 +35,8 @@ const WarehouseCategoryChart = ({ user }) => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get(
-          `http://localhost:8000/api/journal/category-sold?warehouse_id=${Number(
-            user.warehouse_id,
-          )}`,
+        const response = await API_CALL.get(
+          `/journal/category-sold?warehouse_id=${Number(user.warehouse_id)}`,
         );
         setData(response.data);
       } catch (error) {

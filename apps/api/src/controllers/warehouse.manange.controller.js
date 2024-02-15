@@ -72,7 +72,6 @@ export const deleteWarehouse = async (req, res, next) => {
       .status(200)
       .send({ success: true, message: 'Warehouse deleted successfully' });
   } catch (error) {
-    console.error(error);
     return res
       .status(500)
       .send({ success: false, message: 'Error deleting warehouse data' });
@@ -138,7 +137,6 @@ export const updateWarehouse = async (req, res, next) => {
       });
     }
   } catch (error) {
-    console.error(error);
     return res
       .status(500)
       .send({ success: false, message: 'Error updating warehouse data' });

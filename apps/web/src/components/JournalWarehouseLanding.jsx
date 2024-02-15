@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
-import axios from 'axios';
 import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
+import API_CALL from '../helpers/API';
 
 const JournalWarehouseAdmin = () => {
   const [journal, setJournal] = useState([]);
@@ -10,8 +10,8 @@ const JournalWarehouseAdmin = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get(
-          `http://localhost:8000/api/journal?warehouse_id=${userGlobal.warehouse_id}`,
+        const response = await API_CALL.get(
+          `/journal?warehouse_id=${userGlobal.warehouse_id}`,
         );
         setJournal(response.data.data);
       } catch (error) {

@@ -4,10 +4,10 @@ import Pagination from './Temporary/Pagination';
 import { IoMdArrowBack, IoMdClose } from 'react-icons/io';
 import InventoryTable from './InventoryTable';
 import { useEffect, useState } from 'react';
-import axios from 'axios';
 import { useSelector } from 'react-redux';
 import ButtonWithLoading from './ButtonWithLoading';
 import { Loading } from './loadingComponent';
+import API_CALL from '../helpers/API';
 
 const WarehouseInventory = () => {
   const [warehouseInventory, setWarehouseInventory] = useState([]);
@@ -26,7 +26,7 @@ const WarehouseInventory = () => {
 
   const fetchData = async () => {
     try {
-      const response = await axios.get(getApiUrl());
+      const response = await API_CALL.get(getApiUrl());
       setWarehouseInventory(response.data.data || []);
       setTotalPages(response.data.totalPages || 0);
     } catch (error) {
@@ -53,7 +53,7 @@ const WarehouseInventory = () => {
     const selectedWarehouse =
       sessionStorage.getItem('warehouse_selected') || userGlobal.warehouse_id;
     try {
-      await axios.post('http://localhost:8000/api/warehouse/storage', {
+      await API_CALL.post('/warehouse/storage', {
         warehouse_id: Number(selectedWarehouse),
         product_id: Number(selectedProductId),
         stock: stock,
@@ -78,7 +78,7 @@ const WarehouseInventory = () => {
   useEffect(() => {
     const fetchProducts = async () => {
       try {
-        const response = await axios.get(`http://localhost:8000/api/products`);
+        const response = await API_CALL.get(`/products`);
         setProduct(response.data.products || []);
       } catch (error) {
         console.error('Error fetching products:', error);
@@ -94,12 +94,10 @@ const WarehouseInventory = () => {
       try {
         let response;
         if (userGlobal.role === 'superadmin') {
-          response = await axios.get(
-            `http://localhost:8000/api/warehouse/storage${location.search}`,
-          );
+          response = await API_CALL.get(`/warehouse/storage${location.search}`);
         } else if (userGlobal.role === 'admin') {
-          response = await axios.get(
-            `http://localhost:8000/api/warehouse/storage?warehouse=${userGlobal.warehouse_id}`,
+          response = await API_CALL.get(
+            `/warehouse/storage?warehouse=${userGlobal.warehouse_id}`,
           );
         }
         setAvalaibleProduct(response?.data?.data || []);

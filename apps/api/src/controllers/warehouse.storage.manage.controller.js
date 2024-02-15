@@ -79,7 +79,6 @@ export const editStock = async (req, res, next) => {
       nowStock: newStock,
     });
   } catch (error) {
-    console.error(error);
     return res.status(500).send({
       success: false,
       message: 'Error updating data.',

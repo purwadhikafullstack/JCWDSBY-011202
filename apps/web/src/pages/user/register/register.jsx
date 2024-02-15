@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import Register from '../../../assets/register.jpg';
 import { Link, useNavigate } from 'react-router-dom';
-import axios from 'axios';
 import ButtonWithLoading from '../../../components/ButtonWithLoading';
 import { FaCheck } from 'react-icons/fa';
+import API_CALL from '../../../helpers/API';
 
 const RegisterForm = () => {
   const [fullname, setFullName] = useState('');
@@ -17,14 +17,11 @@ const RegisterForm = () => {
     const fetchData = async () => {
       try {
         const token = localStorage.getItem('token');
-        const response = await axios.get(
-          'http://localhost:8000/api/accounts/authcheck',
-          {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
+        const response = await API_CALL.get('/accounts/authcheck', {
+          headers: {
+            Authorization: `Bearer ${token}`,
           },
-        );
+        });
         setCurrentRole(response.data);
       } catch (error) {
         console.log(error);
@@ -45,16 +42,15 @@ const RegisterForm = () => {
     try {
       setLoading(true);
       setError(null);
-      const response = await axios.post(
-        'http://localhost:8000/api/accounts/register',
-        {
-          fullname,
-          email,
-        },
-      );
+      const response = await API_CALL.post('/accounts/register', {
+        fullname,
+        email,
+      });
 
       if (response.data.success) {
         setShowAlert(true);
+        setFullName('');
+        setEmail('');
       } else {
         setError(response.data.message || 'Registration failed.');
       }

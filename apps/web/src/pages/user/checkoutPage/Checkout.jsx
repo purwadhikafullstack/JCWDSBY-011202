@@ -4,13 +4,13 @@ import CheckoutPayment from '../../../components/checkout-listPayment';
 import { useLocation, useNavigate } from 'react-router-dom';
 import TemporaryNavbar from '../../../components/Temporary/Navbar';
 import TemporaryFooter from '../../../components/Temporary/Footer';
-import axios from 'axios';
 import { Loading, MiniLoading } from '../../../components/loadingComponent';
 import {
   IModalOpt,
   IModalCourier,
   IModal,
 } from '../../../components/modalRama';
+import API_CALL from '../../../helpers/API';
 
 const CheckoutPage = () => {
   const navigate = useNavigate();
@@ -49,12 +49,9 @@ const CheckoutPage = () => {
     try {
       const token = localStorage.getItem('token');
       const cartId = localStorage.getItem('cartId');
-      const result = await axios.get(
-        `http://localhost:8000/api/checkout/get-cart/${cartId}`,
-        {
-          headers: { Authorization: `Bearer ${token}` },
-        },
-      );
+      const result = await API_CALL.get(`/checkout/get-cart/${cartId}`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
       setCoPrice(result.data.checkoutPrice);
       setCoWeight(result.data.checkoutWeight);
       setCartData(result.data.result);
@@ -66,12 +63,9 @@ const CheckoutPage = () => {
   const getUserData = async () => {
     try {
       const token = localStorage.getItem('token');
-      const result = await axios.get(
-        `http://localhost:8000/api/checkout/userData`,
-        {
-          headers: { Authorization: `Bearer ${token}` },
-        },
-      );
+      const result = await API_CALL.get(`/checkout/userData`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
       setUserData(result.data.final);
     } catch (error) {
       console.log(error);

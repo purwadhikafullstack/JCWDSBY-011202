@@ -1,6 +1,6 @@
 import { Op } from 'sequelize';
 import stocks_journals from '../models/stocks_journals';
-
+import products from '../models/products';
 export const getStockTraffic = async (req, res, next) => {
   try {
     const filter = {};
@@ -57,7 +57,62 @@ export const getStockTraffic = async (req, res, next) => {
 
     res.send(monthlyStockSum);
   } catch (error) {
-    console.log(error);
-    res.status(500).send({ error: 'Internal Server Error' });
+    res.status(500).send({ succes: false, message: 'Internal Server Error' });
+  }
+};
+
+export const getStockJournals = async (req, res, next) => {
+  try {
+    const { startdate, enddate, product_id, warehouse_id, page } = req.query;
+    const pageSize = 12;
+
+    const filter = {};
+    if (startdate) {
+      filter.date = { [Op.gte]: startdate };
+    }
+    if (enddate) {
+      if (!filter.date) {
+        filter.date = {};
+      }
+      filter.date[Op.lte] = enddate;
+    }
+    if (product_id) {
+      filter.product_id = product_id;
+    }
+    if (warehouse_id) {
+      filter.warehouse_id = warehouse_id;
+    }
+
+    const offset = (parseInt(page) - 1) * pageSize;
+    const limit = pageSize;
+
+    const { count, rows: stockJournals } =
+      await stocks_journals.findAndCountAll({
+        where: filter,
+        offset,
+        limit,
+        include: [
+          {
+            model: products,
+            attributes: ['name'],
+            required: true,
+          },
+        ],
+        order: [['date', 'DESC']],
+        raw: true,
+      });
+
+    const modifiedStockJournals = stockJournals.map((journal) => {
+      return {
+        ...journal,
+        product_name: journal['product.name'],
+      };
+    });
+
+    const totalPages = Math.ceil(count / limit);
+
+    res.status(200).send({ stockJournals: modifiedStockJournals, totalPages });
+  } catch (error) {
+    res.status(500).send({ success: false, message: 'Internal Server Error' });
   }
 };

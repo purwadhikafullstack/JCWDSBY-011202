@@ -2,13 +2,13 @@ import React, { useState, useEffect } from 'react';
 import { MdNavigateNext } from 'react-icons/md';
 import { CiHeart, CiShare1 } from 'react-icons/ci';
 import { Link, useNavigate, useParams } from 'react-router-dom';
-import axios from 'axios';
 import TemporaryNavbar from '../../../components/Temporary/Navbar';
 import TemporaryFooter from '../../../components/Temporary/Footer';
 import { formatPriceToIDR } from '../../../utils';
 import DiscoverMore from '../../../components/DiscoverMore';
 import ButtonWithLoading from '../../../components/ButtonWithLoading';
 import { Loading } from '../../../components/loadingComponent';
+import API_CALL from '../../../helpers/API';
 
 const ProductDetail = () => {
   const [loading, setLoading] = useState(false);
@@ -23,14 +23,11 @@ const ProductDetail = () => {
     const fetchData = async () => {
       try {
         const token = localStorage.getItem('token');
-        const response = await axios.get(
-          'http://localhost:8000/api/accounts/authcheck',
-          {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
+        const response = await API_CALL.get('/accounts/authcheck', {
+          headers: {
+            Authorization: `Bearer ${token}`,
           },
-        );
+        });
         setCurrentRole(response.data);
       } catch (error) {
         console.log(error);
@@ -48,12 +45,9 @@ const ProductDetail = () => {
       try {
         console.log('jalan');
         const token = localStorage.getItem('token');
-        const result = await axios.get(
-          'http://localhost:8000/api/cart/navbar',
-          {
-            headers: { Authorization: `Bearer ${token}` },
-          },
-        );
+        const result = await API_CALL.get('/cart/navbar', {
+          headers: { Authorization: `Bearer ${token}` },
+        });
         return setCartCount(result.data.result);
       } catch (error) {
         console.log(error);
@@ -66,9 +60,7 @@ const ProductDetail = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get(
-          `http://localhost:8000/api/products?name=${id}`,
-        );
+        const response = await API_CALL.get(`/products?name=${id}`);
         if (response.data.length === 0) {
           navigate('/not-found');
         } else {
@@ -97,7 +89,7 @@ const ProductDetail = () => {
     setLoading(true);
     try {
       const token = localStorage.getItem('token');
-      const send = await axios.post(
+      const send = await API_CALL.post(
         'http://localhost:8000/api/cart/add-to-cart',
         {
           product_id: products[0].id,

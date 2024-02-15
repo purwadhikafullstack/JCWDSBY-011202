@@ -1,6 +1,6 @@
+import API_CALL from '../../helpers/API';
 import BarChart from './BarChart';
 import { useState, useEffect } from 'react';
-import axios from 'axios';
 
 const AdminLineStockChart = ({ warehouses, products }) => {
   const [isData2, setData2] = useState([]);
@@ -37,8 +37,8 @@ const AdminLineStockChart = ({ warehouses, products }) => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get(
-          `http://localhost:8000/api/journal/stock-report?warehouse_id=${selectedWarehouse}&product_id=${selectedProduct}`,
+        const response = await API_CALL.get(
+          `/journal/stock-report?warehouse_id=${selectedWarehouse}&product_id=${selectedProduct}`,
         );
         setData2(response.data.reverse());
       } catch (error) {

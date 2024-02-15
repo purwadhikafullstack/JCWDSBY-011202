@@ -2,10 +2,10 @@ import { useNavigate } from 'react-router-dom';
 import WareHouseAdminLayout from './WareHouseAdminLayout';
 import { IoMdArrowBack } from 'react-icons/io';
 import { useEffect, useState } from 'react';
-import axios from 'axios';
 import InputMutation from './InputAddMutation';
 import ConfirmationModal from './ConfirmationModal';
 import Toast from './Toast';
+import API_CALL from '../helpers/API';
 
 const AddMutation = () => {
   const navigate = useNavigate();
@@ -34,8 +34,8 @@ const AddMutation = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get(
-          `http://localhost:8000/api/warehouse/storage?warehouse=${selectedWarehouseId}&product_id=${selectedProductId}`,
+        const response = await API_CALL.get(
+          `/warehouse/storage?warehouse=${selectedWarehouseId}&product_id=${selectedProductId}`,
         );
         console.log(response.data.data);
         const stock = response.data.data[0]?.stock || 0;
@@ -70,8 +70,8 @@ const AddMutation = () => {
     try {
       setLoading(true);
 
-      const response = await axios.post(
-        'http://localhost:8000/api/warehouse/mutation',
+      const response = await API_CALL.post(
+        '/warehouse/mutation',
         {
           product_id: selectedProductId,
           source_warehouse_id: selectedWarehouseId,

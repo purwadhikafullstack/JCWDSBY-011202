@@ -1,15 +1,13 @@
 import { useState, useEffect } from 'react';
 import AdminLayout from '../../../../components/AdminLayout';
 import WarehouseTable from '../../../../components/WarehouseTable';
-import axios from 'axios';
+import API_CALL from '../../../../helpers/API';
 const ManageInventory = () => {
   const [temporaryWareHouse, setTemporaryWareHouse] = useState([]);
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get(
-          'http://localhost:8000/api/warehouses',
-        );
+        const response = await API_CALL.get('/warehouses');
         setTemporaryWareHouse(response.data.data);
       } catch (error) {
         console.error('Error fetching data:', error);

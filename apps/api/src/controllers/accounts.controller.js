@@ -75,7 +75,6 @@ export const GetAccounts = async (req, res, next) => {
       totalPages: totalPages,
     });
   } catch (error) {
-    console.error(error);
     return res.status(500).send({
       success: false,
       message: 'MANAGE ACCOUNT FAILED',
@@ -190,7 +189,6 @@ export const CreateAccount = async (req, res, next) => {
       result,
     });
   } catch (error) {
-    console.error(error);
     return res.status(500).send(error);
   }
 };

@@ -22,7 +22,6 @@ export const cancelMutation = async (req, res, next) => {
       where: { id: mutationId },
       raw: true,
     });
-    console.log(req.userData.warehouse_id, existingMutation.warehouse_id);
     if (!req.userData.warehouse_id == existingMutation.warehouse_id) {
       return res.status(404).send({
         success: false,
@@ -184,7 +183,6 @@ export const cancelMutation = async (req, res, next) => {
       message: 'Mutation successfully cancelled.',
     });
   } catch (error) {
-    console.error(error);
     return res.status(500).send({
       success: false,
       message: 'Internal Server Error',

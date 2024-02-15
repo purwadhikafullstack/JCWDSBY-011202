@@ -13,15 +13,12 @@ module.exports = {
           : defaultDir;
 
         if (fs.existsSync(pathDir)) {
-          console.log(`Directory ${pathDir} already exists`);
           cb(null, pathDir);
         } else {
           fs.mkdir(pathDir, { recursive: true }, (err) => {
             if (err) {
-              console.error('Error creating directory:', err);
               cb(err, pathDir);
             } else {
-              console.log(`Directory ${pathDir} created`);
               cb(null, pathDir);
             }
           });
@@ -33,7 +30,6 @@ module.exports = {
     });
 
     const fileFilter = (req, file, cb) => {
-      console.log('CHECK FILE FROM REQUEST CLIENT', file);
       const allowedExtensions = ['png', 'jpg', 'jpeg', 'gif'];
       const isAllowed = allowedExtensions.some((ext) =>
         file.originalname.toLowerCase().includes(ext),

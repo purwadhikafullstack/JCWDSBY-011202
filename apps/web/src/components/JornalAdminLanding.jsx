@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
-import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
+import API_CALL from '../helpers/API';
 
 const JournalAdmin = () => {
   const [journal, setJournal] = useState([]);
@@ -8,7 +8,7 @@ const JournalAdmin = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get('http://localhost:8000/api/journal');
+        const response = await API_CALL.get('/journal');
         setJournal(response.data.data.reverse());
       } catch (error) {
         console.error(error);
@@ -25,7 +25,7 @@ const JournalAdmin = () => {
         <button
           className="text-black py-2 px-4 rounded-md transition-all duration-300 hover:text-orange-500 "
           onClick={() => {
-            navigate();
+            navigate('/view-all-journal');
           }}
         >
           View All

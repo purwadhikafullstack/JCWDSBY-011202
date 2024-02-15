@@ -2,12 +2,11 @@ import AdminLayout from './AdminLayout';
 import { IoMdArrowBack } from 'react-icons/io';
 import CustomFileInput from './CustomFileInput';
 import { useEffect, useState } from 'react';
-import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import FormProductAdd from './FormProductAdd';
 import ConfirmationModal from './ConfirmationModal';
 import Toast from './Toast';
-import { Loading } from './loadingComponent';
+import API_CALL from '../helpers/API';
 const AddProduct = () => {
   const [selectedImagePreviews, setSelectedImagePreviews] = useState([]);
   const [imageToUpload, setImageToUpload] = useState([]);
@@ -43,10 +42,7 @@ const AddProduct = () => {
       imageToUpload.forEach((image, index) => {
         formData.append(`filesUpload`, image);
       });
-      const response = await axios.post(
-        'http://localhost:8000/api/products',
-        formData,
-      );
+      const response = await API_CALL.post('/products', formData);
       setShowConfirmationModal(false);
       showToast('success', 'Success Add Product');
       setButtonLoading(false);

@@ -3,13 +3,13 @@ import FilterPrice from '../../../components/FilterPrice';
 import ProductCategorySearch from '../../../components/ProductCategoriesSearch';
 import ProductCatalogCard from '../../../components/ProductCatalogCard';
 import { formatPriceToIDR } from '../../../utils';
-import axios from 'axios';
 import { useState, useEffect } from 'react';
 import { useLocation, useNavigate, useSearchParams } from 'react-router-dom';
 import { FaFilter } from 'react-icons/fa';
 import Pagination from '../../../components/Temporary/Pagination';
 import { IoMdClose } from 'react-icons/io';
 import { Loading } from '../../../components/loadingComponent';
+import API_CALL from '../../../helpers/API';
 
 const ProductSearch = () => {
   const [isFilterOpen, setFilterOpen] = useState(false);
@@ -31,14 +31,11 @@ const ProductSearch = () => {
     const fetchData = async () => {
       try {
         const token = localStorage.getItem('token');
-        const response = await axios.get(
-          'http://localhost:8000/api/accounts/authcheck',
-          {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
+        const response = await API_CALL.get('/accounts/authcheck', {
+          headers: {
+            Authorization: `Bearer ${token}`,
           },
-        );
+        });
         setCurrentRole(response.data);
       } catch (error) {
         console.log(error);
@@ -75,9 +72,7 @@ const ProductSearch = () => {
     const fetchData = async () => {
       try {
         setLoading(true);
-        const response = await axios.get(
-          `http://localhost:8000/api/products${location.search}`,
-        );
+        const response = await API_CALL.get(`/products${location.search}`);
         setCurrentPage(response.data.products);
         setTotalPage(response.data.totalPages);
         setLoading(false);

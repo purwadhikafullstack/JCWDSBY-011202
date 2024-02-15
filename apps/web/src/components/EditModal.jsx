@@ -1,9 +1,9 @@
 import { useState } from 'react';
 import { IoClose } from 'react-icons/io5';
-import axios from 'axios';
 import { useEffect } from 'react';
 import ButtonWithLoading from './ButtonWithLoading';
 import { useParams } from 'react-router-dom';
+import API_CALL from '../helpers/API';
 const EditModal = ({ closeModal, onEdit, initialData }) => {
   const { id } = useParams();
   const [loading, setLoading] = useState(false);
@@ -42,14 +42,9 @@ const EditModal = ({ closeModal, onEdit, initialData }) => {
       console.log('MASUK');
       console.log(formDataToSend);
 
-      await axios.patch(
-        `http://localhost:8000/api/products/${id}`,
-        formDataToSend,
-      );
+      await API_CALL.patch(`/products/${id}`, formDataToSend);
 
-      const updatedProduct = await axios.get(
-        `http://localhost:8000/api/products?id=${id}`,
-      );
+      const updatedProduct = await API_CALL.get(`/products?id=${id}`);
 
       if (onEdit) {
         onEdit(updatedProduct.data);
@@ -76,15 +71,13 @@ const EditModal = ({ closeModal, onEdit, initialData }) => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get(
-          'http://localhost:8000/api/categories',
-        )
+        const response = await API_CALL.get('/categories');
         console.log(response.data);
         setCategories(response.data);
       } catch (error) {
         console.log(error);
       }
-    }
+    };
 
     fetchData();
   }, []);

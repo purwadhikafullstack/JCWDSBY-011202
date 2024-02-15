@@ -13,9 +13,6 @@ export const updateStatusArrived = async (req, res, next) => {
       raw: true,
     });
     if (!isExists) {
-      console.error(
-        'Mutation not found or not eligible for updating to arrived',
-      );
       return res.status(500).send({
         success: false,
         message:
@@ -102,7 +99,6 @@ export const updateStatusArrived = async (req, res, next) => {
       message: 'Status updated to arrived',
     });
   } catch (error) {
-    console.error(error);
     return res.status(500).send({
       success: false,
       message: 'Internal Server Error',

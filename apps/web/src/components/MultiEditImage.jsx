@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { FiEdit2 } from 'react-icons/fi';
 import { CiTrash } from 'react-icons/ci';
-import axios from 'axios';
+import API_CALL from '../helpers/API';
 
 const MultiEditImage = ({ products }) => {
   const [images, setImages] = useState([]);
@@ -43,8 +43,8 @@ const MultiEditImage = ({ products }) => {
       const formData = new FormData();
       formData.append('fileUpload', file);
 
-      const response = await axios.patch(
-        `http://localhost:8000/api/products/edit-image/${images[index + 1].id}`,
+      const response = await API_CALL.patch(
+        `/products/edit-image/${images[index + 1].id}`,
         formData,
       );
       if (response.status === 200) {
@@ -85,8 +85,8 @@ const MultiEditImage = ({ products }) => {
       const formData = new FormData();
       formData.append('filesUpload', file);
 
-      const response = await axios.post(
-        `http://localhost:8000/api/products/add-image/${products[0].id}`,
+      const response = await API_CALL.post(
+        `/products/add-image/${products[0].id}`,
         formData,
       );
       if (response.status === 201) {
@@ -104,9 +104,7 @@ const MultiEditImage = ({ products }) => {
 
   const handleDeleteImage = async (id) => {
     try {
-      const response = await axios.delete(
-        `http://localhost:8000/api/products/delete-image/${id}`,
-      );
+      const response = await API_CALL.delete(`/products/delete-image/${id}`);
       if (response.status === 200) {
         setImages((prevImages) =>
           prevImages.filter((image) => image.id !== id),

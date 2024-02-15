@@ -50,7 +50,6 @@ export const getMonthlySales = async (req, res, next) => {
 
     res.send(response);
   } catch (error) {
-    console.log(error);
     res.status(500).send({ error: 'Internal Server Error' });
   }
 };
@@ -89,7 +88,6 @@ export const product_sold = async (req, res, next) => {
     const groupedData = {};
     for (const item of monthlyProductSales) {
       const { product_id, quantity } = item;
-      // Sum up quantities for the same product_id
       groupedData[product_id] = (groupedData[product_id] || 0) + quantity;
     }
 
@@ -106,25 +104,20 @@ export const product_sold = async (req, res, next) => {
       });
     }
 
-    // Sort result by quantity sold in descending order
     result.sort((a, b) => b.product_sold - a.product_sold);
 
-    // Collect data for 'others' if there are more than 4 products
     if (result.length > 4) {
       for (let i = 4; i < result.length; i++) {
         othersTotal += result[i].product_sold;
       }
-      result.splice(4); // Remove elements starting from index 4
+      result.splice(4);
     }
-
-    // Push 'others' data if applicable
     if (othersTotal > 0) {
       result.push({ product_name: 'others', product_sold: othersTotal });
     }
 
     res.send(result);
   } catch (error) {
-    console.log(error);
     res.status(500).send({ error: 'Internal Server Error' });
   }
 };
@@ -158,18 +151,17 @@ export const categoriesSold = async (req, res, next) => {
           include: [
             {
               model: categories,
-              attributes: ['category'], // Change 'name' to 'category'
+              attributes: ['category'],
             },
           ],
         },
       ],
     });
-
     const groupedData = {};
     for (const item of monthlyCategorySales) {
       const { product } = item;
       const { category } = product;
-      const { category: categoryName } = category; // Access 'category' property
+      const { category: categoryName } = category;
       groupedData[categoryName] =
         (groupedData[categoryName] || 0) + item.quantity;
     }
@@ -198,14 +190,6 @@ export const categoriesSold = async (req, res, next) => {
 
     res.send(result);
   } catch (error) {
-    console.log(error);
     res.status(500).send({ error: 'Internal Server Error' });
   }
 };
-
-// include: [
-//   {
-//     model: categories,
-//     attributes: ['category'],
-//   },
-// ],

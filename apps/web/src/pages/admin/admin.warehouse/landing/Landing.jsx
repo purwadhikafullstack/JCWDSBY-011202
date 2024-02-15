@@ -1,9 +1,9 @@
 import { useState, useEffect } from 'react';
 import { Loading } from '../../../../components/loadingComponent';
 import ChartAdmin from '../../../../components/ChartWarehouseAdmin';
-import axios from 'axios';
 import LandingWareHouseAdminLayout from './Layout';
 import { useSelector } from 'react-redux';
+import API_CALL from '../../../../helpers/API';
 const LandingWarehouse = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [warehouse, setWarehouse] = useState([]);
@@ -23,9 +23,7 @@ const LandingWarehouse = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get(
-          'http://localhost:8000/api/warehouses',
-        );
+        const response = await API_CALL.get('/warehouses');
         setWarehouse(response.data.data);
       } catch (error) {
         console.log(error);
@@ -37,7 +35,7 @@ const LandingWarehouse = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get('http://localhost:8000/api/products');
+        const response = await API_CALL.get('/products');
         setProducts(response.data.products);
       } catch (error) {
         console.log(error);

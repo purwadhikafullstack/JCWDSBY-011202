@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { useLocation, Navigate, useNavigate } from 'react-router-dom';
 import { Loading } from './loadingComponent';
-import axios from 'axios';
 import NotFoundPage from './Temporary/404';
+import API_CALL from '../helpers/API';
 
 const RoleRouting = ({ children, role, redirect }) => {
   const [currentRole, setCurrentRole] = useState('');
@@ -14,14 +14,11 @@ const RoleRouting = ({ children, role, redirect }) => {
     const fetchData = async () => {
       try {
         const token = localStorage.getItem('token');
-        const response = await axios.get(
-          'http://localhost:8000/api/accounts/authcheck',
-          {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
+        const response = await API_CALL.get('/accounts/authcheck', {
+          headers: {
+            Authorization: `Bearer ${token}`,
           },
-        );
+        });
         setCurrentRole(response.data);
         setLoading(false);
       } catch (error) {

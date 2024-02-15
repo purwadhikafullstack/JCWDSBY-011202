@@ -6,7 +6,7 @@ import InputForAdmin from './InputForAdmin';
 import InputForWarehouseAdmin from './InputForWarehouseAdmin';
 import ConfirmationModal from './ConfirmationModal';
 import Toast from './Toast';
-import axios from 'axios';
+import API_CALL from '../helpers/API';
 
 const AddAccount = () => {
   const navigate = useNavigate();
@@ -50,11 +50,10 @@ const AddAccount = () => {
 
   const onHandleAdd = async () => {
     const token = localStorage.getItem('token');
-    console.log(email, warehouse);
     try {
       setLoading(true);
-      const response = await axios.post(
-        'http://localhost:8000/api/accounts/create-account',
+      const response = await API_CALL.post(
+        '/accounts/create-account',
         {
           email,
           password,

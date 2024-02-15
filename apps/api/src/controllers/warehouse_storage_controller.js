@@ -116,7 +116,6 @@ export const getStorage = async (req, res, next) => {
       totalPages: totalPages,
     });
   } catch (error) {
-    console.error(error);
     res.status(500).send({ success: false, message: 'ERROR GETTING DATA' });
   }
 };
@@ -174,7 +173,6 @@ export const deleteWarehouseStorage = async (req, res, next) => {
       message: 'Warehouse storage data soft-deleted successfully',
     });
   } catch (error) {
-    console.error(error);
     res.status(500).send({
       success: false,
       message: 'Error soft-deleting warehouse storage data',

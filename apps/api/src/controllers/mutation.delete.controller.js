@@ -38,7 +38,6 @@ export const deleteMutation = async (req, res) => {
       message: 'Mutation deleted successfully',
     });
   } catch (error) {
-    console.error(error);
     res.status(500).send({
       success: false,
       message: 'Internal Server Error',

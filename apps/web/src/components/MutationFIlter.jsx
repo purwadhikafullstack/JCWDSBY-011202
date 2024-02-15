@@ -1,9 +1,9 @@
 import { useState, useEffect } from 'react';
-import axios from 'axios';
 import SearchBar from './SearchBar';
 import { useNavigate } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import { Loading } from './loadingComponent';
+import API_CALL from '../helpers/API';
 const MutationFilter = ({ page }) => {
   const userGlobal = useSelector((state) => state.accountSliceReducer);
   const [products, setProducts] = useState([]);
@@ -14,7 +14,7 @@ const MutationFilter = ({ page }) => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get('http://localhost:8000/api/products');
+        const response = await API_CALL.get('/products');
         setProducts(response.data.products);
       } catch (error) {
         console.log(error);

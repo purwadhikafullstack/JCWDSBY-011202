@@ -21,12 +21,10 @@ module.exports = {
         next();
       }
     } catch (error) {
-      console.log(error);
       return res.status(400).send('Invalid Token');
     }
   },
   ValidateUser: (req, res, next) => {
-    console.log(req.userData);
     try {
       if (!req.userData) {
         return res.status(400).send({
@@ -69,7 +67,6 @@ module.exports = {
     }
   },
   ValidateSuperAdmin: (req, res, next) => {
-    console.log(req.userData);
     try {
       if (!req.userData) {
         return res.status(400).send({
@@ -118,8 +115,6 @@ module.exports = {
   ValidateEmail: (req, res, next) => {
     try {
       const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-      console.log(req.body.email);
-      console.log(emailPattern.test(req.body.email));
       if (
         !req.body.email ||
         !req.body.email.includes('@') ||

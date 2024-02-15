@@ -85,7 +85,6 @@ export const getProduct = async (req, res, next) => {
     });
 
     const isPages = await products.findAll({ where: filter, raw: true });
-    console.log(isPages.length);
 
     const totalProducts = isPages.length;
     const totalPages = Math.ceil(totalProducts / limit);
@@ -101,7 +100,6 @@ export const getProduct = async (req, res, next) => {
 
     return res.status(200).send({ products: resultWithStock, totalPages });
   } catch (error) {
-    console.error(error);
     return res
       .status(500)
       .send({ success: false, message: 'ERROR GETTING DATA' });
@@ -161,7 +159,6 @@ export const createProduct = async (req, res, next) => {
       data: newProduct,
     });
   } catch (error) {
-    console.log(error);
     return res
       .status(500)
       .send({ success: false, message: 'Error adding data' });

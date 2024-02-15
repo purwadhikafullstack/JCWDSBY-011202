@@ -2,12 +2,12 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { IoMdArrowBack } from 'react-icons/io';
 import AdminLayout from './AdminLayout';
-import axios from 'axios';
 import EditImage from './EditImage';
 import MultiEditImage from './MultiEditImage';
 import ConfirmationModal from './ConfirmationModal';
 import Toast from './Toast';
 import { Loading } from './loadingComponent';
+import API_CALL from '../helpers/API';
 const EditProduct = () => {
   const [categories, setCategories] = useState([]);
   const navigate = useNavigate();
@@ -29,9 +29,7 @@ const EditProduct = () => {
 
   const getAgainProduct = async () => {
     try {
-      const response = await axios.get(
-        `http://localhost:8000/api/products?id=${id}`,
-      );
+      const response = await API_CALL.get(`/products?id=${id}`);
       console.log(response.data.products);
       if (!response.data.products.length) {
         navigate('not-found');
@@ -57,9 +55,7 @@ const EditProduct = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get(
-          'http://localhost:8000/api/categories',
-        );
+        const response = await API_CALL.get('/categories');
         setCategories(response.data);
       } catch (error) {
         console.log(error);
@@ -72,16 +68,13 @@ const EditProduct = () => {
   const handleFormSubmit = async (e) => {
     setButtonLoading(true);
     try {
-      const response = await axios.patch(
-        `http://localhost:8000/api/products/${id}`,
-        {
-          name: newName,
-          description: newDescription,
-          category_id: newCategory_id,
-          price: newPrice,
-          weight: newWeight,
-        },
-      );
+      const response = await API_CALL.patch(`/products/${id}`, {
+        name: newName,
+        description: newDescription,
+        category_id: newCategory_id,
+        price: newPrice,
+        weight: newWeight,
+      });
       getAgainProduct();
       setShowConfirmationModal(false);
       showToast('success', response.data.message || `succes edit product`);

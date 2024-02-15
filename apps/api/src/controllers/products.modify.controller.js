@@ -1,5 +1,4 @@
 import products from '../models/products';
-import categories from '../models/categories';
 import products_images from '../models/product_images';
 import fs from 'fs/promises';
 import path from 'path';
@@ -35,7 +34,6 @@ export const deleteProduct = async (req, res, next) => {
       message: 'Product and associated files deleted successfully',
     });
   } catch (error) {
-    console.log(error);
     return res
       .status(500)
       .send({ success: false, message: 'Error deleting data' });
@@ -99,7 +97,6 @@ export const updateProduct = async (req, res, next) => {
       message: 'Data updated successfully',
     });
   } catch (error) {
-    console.error(error);
     return res.status(500).send({
       success: false,
       message: 'Failed to update data',

@@ -2,9 +2,9 @@ import React, { useState, useEffect } from 'react';
 import LoginImage from '../../../assets/login.jpg';
 import { Link, useNavigate } from 'react-router-dom';
 import ButtonWithLoading from '../../../components/ButtonWithLoading';
-import axios from 'axios';
 import { useDispatch, useSelector } from 'react-redux';
 import { userLoaded } from '../../../redux/slice/accountSlice';
+import API_CALL from '../../../helpers/API';
 const LoginForm = () => {
   const [loading, setLoading] = useState(false);
   const [email, setEmail] = useState('');
@@ -18,14 +18,11 @@ const LoginForm = () => {
     const fetchData = async () => {
       try {
         const token = localStorage.getItem('token');
-        const response = await axios.get(
-          'http://localhost:8000/api/accounts/authcheck',
-          {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
+        const response = await API_CALL.get('/accounts/authcheck', {
+          headers: {
+            Authorization: `Bearer ${token}`,
           },
-        );
+        });
         setCurrentRole(response.data);
       } catch (error) {
         console.log(error);
@@ -42,13 +39,10 @@ const LoginForm = () => {
     try {
       setError(null);
       setLoading(true);
-      const response = await axios.post(
-        'http://localhost:8000/api/accounts/login',
-        {
-          email,
-          password,
-        },
-      );
+      const response = await API_CALL.post('/accounts/login', {
+        email,
+        password,
+      });
       if (response.data.success) {
         if (
           response.data.result &&

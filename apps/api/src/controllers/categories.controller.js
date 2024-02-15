@@ -37,7 +37,6 @@ export const getData = async (req, res, next) => {
 
     return res.status(200).send(result);
   } catch (error) {
-    console.error(error);
     return res
       .status(500)
       .send({ success: false, message: 'ERROR GETTING DATA' });
@@ -81,7 +80,6 @@ export const createData = async (req, res, next) => {
       data: result,
     });
   } catch (error) {
-    console.error(error);
     return res
       .status(500)
       .send({ success: false, message: 'ERROR CREATING DATA' });
@@ -89,7 +87,6 @@ export const createData = async (req, res, next) => {
 };
 export const deleteData = async (req, res, next) => {
   try {
-    console.log(req.params.id);
     const isExist = await categories.findOne({
       where: {
         id: req.params.id,
@@ -115,7 +112,6 @@ export const deleteData = async (req, res, next) => {
       .status(200)
       .send({ success: false, message: 'SUCCES DELETE DATA' });
   } catch (error) {
-    console.log(error);
     return res
       .status(500)
       .send({ success: false, message: 'ERROR DELETE DATA' });
@@ -123,7 +119,6 @@ export const deleteData = async (req, res, next) => {
 };
 export const updateData = async (req, res, next) => {
   try {
-    console.log(req.params.id);
     const isExist = await categories.findOne({
       where: {
         id: req.params.id,
@@ -145,12 +140,10 @@ export const updateData = async (req, res, next) => {
         },
       },
     );
-    console.log(result);
     return res
       .status(200)
       .send({ success: true, message: 'SUCCES UPDATE DATA' });
   } catch (error) {
-    console.log(error);
     return res
       .status(500)
       .send({ success: false, message: 'ERROR UPDATE DATA' });

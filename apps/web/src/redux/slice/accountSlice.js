@@ -1,5 +1,6 @@
 import { createSlice } from '@reduxjs/toolkit';
-import axios from 'axios';
+import API_CALL from '../../helpers/API';
+
 const initialState = {
   token: localStorage.getItem('token'),
   username: '',
@@ -37,8 +38,8 @@ export const keepLogin = () => {
   return async (dispatch) => {
     try {
       const token = localStorage.getItem('token');
-      const response = await axios.post(
-        `http://localhost:8000/api/accounts/keep-login`,
+      const response = await API_CALL.post(
+        `/accounts/keep-login`,
         {},
         {
           headers: {

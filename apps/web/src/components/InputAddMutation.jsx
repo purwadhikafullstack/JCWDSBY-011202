@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import axios from 'axios';
 import { useSelector } from 'react-redux';
+import API_CALL from '../helpers/API';
 
 const InputMutation = (props) => {
   const [product, setProduct] = useState([]);
@@ -9,7 +9,7 @@ const InputMutation = (props) => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get(`http://localhost:8000/api/products`);
+        const response = await API_CALL.get(`/products`);
         setProduct(response.data.products);
       } catch (error) {
         console.error('Error fetching product data:', error);
@@ -21,9 +21,7 @@ const InputMutation = (props) => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get(
-          `http://localhost:8000/api/warehouses`,
-        );
+        const response = await API_CALL.get(`/warehouses`);
         setWarehouse(response.data.data);
       } catch (error) {
         console.error('Error fetching warehouse data:', error);

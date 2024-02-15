@@ -89,7 +89,6 @@ export const getMutation = async (req, res, next) => {
       totalPages,
     });
   } catch (error) {
-    console.log(error);
     return res.status(500).send({
       success: false,
       message: 'Internal Server Error',

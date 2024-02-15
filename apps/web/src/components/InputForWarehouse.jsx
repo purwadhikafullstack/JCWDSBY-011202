@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import axios from 'axios';
+import API_CALL from '../helpers/API';
 
 const InputForWarehouse = ({ onFormChange }) => {
   const [warehouse, setWarehouse] = useState('');
@@ -14,9 +14,7 @@ const InputForWarehouse = ({ onFormChange }) => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get(
-          'http://localhost:8000/api/provincesandcities/provinces',
-        );
+        const response = await API_CALL.get('/provincesandcities/provinces');
         setProvinces(response.data.data);
       } catch (error) {
         console.log(error);
@@ -28,9 +26,7 @@ const InputForWarehouse = ({ onFormChange }) => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get(
-          'http://localhost:8000/api/provincesandcities/cities',
-        );
+        const response = await API_CALL.get('/provincesandcities/cities');
         setCitiesList(response.data.data);
       } catch (error) {
         console.log(error);
@@ -42,8 +38,8 @@ const InputForWarehouse = ({ onFormChange }) => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get(
-          `http://localhost:8000/api/provincesandcities/cities?prov_id=${selectedProvince}`,
+        const response = await API_CALL.get(
+          `/provincesandcities/cities?prov_id=${selectedProvince}`,
         );
         setCities(response.data.data);
       } catch (error) {

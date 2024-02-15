@@ -8,13 +8,10 @@ export const getSampleDataById = async () => {
   return { name: 'Sample data' };
 };
 
-export const createSampleData = async () => {
-  console.log('Successfully create new sample data');
-};
+export const createSampleData = async () => {};
 
 // export const register = async (req, res, next) => {
 //   try {
-//     console.log("Check data from client", req.body);
 //     const isExist = await accounts.findOne({
 //       where: {
 //         email: req.body.email,
@@ -29,13 +26,10 @@ export const createSampleData = async () => {
 //     delete req.body.confirmPassword;
 
 //     const salt = await bcrypt.genSalt(10);
-//     console.log("ini salt", salt);
 //     const hashPassword = await bcrypt.hash(req.body.password, salt);
-//     console.log("ini hash", hashPassword);
 //     req.body.password = hashPassword;
 
 //     const result = await accounts.create(req.body);
-//     console.log(result);
 
 //     const token = jwt.sign(
 //       {
@@ -57,7 +51,6 @@ export const createSampleData = async () => {
 //       message: "Register success",
 //     });
 //   } catch (error) {
-//     console.log(error);
 //     return res.status(500).send(error);
 //   }
 // }
@@ -82,7 +75,6 @@ export const createSampleData = async () => {
 //       }
 //     });
 //   } catch (error) {
-//     console.log(error);
 //     return res.status(500).send(error);
 //   }
 //}

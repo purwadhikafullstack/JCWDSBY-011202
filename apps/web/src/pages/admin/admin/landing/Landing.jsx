@@ -5,9 +5,9 @@ import { FaPeopleGroup } from 'react-icons/fa6';
 import { GiSofa } from 'react-icons/gi';
 import { MdOutlineWarehouse } from 'react-icons/md';
 import TopBarAdmin from '../../../../components/TopBarAdmin';
-import axios from 'axios';
 import ChartAdmin from '../../../../components/ChartAdmin';
 import LandingAdminLayout from './Layout';
+import API_CALL from '../../../../helpers/API';
 const LandingAdmin = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [warehouse, setWarehouse] = useState([]);
@@ -38,9 +38,7 @@ const LandingAdmin = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get(
-          'http://localhost:8000/api/warehouses',
-        );
+        const response = await API_CALL.get('/warehouses');
         setWarehouse(response.data.data);
       } catch (error) {
         console.log(error);
@@ -52,7 +50,7 @@ const LandingAdmin = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get('http://localhost:8000/api/products');
+        const response = await API_CALL.get('/products');
         setProducts(response.data.products);
       } catch (error) {
         console.log(error);
@@ -63,9 +61,7 @@ const LandingAdmin = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get(
-          'http://localhost:8000/api/journal/get-data',
-        );
+        const response = await API_CALL.get('/journal/get-data');
         setData(response.data);
       } catch (error) {
         console.log(error);

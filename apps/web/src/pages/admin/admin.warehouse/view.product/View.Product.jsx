@@ -9,7 +9,7 @@ const ViewProduct = () => {
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
   const [searchParams, setSearchParams] = useSearchParams();
-  const [selectedAccount, setSelectedAccount] = useState('');
+  const [selectedProduct, setSelectedProduct] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('');
   const [selectedPrice, setSelectedPrice] = useState('');
   const [categories, setCategories] = useState([]);
@@ -25,9 +25,9 @@ const ViewProduct = () => {
 
   const searchAccount = () => {
     setSearchParams((val) => {
-      val.set('name', selectedAccount);
-      if (!selectedAccount) {
-        val.delete('name', selectedAccount);
+      val.set('name', selectedProduct);
+      if (!selectedProduct) {
+        val.delete('name', selectedProduct);
       }
       return val;
     });
@@ -77,7 +77,7 @@ const ViewProduct = () => {
           <div className="w-full mt-4">
             <div className="flex w-full">
               <SearchBar
-                onChange={(e) => setSelectedAccount(e.target.value)}
+                onChange={(e) => setSelectedProduct(e.target.value)}
                 onClick={searchAccount}
               />
               <div className="w-[200px] sm:ml-0 ml-3 sm:mt-4 mt-4 mr-2  sm:w-1/4 sm:pr-2 flex">
@@ -87,7 +87,7 @@ const ViewProduct = () => {
                     setSearchParams((val) => {
                       val.set('category_id', e.target.value);
                       if (!e.target.value) {
-                        val.delete('price', e.target.value);
+                        val.delete('category_id', e.target.value);
                       }
                       return val;
                     });

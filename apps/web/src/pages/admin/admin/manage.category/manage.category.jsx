@@ -5,7 +5,8 @@ import BasicTable from '../../../../components/CategoryTable';
 import ButtonWithLoading from '../../../../components/ButtonWithLoading';
 import { IoClose } from 'react-icons/io5';
 import { Loading } from '../../../../components/loadingComponent';
-
+import Toast from '../../../../components/Toast';
+import ConfirmationModal from '../../../../components/ConfirmationModal';
 const ManageCategory = () => {
   const [loading, setLoading] = useState(false);
   const [categories, setCategories] = useState([]);
@@ -13,7 +14,10 @@ const ManageCategory = () => {
   const [newCategoryName, setNewCategoryName] = useState('');
   const [editingCategory, setEditingCategory] = useState(null);
   const [buttonLoading, setButtonLoading] = useState(false);
-
+  const [selectedCategoryId, setSelectedCategoryId] = useState();
+  const [deleteLoading, setDeleteLoading] = useState(false);
+  const [toast, setToast] = useState(null);
+  const [showConfirmationModal, setShowConfirmationModal] = useState(false);
   const handleButtonClick = async () => {
     setButtonLoading(true);
     try {
@@ -24,10 +28,12 @@ const ManageCategory = () => {
             category: newCategoryName,
           },
         );
+        showToast('success', 'succes edit category');
       } else {
         await axios.post('http://localhost:8000/api/categories', {
           category: newCategoryName,
         });
+        showToast('success', 'succes create category');
       }
 
       const response = await axios.get('http://localhost:8000/api/categories');
@@ -47,6 +53,37 @@ const ManageCategory = () => {
     setEditingCategory(null);
   };
 
+  const showToast = (status, message) => {
+    setToast({ status, message });
+    setTimeout(() => {
+      setToast(null);
+    }, 5000);
+  };
+
+  const onHandleDelete = async () => {
+    setDeleteLoading(true);
+    try {
+      await axios.delete(
+        `http://localhost:8000/api/categories/${selectedCategoryId}`,
+      );
+      const response = await axios.get('http://localhost:8000/api/categories');
+      setCategories(response.data);
+      setDeleteLoading(false);
+      setShowConfirmationModal(false);
+      showToast('success', response.message || 'success delete category');
+    } catch (error) {
+      showToast('warning', error.response.message || 'failed delete category');
+      console.error('Error deleting category:', error);
+    } finally {
+      setDeleteLoading(false);
+      setShowConfirmationModal(false);
+    }
+  };
+
+  const onCloseConfirmationModal = () => {
+    setShowConfirmationModal(false);
+  };
+
   const handleEditClick = (category) => {
     setModalOpen(true);
     setEditingCategory(category);
@@ -54,17 +91,12 @@ const ManageCategory = () => {
   };
 
   const deleteCategory = async (categoryId) => {
-    try {
-      await axios.delete(`http://localhost:8000/api/categories/${categoryId}`);
-      const response = await axios.get('http://localhost:8000/api/categories');
-      setCategories(response.data);
-    } catch (error) {
-      console.error('Error deleting category:', error);
-    }
+    setShowConfirmationModal(true);
+    setSelectedCategoryId(categoryId);
   };
 
   const closeModal = () => {
-    setModalOpen(false);
+    set(false);
     setEditingCategory(null);
     setNewCategoryName('');
   };
@@ -77,6 +109,7 @@ const ManageCategory = () => {
           'http://localhost:8000/api/categories',
         );
         setCategories(response.data);
+        setShowConfirmationModal(false);
       } catch (error) {
         console.error('Error fetching categories:', error);
       } finally {
@@ -142,6 +175,22 @@ const ManageCategory = () => {
               </div>
             </div>
           </div>
+        )}
+        {showConfirmationModal && (
+          <ConfirmationModal
+            onClickCancel={onCloseConfirmationModal}
+            onclickClose={onCloseConfirmationModal}
+            title="Delete Category"
+            isLoading={deleteLoading}
+            onClick={onHandleDelete}
+          />
+        )}
+        {toast && (
+          <Toast
+            status={toast.status}
+            message={toast.message}
+            onClose={() => setToast(null)}
+          />
         )}
       </AdminLayout>
     </div>

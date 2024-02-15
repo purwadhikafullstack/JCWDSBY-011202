@@ -61,22 +61,22 @@ const ProductSearch = () => {
     });
   };
 
-  useEffect(() => {}, [
-    page,
-    price,
-    selectedMaxPrice,
-    selectedMinPrice,
-    location.search,
-  ]);
+  useEffect(() => {
+    setSearchParams((val) => {
+      val.set('page', page);
+      if (page > totalPage) {
+        val.set('page', totalPage);
+      }
+      return val;
+    });
+  }, [page]);
 
   useEffect(() => {
     const fetchData = async () => {
       try {
         setLoading(true);
         const response = await axios.get(
-          `http://localhost:8000/api/products${
-            location.search || `?page=${page || 1}`
-          }`,
+          `http://localhost:8000/api/products${location.search}`,
         );
         setCurrentPage(response.data.products);
         setTotalPage(response.data.totalPages);

@@ -16,7 +16,7 @@ function CarouselComponent() {
         <Link to="/product-detail/Chelsea Bed">
           <img src={Carousel2} alt="..." className="w-full cursor-pointer" />
         </Link>
-        <Link to="product-detail/Wise Night Stand (Ivory): ">
+        <Link to="product-detail/Wise Night Stand (Ivory) ">
           <img src={Carousel3} alt="..." className="w-full cursor-pointer" />
         </Link>
         <Link to="product-detail/Kokoro Coffee Table (White-Pink)">

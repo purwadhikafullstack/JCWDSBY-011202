@@ -46,7 +46,10 @@ const DiscoverMore = ({ products }) => {
             productName={product?.name || 'N/A'}
             price={formatPriceToIDR(product?.price) || 'N/A'}
             category={product?.category?.category || 'N/A'}
-            onClick={() => navigate(`/product-detail/${product.name}`)}
+            onClick={() => {
+              navigate(`/product-detail/${product.name}`);
+              window.scrollTo({ top: 0, behavior: 'smooth' });
+            }}
             src={
               `http://localhost:8000/productimage/${product?.product_images?.[0]?.image}` ||
               'https://placehold.co/384x384'

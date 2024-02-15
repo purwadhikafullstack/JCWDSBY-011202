@@ -11,7 +11,7 @@ import {
   IModal,
 } from '../../../components/modalRama';
 import API_CALL from '../../../helpers/API';
-
+import axios from 'axios';
 const CheckoutPage = () => {
   const navigate = useNavigate();
   const [firstloading, setFirstLoading] = useState(false);

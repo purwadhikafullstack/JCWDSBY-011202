@@ -1,4 +1,3 @@
-import warehouse from '../models/warehouses';
 import warehouse_storage from '../models/warehouse_storage';
 import orders from '../models/orders';
 import addresses from '../models/addresses';
@@ -22,7 +21,6 @@ function formatDate(date) {
 }
 export const getWarehouseOrderData = async (req, res, next) => {
   try {
-    // console.log("masu bos", req.userData);
     const result = await orders.findAll({
       where: {
         warehouse_id: req.userData.warehouse_id,
@@ -55,7 +53,6 @@ export const getWarehouseOrderData = async (req, res, next) => {
 };
 export const getManageOrderDetail = async (req, res, next) => {
   try {
-    // console.log("mulai kerjakan", req.query);
     const data = await order_details.findAll({
       where: {
         order_id: req.query.id,
@@ -194,7 +191,6 @@ export const updateStatus = async (req, res, next) => {
       return res.status(200).send(result);
     }
   } catch (error) {
-    console.error('Error:', error);
     return res.status(500).send('Internal Server Error');
   }
 };

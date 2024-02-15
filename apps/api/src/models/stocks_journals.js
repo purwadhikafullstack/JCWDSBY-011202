@@ -7,7 +7,10 @@ export default class stocks_journals extends Model {
    * The `models/index` file will call this method automatically.
    */
   static associate(models) {
-    // define association here
+    // Define association with the products table
+    stocks_journals.belongsTo(models.products, {
+      foreignKey: 'product_id',
+    });
   }
 }
 

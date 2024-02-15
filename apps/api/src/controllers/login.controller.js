@@ -59,7 +59,6 @@ export const Login = async (req, res, next) => {
       result: resultData,
     });
   } catch (error) {
-    console.error(error);
     return res.status(500).send({
       success: false,
       message: 'Internal Server Error',
@@ -96,7 +95,6 @@ export const keepLogin = async (req, res) => {
       result: resultData,
     });
   } catch (error) {
-    console.error(error);
     return res.status(500).send({
       success: false,
       message: 'Internal Server Error',

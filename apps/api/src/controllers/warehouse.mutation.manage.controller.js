@@ -26,7 +26,6 @@ export const confirmMutation = async (req, res, next) => {
     });
 
     if (!isExists) {
-      console.error('Mutation not found or not eligible for confirmation');
       return res.status(500).send({
         success: false,
         message: "Sorry, your data can't be updated",
@@ -163,7 +162,6 @@ export const confirmMutation = async (req, res, next) => {
       message: 'Mutation confirmed successfully',
     });
   } catch (error) {
-    console.error(error);
     return res.status(500).send({
       success: false,
       message: 'Internal Server Error',

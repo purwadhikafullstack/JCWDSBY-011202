@@ -6,6 +6,8 @@ import {
   product_sold,
   categoriesSold,
 } from '../controllers/sales.journal.controller';
+import { getSalesJournals } from '../controllers/read.sales.journal';
+import { getStockJournals } from '../controllers/stocks.journal.controller';
 const journalRouter = Router();
 
 journalRouter.get('/', readJournal);
@@ -14,5 +16,7 @@ journalRouter.get('/stock-report?', getStockTraffic);
 journalRouter.get('/product-sold?', product_sold);
 journalRouter.get('/monthly-sales?', getMonthlySales);
 journalRouter.get('/category-sold?', categoriesSold);
+journalRouter.get('/stock-journal?', getStockJournals);
+journalRouter.get('/sales-journal?', getSalesJournals);
 
 export { journalRouter };

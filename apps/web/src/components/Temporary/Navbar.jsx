@@ -3,8 +3,8 @@ import { CiShoppingCart } from 'react-icons/ci';
 import { VscAccount } from 'react-icons/vsc';
 import { Link, useNavigate } from 'react-router-dom';
 import SearchBar from './Searchbar';
-import axios from 'axios';
 import { GiHamburgerMenu } from 'react-icons/gi';
+import API_CALL from '../../helpers/API';
 
 const linksData = [
   { to: '/', label: 'Home' },
@@ -20,7 +20,7 @@ const TemporaryNavbar = (props) => {
   const getCountCart = async () => {
     try {
       const token = localStorage.getItem('token');
-      const result = await axios.get('http://localhost:8000/api/cart/navbar', {
+      const result = await API_CALL.get('/cart/navbar', {
         headers: { Authorization: `Bearer ${token}` },
       });
       return setCartCount(result.data.result);

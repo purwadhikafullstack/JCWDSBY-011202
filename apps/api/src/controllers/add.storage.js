@@ -23,7 +23,6 @@ export const addStorage = async (req, res, next) => {
     });
 
     if (existingStock) {
-      console.log(existingStock);
       if (existingStock.is_deleted === true) {
         const restoredStock = await warehouse_storage.update(
           {
@@ -118,7 +117,6 @@ export const addStorage = async (req, res, next) => {
       added: createNewStock.dataValues,
     });
   } catch (error) {
-    console.error(error);
     res.status(500).send({ success: false, message: 'ERROR ADDING STORAGE' });
   }
 };

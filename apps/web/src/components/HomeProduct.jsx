@@ -1,16 +1,15 @@
 import { useEffect, useState } from 'react';
-import axios from 'axios';
 import ProductCatalog from './ProductCatalogCard';
 import { formatPriceToIDR } from '../utils';
 import { useNavigate } from 'react-router-dom';
+import API_CALL from '../helpers/API';
+import { IMG_URL_PRODUCT_IMAGE } from '../helpers/Image';
 const HomeProduct = () => {
   const [products, setProducts] = useState([]);
   const navigate = useNavigate();
   useEffect(() => {
     const fetchData = async () => {
-      const response = await axios.get(
-        'http://localhost:8000/api/products?page=1',
-      );
+      const response = await API_CALL.get('/products?page=1');
       setProducts(response.data.products);
     };
     fetchData();
@@ -25,11 +24,11 @@ const HomeProduct = () => {
             category={product?.category?.category || 'N/A'}
             onClick={() => navigate(`/product-detail/${product.id}`)}
             src={
-              `http://localhost:8000/productimage/${product?.product_images?.[0]?.image}` ||
+              `${IMG_URL_PRODUCT_IMAGE}/${product?.product_images?.[0]?.image}` ||
               'https://placehold.co/384x384'
             }
             src2={
-              `http://localhost:8000/productimage/${
+              `${IMG_URL_PRODUCT_IMAGE}/${
                 product?.product_images.length >= 2
                   ? product?.product_images?.[1]?.image
                   : product?.product_images?.[0]?.image

@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import axios from 'axios';
 import AdminLayout from '../../../../components/AdminLayout';
 import BasicTable from '../../../../components/CategoryTable';
 import ButtonWithLoading from '../../../../components/ButtonWithLoading';
@@ -7,6 +6,7 @@ import { IoClose } from 'react-icons/io5';
 import { Loading } from '../../../../components/loadingComponent';
 import Toast from '../../../../components/Toast';
 import ConfirmationModal from '../../../../components/ConfirmationModal';
+import API_CALL from '../../../../helpers/API';
 const ManageCategory = () => {
   const [loading, setLoading] = useState(false);
   const [categories, setCategories] = useState([]);
@@ -22,21 +22,18 @@ const ManageCategory = () => {
     setButtonLoading(true);
     try {
       if (editingCategory) {
-        await axios.patch(
-          `http://localhost:8000/api/categories/${editingCategory.id}`,
-          {
-            category: newCategoryName,
-          },
-        );
+        await API_CALL.patch(`/categories/${editingCategory.id}`, {
+          category: newCategoryName,
+        });
         showToast('success', 'succes edit category');
       } else {
-        await axios.post('http://localhost:8000/api/categories', {
+        await API_CALL.post('/categories', {
           category: newCategoryName,
         });
         showToast('success', 'succes create category');
       }
 
-      const response = await axios.get('http://localhost:8000/api/categories');
+      const response = await API_CALL.get('/categories');
       setCategories(response.data);
     } catch (error) {
       console.error('Error:', error);
@@ -63,10 +60,8 @@ const ManageCategory = () => {
   const onHandleDelete = async () => {
     setDeleteLoading(true);
     try {
-      await axios.delete(
-        `http://localhost:8000/api/categories/${selectedCategoryId}`,
-      );
-      const response = await axios.get('http://localhost:8000/api/categories');
+      await API_CALL.delete(`/categories/${selectedCategoryId}`);
+      const response = await API_CALL.get('/categories');
       setCategories(response.data);
       setDeleteLoading(false);
       setShowConfirmationModal(false);
@@ -96,7 +91,7 @@ const ManageCategory = () => {
   };
 
   const closeModal = () => {
-    set(false);
+    setModalOpen(false);
     setEditingCategory(null);
     setNewCategoryName('');
   };
@@ -105,9 +100,7 @@ const ManageCategory = () => {
     const fetchData = async () => {
       try {
         setLoading(true);
-        const response = await axios.get(
-          'http://localhost:8000/api/categories',
-        );
+        const response = await API_CALL.get('/categories');
         setCategories(response.data);
         setShowConfirmationModal(false);
       } catch (error) {

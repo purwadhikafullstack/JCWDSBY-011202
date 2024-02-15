@@ -1,6 +1,4 @@
-import fs from 'fs/promises';
-import path from 'path';
-import { Op, Sequelize } from 'sequelize';
+import { Op } from 'sequelize';
 import orders from '../models/orders';
 import addresses from '../models/addresses';
 import warehouses from '../models/warehouses';
@@ -152,3 +150,4 @@ export const getOrder = async (req, res, next) => {
         return res.status(500).send({ success: false, result: null, message: error.message })
     }
 }
+

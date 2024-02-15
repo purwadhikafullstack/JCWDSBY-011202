@@ -3,11 +3,11 @@ import WareHouseAdminLayout from '../../../../components/WareHouseAdminLayout';
 import { IoMdArrowBack } from 'react-icons/io';
 import DataEditStock from '../../../../components/DataEditStock';
 import { useEffect, useState } from 'react';
-import axios from 'axios';
 import ConfirmationModal from '../../../../components/ConfirmationModal';
 import { useSelector } from 'react-redux';
 import { Loading } from '../../../../components/loadingComponent';
 import Toast from '../../../../components/Toast';
+import API_CALL from '../../../../helpers/API';
 const EditStockProduct = () => {
   const navigate = useNavigate();
   const userGlobal = useSelector((state) => state.accountSliceReducer);
@@ -30,16 +30,16 @@ const EditStockProduct = () => {
   };
   const fetchData = async () => {
     try {
-      const response = await axios.get(
-        `http://localhost:8000/api/warehouse/storage?id=${realIdNumber}`,
+      const response = await API_CALL.get(
+        `/warehouse/storage?id=${realIdNumber}`,
       );
       const selectedInventory = response.data.data[0] || {};
       setInventorySelected(selectedInventory);
       setStockChanges(selectedInventory.stock || 0);
 
       if (selectedInventory.product_id) {
-        const responseProduct = await axios.get(
-          `http://localhost:8000/api/products?id=${selectedInventory.product_id}`,
+        const responseProduct = await API_CALL.get(
+          `/products?id=${selectedInventory.product_id}`,
         );
         setProductSelected(responseProduct.data.products[0] || {});
       }
@@ -84,8 +84,8 @@ const EditStockProduct = () => {
     let operator = operation === 'add' ? 'increment' : 'decrement';
 
     try {
-      const response = await axios.patch(
-        `http://localhost:8000/api/warehouse/storage/${realIdNumber}`,
+      const response = await API_CALL.patch(
+        `/warehouse/storage/${realIdNumber}`,
         {
           unit: counter,
           operation: operator,

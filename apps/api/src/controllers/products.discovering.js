@@ -62,7 +62,6 @@ export const ProductDiscovering = async (req, res, next) => {
 
     return res.status(200).send({ success: true, data: finalResult });
   } catch (error) {
-    console.error(error);
     return res
       .status(500)
       .send({ success: false, message: 'ERROR GETTING DATA' });

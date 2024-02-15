@@ -259,27 +259,84 @@ function App() {
         <Route path="/user/register" element={<RegisterForm />} />
         <Route path="/product-detail/:id" element={<ProductDetail />} />
         {/* BELUM KE ROUTING */}
+        <Route
+          path="/cart"
+          element={
+            <RoleRouting role={'user'} redirect="/unathorized">
+              <CartPage />
+            </RoleRouting>
+          }
+        />
+        <Route
+          path="/checkout"
+          element={
+            <RoleRouting role={'user'} redirect="/unathorized">
+              <CheckoutPage />
+            </RoleRouting>
+          }
+        />
+        <Route
+          path="/checkout/success?"
+          element={
+            <RoleRouting role={'user'} redirect="/unathorized">
+              <CheckoutSuccess />
+            </RoleRouting>
+          }
+        />
+        <Route
+          path="user/dashboard"
+          element={
+            <RoleRouting role={'user'} redirect="/unathorized">
+              <DashboardLanding />
+            </RoleRouting>
+          }
+        />
+        <Route
+          path="user/dashboard/address"
+          element={
+            <RoleRouting role={'user'} redirect="/unathorized">
+              <DashboardAddress />
+            </RoleRouting>
+          }
+        />
+        <Route
+          path="user/dashboard/order"
+          element={
+            <RoleRouting role={'user'} redirect="/unathorized">
+              <DashboardOrder />
+            </RoleRouting>
+          }
+        />
+        <Route
+          path="user/dashboard/upload-payment?"
+          element={
+            <RoleRouting role={'user'} redirect="/unathorized">
+              <DashboardUploadPayment />
+            </RoleRouting>
+          }
+        />
+        <Route
+          path="/warehouse-admin/manage-order"
+          element={
+            <RoleRouting role={'admin'} redirect="/unathorized">
+              <WarehouseManageOrder />
+            </RoleRouting>
+          }
+        />
+        <Route
+          path="/admin/manage-order"
+          element={
+            <RoleRouting role={'superadmin'} redirect="/unathorized">
+              <AdminManageOrder />
+            </RoleRouting>
+          }
+        />
         {/* TEST */}
         <Route path="/user/forgot-pass" element={<ResetPassword />} />
         <Route path="/product-search?" element={<ProdutSearch />} />
         {/* BELUM */}
         <Route path="*" element={<NotFoundPage />} />
         {/* ROUTES FEATURE : PRODUCT-MANAGEMENT MAS ADHON*/}
-        <Route path="/cart" element={<CartPage />} />
-        <Route path="/checkout" element={<CheckoutPage />} />
-        <Route path="/checkout/success?" element={<CheckoutSuccess />} />
-        <Route path="user/dashboard" element={<DashboardLanding />} />
-        <Route path="user/dashboard/address" element={<DashboardAddress />} />
-        <Route path="user/dashboard/order" element={<DashboardOrder />} />
-        <Route
-          path="user/dashboard/upload-payment?"
-          element={<DashboardUploadPayment />}
-        />
-        <Route
-          path="/warehouse-admin/manage-order"
-          element={<WarehouseManageOrder />}
-        />
-        <Route path="/admin/manage-order" element={<AdminManageOrder />} />
         <Route path="" />
       </Routes>
     </BrowserRouter>

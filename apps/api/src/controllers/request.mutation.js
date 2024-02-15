@@ -128,7 +128,6 @@ export const requestMutation = async (req, res, next) => {
       message: 'Mutation request created successfully',
     });
   } catch (error) {
-    console.error(error);
     return res.status(500).send({
       success: false,
       message: 'Internal Server Error',

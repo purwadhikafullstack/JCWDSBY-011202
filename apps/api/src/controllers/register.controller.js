@@ -37,9 +37,7 @@ export const Register = async (req, res, next) => {
 
     req.body.username = generatedUsername;
     req.body.role = 'user';
-    console.log(req.body);
     const result = await accounts.create(req.body);
-    console.log(result.dataValues);
     const token = jwt.sign(
       {
         email: result.email,
@@ -76,7 +74,6 @@ export const Register = async (req, res, next) => {
       token,
     });
   } catch (error) {
-    console.error(error);
     return res
       .status(500)
       .send({ success: false, message: 'ERROR GETTING DATA' });
@@ -84,7 +81,6 @@ export const Register = async (req, res, next) => {
 };
 
 export const ConfirmationEmail = async (req, res, next) => {
-  console.log('MASUK');
   try {
     const isExist = await accounts.findOne({
       where: {
@@ -109,13 +105,11 @@ export const ConfirmationEmail = async (req, res, next) => {
       { password: hashPassword, is_verified: true },
       { where: { id: req.userData.id } },
     );
-    console.log(setPassword);
     return res.status(200).send({
       success: true,
       message: 'Registration and Verification Successfully',
     });
   } catch (error) {
-    console.error(error);
     return res
       .status(500)
       .send({ success: false, message: 'ERROR GETTING DATA' });

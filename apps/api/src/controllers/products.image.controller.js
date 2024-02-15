@@ -45,7 +45,6 @@ export const addImageToProduct = async (req, res, next) => {
       data: uploadedImages,
     });
   } catch (error) {
-    console.error(error);
     return res
       .status(500)
       .send({ success: false, message: 'Error adding data' });
@@ -85,7 +84,6 @@ export const deleteImage = async (req, res, next) => {
       .status(200)
       .send({ success: true, message: 'Product image deleted successfully' });
   } catch (error) {
-    console.error(error);
     return res
       .status(500)
       .send({ success: false, message: 'Error deleting image' });
@@ -150,7 +148,6 @@ export const editImage = async (req, res, next) => {
       },
     });
   } catch (error) {
-    console.error(error);
     return res
       .status(500)
       .send({ success: false, message: 'Error editing image' });
@@ -158,7 +155,6 @@ export const editImage = async (req, res, next) => {
 };
 
 export const GetImages = async (req, res, next) => {
-  console.log(req.params.name);
   try {
     const result = await products_images.findOne({
       where: {
@@ -167,7 +163,6 @@ export const GetImages = async (req, res, next) => {
     });
     return res.status(200).send({ success: true, image: result });
   } catch (error) {
-    console.log(error);
     return res.status(500).send({ success: false, message: 'Not Found' });
   }
 };

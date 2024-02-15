@@ -73,7 +73,6 @@ export const getWarehouse = async (req, res, next) => {
       totalPages: totalPages,
     });
   } catch (error) {
-    console.error(error);
     return res
       .status(500)
       .send({ success: false, message: 'Error getting data' });
@@ -168,7 +167,6 @@ export const createWarehouse = async (req, res, next) => {
       data: newWarehouse.dataValues,
     });
   } catch (error) {
-    console.error(error);
     return res.status(500).send({
       success: false,
       message: 'Error creating or restoring warehouse data',

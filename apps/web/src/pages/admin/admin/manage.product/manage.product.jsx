@@ -1,11 +1,11 @@
 import AdminLayout from '../../../../components/AdminLayout';
 import ProductTable from '../../../../components/ProductTable';
 import React, { useState, useEffect } from 'react';
-import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import Pagination from '../../../../components/Temporary/Pagination';
 import SearchProduct from '../../../../components/SearchProduct';
 import { Loading } from '../../../../components/loadingComponent';
+import API_CALL from '../../../../helpers/API';
 
 const ManageProduct = () => {
   const [page, setPage] = useState(1);
@@ -23,8 +23,8 @@ const ManageProduct = () => {
 
   const handleDelete = async (deletedProductId) => {
     try {
-      const response = await axios.get(
-        `http://localhost:8000/api/products${endPoint || `?page=${page}`}`,
+      const response = await API_CALL.get(
+        `/products${endPoint || `?page=${page}`}`,
       );
       setCurrentPage(response.data.products);
     } catch (error) {
@@ -50,8 +50,8 @@ const ManageProduct = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get(
-          `http://localhost:8000/api/products${endPoint || '?page=1'}`,
+        const response = await API_CALL.get(
+          `/products${endPoint || '?page=1'}`,
         );
         setCurrentPage(response.data.products);
         setTotalPages(response.data.totalPages);
@@ -69,9 +69,7 @@ const ManageProduct = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get(
-          'http://localhost:8000/api/categories',
-        );
+        const response = await API_CALL.get('/categories');
         setCategories(response.data);
       } catch (error) {
         console.error('Error fetching categories:', error);

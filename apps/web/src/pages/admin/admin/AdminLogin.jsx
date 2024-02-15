@@ -1,9 +1,9 @@
 import { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import axios from 'axios';
 import ButtonWithLoading from '../../../components/ButtonWithLoading';
 import { userLoaded } from '../../../redux/slice/accountSlice';
 import { useDispatch, useSelector } from 'react-redux';
+import API_CALL from '../../../helpers/API';
 const AdminLogin = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -17,14 +17,11 @@ const AdminLogin = () => {
     const fetchData = async () => {
       try {
         const token = localStorage.getItem('token');
-        const response = await axios.get(
-          'http://localhost:8000/api/accounts/authcheck',
-          {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
+        const response = await API_CALL.get('/accounts/authcheck', {
+          headers: {
+            Authorization: `Bearer ${token}`,
           },
-        );
+        });
         setCurrentRole(response.data);
       } catch (error) {
         console.log(error);
@@ -46,13 +43,10 @@ const AdminLogin = () => {
     try {
       setError(null);
       setLoading(true);
-      const response = await axios.post(
-        'http://localhost:8000/api/accounts/login',
-        {
-          email,
-          password,
-        },
-      );
+      const response = await API_CALL.post('/accounts/login', {
+        email,
+        password,
+      });
 
       if (response.data.success) {
         if (

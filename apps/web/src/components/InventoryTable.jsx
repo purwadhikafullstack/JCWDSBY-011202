@@ -1,9 +1,9 @@
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import axios from 'axios';
 import ConfirmationModal from './ConfirmationModal';
 import Toast from './Toast';
 import { useSelector } from 'react-redux';
+import API_CALL from '../helpers/API';
 const InventoryTable = ({ warehouseInventory, onDelete }) => {
   const navigate = useNavigate();
   const [Inventory, setInventory] = useState([]);
@@ -29,9 +29,7 @@ const InventoryTable = ({ warehouseInventory, onDelete }) => {
   const onHandleDelete = async (id) => {
     try {
       setLoading(true);
-      await axios.delete(
-        `http://localhost:8000/api/warehouse/storage/${deleteId}`,
-      );
+      await API_CALL.delete(`/warehouse/storage/${deleteId}`);
       setInventory((prevInventory) =>
         prevInventory.filter((item) => item.id !== id),
       );
@@ -59,9 +57,7 @@ const InventoryTable = ({ warehouseInventory, onDelete }) => {
         const productIds = warehouseInventory.map((item) => item.product_id);
 
         for (let i = 0; i < productIds.length; i++) {
-          const response = await axios.get(
-            `http://localhost:8000/api/products?id=${productIds[i]}`,
-          );
+          const response = await API_CALL.get(`/products?id=${productIds[i]}`);
           tempProduct.push(response.data.products[0]);
         }
 

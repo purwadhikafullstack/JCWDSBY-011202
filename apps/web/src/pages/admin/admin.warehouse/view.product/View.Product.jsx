@@ -1,10 +1,10 @@
 import WareHouseAdminLayout from '../../../../components/WareHouseAdminLayout';
 import { useEffect, useState } from 'react';
-import axios from 'axios';
 import { formatPriceToIDR } from '../../../../utils';
 import Pagination from '../../../../components/Temporary/Pagination';
 import SearchBar from '../../../../components/SearchBar';
 import { useLocation, useParams, useSearchParams } from 'react-router-dom';
+import API_CALL from '../../../../helpers/API';
 const ViewProduct = () => {
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
@@ -40,9 +40,7 @@ const ViewProduct = () => {
     });
     const fetchData = async () => {
       try {
-        const response = await axios.get(
-          `http://localhost:8000/api/products${location.search}`,
-        );
+        const response = await API_CALL.get(`/products${location.search}`);
         setProducts(response.data.products);
         setTotalPages(response.data.totalPages);
       } catch (error) {
@@ -55,9 +53,7 @@ const ViewProduct = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get(
-          'http://localhost:8000/api/categories',
-        );
+        const response = await API_CALL.get('/categories');
         setCategories(response.data);
       } catch (error) {
         console.error('Error fetching categories:', error);

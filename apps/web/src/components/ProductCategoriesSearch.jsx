@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
-import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
+import API_CALL from '../helpers/API';
 
 const ProductCategorySearch = () => {
   const [categories, setCategories] = useState([]);
@@ -8,9 +8,7 @@ const ProductCategorySearch = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get(
-          'http://localhost:8000/api/categories',
-        );
+        const response = await API_CALL.get('/categories');
         setCategories(response.data);
       } catch (error) {
         console.error('Error fetching categories:', error);

@@ -2,7 +2,7 @@ import { FaRegUser } from 'react-icons/fa6';
 import { useNavigate } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import Toast from './Toast';
-import axios from 'axios';
+import API_CALL from '../helpers/API';
 const DashboardTitle = (props) => {
   return (
     <div className="mb-2 mt-4">
@@ -17,12 +17,9 @@ const DashboardSidebar = (props) => {
   const [userData, setUserData] = useState({});
   const getUserData = async () => {
     const token = localStorage.getItem('token');
-    const result = await axios.get(
-      `http://localhost:8000/api/checkout/getUsernamePict`,
-      {
-        headers: { Authorization: `Bearer ${token}` },
-      },
-    );
+    const result = await API_CALL.get(`/checkout/getUsernamePict`, {
+      headers: { Authorization: `Bearer ${token}` },
+    });
     setUserData(result.data);
   };
   const showToast = (status, message) => {
@@ -55,7 +52,7 @@ const DashboardSidebar = (props) => {
         </div>
       </div>
       <div className="border-t-[1px] border-[#F06105]"></div>
-      <div className='flex flex-col  justify-between h-[300px]'>
+      <div className="flex flex-col  justify-between h-[300px]">
         <ul className="flex flex-col gap-y-4 p-5">
           <li
             className="cursor-pointer hover:text-[#F06105] hover:font-semibold"

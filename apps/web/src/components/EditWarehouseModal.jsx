@@ -1,10 +1,10 @@
 import { useEffect, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { IoMdArrowBack } from 'react-icons/io';
-import axios from 'axios';
 import AdminLayout from './AdminLayout';
 import ConfirmationModal from './ConfirmationModal';
 import Toast from './Toast';
+import API_CALL from '../helpers/API';
 
 const EditWarehouse = () => {
   const navigate = useNavigate();
@@ -37,8 +37,8 @@ const EditWarehouse = () => {
 
     try {
       setLoading(true);
-      const response = await axios.patch(
-        `http://localhost:8000/api/warehouses/${realIdNumber}`,
+      const response = await API_CALL.patch(
+        `/warehouses/${realIdNumber}`,
         {
           prov_id: selectedProvince,
           city_id: selectedCityIndex,
@@ -69,8 +69,8 @@ const EditWarehouse = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get(
-          `http://localhost:8000/api/warehouses?warehouse_id=${realIdNumber}`,
+        const response = await API_CALL.get(
+          `/warehouses?warehouse_id=${realIdNumber}`,
         );
         const fetchedWarehouse = response.data.data[0];
         setWarehouse(fetchedWarehouse);
@@ -88,9 +88,7 @@ const EditWarehouse = () => {
   useEffect(() => {
     const fetchProvinces = async () => {
       try {
-        const response = await axios.get(
-          'http://localhost:8000/api/provincesandcities/provinces',
-        );
+        const response = await API_CALL.get('/provincesandcities/provinces');
         setProvinces(response.data.data);
       } catch (error) {
         console.log(error);
@@ -102,8 +100,8 @@ const EditWarehouse = () => {
   useEffect(() => {
     const fetchCities = async () => {
       try {
-        const response = await axios.get(
-          `http://localhost:8000/api/provincesandcities/cities?prov_id=${selectedProvince}`,
+        const response = await API_CALL.get(
+          `/provincesandcities/cities?prov_id=${selectedProvince}`,
         );
         setCities(response.data.data);
       } catch (error) {

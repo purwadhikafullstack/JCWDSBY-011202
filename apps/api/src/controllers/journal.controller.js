@@ -28,7 +28,6 @@ export const readJournal = async (req, res, next) => {
       data: result,
     });
   } catch (error) {
-    console.error(error);
     return res.status(500).send({
       success: false,
       message: 'Internal Server Error',
@@ -64,7 +63,6 @@ export const getData = async (req, res, next) => {
       countproduct: getProduct.length,
     });
   } catch (error) {
-    console.error(error);
     return res.status(500).send({
       success: false,
       message: 'Internal Server Error',

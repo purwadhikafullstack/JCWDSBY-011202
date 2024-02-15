@@ -1,10 +1,10 @@
 import React from 'react';
-import axios from 'axios';
 import { formatPriceToIDR } from '../utils';
 import { useNavigate } from 'react-router-dom';
 import Toast from './Toast';
 import ConfirmationModal from './ConfirmationModal';
 import { useState } from 'react';
+import API_CALL from '../helpers/API';
 const ProductTable = ({ products, onDelete }) => {
   const navigate = useNavigate();
   const [showConfirmationModal, setShowConfirmationModal] = useState(false);
@@ -23,9 +23,7 @@ const ProductTable = ({ products, onDelete }) => {
   const handleDelete = async (product) => {
     setButtonLoading(true);
     try {
-      await axios.delete(
-        `http://localhost:8000/api/products/${selectedProduct.id}`,
-      );
+      await API_CALL.delete(`/products/${selectedProduct.id}`);
       onDelete(selectedProduct.id);
       setButtonLoading(false);
       setShowConfirmationModal(false);

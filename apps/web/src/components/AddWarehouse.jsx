@@ -2,10 +2,10 @@ import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import AdminLayout from '../components/AdminLayout';
 import { IoMdArrowBack } from 'react-icons/io';
-import axios from 'axios';
 import InputForWarehouse from './InputForWarehouse';
 import ConfirmationModal from './ConfirmationModal';
 import Toast from './Toast';
+import API_CALL from '../helpers/API';
 const AddWarehouse = () => {
   const navigate = useNavigate();
   const [formData, setFormData] = useState({});
@@ -36,8 +36,8 @@ const AddWarehouse = () => {
     const token = localStorage.getItem('token');
     try {
       setLoading(true);
-      const response = await axios.post(
-        'http://localhost:8000/api/warehouses',
+      const response = await API_CALL.post(
+        '/warehouses',
         {
           name: formData.warehouse,
           prov_id: formData.selectedProvince,
@@ -53,15 +53,16 @@ const AddWarehouse = () => {
         },
       );
       if (response.data.success === true) {
-        showToast('success', 'Account created successfully');
+        showToast('success', 'Warehouse created successfully');
+        setFormData({});
       } else {
         showToast(
           'danger',
-          error.response.data.message || 'Failed to create account',
+          error.response.data.message || 'Failed to create warehouse',
         );
       }
     } catch (error) {
-      console.error('Error creating account:', error);
+      console.error('Error creating warehouse:', error);
       showToast(
         'danger',
         error.response.data.message || 'An error occurred. Please try again.',

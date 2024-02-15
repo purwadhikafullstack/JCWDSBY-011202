@@ -2,13 +2,13 @@ import WareHouseAdminLayout from '../../../../components/WareHouseAdminLayout';
 import { useState, useEffect } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { useSelector } from 'react-redux';
-import axios from 'axios';
 import { Loading } from '../../../../components/loadingComponent';
 import ConfirmationModal from '../../../../components/ConfirmationModal';
 import Toast from '../../../../components/Toast';
 import MutationJournalTable from '../../../../components/MutationJournalTable';
 import Pagination from '../../../../components/Temporary/Pagination';
 import MutationFilter from '../../../../components/MutationFIlter';
+import API_CALL from '../../../../helpers/API';
 const ManageMutation = () => {
   const navigate = useNavigate();
   const userGlobal = useSelector((state) => state.accountSliceReducer);
@@ -37,29 +37,29 @@ const ManageMutation = () => {
       let actionEndpoint = '';
       switch (status) {
         case 1:
-          actionEndpoint = `http://localhost:8000/api/warehouse/mutation/confirm/${id}`;
+          actionEndpoint = `/warehouse/mutation/confirm/${id}`;
           break;
         case 2:
-          actionEndpoint = `http://localhost:8000/api/warehouse/mutation/process/${id}`;
+          actionEndpoint = `/warehouse/mutation/process/${id}`;
           break;
         case 3:
-          actionEndpoint = `http://localhost:8000/api/warehouse/mutation/arrival/${id}`;
+          actionEndpoint = `/warehouse/mutation/arrival/${id}`;
           break;
         case 4:
-          actionEndpoint = `http://localhost:8000/api/warehouse/mutation/finish/${id}`;
+          actionEndpoint = `/warehouse/mutation/finish/${id}`;
           break;
         case 5:
-          actionEndpoint = `http://localhost:8000/api/warehouse/mutation/delete/${id}`;
+          actionEndpoint = `/warehouse/mutation/delete/${id}`;
           break;
         case 6:
-          actionEndpoint = `http://localhost:8000/api/warehouse/mutation/cancel/${id}`;
+          actionEndpoint = `/warehouse/mutation/cancel/${id}`;
           break;
         default:
           break;
       }
 
       const token = localStorage.getItem('token');
-      const response = await axios.patch(
+      const response = await API_CALL.patch(
         actionEndpoint,
         {},
         {
@@ -74,8 +74,8 @@ const ManageMutation = () => {
       showToast(response.data.success ? 'success' : 'danger', successMessage);
 
       if (response.data.success) {
-        const mutationResponse = await axios.get(
-          `http://localhost:8000/api/warehouse/mutation?warehouse_id=${userGlobal.warehouse_id}&page=${page}`,
+        const mutationResponse = await API_CALL.get(
+          `/warehouse/mutation?warehouse_id=${userGlobal.warehouse_id}&page=${page}`,
         );
         setTemporaryMutation(mutationResponse.data.data);
       }
@@ -102,8 +102,8 @@ const ManageMutation = () => {
     const fetchData = async () => {
       console.log(query);
       try {
-        const response = await axios.get(
-          `http://localhost:8000/api/warehouse/mutation${
+        const response = await API_CALL.get(
+          `/warehouse/mutation${
             query || `?warehouse_id=${userGlobal.warehouse_id}&page=${page}`
           }`,
         );

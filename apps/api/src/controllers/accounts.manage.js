@@ -1,6 +1,4 @@
-import warehouses from '../models/warehouses';
 import accounts from '../models/accounts';
-import bcrypt from 'bcrypt';
 import journal from '../models/journal';
 import { Op } from 'sequelize';
 
@@ -45,7 +43,6 @@ export const updateAccount = async (req, res, next) => {
       success: true,
     });
   } catch (error) {
-    console.log(error);
     return res.status(500).send({
       message: 'Error updating data',
       success: false,
@@ -96,7 +93,6 @@ export const deleteAccount = async (req, res, next) => {
       success: true,
     });
   } catch (error) {
-    console.log(error);
     return res.status(500).send({
       message: 'Error deleting data',
       success: false,
@@ -108,7 +104,6 @@ export const authCheck = (req, res) => {
   try {
     return res.status(200).send(req.userData.role);
   } catch (error) {
-    console.log(error);
     return res.status(500).send({
       message: 'Error deleting data',
       success: false,

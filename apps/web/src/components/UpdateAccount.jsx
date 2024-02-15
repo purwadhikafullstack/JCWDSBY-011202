@@ -3,10 +3,10 @@ import AdminLayout from './AdminLayout';
 import EditWarehouseAdmin from './EditWarehouseAdmin';
 import { IoMdArrowBack } from 'react-icons/io';
 import { useState, useEffect } from 'react';
-import axios from 'axios';
 import { Loading } from './loadingComponent';
 import ConfirmationModal from './ConfirmationModal';
 import Toast from './Toast';
+import API_CALL from '../helpers/API';
 
 const UpdateAccount = () => {
   const navigate = useNavigate();
@@ -23,9 +23,7 @@ const UpdateAccount = () => {
     const fetchData = async () => {
       setLoading(true);
       try {
-        const response = await axios.get(
-          `http://localhost:8000/api/accounts?id=${realIdNumber}`,
-        );
+        const response = await API_CALL.get(`/accounts?id=${realIdNumber}`);
         const { email, fullname, warehouse_id } = response.data.accounts[0];
         setEmail(email);
         setFullName(fullname);
@@ -59,8 +57,8 @@ const UpdateAccount = () => {
     console.log(warehouse);
     try {
       setLoading(true);
-      const response = await axios.patch(
-        `http://localhost:8000/api/accounts/update-account/${realIdNumber}`,
+      const response = await API_CALL.patch(
+        `/accounts/update-account/${realIdNumber}`,
         {
           fullname,
           email,

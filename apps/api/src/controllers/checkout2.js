@@ -36,7 +36,6 @@ export const getUserAddress = async (req, res, next) => {
 };
 export const changeUserAddress = async (req, res, next) => {
   try {
-    // console.log("haha",req.body);
     const result = await accounts.update(
       {
         address_id: req.body.address,
@@ -47,7 +46,6 @@ export const changeUserAddress = async (req, res, next) => {
         },
       },
     );
-    // console.log("ganit da",result);
     return res.status(200).send(result);
   } catch (error) {
     return res.status(500).send(error);
@@ -55,7 +53,6 @@ export const changeUserAddress = async (req, res, next) => {
 };
 export const createOrder = async (req, res, next) => {
   try {
-    // console.log("masuk nih", req.body);
     const orderDetails = [];
     const orderItemsId = req.body.cartId.split(',');
     const countOrder = await orders.findAndCountAll({
@@ -74,7 +71,6 @@ export const createOrder = async (req, res, next) => {
     const productId = orderItems.map((val, idx) => {
       return val.product_id;
     });
-    console.log('orderitems', orderItems);
     // const productStock = await warehouse_storage.findAll({
     //     where: {
     //         warehouse_id: req.body.warehouse_id,
@@ -94,7 +90,6 @@ export const createOrder = async (req, res, next) => {
     // })
     // let total = 0
     // if (productIdLessStock.length > 0) {
-    //     console.log("masuk sini1");
     //     const searchStock = await warehouse_storage.findAll({
     //         where: {
     //             product_id: productIdLessStock,
@@ -116,9 +111,7 @@ export const createOrder = async (req, res, next) => {
     //                         destination_warehouse_id:req.body.warehouse_id
     //                     },raw:true
     //                 })
-    //                 console.log("hitung",countMutation);
     //                 total = total+parseInt(searchStock[j].stock)
-    //                 // console.log("hola",searchStock[j]);
     //                 itemMutation.push({
     //                     mutation_code:`MUT/${date.getFullYear()}${date.getMonth()}${date.getDate()}/ORI${req.body.warehouse_id}/DEST${searchStock[j].warehouse_id}/PR${productLessStock[i].product_id}/${countMutation.count}/${j+1}`,
     //                     product_id: productLessStock[i].product_id,
@@ -132,7 +125,6 @@ export const createOrder = async (req, res, next) => {
     //             }
     //         }
     //     }
-    //     console.log("masuk sini3", itemMutation);
     //     const createMutation = await warehouse_mutation.bulkCreate(itemMutation)
     // }
     const createOrder = await orders.create({
@@ -164,15 +156,12 @@ export const createOrder = async (req, res, next) => {
       where: { id: orderItemsId },
     });
     const createOrderDetail = await order_details.bulkCreate(orderDetails);
-    return res
-      .status(200)
-      .send({
-        message: 'success create order',
-        id: createOrder.id,
-        invoice: createOrder.invoice,
-      });
+    return res.status(200).send({
+      message: 'success create order',
+      id: createOrder.id,
+      invoice: createOrder.invoice,
+    });
   } catch (error) {
-    console.log(error);
     return res.status(500).send(error);
   }
 };
@@ -196,7 +185,6 @@ export const getOrderData = async (req, res, next) => {
     });
     return res.status(200).send(result);
   } catch (error) {
-    console.log(error);
     return res.status(500).send(error);
   }
 };

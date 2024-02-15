@@ -4,8 +4,8 @@ import Carousel from '../../../components/Carousel';
 import HomeGallery from '../../../components/HomeGallery';
 import HomeProduct from '../../../components/HomeProduct';
 import { useState, useEffect } from 'react';
-import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
+import API_CALL from '../../../helpers/API';
 function Home() {
   const navigate = useNavigate();
   const [currentRole, setCurrentRole] = useState('');
@@ -14,14 +14,11 @@ function Home() {
     const fetchData = async () => {
       try {
         const token = localStorage.getItem('token');
-        const response = await axios.get(
-          'http://localhost:8000/api/accounts/authcheck',
-          {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
+        const response = await API_CALL.get('/accounts/authcheck', {
+          headers: {
+            Authorization: `Bearer ${token}`,
           },
-        );
+        });
         setCurrentRole(response.data);
       } catch (error) {
         console.log(error);

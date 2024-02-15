@@ -13,7 +13,6 @@ export const getCities = async (req, res, next) => {
 
     res.status(200).send({ success: true, data: city });
   } catch (error) {
-    console.error(error);
     res.status(500).send({ success: false, message: 'ERROR GETTING DATA' });
   }
 };
@@ -26,7 +25,6 @@ export const getProvinces = async (req, res, next) => {
 
     res.status(200).send({ success: true, data: province });
   } catch (error) {
-    console.error(error);
     res.status(500).send({ success: false, message: 'ERROR GETTING DATA' });
   }
 };

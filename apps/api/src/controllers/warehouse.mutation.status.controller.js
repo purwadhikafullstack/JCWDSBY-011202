@@ -14,7 +14,6 @@ export const updateStatusProcess = async (req, res, next) => {
     });
 
     if (!isExists) {
-      console.error('Mutation not found or not eligible for delivery');
       return res.status(500).send({
         success: false,
         message:
@@ -108,7 +107,6 @@ export const updateStatusProcess = async (req, res, next) => {
       message: 'Status updated to on delivery',
     });
   } catch (error) {
-    console.error(error);
     return res.status(500).send({
       success: false,
       message: 'Internal Server Error',

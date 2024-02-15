@@ -1,13 +1,11 @@
-import axios from 'axios';
 import { useEffect, useState } from 'react';
+import API_CALL from '../helpers/API';
 const InputForWarehouseAdmin = (props) => {
   const [warehouse, setWarehouses] = useState([]);
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get(
-          `http://localhost:8000/api/warehouses`,
-        );
+        const response = await API_CALL.get(`/warehouses`);
         setWarehouses(response.data.data);
       } catch (error) {
         console.error('Error fetching data:', error);

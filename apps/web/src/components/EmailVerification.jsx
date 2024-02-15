@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import Register from '../assets/register.jpg';
-import axios from 'axios';
 import ButtonWithLoading from './ButtonWithLoading';
+import API_CALL from '../helpers/API';
 
 const EmailVerification = () => {
   const [password, setPassword] = useState('');
@@ -18,14 +18,11 @@ const EmailVerification = () => {
     const fetchData = async () => {
       try {
         const tokenAuth = localStorage.getItem('token');
-        const response = await axios.get(
-          'http://localhost:8000/api/accounts/authcheck',
-          {
-            headers: {
-              Authorization: `Bearer ${tokenAuth}`,
-            },
+        const response = await API_CALL.get('/accounts/authcheck', {
+          headers: {
+            Authorization: `Bearer ${tokenAuth}`,
           },
-        );
+        });
         setCurrentRole(response.data);
       } catch (error) {
         console.log(error);
@@ -61,8 +58,8 @@ const EmailVerification = () => {
         setError('Password must be at least 8 characters');
         return;
       }
-      const response = await axios.post(
-        'http://localhost:8000/api/accounts/register/verification',
+      const response = await API_CALL.post(
+        '/accounts/register/verification',
         {
           password,
           confirmpassword: confirmPassword,

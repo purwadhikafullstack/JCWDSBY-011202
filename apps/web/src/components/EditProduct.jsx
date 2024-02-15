@@ -5,7 +5,9 @@ import AdminLayout from './AdminLayout';
 import axios from 'axios';
 import EditImage from './EditImage';
 import MultiEditImage from './MultiEditImage';
-
+import ConfirmationModal from './ConfirmationModal';
+import Toast from './Toast';
+import { Loading } from './loadingComponent';
 const EditProduct = () => {
   const [categories, setCategories] = useState([]);
   const navigate = useNavigate();
@@ -19,27 +21,35 @@ const EditProduct = () => {
   const [newCategory_id, setNewCategory_id] = useState(
     products[0]?.category_id || '',
   );
+  const [showConfirmationModal, setShowConfirmationModal] = useState(false);
+  const [toast, setToast] = useState(null);
+  const [buttonLoading, setButtonLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
+
+  const getAgainProduct = async () => {
+    try {
+      const response = await axios.get(
+        `http://localhost:8000/api/products?id=${id}`,
+      );
+      console.log(response.data.products);
+      if (!response.data.products.length) {
+        navigate('not-found');
+      }
+      setProducts(response.data.products);
+      setNewName(response.data.products[0].name);
+      setNewPrice(response.data.products[0].price);
+      setNewCategory_id(response.data.products[0].category_id);
+      setNewDescription(response.data.products[0].description);
+      setIsLoading(false);
+    } catch (error) {
+      console.error('Error fetching data:', error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await axios.get(
-          `http://localhost:8000/api/products?id=${id}`,
-        );
-        if (!response.data.length) {
-          navigate('not-found');
-        }
-        setProducts(response.data);
-        setNewName(response.data[0].name);
-        setNewPrice(response.data[0].price);
-        setNewCategory_id(response.data[0].category_id);
-        setNewDescription(response.data[0].description);
-      } catch (error) {
-        console.error('Error fetching data:', error);
-      }
-    };
-
-    fetchData();
+    getAgainProduct();
   }, []);
 
   useEffect(() => {
@@ -59,9 +69,7 @@ const EditProduct = () => {
   }, []);
 
   const handleFormSubmit = async (e) => {
-    console.log(
-      `name: ${newName}, description: ${newDescription}, category:${newCategory_id}, price:${newPrice}`,
-    );
+    setButtonLoading(true);
     try {
       const response = await axios.patch(
         `http://localhost:8000/api/products/${id}`,
@@ -72,12 +80,40 @@ const EditProduct = () => {
           price: newPrice,
         },
       );
-      console.log(response);
-      navigate('/admin/manage-product');
+      getAgainProduct();
+      setShowConfirmationModal(false);
+      showToast('success', response.data.message || `succes edit product`);
+      setButtonLoading(false);
     } catch (error) {
       console.error('Error updating product:', error);
+      showToast(
+        'warning',
+        error.response.data.message || `edit product failed`,
+      );
+      setButtonLoading(false);
+    } finally {
+      setButtonLoading(false);
     }
   };
+
+  const showToast = (status, message) => {
+    setToast({ status, message });
+    setTimeout(() => {
+      setToast(null);
+    }, 5000);
+  };
+
+  const onHandleSaveChanges = () => {
+    setShowConfirmationModal(true);
+  };
+
+  const onCloseConfirmationModal = () => {
+    setShowConfirmationModal(false);
+  };
+
+  if (isLoading) {
+    return <Loading />;
+  }
 
   return (
     <div>
@@ -97,7 +133,7 @@ const EditProduct = () => {
             </div>
           </div>
           <button
-            onClick={handleFormSubmit}
+            onClick={onHandleSaveChanges}
             className="font-medium text-sm bg-orange-500 hover:bg-orange-600 text-white py-2 px-4 rounded-md transition-all duration-300 ease-in-out focus:outline-none "
           >
             Save Changes
@@ -189,6 +225,22 @@ const EditProduct = () => {
             </div>
           </div>
         </div>
+        {showConfirmationModal && (
+          <ConfirmationModal
+            onClickCancel={onCloseConfirmationModal}
+            onclickClose={onCloseConfirmationModal}
+            title="Add Product"
+            isLoading={buttonLoading}
+            onClick={handleFormSubmit}
+          />
+        )}
+        {toast && (
+          <Toast
+            status={toast.status}
+            message={toast.message}
+            onClose={() => setToast(null)}
+          />
+        )}
       </AdminLayout>
     </div>
   );

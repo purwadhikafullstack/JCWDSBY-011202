@@ -3,6 +3,7 @@ import categories from '../models/categories';
 import products_images from '../models/product_images';
 import fs from 'fs/promises';
 import path from 'path';
+import { Sequelize } from 'sequelize';
 
 export const deleteProduct = async (req, res, next) => {
   try {

@@ -3,6 +3,7 @@ import axios from 'axios';
 import SearchBar from './SearchBar';
 import { useNavigate } from 'react-router-dom';
 import { useSelector } from 'react-redux';
+import { Loading } from './loadingComponent';
 const MutationFilter = ({ page }) => {
   const userGlobal = useSelector((state) => state.accountSliceReducer);
   const [products, setProducts] = useState([]);
@@ -33,8 +34,19 @@ const MutationFilter = ({ page }) => {
   };
 
   useEffect(() => {
+    if (product_id === 0 && status !== '') {
+      console.log('masuk 1');
+      navigate(
+        `?warehouse_id=${userGlobal.warehouse_id}&page=${page}&status=${status}`,
+      );
+    }
+    if (product_id > 0 && status === '') {
+      console.log('masuk 2');
+      navigate(
+        `?warehouse_id=${userGlobal.warehouse_id}&page=${page}&product_id=${product_id}`,
+      );
+    }
     if (product_id === 0 && status === '') {
-      console.log('masuk sini');
       navigate(`?warehouse_id=${userGlobal.warehouse_id}&page=${page}`);
     } else {
       console.log('MASUK 2');

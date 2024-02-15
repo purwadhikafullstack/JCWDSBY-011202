@@ -8,6 +8,7 @@ const FilterPrice = (props) => {
           name="Min Price"
           placeholder="Min Price"
           onChange={props.MinPriceChange}
+          value={props.MinPrice}
         />
         <button
           type="number"
@@ -24,6 +25,7 @@ const FilterPrice = (props) => {
           name="Max Price"
           placeholder="Max Price"
           onChange={props.MaxPriceChange}
+          value={props.MaxPrice}
         />
         <button
           type="submit"

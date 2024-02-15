@@ -68,9 +68,24 @@ export const getMutation = async (req, res, next) => {
 
     const totalPages = Math.ceil(totalCount / limit);
 
+    const getPriority = (val) => {
+      const priorities = {
+        'waiting for confirmation': 1,
+        processing: 2,
+        'on delivery': 3,
+        arrived: 4,
+        done: 5,
+        canceled: 6,
+      };
+      return priorities[val.status] || 0;
+    };
+    const sortedData = modifiedResult.sort(
+      (a, b) => getPriority(a) - getPriority(b),
+    );
+
     return res.status(200).send({
       success: true,
-      data: modifiedResult,
+      data: sortedData,
       totalPages,
     });
   } catch (error) {

@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Register from '../../../assets/register.jpg';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import ButtonWithLoading from '../../../components/ButtonWithLoading';
 import { FaCheck } from 'react-icons/fa';
@@ -10,8 +10,37 @@ const RegisterForm = () => {
   const [email, setEmail] = useState('');
   const [error, setError] = useState(null);
   const [showAlert, setShowAlert] = useState(false);
-  const [loading, setLoading] = useState(false);
+  const navigate = useNavigate();
+  const [currentRole, setCurrentRole] = useState('');
+  const [loading, setLoading] = useState(true);
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const token = localStorage.getItem('token');
+        const response = await axios.get(
+          'http://localhost:8000/api/accounts/authcheck',
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          },
+        );
+        setCurrentRole(response.data);
+      } catch (error) {
+        console.log(error);
+        setLoading(false);
+      }
+    };
+    fetchData();
+  }, []);
 
+  if (
+    currentRole === 'admin' ||
+    currentRole === 'superadmin' ||
+    currentRole === 'user'
+  ) {
+    navigate('/not-authorized');
+  }
   const onHandleSignup = async () => {
     try {
       setLoading(true);

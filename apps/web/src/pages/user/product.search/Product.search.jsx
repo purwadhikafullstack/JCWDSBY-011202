@@ -5,109 +5,100 @@ import ProductCatalogCard from '../../../components/ProductCatalogCard';
 import { formatPriceToIDR } from '../../../utils';
 import axios from 'axios';
 import { useState, useEffect } from 'react';
-import { useLocation, useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate, useSearchParams } from 'react-router-dom';
 import { FaFilter } from 'react-icons/fa';
 import Pagination from '../../../components/Temporary/Pagination';
 import { IoMdClose } from 'react-icons/io';
-const ProdutSearch = () => {
+import { Loading } from '../../../components/loadingComponent';
+
+const ProductSearch = () => {
   const [isFilterOpen, setFilterOpen] = useState(false);
-  const [products, setProducts] = useState([]);
   const [currentPage, setCurrentPage] = useState([]);
   const [price, setPrice] = useState('');
   const [minPrice, setMinPrice] = useState('');
   const [maxPrice, setMaxPrice] = useState('');
+  const [selectedMinPrice, setSelectedMinPrice] = useState('');
+  const [selectedMaxPrice, setSelectedMaxPrice] = useState('');
   const [page, setPage] = useState(1);
+  const [totalPage, setTotalPage] = useState(1);
+  const [loading, setLoading] = useState(true);
   const location = useLocation();
   const navigate = useNavigate();
-  const handleFilter = () => {
-    const emptyFilter = [...currentPage];
-    let filteredProducts = [...products];
-    if (minPrice !== '' && maxPrice !== '') {
-      filteredProducts = filteredProducts.filter(
-        (product) =>
-          product.price >= parseInt(minPrice, 10) &&
-          product.price <= parseInt(maxPrice, 10),
-      );
-    } else if (minPrice !== '') {
-      filteredProducts = filteredProducts.filter(
-        (product) => product.price >= parseInt(minPrice, 10),
-      );
-    } else if (maxPrice !== '') {
-      filteredProducts = filteredProducts.filter(
-        (product) => product.price <= parseInt(maxPrice, 10),
-      );
-    }
-    setCurrentPage(
-      filteredProducts.length > 0 ? filteredProducts : emptyFilter,
-    );
-  };
+  const [searchParams, setSearchParams] = useSearchParams();
+  const [currentRole, setCurrentRole] = useState('');
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        if (location.search.includes('category_id=')) {
-          if (page !== 1) {
-            setPage(1);
-          }
-          const response1 = await axios.get(
-            `http://localhost:8000/api/products${location.search}`,
-          );
-          setProducts(response1.data);
-          const response2 = await axios.get(
-            `http://localhost:8000/api/products${location.search}&page=${page}`,
-          );
-          setCurrentPage(response2.data);
-        } else {
-          const response1 = await axios.get(
-            `http://localhost:8000/api/products${location.search}`,
-          );
-          setProducts(response1.data);
-          if (location.search) {
-            const response2 = await axios.get(
-              `http://localhost:8000/api/products${location.search}&page=${page}`,
-            );
-            setCurrentPage(response2.data);
-          } else {
-            const response2 = await axios.get(
-              `http://localhost:8000/api/products?page=${page}`,
-            );
-            setCurrentPage(response2.data);
-          }
-        }
+        const token = localStorage.getItem('token');
+        const response = await axios.get(
+          'http://localhost:8000/api/accounts/authcheck',
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          },
+        );
+        setCurrentRole(response.data);
       } catch (error) {
-        console.error('Error fetching data:', error);
+        console.log(error);
+        setLoading(false);
       }
     };
     fetchData();
-  }, [location.search, page]);
+  }, []);
+
+  if (currentRole === 'admin' || currentRole === 'superadmin') {
+    navigate('/not-authorized');
+  }
+  const handleFilter = () => {
+    setSelectedMaxPrice(maxPrice);
+    setSelectedMinPrice(minPrice);
+    setSearchParams((val) => {
+      val.set('min_price', minPrice);
+      val.set('max_price', maxPrice);
+      return val;
+    });
+  };
+
+  useEffect(() => {}, [
+    page,
+    price,
+    selectedMaxPrice,
+    selectedMinPrice,
+    location.search,
+  ]);
 
   useEffect(() => {
-    if (location.search && !location.search.includes('price=')) {
-      navigate(`/product-search${location.search}&price=${price}`);
-    } else if (
-      location.search.includes('category_id=') &&
-      location.search.includes('price=')
-    ) {
-      const updatedQuery = location.search.split('&')[0];
-      navigate(`/product-search${updatedQuery}&price=${price}`);
-      if (!price) {
-        navigate(`/product-search${updatedQuery}`);
+    const fetchData = async () => {
+      try {
+        setLoading(true);
+        const response = await axios.get(
+          `http://localhost:8000/api/products${
+            location.search || `?page=${page || 1}`
+          }`,
+        );
+        setCurrentPage(response.data.products);
+        setTotalPage(response.data.totalPages);
+        setLoading(false);
+      } catch (error) {
+        console.log(error);
+      } finally {
+        setLoading(false);
       }
-    } else {
-      navigate(`?price=${price}`);
-      if (!price) {
-        navigate(`/product-search`);
-      }
-    }
-  }, [price]);
+    };
+    fetchData();
+  }, [page, location.search]);
 
-  const handlePageChange = (newPage) => {
-    setPage(newPage);
-  };
+  if (loading) {
+    return <Loading />;
+  }
+
   return (
     <div>
       <TemporaryNavbar />
       <div className="sm:w-9/12 w-11/12 mx-auto">
+        {/* Header */}
         <div className="w-auto">
           <h1 className="text-4xl text-center">Products</h1>
           <p className="text-center">
@@ -118,11 +109,15 @@ const ProdutSearch = () => {
             <span className="mx-1 font-semibold">Products</span>
           </p>
         </div>
+
+        {/* Filter Section */}
         <div className="flex w-full mt-8">
           <div className="sm:w-3/12">
+            {/* Category Search */}
             <div className="sm:block hidden">
               <ProductCategorySearch />
             </div>
+            {/* Price Filter */}
             <div className="sm:block hidden">
               <FilterPrice
                 MinPriceChange={(e) => {
@@ -135,21 +130,28 @@ const ProdutSearch = () => {
               <div className="mt-2">
                 <button
                   onClick={() => handleFilter()}
-                  className='w-full class="font-medium text-sm bg-orange-500 hover:bg-orange-600 text-white py-2 px-4 rounded-md transition-all duration-300 ease-in-out focus:outline-none "'
+                  className="w-full font-medium text-sm bg-orange-500 hover:bg-orange-600 text-white py-2 px-4 rounded-md transition-all duration-300 ease-in-out focus:outline-none"
                 >
                   Filter
                 </button>
               </div>
             </div>
           </div>
+
+          {/* Product Display */}
           <div className="w-full">
+            {/* Filter Toggle Button */}
             <div className="flex justify-between h-8">
               <div className="w-4/12 mt-1 flex">
                 <select
                   onChange={(e) => {
                     setPrice(e.target.value);
+                    setSearchParams((val) => {
+                      val.set('price', e.target.value);
+                      return val;
+                    });
                   }}
-                  className=' className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-orange-500 focus:border-orange-500 block w-full p-1 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-orange-500 dark:focus:border-orange-500"'
+                  className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-orange-500 focus:border-orange-500 block w-full p-1 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-orange-500 dark:focus:border-orange-500"
                 >
                   <option value={''}>Default Sorting</option>
                   <option value="asc">Price Ascending</option>
@@ -165,6 +167,8 @@ const ProdutSearch = () => {
                 Showing <span>{currentPage.length}</span> results
               </h1>
             </div>
+
+            {/* Product Cards */}
             <div className="flex flex-wrap -mx-2">
               {currentPage.map((product, index) => (
                 <div key={index} className="sm:w-1/4 w-1/2 p-2">
@@ -172,7 +176,7 @@ const ProdutSearch = () => {
                     productName={product?.name || 'N/A'}
                     price={formatPriceToIDR(product?.price) || 'N/A'}
                     category={product?.category?.category || 'N/A'}
-                    onClick={() => navigate(`/product-detail/${product.id}`)}
+                    onClick={() => navigate(`/product-detail/${product.name}`)}
                     src={
                       `http://localhost:8000/productimage/${product?.product_images?.[0]?.image}` ||
                       'https://placehold.co/384x384'
@@ -188,19 +192,23 @@ const ProdutSearch = () => {
                 </div>
               ))}
             </div>
+
+            {/* Pagination */}
             <div className="mx-auto p-6 ">
               <div className="flex justify-center">
                 <Pagination
-                  products={products}
+                  products={totalPage}
                   page={page}
-                  onClickPrevious={() => handlePageChange(page - 1)}
-                  onClickNext={() => handlePageChange(page + 1)}
+                  onClickPrevious={() => setPage(page - 1)}
+                  onClickNext={() => setPage(page + 1)}
                 />
               </div>
             </div>
           </div>
         </div>
       </div>
+
+      {/* Filter Modal */}
       {isFilterOpen && (
         <div className="sm:hidden fixed top-0 right-0 h-full w-64 bg-white shadow">
           <div className="flex justify-between items-center p-4">
@@ -223,7 +231,7 @@ const ProdutSearch = () => {
             <div className="mt-2">
               <button
                 onClick={() => handleFilter()}
-                className='w-full class="font-medium text-sm bg-orange-500 hover:bg-orange-600 text-white py-2 px-4 rounded-md transition-all duration-300 ease-in-out focus:outline-none "'
+                className="w-full font-medium text-sm bg-orange-500 hover:bg-orange-600 text-white py-2 px-4 rounded-md transition-all duration-300 ease-in-out focus:outline-none"
               >
                 Filter
               </button>
@@ -234,4 +242,5 @@ const ProdutSearch = () => {
     </div>
   );
 };
-export default ProdutSearch;
+
+export default ProductSearch;

@@ -26,7 +26,7 @@ const UpdateAccount = () => {
         const response = await axios.get(
           `http://localhost:8000/api/accounts?id=${realIdNumber}`,
         );
-        const { email, fullname, warehouse_id } = response.data[0];
+        const { email, fullname, warehouse_id } = response.data.accounts[0];
         setEmail(email);
         setFullName(fullname);
         setWarehouse(parseInt(warehouse_id));

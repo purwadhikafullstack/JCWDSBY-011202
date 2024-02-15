@@ -84,12 +84,13 @@ export const Register = async (req, res, next) => {
 };
 
 export const ConfirmationEmail = async (req, res, next) => {
+  console.log('MASUK');
   try {
     const isExist = await accounts.findOne({
       where: {
         id: req.userData.id,
-        raw: true,
       },
+      raw: true,
     });
     if (!isExist) {
       return res

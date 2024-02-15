@@ -3,9 +3,11 @@ import axios from 'axios';
 import ProductCard from './Productcard';
 import { formatPriceToIDR } from '../utils';
 import { useNavigate } from 'react-router-dom';
+import { MiniLoading } from '../components/loadingComponent';
 
 const DiscoverMore = ({ products }) => {
   const [discoverProducts, setDiscoverProducts] = useState([]);
+  const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -17,11 +19,17 @@ const DiscoverMore = ({ products }) => {
         setDiscoverProducts(response.data.data);
       } catch (error) {
         console.error('Error fetching data:', error);
+      } finally {
+        setLoading(false);
       }
     };
 
     fetchData();
   }, [products]);
+
+  if (loading) {
+    return <MiniLoading />;
+  }
 
   return (
     <div className="">
@@ -38,7 +46,7 @@ const DiscoverMore = ({ products }) => {
             productName={product?.name || 'N/A'}
             price={formatPriceToIDR(product?.price) || 'N/A'}
             category={product?.category?.category || 'N/A'}
-            onClick={() => navigate(`/product-detail/${product.id}`)}
+            onClick={() => navigate(`/product-detail/${product.name}`)}
             src={
               `http://localhost:8000/productimage/${product?.product_images?.[0]?.image}` ||
               'https://placehold.co/384x384'

@@ -24,9 +24,9 @@ const ManageProduct = () => {
   const handleDelete = async (deletedProductId) => {
     try {
       const response = await axios.get(
-        `http://localhost:8000/api/products${endPoint || '?page=1'}`,
+        `http://localhost:8000/api/products${endPoint || `?page=${page}`}`,
       );
-      setCurrentPage(response.data);
+      setCurrentPage(response.data.products);
     } catch (error) {
       console.error('Error fetching data:', error);
     }

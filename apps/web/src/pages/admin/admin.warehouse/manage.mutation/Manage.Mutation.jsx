@@ -18,13 +18,21 @@ const ManageMutation = () => {
   const [toast, setToast] = useState(null);
   const [showConfirmationModal, setShowConfirmationModal] = useState(false);
   const [page, setPage] = useState(1);
-  const [endPoint, setEndPoint] = useState('');
   const [totalPage, setTotalPage] = useState(0);
   const location = useLocation();
   const query = location.search;
+  const [isStatusToUpdate, setIsStatusToUpdate] = useState(0);
+  const [isMutationId, setMutationId] = useState(0);
   const onCloseConfirmationModal = () => setShowConfirmationModal(false);
 
+  const handlesShowConfirmation = (status, id) => {
+    setIsStatusToUpdate(status);
+    setMutationId(id);
+    setShowConfirmationModal(true);
+  };
+
   const handleMutationAction = async (status, id) => {
+    console.log('35', status, id);
     try {
       let actionEndpoint = '';
       switch (status) {
@@ -136,16 +144,16 @@ const ManageMutation = () => {
               <MutationFilter page={page} />
               <MutationJournalTable
                 mutation={temporaryMutation}
-                onClickConfirmMutation={(id) => handleMutationAction(1, id)}
-                onClickArrived={(id) => handleMutationAction(3, id)}
-                onClickDeliver={(id) => handleMutationAction(2, id)}
-                onClickDone={(id) => handleMutationAction(4, id)}
-                onClickDelete={(id) => handleMutationAction(5, id)}
-                handleCancel={(id) => handleMutationAction(6, id)}
+                onClickConfirmMutation={(id) => handlesShowConfirmation(1, id)}
+                onClickArrived={(id) => handlesShowConfirmation(3, id)}
+                onClickDeliver={(id) => handlesShowConfirmation(2, id)}
+                onClickDone={(id) => handlesShowConfirmation(4, id)}
+                onClickDelete={(id) => handlesShowConfirmation(5, id)}
+                handleCancel={(id) => handlesShowConfirmation(6, id)}
               />
-              <div className="flex justify-center">
+              <div className="flex justify-center mt-2">
                 <Pagination
-                  products={totalPage}
+                  products={totalPage || 1}
                   page={page}
                   onClickPrevious={() => setPage(page - 1)}
                   onClickNext={() => setPage(page + 1)}
@@ -160,7 +168,9 @@ const ManageMutation = () => {
             onclickClose={onCloseConfirmationModal}
             title={'Are you sure to do this action?'}
             isLoading={buttonLoading}
-            onClick={handleAction}
+            onClick={() => {
+              handleMutationAction(isStatusToUpdate, isMutationId);
+            }}
           />
         )}
         {toast && (

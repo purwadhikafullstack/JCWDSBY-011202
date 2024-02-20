@@ -4,6 +4,7 @@ import { join } from 'path';
 import { NODE_ENV, PORT } from './config';
 import router from './router';
 import { DB } from './db';
+import bearer from 'express-bearer-token';
 
 /**
  * Serve "web" project build result (for production only)
@@ -29,6 +30,7 @@ const globalAPIErrorHandler = (app) => {
   // not found
   app.use((req, res, next) => {
     if (req.path.includes('/api/')) {
+      console.log(res);
       res.status(404).send('Not found !');
     } else {
       next();
@@ -51,11 +53,13 @@ const globalAPIErrorHandler = (app) => {
  */
 const main = () => {
   DB.initialize();
-
   const app = express();
   app.use(cors());
   app.use(json());
+  app.use(bearer());
   app.use('/api', router);
+  app.use('/productimage', express.static(__dirname + '/public/productimage'));
+  app.use('/paymentProof', express.static(__dirname + '/public/paymentProof'));
 
   globalAPIErrorHandler(app);
   serveWebProjectBuildResult(app);
@@ -64,7 +68,7 @@ const main = () => {
     if (err) {
       console.log(`ERROR: ${err}`);
     } else {
-      console.log(`  ➜  [API] Local:   http://localhost:${PORT}/`);
+      console.log(`  ➜  [API] Local:   http://localhost:${PORT}/api`);
     }
   });
 };

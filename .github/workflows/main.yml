@@ -7,8 +7,10 @@ on:
 #Allow repo secrets
 env:
   VITE_API_URL: ${{ secrets.VITE_API_URL }}
-  VITE_IMG_URL: ${{ secrets.VITE_IMG_URL }}
-  VITE_GOOGLE_CLIENT_ID: ${{ secrets.VITE_GOOGLE_CLIENT_ID }}
+  VITE_IMAGE_URL: ${{ secrets.VITE_IMAGE_URL }}
+  RAJA_ONGKIR_APIKEY: ${{ secrets.RAJA_ONGKIR_APIKEY }}
+  MIDTRANS_CLIENT_APIKEY: ${{ secrets.MIDTRANS_CLIENT_APIKEY }}
+  GEOCODE_APIKEY: ${{ secrets.GEOCODE_APIKEY }}
 
 jobs:
   build:

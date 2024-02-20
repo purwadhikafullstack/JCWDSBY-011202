@@ -17,7 +17,6 @@ import {
   AddressCardSub,
 } from '../../../components/addressCard';
 import { Loading } from '../../../components/loadingComponent';
-import { API_CALL } from '../../../helper';
 const DashboardAddress = (props) => {
   const ref = useRef();
   const [userAddress, setUserAddress] = useState([]);
@@ -35,9 +34,12 @@ const DashboardAddress = (props) => {
   const token = localStorage.getItem('token');
   const getUserAddress = async () => {
     try {
-      const result = await API_CALL.get(`/checkout/userAddress`, {
-        headers: { Authorization: `Bearer ${token}` },
-      });
+      const result = await axios.get(
+        `http://localhost:8000/api/checkout/userAddress`,
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        },
+      );
       return setUserAddress(result.data.address);
     } catch (error) {
       console.error(error);
@@ -45,22 +47,27 @@ const DashboardAddress = (props) => {
   };
   const getUserMainAddressId = async () => {
     try {
-      const result = await API_CALL.get(`/userSetting/main-address`, {
-        headers: { Authorization: `Bearer ${token}` },
-      });
+      const result = await axios.get(
+        `http://localhost:8000/api/userSetting/main-address`,
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        },
+      );
       setUserMainAddress(result.data.address_id);
     } catch (error) {
       console.error(error);
     }
   };
   const getProvinces = async () => {
-    const result = await API_CALL.get(`/provincesandcities/provinces`);
+    const result = await axios.get(
+      `http://localhost:8000/api/provincesandcities/provinces`,
+    );
     setProvinces(result.data.data);
   };
   const getCity = async () => {
     try {
-      const getCity = await API_CALL.get(
-        `/userSetting/getCity/${userProvince}`,
+      const getCity = await axios.get(
+        `http://localhost:8000/api/userSetting/getCity/${userProvince}`,
       );
       setCities(getCity.data.data);
     } catch (error) {
@@ -89,8 +96,8 @@ const DashboardAddress = (props) => {
       const doc2 = document.getElementById('phone');
       if (doc.value && doc2.value && userCity && userProvince) {
         openLoading(1500);
-        const result = await API_CALL.post(
-          `/userSetting/add-address`,
+        const result = await axios.post(
+          `http://localhost:8000/api/userSetting/add-address`,
           {
             prov_id: userProvince,
             city_id: userCity,
@@ -117,8 +124,8 @@ const DashboardAddress = (props) => {
       const doc2 = document.getElementById('phone');
       if (userCity && doc.value && doc2.value && userProvince) {
         openLoading(1500);
-        const result = await API_CALL.patch(
-          `/userSetting/edit-address`,
+        const result = await axios.patch(
+          `http://localhost:8000/api/userSetting/edit-address`,
           {
             prov_id: userProvince,
             city_id: userCity,
@@ -183,8 +190,8 @@ const DashboardAddress = (props) => {
                             }
                           };
                           const token = localStorage.getItem('token');
-                          const result = await API_CALL.delete(
-                            `/userSetting/delete-main-address?id=${
+                          const result = await axios.delete(
+                            `http://localhost:8000/api/userSetting/delete-main-address?id=${
                               val.id
                             }&other=${userAddress[index(idx)].id}`,
                             {
@@ -224,8 +231,8 @@ const DashboardAddress = (props) => {
                         onHandleDeleteAddress={async () => {
                           try {
                             const token = localStorage.getItem('token');
-                            const result = await API_CALL.delete(
-                              `/userSetting/delete-address/${val.id}`,
+                            const result = await axios.delete(
+                              `http://localhost:8000/api/userSetting/delete-address/${val.id}`,
                               {
                                 headers: { Authorization: `Bearer ${token}` },
                               },
@@ -239,8 +246,8 @@ const DashboardAddress = (props) => {
                         onHandleChangeMainAddress={async () => {
                           try {
                             const token = localStorage.getItem('token');
-                            const result = await API_CALL.patch(
-                              `/checkout/changeUserAddress`,
+                            const result = await axios.patch(
+                              `http://localhost:8000/api/checkout/changeUserAddress`,
                               { address: val.id },
                               {
                                 headers: { Authorization: `Bearer ${token}` },

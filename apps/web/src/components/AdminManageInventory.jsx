@@ -37,9 +37,9 @@ const WarehouseInventory = () => {
 
   const getApiUrl = () => {
     if (userGlobal.role === 'superadmin') {
-      return `http://localhost:8000/api/warehouse/storage${location.search}&page=${page}`;
+      return `/warehouse/storage${location.search}&page=${page}`;
     } else if (userGlobal.role === 'admin') {
-      return `http://localhost:8000/api/warehouse/storage?warehouse=${userGlobal.warehouse_id}&page=${page}`;
+      return `/warehouse/storage?warehouse=${userGlobal.warehouse_id}&page=${page}`;
     }
   };
 

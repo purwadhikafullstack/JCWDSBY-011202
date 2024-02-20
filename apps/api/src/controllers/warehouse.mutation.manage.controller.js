@@ -120,19 +120,19 @@ export const confirmMutation = async (req, res, next) => {
       hour12: false,
     });
 
+    await stocks_journals.create({
+      date: formatDate(new Date()),
+      product_id: isExists.product_id,
+      warehouse_id: isExists.source_warehouse_id,
+      quantity: isExists.quantity,
+      operation: 'decrement',
+      now_stock: isStock.stock - isExists.quantity,
+    });
     const journalInformation = `${isExists.mutation_code}: ${req.userData.fullname} confirmed a request for ${isExists.quantity} units of product ${isExistProduct.name} from warehouse ${isExistSourceWarehouse.name} to ${isExistDestinationWarehouse.name}, the stock of stock product will be reduce`;
     const sourceInformation = `${isExists.mutation_code}: Your warehouse, ${isExistSourceWarehouse.name} confirmed a request for ${isExists.quantity} units of product  ${isExistProduct.name} of warehouse ${isExistDestinationWarehouse.name} request`;
     const destinationInformation = `${isExists.mutation_code}:  Your warehouse, ${isExistDestinationWarehouse.name} request for ${isExists.quantity} units of product ${isExistProduct.name} is confirmed by admin of ${isExistSourceWarehouse}`;
     const journalFrom = 'Mutation Stock';
     if (updateStatusReversedWarehouse && updateStatus) {
-      await stocks_journals.create({
-        date: formatDate(new Date()),
-        product_id: isExists.product_id,
-        warehouse_id: isExists.source_warehouse_id,
-        quantity: isExists.quantity,
-        operation: 'decrement',
-        now_stock: isStock.stock - isExists.quantity,
-      });
       await journal.create({
         date: journalDate,
         information: journalInformation,

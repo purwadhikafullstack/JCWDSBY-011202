@@ -5,7 +5,7 @@ import { updateItem } from '../redux/slice/orderSlice';
 import axios from 'axios';
 import { updateStatus } from '../redux/slice/statusSlice';
 import { cancelOrder } from '../redux/slice/cancelOrderAdmin';
-import { API_CALL } from '../helper';
+import API_CALL from '../helpers/API';
 
 const ManageOrderTable2 = (props) => {
   const index = ['Diproses', 'Dikirim', 'Berhasil', 'Dibatalkan'];

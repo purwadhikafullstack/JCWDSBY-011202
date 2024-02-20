@@ -14,7 +14,6 @@ import { Loading } from '../../../components/loadingComponent';
 import { IModal } from '../../../components/modalRama';
 import { useDispatch, useSelector } from 'react-redux';
 import { updateStatus } from '../../../redux/slice/statusSlice';
-import { API_CALL } from '../../../helper';
 const DashboardOrder = (props) => {
   const dispatch = useDispatch();
   const showModalConfirmation = useSelector((state) => state.statusSlice);
@@ -29,7 +28,7 @@ const DashboardOrder = (props) => {
   const getUserOrder = async () => {
     try {
       const token = localStorage.getItem('token');
-      const result = await API_CALL.get('/userOrder/', {
+      const result = await axios.get('http://localhost:8000/api/userOrder/', {
         headers: { Authorization: `Bearer ${token}` },
       });
       setDataOrder(result.data);
@@ -41,8 +40,8 @@ const DashboardOrder = (props) => {
     try {
       // const deleteItem=JSON.parse(sessionStorage.getItem("deleteOrderId"))
       const token = localStorage.getItem('token');
-      const result = await API_CALL.patch(
-        `/userOrder/delete`,
+      const result = await axios.patch(
+        `http://localhost:8000/api/userOrder/delete`,
         { id: deleteItem.id, invoice: deleteItem.inv },
         {
           headers: { Authorization: `Bearer ${token}` },
@@ -103,8 +102,8 @@ const DashboardOrder = (props) => {
               onHandleModalClick={async () => {
                 try {
                   const token = localStorage.getItem('token');
-                  const result = await API_CALL.patch(
-                    `/userOrder/confirm-order`,
+                  const result = await axios.patch(
+                    `http://localhost:8000/api/userOrder/confirm-order`,
                     {
                       order: showModalConfirmation.order_id,
                       invoice: showModalConfirmation.invoice,

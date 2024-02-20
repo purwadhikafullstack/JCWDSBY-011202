@@ -14,7 +14,8 @@ import { Loading } from '../../../components/loadingComponent';
 import { IModal } from '../../../components/modalRama';
 import { useDispatch, useSelector } from 'react-redux';
 import { updateStatus } from '../../../redux/slice/statusSlice';
-import { API_CALL } from '../../../helper';
+import  API_CALL  from '../../../helpers/API';
+
 const DashboardOrder = (props) => {
   const dispatch = useDispatch();
   const showModalConfirmation = useSelector((state) => state.statusSlice);

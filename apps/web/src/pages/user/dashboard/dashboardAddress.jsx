@@ -17,7 +17,7 @@ import {
   AddressCardSub,
 } from '../../../components/addressCard';
 import { Loading } from '../../../components/loadingComponent';
-import { API_CALL } from '../../../helper';
+import  API_CALL  from '../../../helpers/API';
 const DashboardAddress = (props) => {
   const ref = useRef();
   const [userAddress, setUserAddress] = useState([]);

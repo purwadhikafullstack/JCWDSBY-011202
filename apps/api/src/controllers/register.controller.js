@@ -57,7 +57,7 @@ export const Register = async (req, res, next) => {
         <p style="font-size: 16px; color: #fff;">Your registration was successful.</p>
 
         <div style="margin-top: 20px;">
-          <a href="http://localhost:5173/user/email-verification?${token}" style="background-color: #FF6347; color: #fff; padding: 10px 20px; text-decoration: none; border-radius: 5px; font-weight: bold;">Complete Registration</a>
+          <a href="$https://jcwdsby011202.purwadhikabootcamp.com/user/email-verification?${token}" style="background-color: #FF6347; color: #fff; padding: 10px 20px; text-decoration: none; border-radius: 5px; font-weight: bold;">Complete Registration</a>
         </div>
       </div>
     `;

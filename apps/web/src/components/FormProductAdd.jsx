@@ -77,8 +77,8 @@ const FormProductAdd = (props) => {
             <option value={7000}>7 kg</option>
             <option value={8000}>8 kg</option>
             <option value={9000}>9 kg</option>
-            <option value={1000}>10 kg</option>
-            <option value={2000}>More than 10 kg</option>
+            <option value={10000}>10 kg</option>
+            <option value={20000}>More than 10 kg</option>
           </select>
         </div>
       </div>

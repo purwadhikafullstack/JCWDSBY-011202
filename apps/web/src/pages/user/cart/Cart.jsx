@@ -194,7 +194,6 @@ const CartPage = () => {
       navigate('/user/dashboard/address');
     }
   };
-  console.log("cart dat",cartProduct);
   return (
     <>
       {firstloading ? <Loading /> : ''}

@@ -5,6 +5,8 @@ import { useState } from 'react';
 import { ModalDetailOrder } from './modalRama2';
 import { useDispatch } from 'react-redux';
 import { updateStatus } from '../redux/slice/statusSlice';
+import { updateItem } from '../redux/slice/orderSlice';
+import API_CALL from '../helpers/API';
 export const OrderCardNone = (props) => {
   // if (!props.data) {
   return (
@@ -18,7 +20,6 @@ export const OrderCard = (props) => {
   const [itemDisplay, setItemDisplay] = useState([props.itemDisplay]);
   const navigate = useNavigate();
   const [showModal, setShowModal] = useState(false);
-  const [showDetailOrder, setShowDetailOrder] = useState(false);
   const statusStyle = (status) => {
     switch (status) {
       case 'Diproses':
@@ -71,8 +72,8 @@ export const OrderCard = (props) => {
               <ul className=" flex-col flex">
                 <li
                   className=" hover:bg-orange-200 cursor-pointer w-full rounded-md p-2"
-                  onClick={() => {
-                    setShowDetailOrder(true);
+                  onClick={()=>{
+                    dispatch(updateItem({ order_id:props.orderId , invoice:props.invoice }));
                   }}
                 >
                   Detail Pesanan
@@ -106,10 +107,6 @@ export const OrderCard = (props) => {
                 order_id:props.orderId,
                 invoice:props.invoice
               }))
-              // sessionStorage.setItem("orderItem",JSON.stringify(props.orderItem))
-              // navigate(
-              //   `/user/dashboard/upload-payment?order=${props.orderId}&inv=${props.invoice}`,
-              // );
             }}
           >
             Konfirmasi Pesanan
@@ -135,10 +132,11 @@ export const OrderCard = (props) => {
             >
               <ul className=" flex-col flex">
                 <li
-                  className=" hover:bg-orange-200 cursor-pointer w-full rounded-md p-2"
-                  onClick={() => {
-                    setShowDetailOrder(true);
-                  }}
+                  className=" hover:bg-orange-200 cursor-pointer w-fit rounded-md p-2 "
+                  onClick={()=>{
+                    dispatch(updateItem({ order_id:props.orderId , invoice:props.invoice }));
+                  }
+                }
                 >
                   Detail Pesanan
                 </li>
@@ -151,8 +149,11 @@ export const OrderCard = (props) => {
       return (
         <div className="justify-end text-sm flex gap-2">
           <p
-            className="font-semibold text-right  text-[#F06105] hover:text-orange-400 cursor-pointer w-full rounded-md p-2"
+            className="font-semibold text-right  text-[#F06105] hover:text-orange-400 cursor-pointer w-fit rounded-md p-2"
             disabled={false}
+            onClick={()=>{
+              dispatch(updateItem({ order_id:props.orderId , invoice:props.invoice }));
+            }}
           >
             Detail Pesanan
           </p>
@@ -229,10 +230,7 @@ export const OrderCard = (props) => {
       ) : (
         ''
       )}
-      {showDetailOrder ? <ModalDetailOrder onHandleModalCancel={() => {
-            setShowDetailOrder(false);
-            
-          }}/> : ''}
+      
     </div>
   );
 };

@@ -52,6 +52,9 @@ const AdminManageOrder = () => {
   useEffect(() => {
     getDataOrder();
   }, [location.search]);
+  useEffect(()=>{
+    console.log(editItem);
+  },[editItem])
   return (
     <>
       <AdminLayout>

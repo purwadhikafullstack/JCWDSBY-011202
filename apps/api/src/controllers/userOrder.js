@@ -99,7 +99,7 @@ export const deleteOrder = async (req, res, next) => {
 };
 export const getOrderDetail = async (req, res, next) => {
   try {
-    const userOrder = await orders.findAll({
+    const userOrder = await orders.findOne({
       where: {
         id: req.query.order,
         invoice: req.query.inv,
@@ -123,7 +123,36 @@ export const getOrderDetail = async (req, res, next) => {
       ],
       raw: true,
     });
-    return res.status(200).send(userOrder);
+    const data = await order_details.findAll({
+      where: {
+        order_id: req.query.order,
+      },
+      include: [
+        {
+          model: products,
+          required: true,
+          attributes: ['id', 'name', 'price'],
+          include: [
+            {
+              model: product_images,
+              required: true,
+              attributes: ['image'],
+            },
+          ],
+        },
+      ],
+      raw: true,
+    });
+    const result = [];
+    const index = [];
+    data.map((val, idx) => {
+      if (!index.includes(data[idx].product_id)) {
+        index.push(data[idx].product_id);
+        result.push(val);
+      }
+    });
+    console.log(userOrder);
+    return res.status(200).send({...userOrder,orderDate:userOrder.createdAt,address:userOrder["address.address"],city:userOrder["address.city.name"],province:userOrder["address.province.name"],data:result});
   } catch (error) {
     return res.status(500).send(error);
   }

@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { CiSearch } from 'react-icons/ci';
 import { useNavigate } from 'react-router-dom';
 import API_CALL from '../../helpers/API';
-
+import { IMG_URL_PRODUCT } from '../../helper';
 function SearchBar() {
   const navigate = useNavigate();
   const [query, setQuery] = useState('');
@@ -13,7 +13,7 @@ function SearchBar() {
     const fetchData = async () => {
       try {
         const response = await API_CALL.get(`/products`);
-        setProducts(response.data);
+        setProducts(response.data.products);
       } catch (error) {
         console.error('Error fetching data:', error);
       }
@@ -65,7 +65,7 @@ function SearchBar() {
               onClick={() => navigate(`/product-detail/${product.id}`)}
             >
               <img
-                src={`http://localhost:8000/productimage/${product?.product_images?.[0]?.image}`}
+                src={`${IMG_URL_PRODUCT}/productimage/${product?.product_images?.[0]?.image}`}
                 className="hidden sm:block w-16 mx-2 border-2"
                 alt={product.name}
               />

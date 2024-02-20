@@ -4,6 +4,7 @@ import TemporaryNavbar from '../../../components/Temporary/Navbar';
 import axios from 'axios';
 import { Loading } from '../../../components/loadingComponent';
 import { useEffect, useState } from 'react';
+import { API_CALL } from '../../../helper';
 
 const CheckoutSuccess = () => {
   const navigate = useNavigate();
@@ -19,12 +20,9 @@ const CheckoutSuccess = () => {
   const getOrderData = async () => {
     try {
       const token = localStorage.getItem('token');
-      const data = await axios.get(
-        `http://localhost:8000/api/checkout/success${location.search}`,
-        {
-          headers: { Authorization: `Bearer ${token}` },
-        },
-      );
+      const data = await API_CALL.get(`/checkout/success${location.search}`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
       setOrderData(data.data);
     } catch (error) {
       console.error(error);

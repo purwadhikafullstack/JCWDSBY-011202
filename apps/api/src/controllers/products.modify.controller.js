@@ -34,6 +34,7 @@ export const deleteProduct = async (req, res, next) => {
       message: 'Product and associated files deleted successfully',
     });
   } catch (error) {
+    console.log(error);
     return res
       .status(500)
       .send({ success: false, message: 'Error deleting data' });

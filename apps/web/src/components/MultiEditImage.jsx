@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { FiEdit2 } from 'react-icons/fi';
 import { CiTrash } from 'react-icons/ci';
 import API_CALL from '../helpers/API';
-
+import { IMG_URL_PRODUCT } from '../helper';
 const MultiEditImage = ({ products }) => {
   const [images, setImages] = useState([]);
   const [newImages, setNewImages] = useState([]);
@@ -124,7 +124,7 @@ const MultiEditImage = ({ products }) => {
           <img
             src={
               previewImages[index] ||
-              `http://localhost:8000/productimage/${val.image}`
+              `${IMG_URL_PRODUCT}/productimage/${val.image}`
             }
             className="sm:w-24 sm:h-24 w-20 object-cover rounded-md mb-2 md:w-[108px] md:h-[108px] md:mb-0"
             alt={`Image Preview ${index + 1}`}

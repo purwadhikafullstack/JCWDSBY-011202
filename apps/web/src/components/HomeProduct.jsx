@@ -22,7 +22,7 @@ const HomeProduct = () => {
             productName={product?.name || 'N/A'}
             price={formatPriceToIDR(product?.price) || 'N/A'}
             category={product?.category?.category || 'N/A'}
-            onClick={() => navigate(`/product-detail/${product.id}`)}
+            onClick={() => navigate(`/product-detail/${product.name}`)}
             src={
               `${IMG_URL_PRODUCT_IMAGE}/${product?.product_images?.[0]?.image}` ||
               'https://placehold.co/384x384'

@@ -8,7 +8,7 @@ import API_CALL from '../../helpers/API';
 
 const linksData = [
   { to: '/', label: 'Home' },
-  { to: '/product-search', label: 'Products' },
+  { to: '/product-search?page=1', label: 'Products' },
 ];
 
 const TemporaryNavbar = (props) => {

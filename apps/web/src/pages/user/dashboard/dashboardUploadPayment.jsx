@@ -13,6 +13,7 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { Loading } from '../../../components/loadingComponent';
 import { IModal } from '../../../components/modalRama';
+import { API_CALL } from '../../../helper';
 const DashboardUploadPayment = (props) => {
   const [media, setMedia] = useState(null);
   const [fileName, setFileName] = useState('No selected file');
@@ -44,8 +45,8 @@ const DashboardUploadPayment = (props) => {
         //   `http://localhost:8000/api/userOrder/upload/payment-proof${location.search}`,
         //   formData,
         // );
-        const result2 = await axios.post(
-          `http://localhost:8000/api/userOrder/request-mutation${location.search}`,
+        const result2 = await API_CALL.post(
+          `/userOrder/request-mutation${location.search}`,
           {},
           {
             headers: { Authorization: `Bearer ${token}` },
@@ -63,8 +64,8 @@ const DashboardUploadPayment = (props) => {
   const getOrderDetail = async () => {
     try {
       const token = localStorage.getItem('token');
-      const result = await axios.get(
-        `http://localhost:8000/api/userOrder/order-detail${location.search}`,
+      const result = await API_CALL.get(
+        `/userOrder/order-detail${location.search}`,
         {
           headers: { Authorization: `Bearer ${token}` },
         },

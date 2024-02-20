@@ -29,7 +29,6 @@ const ProductTable = ({ products, onDelete }) => {
       setShowConfirmationModal(false);
       showToast('success', 'Product deleted successfully');
     } catch (error) {
-      lo;
       setShowConfirmationModal(false);
       showToast('warning', 'Product deleted failed');
       console.error('Error deleting product:', error);

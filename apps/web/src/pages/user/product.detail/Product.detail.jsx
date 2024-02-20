@@ -9,6 +9,7 @@ import DiscoverMore from '../../../components/DiscoverMore';
 import ButtonWithLoading from '../../../components/ButtonWithLoading';
 import { Loading } from '../../../components/loadingComponent';
 import API_CALL from '../../../helpers/API';
+import { IMG_URL_PRODUCT } from '../../../helper';
 
 const ProductDetail = () => {
   const [loading, setLoading] = useState(false);
@@ -90,7 +91,7 @@ const ProductDetail = () => {
     try {
       const token = localStorage.getItem('token');
       const send = await API_CALL.post(
-        'http://localhost:8000/api/cart/add-to-cart',
+        '/cart/add-to-cart',
         {
           product_id: products[0].id,
           quantity: counter,
@@ -107,7 +108,6 @@ const ProductDetail = () => {
       setLoading(false);
     }
   };
-  console.error(products[0]);
 
   return (
     <div className="flex flex-col min-h-screen">
@@ -153,7 +153,7 @@ const ProductDetail = () => {
                   src={
                     products.length > 0 &&
                     products[0].product_images?.length > 0
-                      ? `http://localhost:8000/productimage/${products[0].product_images[0].image}`
+                      ? `${IMG_URL_PRODUCT}/productimage/${products[0].product_images[0].image}`
                       : 'https://placehold.co/384x384'
                   }
                   alt="Main Image"
@@ -167,7 +167,7 @@ const ProductDetail = () => {
                         <img
                           key={index}
                           className="w-16 sm:w-[84px] h-auto border-2"
-                          src={`http://localhost:8000/productimage/${image.image}`}
+                          src={`${IMG_URL_PRODUCT}/productimage/${image.image}`}
                           alt={`Product ${index + 2}`}
                         />
                       ))}

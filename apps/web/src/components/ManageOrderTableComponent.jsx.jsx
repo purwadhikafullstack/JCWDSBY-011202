@@ -5,6 +5,7 @@ import { updateItem } from '../redux/slice/orderSlice';
 import axios from 'axios';
 import { updateStatus } from '../redux/slice/statusSlice';
 import { cancelOrder } from '../redux/slice/cancelOrderAdmin';
+import API_CALL from '../helpers/API';
 
 const ManageOrderTable = (props) => {
   const index = ['Diproses', 'Dikirim', 'Berhasil', 'Dibatalkan'];
@@ -170,8 +171,8 @@ const ManageOrderTable = (props) => {
                               onClick={async () => {
                                 try {
                                   const token = localStorage.getItem('token');
-                                  const result = await axios.get(
-                                    `http://localhost:8000/api/warehouse/order/manage-order?id=${val.id}&inv=${val.invoice}`,
+                                  const result = await API_CALL.get(
+                                    `/warehouse/order/manage-order?id=${val.id}&inv=${val.invoice}`,
                                     {
                                       headers: {
                                         Authorization: `Bearer ${token}`,

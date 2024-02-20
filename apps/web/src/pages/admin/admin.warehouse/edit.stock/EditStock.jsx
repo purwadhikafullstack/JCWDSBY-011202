@@ -8,6 +8,7 @@ import { useSelector } from 'react-redux';
 import { Loading } from '../../../../components/loadingComponent';
 import Toast from '../../../../components/Toast';
 import API_CALL from '../../../../helpers/API';
+import { IMG_URL_PRODUCT } from '../../../../helper';
 const EditStockProduct = () => {
   const navigate = useNavigate();
   const userGlobal = useSelector((state) => state.accountSliceReducer);
@@ -154,7 +155,7 @@ const EditStockProduct = () => {
                   <img
                     src={
                       productSelected?.product_images?.[0]?.image
-                        ? `http://localhost:8000/productimage/${productSelected.product_images[0].image}`
+                        ? `${IMG_URL_PRODUCT}/productimage/${productSelected.product_images[0].image}`
                         : `https://placehold.co/400x400`
                     }
                     className="w-full"

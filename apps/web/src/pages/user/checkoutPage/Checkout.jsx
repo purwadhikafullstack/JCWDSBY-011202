@@ -75,12 +75,9 @@ const CheckoutPage = () => {
   const getUserAddress = async () => {
     try {
       const token = localStorage.getItem('token');
-      const result = await axios.get(
-        `http://localhost:8000/api/checkout/userAddress`,
-        {
-          headers: { Authorization: `Bearer ${token}` },
-        },
-      );
+      const result = await API_CALL.get(`/checkout/userAddress`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
       setUserAddress(result.data.address);
     } catch (error) {
       console.error(error);
@@ -90,8 +87,8 @@ const CheckoutPage = () => {
   const getShippingCostApi = async (lat, lon, city, kota, weight) => {
     try {
       const token = localStorage.getItem('token');
-      const result = await axios.get(
-        `http://localhost:8000/api/checkout/get-shipping-cost?lat=${lat}&lon=${lon}&city=${city}&kota=${kota}&weight=${weight}`,
+      const result = await API_CALL.get(
+        `/checkout/get-shipping-cost?lat=${lat}&lon=${lon}&city=${city}&kota=${kota}&weight=${weight}`,
         {
           headers: { Authorization: `Bearer ${token}` },
         },
@@ -120,8 +117,8 @@ const CheckoutPage = () => {
       if (finalPrice !== '-') {
         const date = new Date();
         const token = localStorage.getItem('token');
-        const result = await axios.post(
-          `http://localhost:8000/api/checkout`,
+        const result = await API_CALL.post(
+          `/checkout`,
           {
             invoice: `INV/${date.getFullYear()}${
               date.getMonth() + 1 < 10

@@ -16,6 +16,7 @@ import {
 import { useNavigate } from 'react-router-dom';
 import AdminLayout from '../../../../components/AdminLayout.jsx';
 import ManageOrderTable2 from '../../../../components/ManageOrderTableComponent2.jsx';
+import { API_CALL } from '../../../../helper.js';
 
 const AdminManageOrder = () => {
   const navigate = useNavigate();
@@ -36,12 +37,9 @@ const AdminManageOrder = () => {
   const token = localStorage.getItem('token');
   const getDataOrder = async () => {
     try {
-      const result = await axios.get(
-        `http://localhost:8000/api/admin/order`,
-        {
-          headers: { Authorization: `Bearer ${token}` },
-        },
-      );
+      const result = await API_CALL.get(`/admin/order`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
       setData(result.data);
     } catch (error) {
       console.log(error);
@@ -58,7 +56,6 @@ const AdminManageOrder = () => {
       <AdminLayout>
         <div className="bg-white p-4 flex justify-between align-middle">
           <p className="font-bold text-xl ">Manage Order</p>
-          
         </div>
         <div className="px-4 py-3">
           <div className=" mb-2 flex gap-2">
@@ -112,46 +109,46 @@ const AdminManageOrder = () => {
             />
           </div>
           <div>
-          <div className="flex gap-2 justify-end mb-3">
-            <button
-              className=" bg-[#F06105] text-white font-semibold my-auto px-4 rounded-md py-2 hover:bg-orange-400"
-              disabled={false}
-              onClick={() => {
-                const object = {
-                  warehouse_id:filterIdGudang,
-                  invoice: filterInvoice,
-                  status: filterStatus,
-                  from: filterDateFrom,
-                  to: filterDateTo,
-                };
-                const result = [];
-                console.log('yang dicari', object);
-                for (const key in object) {
-                  if (object[key]) {
-                    result.push(`${key}=${object[key]}`);
+            <div className="flex gap-2 justify-end mb-3">
+              <button
+                className=" bg-[#F06105] text-white font-semibold my-auto px-4 rounded-md py-2 hover:bg-orange-400"
+                disabled={false}
+                onClick={() => {
+                  const object = {
+                    warehouse_id: filterIdGudang,
+                    invoice: filterInvoice,
+                    status: filterStatus,
+                    from: filterDateFrom,
+                    to: filterDateTo,
+                  };
+                  const result = [];
+                  console.log('yang dicari', object);
+                  for (const key in object) {
+                    if (object[key]) {
+                      result.push(`${key}=${object[key]}`);
+                    }
                   }
-                }
-                const finalresult = result.join('&');
-                navigate(`/warehouse-admin/manage-order?${finalresult}`);
-                // getDataOrder();
-              }}
-            >
-              Search
-            </button>
-            <button
-              className=" bg-slate-300 font-semibold my-auto px-4 rounded-md py-2 hover:bg-slate-100"
-              disabled={false}
-              onClick={() => {
-                navigate(`/warehouse-admin/manage-order`);
-                setFilterDateFrom('');
-                setFilterDateTo('');
-                setFilterInvoice('');
-                setFilterStatus('');
-              }}
-            >
-              Reset
-            </button>
-          </div>
+                  const finalresult = result.join('&');
+                  navigate(`/warehouse-admin/manage-order?${finalresult}`);
+                  // getDataOrder();
+                }}
+              >
+                Search
+              </button>
+              <button
+                className=" bg-slate-300 font-semibold my-auto px-4 rounded-md py-2 hover:bg-slate-100"
+                disabled={false}
+                onClick={() => {
+                  navigate(`/warehouse-admin/manage-order`);
+                  setFilterDateFrom('');
+                  setFilterDateTo('');
+                  setFilterInvoice('');
+                  setFilterStatus('');
+                }}
+              >
+                Reset
+              </button>
+            </div>
           </div>
           <ManageOrderTable2
             header={[

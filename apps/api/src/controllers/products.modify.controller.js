@@ -3,7 +3,7 @@ import products_images from '../models/product_images';
 import fs from 'fs/promises';
 import path from 'path';
 import { Sequelize } from 'sequelize';
-
+import warehouse_storage from '../models/warehouse_storage';
 export const deleteProduct = async (req, res, next) => {
   try {
     const productId = req.params.id;
@@ -29,6 +29,18 @@ export const deleteProduct = async (req, res, next) => {
         },
       },
     );
+    await warehouse_storage.update(
+      {
+        is_deleted: true,
+      },
+      {
+        where: {
+          product_id: productId,
+          is_deleted: false,
+        },
+      },
+    );
+
     return res.status(200).send({
       success: true,
       message: 'Product and associated files deleted successfully',

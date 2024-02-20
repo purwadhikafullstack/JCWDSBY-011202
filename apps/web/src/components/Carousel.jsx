@@ -1,4 +1,4 @@
-('use client');
+// ('use client');
 import { Carousel } from 'flowbite-react';
 import Carousel1 from '../assets/carousel1.jpg';
 import Carousel2 from '../assets/carousel2.jpg';

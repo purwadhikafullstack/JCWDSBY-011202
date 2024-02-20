@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import axios from 'axios';
-import ProductCard from './Productcard';
+import ProductCard from './ProductCard';
 import { formatPriceToIDR } from '../utils';
 import { useNavigate } from 'react-router-dom';
 import { MiniLoading } from '../components/loadingComponent';

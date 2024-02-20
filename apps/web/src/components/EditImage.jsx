@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { FiEdit2 } from 'react-icons/fi';
 import API_CALL from '../helpers/API';
-
+import { IMG_URL_PRODUCT } from '../helper';
 const EditImage = ({ products }) => {
   const [image, setImage] = useState({});
   const [newImage, setNewImage] = useState(null);
@@ -66,8 +66,7 @@ const EditImage = ({ products }) => {
         <>
           <img
             src={
-              previewImage ||
-              `http://localhost:8000/productimage/${image.image}`
+              previewImage || `${IMG_URL_PRODUCT}/productimage/${image.image}`
             }
             className="w-full h-full  border-2"
             alt=""

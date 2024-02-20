@@ -4,6 +4,8 @@ import ProductCard from './ProductCard';
 import { formatPriceToIDR } from '../utils';
 import { useNavigate } from 'react-router-dom';
 import { MiniLoading } from '../components/loadingComponent';
+import API_CALL from '../helpers/API';
+import { IMG_URL_PRODUCT } from '../helper';
 
 const DiscoverMore = ({ products }) => {
   const [discoverProducts, setDiscoverProducts] = useState([]);
@@ -13,8 +15,8 @@ const DiscoverMore = ({ products }) => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get(
-          `http://localhost:8000/api/products/discovering/${products[0].category_id}/${products[0].id}`,
+        const response = await API_CALL.get(
+          `/products/discovering/${products[0].category_id}/${products[0].id}`,
         );
         setDiscoverProducts(response.data.data);
       } catch (error) {
@@ -51,11 +53,11 @@ const DiscoverMore = ({ products }) => {
               window.scrollTo({ top: 0, behavior: 'smooth' });
             }}
             src={
-              `http://localhost:8000/productimage/${product?.product_images?.[0]?.image}` ||
+              `${IMG_URL_PRODUCT}/productimage/${product?.product_images?.[0]?.image}` ||
               'https://placehold.co/384x384'
             }
             src2={
-              `http://localhost:8000/productimage/${
+              `${IMG_URL_PRODUCT}/productimage/${
                 product?.product_images.length >= 2
                   ? product?.product_images?.[1]?.image
                   : product?.product_images?.[0]?.image

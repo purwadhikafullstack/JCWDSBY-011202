@@ -10,6 +10,7 @@ import Pagination from '../../../components/Temporary/Pagination';
 import { IoMdClose } from 'react-icons/io';
 import { Loading } from '../../../components/loadingComponent';
 import API_CALL from '../../../helpers/API';
+import { IMG_URL_PRODUCT } from '../../../helper';
 
 const ProductSearch = () => {
   const [isFilterOpen, setFilterOpen] = useState(false);
@@ -173,11 +174,11 @@ const ProductSearch = () => {
                     category={product?.category?.category || 'N/A'}
                     onClick={() => navigate(`/product-detail/${product.name}`)}
                     src={
-                      `http://localhost:8000/productimage/${product?.product_images?.[0]?.image}` ||
+                      `${IMG_URL_PRODUCT}/productimage/${product?.product_images?.[0]?.image}` ||
                       'https://placehold.co/384x384'
                     }
                     src2={
-                      `http://localhost:8000/productimage/${
+                      `${IMG_URL_PRODUCT}/productimage/${
                         product?.product_images.length >= 2
                           ? product?.product_images?.[1]?.image
                           : product?.product_images?.[0]?.image

@@ -4,6 +4,7 @@ import ConfirmationModal from './ConfirmationModal';
 import Toast from './Toast';
 import { useSelector } from 'react-redux';
 import API_CALL from '../helpers/API';
+import { IMG_URL_PRODUCT } from '../helper';
 const InventoryTable = ({ warehouseInventory, onDelete }) => {
   const navigate = useNavigate();
   const [Inventory, setInventory] = useState([]);
@@ -97,7 +98,7 @@ const InventoryTable = ({ warehouseInventory, onDelete }) => {
                 <td className="px-3 py-2 text-sm text-gray-500 whitespace-nowrap">
                   {productImage && (
                     <img
-                      src={`http://localhost:8000/productimage/${productImage}`}
+                      src={`${IMG_URL_PRODUCT}/productimage/${productImage}`}
                       className="w-16 mx-auto"
                     />
                   )}

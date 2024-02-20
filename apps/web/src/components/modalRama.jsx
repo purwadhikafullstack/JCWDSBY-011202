@@ -3,6 +3,7 @@ import { FaShippingFast } from 'react-icons/fa';
 import { MiniLoading } from './loadingComponent';
 import axios from 'axios';
 import { useEffect, useState } from 'react';
+import API_CALL from '../helpers/API';
 const IModal = (props) => {
   return (
     <div className="fixed inset-0 bg-opacity-80 flex flex-col justify-center items-center bg-slate-100 content-center gap-y-3 text-center z-50">
@@ -91,8 +92,8 @@ const IModalOpt = (props) => {
                             openMiniLoading(500);
                             setIdIndex(val.id);
                             const token = localStorage.getItem('token');
-                            const result = await axios.patch(
-                              `http://localhost:8000/api/checkout/changeUserAddress`,
+                            const result = await API_CALL.patch(
+                              `/checkout/changeUserAddress`,
                               { address: val.id },
                               {
                                 headers: { Authorization: `Bearer ${token}` },

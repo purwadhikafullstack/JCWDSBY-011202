@@ -8,6 +8,7 @@ import { cartToOrder } from './cart.api';
 import TemporaryFooter from '../../../components/Temporary/Footer';
 import TemporaryNavbar from '../../../components/Temporary/Navbar';
 import { IModal } from '../../../components/modalRama';
+import { API_CALL } from '../../../helper';
 
 const CartPage = () => {
   const navigate = useNavigate();
@@ -24,7 +25,7 @@ const CartPage = () => {
   const getDataCart = async () => {
     try {
       const token = localStorage.getItem('token');
-      const result = await axios.get('http://localhost:8000/api/cart/', {
+      const result = await API_CALL.get(`/cart/`, {
         headers: { Authorization: `Bearer ${token}` },
       });
       setCartCount(result.data.count);
@@ -36,12 +37,9 @@ const CartPage = () => {
   const getUserAddress = async () => {
     try {
       const token = localStorage.getItem('token');
-      const result = await axios.get(
-        `http://localhost:8000/api/checkout/userAddress`,
-        {
-          headers: { Authorization: `Bearer ${token}` },
-        },
-      );
+      const result = await API_CALL.get(`/checkout/userAddress`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
       setUserAddress(result.data.address);
     } catch (error) {
       console.error(error);
@@ -56,12 +54,9 @@ const CartPage = () => {
   const getSummary = async () => {
     try {
       const token = localStorage.getItem('token');
-      const result = await axios.get(
-        `http://localhost:8000/api/cart/summary/${checkedArray}`,
-        {
-          headers: { Authorization: `Bearer ${token}` },
-        },
-      );
+      const result = await API_CALL.get(`/cart/summary/${checkedArray}`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
       return setCartSummary(result.data);
     } catch (error) {
       console.error(error);
@@ -107,12 +102,9 @@ const CartPage = () => {
   const onHandleDelete = async (id) => {
     try {
       const token = localStorage.getItem('token');
-      const deleteEvent = await axios.delete(
-        `http://localhost:8000/api/cart/${id}`,
-        {
-          headers: { Authorization: `Bearer ${token}` },
-        },
-      );
+      const deleteEvent = await API_CALL.delete(`/cart/${id}`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
       alert('Berhasil menghapus cart');
       getDataCart();
       setOnChangeCheckedValue(!onChangeCheckedValue);
@@ -126,8 +118,8 @@ const CartPage = () => {
       let item = document.getElementsByName('inputQty');
       let changeItem = item[idx].value;
       if (!changeItem) {
-        const updateQty = await axios.patch(
-          `http://localhost:8000/api/checkout/qty/${cartId}`,
+        const updateQty = await API_CALL.patch(
+          `/checkout/qty/${cartId}`,
           { quantity: 0 },
           {
             headers: { Authorization: `Bearer ${token}` },
@@ -140,8 +132,8 @@ const CartPage = () => {
         if (changeItem > stock) {
           alert(`Oops jumlah maksimal pembelian adalah ${stock}`);
         }
-        const updateQty = await axios.patch(
-          `http://localhost:8000/api/cart/qty/${cartId}`,
+        const updateQty = await API_CALL.patch(
+          `/cart/qty/${cartId}`,
           { quantity: parseInt(changeItem), stock: stock },
           {
             headers: { Authorization: `Bearer ${token}` },
@@ -161,8 +153,8 @@ const CartPage = () => {
         if (qty + 1 > stock) {
           alert(`Oops jumlah maksimal pembelian adalah ${stock}`);
         }
-        const edit = await axios.patch(
-          `http://localhost:8000/api/cart/plus/${id}`,
+        const edit = await API_CALL.patch(
+          `/cart/plus/${id}`,
           { stock: stock },
           {
             headers: { Authorization: `Bearer ${token}` },
@@ -172,8 +164,8 @@ const CartPage = () => {
         setOnChangeCheckedValue(!onChangeCheckedValue);
       } else if (operator === 'minus') {
         // getChecked()
-        const edit = await axios.patch(
-          `http://localhost:8000/api/cart/minus/${id}`,
+        const edit = await API_CALL.patch(
+          `/cart/minus/${id}`,
           {},
           {
             headers: { Authorization: `Bearer ${token}` },

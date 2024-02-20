@@ -20,6 +20,7 @@ import {
 } from '../../../../components/adminOrderSearchComponent.jsx';
 import { useLocation, useNavigate } from 'react-router-dom';
 import ManageOrderTable2 from '../../../../components/ManageOrderTableComponent2.jsx';
+import { API_CALL } from '../../../../helper.js';
 
 const WarehouseManageOrder = () => {
   const location = useLocation();
@@ -42,20 +43,17 @@ const WarehouseManageOrder = () => {
   const getDataOrder = async () => {
     try {
       if (location.search) {
-        const result = await axios.get(
-          `http://localhost:8000/api/warehouse/order/search-order${location.search}`,
+        const result = await API_CALL.get(
+          `/warehouse/order/search-order${location.search}`,
           {
             headers: { Authorization: `Bearer ${token}` },
           },
         );
         return setData(result.data);
       } else {
-        const result = await axios.get(
-          `http://localhost:8000/api/warehouse/order`,
-          {
-            headers: { Authorization: `Bearer ${token}` },
-          },
-        );
+        const result = await API_CALL.get(`/warehouse/order`, {
+          headers: { Authorization: `Bearer ${token}` },
+        });
         return setData(result.data);
       }
     } catch (error) {
@@ -227,8 +225,8 @@ const WarehouseManageOrder = () => {
               try {
                 const token = localStorage.getItem('token');
                 let doc = document.getElementById('update');
-                const result = await axios.patch(
-                  `http://localhost:8000/api/warehouse/order/update-status`,
+                const result = await API_CALL.patch(
+                  `/warehouse/order/update-status`,
                   {
                     status: doc.value,
                     invoice: editStatus.invoice,
@@ -261,8 +259,8 @@ const WarehouseManageOrder = () => {
             deskripsi={'Apakah anda yakin membatalkan Pesanan ini?'}
             onHandleModalClick={async () => {
               try {
-                const batalkanOrder = await axios.patch(
-                  `http://localhost:8000/api/warehouse/order/update-status`,
+                const batalkanOrder = await API_CALL.patch(
+                  `/warehouse/order/update-status`,
                   {
                     status: cancelOrderItem.status,
                     invoice: cancelOrderItem.invoice,

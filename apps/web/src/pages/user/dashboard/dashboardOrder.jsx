@@ -74,7 +74,6 @@ const DashboardOrder = (props) => {
       console.log(error);
     }
   };
-
   useEffect(() => {
     if (orderDetail.invoice) {
       getOrderDetail();
@@ -84,7 +83,6 @@ const DashboardOrder = (props) => {
     getUserOrder();
     openLoading(2500);
   }, []);
-  console.log('apa yang kau', orderDetail);
   return (
     <div>
       {firstloading ? (
@@ -167,6 +165,7 @@ const DashboardOrder = (props) => {
           {orderDetail.invoice ? (
             <ModalOrderInformation
               data={orderDetailItem}
+              dataItems={orderDetailItem.data}
               onHandleModalCancel={() => {
                 dispatch(
                   updateItem({

@@ -84,7 +84,7 @@ const DashboardOrder = (props) => {
     getUserOrder();
     openLoading(2500);
   }, []);
-  console.log('apa yang kau', orderDetail);
+  console.log('apa yang kau', orderDetailItem);
   return (
     <div>
       {firstloading ? (
@@ -167,6 +167,7 @@ const DashboardOrder = (props) => {
           {orderDetail.invoice ? (
             <ModalOrderInformation
               data={orderDetailItem}
+              dataItems={orderDetailItem.data}
               onHandleModalCancel={() => {
                 dispatch(
                   updateItem({

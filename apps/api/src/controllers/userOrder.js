@@ -99,6 +99,8 @@ export const deleteOrder = async (req, res, next) => {
 };
 export const getOrderDetail = async (req, res, next) => {
   try {
+    console.log("yuser order",req.query);
+
     const userOrder = await orders.findOne({
       where: {
         id: req.query.order,
@@ -151,7 +153,6 @@ export const getOrderDetail = async (req, res, next) => {
         result.push(val);
       }
     });
-    console.log(userOrder);
     return res.status(200).send({...userOrder,orderDate:userOrder.createdAt,address:userOrder["address.address"],city:userOrder["address.city.name"],province:userOrder["address.province.name"],data:result});
   } catch (error) {
     return res.status(500).send(error);

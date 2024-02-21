@@ -99,8 +99,6 @@ export const deleteOrder = async (req, res, next) => {
 };
 export const getOrderDetail = async (req, res, next) => {
   try {
-    console.log("yuser order",req.query);
-
     const userOrder = await orders.findOne({
       where: {
         id: req.query.order,

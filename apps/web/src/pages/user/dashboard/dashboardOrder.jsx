@@ -83,7 +83,6 @@ const DashboardOrder = (props) => {
     getUserOrder();
     openLoading(2500);
   }, []);
-  console.log('apa yang kau', orderDetailItem);
   return (
     <div>
       {firstloading ? (

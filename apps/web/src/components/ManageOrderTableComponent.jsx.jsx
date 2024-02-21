@@ -30,15 +30,15 @@ const ManageOrderTable = (props) => {
   const data = [props.data];
   return (
     <div className=" overflow-scroll">
-      <table className="table-fixed overflow-scroll w-full">
-        <thead className="bg-[rgb(240,97,5)] text-white font-semibold ">
+      <table className="min-w-full border divide-y divide-gray-200 ">
+        <thead className="bg-orange-50 rounded-md">
           <tr className="">
             {props.header.map((val, idx) => {
               if (val == 'Action') {
                 return (
                   <th
                     key={idx}
-                    className="lg:px-1 lg:py-1 px-3 py-2 text-[13px] font-medium tracking-wide uppercase w-[150px]"
+                    className="px-6 py-3 text-xs font-medium tracking-wider text-left text-gray-500 uppercase"
                   >
                     {val}
                   </th>
@@ -47,7 +47,7 @@ const ManageOrderTable = (props) => {
                 return (
                   <th
                     key={idx}
-                    className="lg:px-1 lg:py-1 px-3 py-2 text-[13px] font-medium tracking-wide uppercase w-[100px]"
+                    className="px-6 py-3 text-xs font-medium tracking-wider text-left text-gray-500 uppercase"
                   >
                     {val}
                   </th>
@@ -56,7 +56,7 @@ const ManageOrderTable = (props) => {
                 return (
                   <th
                     key={idx}
-                    className="lg:px-1 lg:py-1 px-3 py-2 text-[13px] font-medium tracking-wide uppercase w-[150px]"
+                    className="px-6 py-3 text-xs font-medium tracking-wider text-left text-gray-500 uppercase"
                   >
                     <div className="flex items-center justify-between w-fit">
                       {val}{' '}
@@ -70,35 +70,33 @@ const ManageOrderTable = (props) => {
             })}
           </tr>
         </thead>
-        <tbody>
+        <tbody className="bg-white divide-y divide-gray-200">
           {data[0].length > 0 ? (
             data[0].map((val, id) => {
               return (
                 <tr
-                  className={` border-b-[1px] border-slate-300 text-[13px] ${
-                    id % 2 == 0 ? 'bg-slate-200' : 'bg-slate-300'
-                  }`}
+                  className="px-6 py-4 text-sm text-gray-500 whitespace-nowrap"
                   key={id}
                 >
-                  <td className="">
+                  <td className="px-6 py-4 text-sm text-gray-500 whitespace-nowrap">
                     <div className=" align-middle py-4 px-2 overflow-hidden text-ellipsis whitespace-nowrap">
                       {val.invoice}
                     </div>
                   </td>
-                  <td className="">
+                  <td className="px-6 py-4 text-sm text-gray-500 whitespace-nowrap">
                     <div className=" align-middle px-2 overflow-hidden text-ellipsis whitespace-nowrap">
                       {new Date(val.createdAt).toLocaleDateString('id', {
                         dateStyle: 'medium',
                       })}
                     </div>
                   </td>
-                  <td className="">
+                  <td className="px-6 py-4 text-sm text-gray-500 whitespace-nowrap">
                     <div className=" align-middle px-2 overflow-hidden text-ellipsis whitespace-nowrap ">
                       {val['address.address']}, {val['address.city.name']},{' '}
                       {val['address.province.name']}
                     </div>
                   </td>
-                  <td className="">
+                  <td className="px-6 py-4 text-sm text-gray-500 whitespace-nowrap">
                     <div className=" align-middle px-2  ">
                       <a
                         href={`http://localhost:8000/paymentProof/${val.payment_proof}`}
@@ -110,7 +108,7 @@ const ManageOrderTable = (props) => {
                       </a>
                     </div>
                   </td>
-                  <td className="">
+                  <td className="px-6 py-4 text-sm text-gray-500 whitespace-nowrap">
                     <div className=" align-middle font-semibold px-2">
                       Rp{' '}
                       <span className="text-right">
@@ -118,7 +116,7 @@ const ManageOrderTable = (props) => {
                       </span>
                     </div>
                   </td>
-                  <td className="">
+                  <td className="px-6 py-4 text-sm text-gray-500 whitespace-nowrap">
                     <div
                       className={`align-middle max-w-fit px-2 py-1 rounded-md overflow-hidden text-ellipsis whitespace-nowrap ${statusStyle(
                         val.status,
@@ -127,7 +125,7 @@ const ManageOrderTable = (props) => {
                       {val.status}
                     </div>
                   </td>
-                  <td className="">
+                  <td className="px-6 py-4 text-sm text-gray-500 whitespace-nowrap">
                     <div className="flex justify-center py-1 gap-1">
                       <button
                         className="rounded-md  bg-[#F06105] text-white py-1 px-2 hover:bg-orange-400 "

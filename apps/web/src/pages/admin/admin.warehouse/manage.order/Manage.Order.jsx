@@ -20,7 +20,7 @@ import {
 } from '../../../../components/adminOrderSearchComponent.jsx';
 import { useLocation, useNavigate } from 'react-router-dom';
 import ManageOrderTable2 from '../../../../components/ManageOrderTableComponent2.jsx';
-import { API_CALL } from '../../../../helper.js';
+import API_CALL from '../../../../helpers/API.js';
 
 const WarehouseManageOrder = () => {
   const location = useLocation();
@@ -74,14 +74,15 @@ const WarehouseManageOrder = () => {
     getQuery();
     getDataOrder();
   }, [location.search]);
+  console.log('data', data);
 
   return (
     <>
       <WareHouseAdminLayout>
+        <div className="bg-white p-4 flex justify-between align-middle">
+          <p className="font-bold text-xl ">Manage Order</p>
+        </div>
         <div className="px-4 py-3">
-          <div className="bg-white">
-            <p className="font-bold mb-5 text-xl ">Manage Order</p>
-          </div>
           <div className=" mb-2 flex gap-2">
             <InputSearchComponent
               inputSearchId={'searchByInv'}
@@ -165,7 +166,7 @@ const WarehouseManageOrder = () => {
             </button>
           </div>
           <div className="">
-            <ManageOrderTable2
+            <ManageOrderTable
               header={[
                 'Invoice',
                 'Date Invoice',

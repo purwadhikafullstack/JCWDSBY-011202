@@ -8,7 +8,7 @@ import { cartToOrder } from './cart.api';
 import TemporaryFooter from '../../../components/Temporary/Footer';
 import TemporaryNavbar from '../../../components/Temporary/Navbar';
 import { IModal } from '../../../components/modalRama';
-import { API_CALL } from '../../../helper';
+import  API_CALL  from '../../../helpers/API';
 
 const CartPage = () => {
   const navigate = useNavigate();

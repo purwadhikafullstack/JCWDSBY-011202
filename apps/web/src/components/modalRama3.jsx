@@ -1,4 +1,5 @@
 import { RiArrowDropRightLine } from 'react-icons/ri';
+import { IMG_URL_PRODUCT } from '../helper';
 const ModalOrderInformation = (props) => {
   const data = props.data;
   return (
@@ -46,7 +47,7 @@ const ModalOrderInformation = (props) => {
                       <div className="flex gap-2">
                         <div className=" flex justify-center items-center">
                           <img
-                            src={`http://localhost:8000/productimage/${val['product.product_images.image']}`}
+                            src={`${IMG_URL_PRODUCT}/productimage/${val['product.product_images.image']}`}
                             alt="gambar"
                             className="rounded-sm h-[60px] w-[60px]"
                           />
@@ -146,7 +147,11 @@ const ModalUpdateStatus = (props) => {
               className="rounded-md p-2 text-sm truncate"
             >
               {updateTo.map((val, idx) => {
-                return <option key={idx} value={val}>{val}</option>;
+                return (
+                  <option key={idx} value={val}>
+                    {val}
+                  </option>
+                );
               })}
             </select>
           </div>

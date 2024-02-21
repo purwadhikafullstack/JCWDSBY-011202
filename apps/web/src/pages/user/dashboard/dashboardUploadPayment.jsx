@@ -13,7 +13,8 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { Loading } from '../../../components/loadingComponent';
 import { IModal } from '../../../components/modalRama';
-import { API_CALL } from '../../../helper';
+import  API_CALL  from '../../../helpers/API';
+
 const DashboardUploadPayment = (props) => {
   const [media, setMedia] = useState(null);
   const [fileName, setFileName] = useState('No selected file');
@@ -41,10 +42,10 @@ const DashboardUploadPayment = (props) => {
         const token = localStorage.getItem('token');
         const formData = new FormData();
         formData.append('fileUpload', fileToUpload);
-        // const result = await axios.patch(
-        //   `http://localhost:8000/api/userOrder/upload/payment-proof${location.search}`,
-        //   formData,
-        // );
+        const result = await API_CALL.patch(
+          `/userOrder/upload/payment-proof${location.search}`,
+          formData,
+        );
         const result2 = await API_CALL.post(
           `/userOrder/request-mutation${location.search}`,
           {},
@@ -52,7 +53,7 @@ const DashboardUploadPayment = (props) => {
             headers: { Authorization: `Bearer ${token}` },
           },
         );
-        // navigate("/user/dashboard/order")
+        navigate("/user/dashboard/order")
         alert(
           'Terima kasih sudah mengupload pembayaran, pembayaran anda akan segera dikonfirmasi ',
         );

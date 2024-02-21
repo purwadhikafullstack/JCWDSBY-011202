@@ -4,13 +4,13 @@ const path = require('path');
 
 module.exports = {
   uploader: (directory) => {
-    const defaultDir = './src/public'; // Adjust the default public directory path
-
+    const defaultDir = path.join(
+      __dirname,
+      `../public${directory ? `/${directory}` : ''}`,
+    );
     const storageUploader = multer.diskStorage({
       destination: (req, file, cb) => {
-        const pathDir = directory
-          ? path.join(defaultDir, directory)
-          : defaultDir;
+        const pathDir = directory ? path.join(defaultDir) : defaultDir;
 
         if (fs.existsSync(pathDir)) {
           cb(null, pathDir);

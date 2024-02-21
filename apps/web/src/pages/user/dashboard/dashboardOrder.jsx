@@ -14,12 +14,19 @@ import { Loading } from '../../../components/loadingComponent';
 import { IModal } from '../../../components/modalRama';
 import { useDispatch, useSelector } from 'react-redux';
 import { updateStatus } from '../../../redux/slice/statusSlice';
-import { API_CALL } from '../../../helper';
+import API_CALL from '../../../helpers/API';
+import { ModalDetailOrder } from '../../../components/modalRama2';
+import { ModalOrderInformation } from '../../../components/modalRama3';
+import { updateItem } from '../../../redux/slice/orderSlice';
+
 const DashboardOrder = (props) => {
   const dispatch = useDispatch();
+  const orderDetail = useSelector((state) => state.orderSlice);
   const showModalConfirmation = useSelector((state) => state.statusSlice);
+  const [orderDetailItem, setOrderDetailItem] = useState([]);
   const [dataOrder, setDataOrder] = useState([]);
   const [firstloading, setFirstLoading] = useState(false);
+  const token = localStorage.getItem('token');
   const openLoading = (time) => {
     setFirstLoading(true);
     setTimeout(() => {
@@ -54,11 +61,29 @@ const DashboardOrder = (props) => {
       console.error(error);
     }
   };
+  const getOrderDetail = async () => {
+    try {
+      const result = await API_CALL.get(
+        `/userOrder/order-detail?inv=${orderDetail.invoice}&order=${orderDetail.order_id}`,
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        },
+      );
+      setOrderDetailItem(result.data);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+  useEffect(() => {
+    if (orderDetail.invoice) {
+      getOrderDetail();
+    }
+  }, [orderDetail]);
   useEffect(() => {
     getUserOrder();
     openLoading(2500);
   }, []);
-
+console.log("apa yang kau",orderDetail);
   return (
     <div>
       {firstloading ? (
@@ -130,6 +155,21 @@ const DashboardOrder = (props) => {
                   updateStatus({
                     order_id: '',
                     status: '',
+                    invoice: '',
+                  }),
+                );
+              }}
+            />
+          ) : (
+            ''
+          )}
+          {orderDetail.invoice ? (
+            <ModalOrderInformation
+              data={orderDetailItem}
+              onHandleModalCancel = {()=>{
+                dispatch(
+                  updateItem({
+                    order_id: '',
                     invoice: '',
                   }),
                 );

@@ -4,7 +4,7 @@ import TemporaryNavbar from '../../../components/Temporary/Navbar';
 import axios from 'axios';
 import { Loading } from '../../../components/loadingComponent';
 import { useEffect, useState } from 'react';
-import { API_CALL } from '../../../helper';
+import  API_CALL  from '../../../helpers/API';
 
 const CheckoutSuccess = () => {
   const navigate = useNavigate();

@@ -16,7 +16,8 @@ import {
 import { useNavigate } from 'react-router-dom';
 import AdminLayout from '../../../../components/AdminLayout.jsx';
 import ManageOrderTable2 from '../../../../components/ManageOrderTableComponent2.jsx';
-import { API_CALL } from '../../../../helper.js';
+import  API_CALL  from '../../../../helpers/API.js'
+
 
 const AdminManageOrder = () => {
   const navigate = useNavigate();
@@ -51,6 +52,9 @@ const AdminManageOrder = () => {
   useEffect(() => {
     getDataOrder();
   }, [location.search]);
+  useEffect(()=>{
+    console.log(editItem);
+  },[editItem])
   return (
     <>
       <AdminLayout>

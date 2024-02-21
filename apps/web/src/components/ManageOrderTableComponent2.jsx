@@ -35,7 +35,7 @@ const ManageOrderTable2 = (props) => {
                 return (
                   <th
                     key={idx}
-                    className="lg:px-1 lg:py-1 px-3 py-2 text-[13px] font-medium tracking-wide uppercase w-[150px]"
+                    className="lg:px-1 lg:py-1 px-3 py-2 text-[13px] font-medium tracking-wide uppercase w-[120px]"
                   >
                     {val}
                   </th>
@@ -130,106 +130,46 @@ const ManageOrderTable2 = (props) => {
                     </div>
                   </td>
                   <td className="">
-                    <div className="flex justify-center py-1 gap-1">
+                    <div className="">
                       <button
-                        className="rounded-md  bg-[#F06105] text-white py-1 px-2 hover:bg-orange-400 "
-                        type="button"
-                        onClick={() => {
-                          dispatch(
-                            updateStatus({
-                              order_id: val.id,
-                              invoice: val.invoice,
-                              orderDate: val.createdAt,
-                              status: val.status,
-                            }),
-                          );
-                        }}
-                      >
-                        Update Status
-                      </button>
-                      <button
-                        className="border-[1px] rounded-md px-2 border-[#F06105] hover:text-[#F06105]"
-                        onClick={() => {
-                          let doc = document.getElementById(`hamburger${id}`);
-                          if (doc.style.display == 'block') {
-                            doc.style.display = 'none';
-                            activeHamburger = null;
-                          } else if (doc.style.display == 'none') {
-                            doc.style.display = 'block';
+                        className=" hover:text-orange-500 cursor-pointer w-full rounded-md p-2"
+                        onClick={async () => {
+                          try {
+                            const token = localStorage.getItem('token');
+                            const result = await API_CALL.get(
+                              `/admin/order/detail?id=${val.id}&inv=${val.invoice}`,
+                              {
+                                headers: {
+                                  Authorization: `Bearer ${token}`,
+                                },
+                              },
+                            );
+                            dispatch(
+                              updateItem({
+                                order_id: val.id,
+                                address: val['address.address'],
+                                city: val['address.city.name'],
+                                province: val['address.province.name'],
+                                warehouse_id: val.warehouse_id,
+                                recepient: val.recepient,
+                                status: val.status,
+                                payment_proof: val.payment_proof,
+                                invoice: val.invoice,
+                                total_price: val.total_price,
+                                total_weight: val.total_weight,
+                                shipping_cost: val.shipping_cost,
+                                shipping_type: val.shipping_type,
+                                orderDate: val.createdAt,
+                                data: result.data,
+                              }),
+                            );
+                          } catch (error) {
+                            console.log(error);
                           }
                         }}
                       >
-                        <RxHamburgerMenu />
+                        Detail Pesanan
                       </button>
-                      <div className="relative">
-                        <div
-                          id={`hamburger${id}`}
-                          style={{ display: 'none' }}
-                          className="absolute w-[134px]  sm:top-[29px] sm:right-[5px]  bg-white  text-left rounded-md border-[1px]"
-                        >
-                          <ul className=" flex-col flex">
-                            <li
-                              className=" hover:bg-orange-200 cursor-pointer w-full rounded-md p-2"
-                              onClick={async () => {
-                                try {
-                                  const token = localStorage.getItem('token');
-                                  const result = await API_CALL.get(
-                                    `/warehouse/order/manage-order?id=${val.id}&inv=${val.invoice}`,
-                                    {
-                                      headers: {
-                                        Authorization: `Bearer ${token}`,
-                                      },
-                                    },
-                                  );
-                                  dispatch(
-                                    updateItem({
-                                      order_id: val.id,
-                                      address: val['address.address'],
-                                      city: val['address.city.name'],
-                                      province: val['address.province.name'],
-                                      warehouse_id: val.warehouse_id,
-                                      recepient: val.recepient,
-                                      status: val.status,
-                                      payment_proof: val.payment_proof,
-                                      invoice: val.invoice,
-                                      total_price: val.total_price,
-                                      total_weight: val.total_weight,
-                                      shipping_cost: val.shipping_cost,
-                                      shipping_type: val.shipping_type,
-                                      orderDate: val.createdAt,
-                                      data: result.data,
-                                    }),
-                                  );
-                                } catch (error) {
-                                  console.log(error);
-                                }
-                              }}
-                            >
-                              Detail Pesanan
-                            </li>
-                            <li className="border-t-[1px]"></li>
-                            {!index.includes(val.status) ? (
-                              <li
-                                className="hover:bg-orange-200 cursor-pointer w-full rounded-sm p-2"
-                                onClick={() => {
-                                  dispatch(
-                                    cancelOrder({
-                                      order_id: val.id,
-                                      invoice: val.invoice,
-                                      status: val.status,
-                                      orderDate: val.createdAt,
-                                    }),
-                                  );
-                                }}
-                              >
-                                Batalkan pesanan
-                              </li>
-                            ) : (
-                              ''
-                            )}
-                          </ul>
-                        </div>
-                      </div>
                     </div>
                   </td>
                 </tr>

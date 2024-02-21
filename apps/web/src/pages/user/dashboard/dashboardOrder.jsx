@@ -74,7 +74,6 @@ const DashboardOrder = (props) => {
       console.log(error);
     }
   };
-
   useEffect(() => {
     if (orderDetail.invoice) {
       getOrderDetail();

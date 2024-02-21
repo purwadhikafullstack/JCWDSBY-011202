@@ -92,16 +92,21 @@ export const updateWarehouse = async (req, res, next) => {
         .send({ success: false, message: 'Warehouse data not found' });
     }
     const { name, prov_id, city_id, address } = req.body;
-    const existingWarehouseExist = await warehouse.findOne({
-      where: {
-        name: name || existingWarehouse.name,
-      },
-    });
-    if (existingWarehouseExist) {
-      return res
-        .status(400)
-        .send({ success: false, message: 'Warehouse is already exist' });
+
+    // Check if the name is provided and different from the current warehouse name
+    if (name && name !== existingWarehouse.name) {
+      const existingWarehouseExist = await warehouse.findOne({
+        where: {
+          name: name,
+        },
+      });
+      if (existingWarehouseExist) {
+        return res
+          .status(400)
+          .send({ success: false, message: 'Warehouse is already exist' });
+      }
     }
+
     const numOfUpdatedRows = await warehouse.update(
       {
         name: name || existingWarehouse.name,
